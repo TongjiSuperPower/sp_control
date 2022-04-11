@@ -1,0 +1,6 @@
+<launch>
+	<rosparam file="$(find engineer_gazebo)/config/chassis_controller.yaml" command="load"/>
+	
+	<node name="controller_loader" pkg="controller_manager" type="spawner" output="screen" args="chassis/lf_vel_controller chassis/lb_vel_controller"/>
+
+</launch>

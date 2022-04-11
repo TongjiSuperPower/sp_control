@@ -1,0 +1,14 @@
+<launch>
+	<include file="$(find arm_moveit_config)/launch/move_group.launch">
+		<arg name="publish_monitored_planning_scene" value="true"/>
+		<arg name="moveit_controller_manager" value="arm"/>
+	</include>
+
+	<include file="$(find arm_moveit_config)/launch/moveit_rviz.launch"/>
+	
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+		<param name="/use_gui" value="false"/>
+		<rosparam param="/source_list">[/arm/joint_states]</rosparam>
+	</node>
+
+</launch>
