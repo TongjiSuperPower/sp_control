@@ -1,0 +1,9 @@
+<library path="lib/libchassis_controller">
+	<class name="chassis_controller/ChassisBase" 
+		type="chassis_controller::ChassisBase"
+		base_class_type="controller_interface::ControllerBase">
+		<description>
+		THE FIRST STEP OF OUR ENGINEER.
+		</description>
+	</class>
+</library>
