@@ -199,6 +199,7 @@ namespace chassis_controller
             {
                 geometry_msgs::TransformStamped& odom_frame = tf_odom_pub_->msg_.transforms[0];
                 odom_frame.header.stamp = time;
+                //TODO: delete the following 2 lines
                 odom_frame.header.frame_id = odom2base_.header.frame_id;
                 odom_frame.child_frame_id = odom2base_.child_frame_id;
                 odom_frame.transform.translation.x = odom2base_.transform.translation.x;
@@ -211,4 +212,4 @@ namespace chassis_controller
     }
 
 	PLUGINLIB_EXPORT_CLASS(chassis_controller::ChassisBase, controller_interface::ControllerBase);
-}  // namespace rm_chassis_controllers
+}  // namespace chassis_controller
