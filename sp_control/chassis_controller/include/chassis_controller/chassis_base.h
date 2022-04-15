@@ -1,5 +1,5 @@
 #pragma once
-#include <ros/ros.h>
+
 #include <controller_interface/multi_interface_controller.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <realtime_tools/realtime_publisher.h>
@@ -7,19 +7,12 @@
 
 #include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
-#include <sp_common/hardware_interface/robot_state_interface.h>
-/*---------TF-TRANSFORMATION----------*/
-#include <vector>
-#include <nav_msgs/Odometry.h>
-#include <tf2_msgs/TFMessage.h>
-#include <tf2_ros/buffer.h>
 #include <geometry_msgs/TransformStamped.h>
+
+#include <tf2_msgs/TFMessage.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <angles/angles.h>
-#include <realtime_tools/realtime_buffer.h>
-#include <realtime_tools/realtime_publisher.h>
-
-
+#include <tf2/LinearMath/Quaternion.h>
+#include <nav_msgs/Odometry.h>
 namespace chassis_controller
 {
     struct Command
@@ -65,11 +58,10 @@ namespace chassis_controller
         void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg);
 
         hardware_interface::EffortJointInterface* effort_joint_interface_{};
-        sp_control::RobotStateHandle robot_state_handle_{};
-
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
+		geometry_msgs::TransformStamped odom2base_{};
         geometry_msgs::Vector3 vel_cmd_{};  // x, y
 
 		double wheel_base_{},wheel_track_{},wheel_radius_{},publish_rate_{},twist_angular_{},
@@ -79,23 +71,17 @@ namespace chassis_controller
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;
-
-        /** @brief  TF and Odometry init-function, should be used in the controller::init()
-                    both variable odom_pub_ and tf_odom_pub_ will be initialized.
-        */
-        void setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh);
-        void updateOdom(const ros::Time& time, const ros::Duration& period);
-		geometry_msgs::TransformStamped odom2base_{};
+		std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > odom_pub_;	
+		std::shared_ptr<realtime_tools::RealtimePublisher<tf2_msgs::TFMessage> > tf_odom_pub_;	
+		void setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh);
+		void updateOdom(const ros::Time& time, const ros::Duration& period);
+	private:
+		void moveJoint(const ros::Time& time, const ros::Duration& period);
         std::string odom_frame_id_ = "odom";
         std::string base_frame_id_ = "base_link";
-	
-    private:
-		tf2_ros::Buffer* tf_buffer_;
-		void moveJoint(const ros::Time& time, const ros::Duration& period);
 		geometry_msgs::Twist forwardKinematics();
+
 		effort_controllers::JointVelocityController ctrl_lf_,ctrl_rf_,ctrl_lb_,ctrl_rb_;
-		std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > odom_pub_;
-		std::shared_ptr<realtime_tools::RealtimePublisher<tf2_msgs::TFMessage> > tf_odom_pub_;
     };
 
 }

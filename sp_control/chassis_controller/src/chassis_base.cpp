@@ -15,7 +15,7 @@ namespace chassis_controller
 
     bool ChassisBase::init(hardware_interface::RobotHW* robot_hw, ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh)
     {
-	    std::cout<<"CHASSIS: READY TO INIT"<<std::endl;
+		std::cout<<"CHASSIS: READY TO INIT"<<std::endl;
 		ROS_INFO("CHASSIS: READY TO INIT");
         if (!controller_nh.getParam("publish_rate", publish_rate_) || !controller_nh.getParam("timeout", timeout_) ||
             !controller_nh.getParam("power/vel_coeff", velocity_coeff_) ||
@@ -30,13 +30,7 @@ namespace chassis_controller
         wheel_track_ = getParam(controller_nh, "wheel_track", 0.410);
         wheel_base_ = getParam(controller_nh, "wheel_base", 0.320);
         twist_angular_ = getParam(controller_nh, "twist_angular", M_PI / 6);
-		double duration = 10;
-        tf_buffer_ = new tf2_ros::Buffer(ros::Duration(duration));
-        // <Construct and Register Function> conbine the tf2_ros::Buffer and the String::Name into one class
-        // https://github.com/ros-controls/ros_control/blob/noetic-devel/hardware_interface/include/hardware_interface/internal/resource_manager.h
-		sp_control::RobotStateHandle robot_state_handle("robot_state", tf_buffer_);
-       // robot_hw->get<sp_control::RobotStateInterface>()->registerHandle(robot_state_handle);
-        //robot_state_handle_ = robot_hw->get<sp_control::RobotStateInterface>()->getHandle("robot_state");
+
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
         // Setup odometry realtime publisher + odom message constant fields
@@ -56,14 +50,13 @@ namespace chassis_controller
 
         setOdomPubFields(root_nh, controller_nh);
 
-	    std::cout<<"CHASSIS: INIT SUCCESS"<<std::endl;
         return true;
     }
 
     void ChassisBase::update(const ros::Time& time, const ros::Duration& period)
     {
         geometry_msgs::Twist cmd_vel = cmd_rt_buffer_.readFromRT()->cmd_vel_;
-        //updateOdom(time, period);
+
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
         {
             vel_cmd_.x = 0.;
@@ -76,7 +69,7 @@ namespace chassis_controller
             vel_cmd_.y = cmd_vel.linear.y;
             vel_cmd_.z = cmd_vel.angular.z;
         }
-
+        updateOdom(time, period);
         moveJoint(time, period);
     }
 
@@ -115,76 +108,6 @@ namespace chassis_controller
         return vel_data;
     }
 
-    void ChassisBase::updateOdom(const ros::Time& time, const ros::Duration& period)
-    {
-        geometry_msgs::Twist vel_base = forwardKinematics();  // on base_link frame
-
-            geometry_msgs::Vector3 linear_vel_odom, angular_vel_odom;
-            try
-            {
-            odom2base_ = robot_state_handle_.lookupTransform("odom", "base_link", ros::Time(0));
-            }
-            catch (tf2::TransformException& ex)
-            {
-			//TODO: Encapsulate the following functions into a Class
-                std::vector<geometry_msgs::TransformStamped> vector1;
-                vector1.push_back(odom2base_);
-				tf2_msgs::TFMessage message;
-				message.transforms.push_back(odom2base_);
-                if (tf_odom_pub_->trylock())
-                    {
-                        tf_odom_pub_->msg_ = message;
-                        tf_odom_pub_->unlockAndPublish();
-                    }
-                ROS_WARN("%s", ex.what());
-                return;
-            }
-            odom2base_.header.stamp = time;
-            // integral vel to pos and angle
-            tf2::doTransform(vel_base.linear, linear_vel_odom, odom2base_);
-            tf2::doTransform(vel_base.angular, angular_vel_odom, odom2base_);
-            odom2base_.transform.translation.x += linear_vel_odom.x * period.toSec();
-            odom2base_.transform.translation.y += linear_vel_odom.y * period.toSec();
-            odom2base_.transform.translation.z += linear_vel_odom.z * period.toSec();
-            double length =
-                std::sqrt(std::pow(angular_vel_odom.x, 2) + std::pow(angular_vel_odom.y, 2) + std::pow(angular_vel_odom.z, 2));
-            if (length > 0.001)
-            {  // avoid nan quat
-            tf2::Quaternion odom2base_quat, trans_quat;
-            tf2::fromMsg(odom2base_.transform.rotation, odom2base_quat);
-            trans_quat.setRotation(tf2::Vector3(angular_vel_odom.x / length, angular_vel_odom.y / length,
-                                                angular_vel_odom.z / length),
-                                    length * period.toSec());
-            odom2base_quat = trans_quat * odom2base_quat;
-            odom2base_quat.normalize();
-            odom2base_.transform.rotation = tf2::toMsg(odom2base_quat);
-            }
-            // What is this ?????//
-            robot_state_handle_.setTransform(odom2base_, "chassis/chassis_controller");
-
-        if (publish_rate_ > 0.0 && last_publish_time_ + ros::Duration(1.0 / publish_rate_) < time)
-        {
-            if (odom_pub_->trylock())
-            {
-                odom_pub_->msg_.header.stamp = time;
-                odom_pub_->msg_.twist.twist.linear.x = vel_base.linear.x;
-                odom_pub_->msg_.twist.twist.linear.y = vel_base.linear.y;
-                odom_pub_->msg_.twist.twist.angular.z = vel_base.angular.z;
-                odom_pub_->unlockAndPublish();
-            }
-            if (tf_odom_pub_->trylock())
-            {
-                geometry_msgs::TransformStamped& odom_frame = tf_odom_pub_->msg_.transforms[0];
-                odom_frame.header.stamp = time;
-                odom_frame.transform.translation.x = odom2base_.transform.translation.x;
-                odom_frame.transform.translation.y = odom2base_.transform.translation.y;
-                odom_frame.transform.rotation = odom2base_.transform.rotation;
-                tf_odom_pub_->unlockAndPublish();
-            }
-            last_publish_time_ = time;
-        }
-    }
-
     void ChassisBase::setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh)
     {
     // Get and check params for covariances
@@ -203,7 +126,7 @@ namespace chassis_controller
         ROS_ASSERT(twist_cov_list[i].getType() == XmlRpc::XmlRpcValue::TypeDouble);
 
         // Setup odometry realtime publisher + odom message constant fields
-        odom_pub_.reset(new realtime_tools::RealtimePublisher<nav_msgs::Odometry>(controller_nh, "odom", 100));
+        odom_pub_.reset(new realtime_tools::RealtimePublisher<nav_msgs::Odometry>(root_nh, "/odom", 100));
         odom_pub_->msg_.header.frame_id = odom_frame_id_;
         odom_pub_->msg_.child_frame_id = base_frame_id_;
         odom_pub_->msg_.pose.pose.position.z = 0;
@@ -229,10 +152,63 @@ namespace chassis_controller
 		odom2base_.header.frame_id = odom_frame_id_;
 		odom2base_.child_frame_id = base_frame_id_;
 		odom2base_.header.stamp = ros::Time::now();
+        odom2base_.transform.translation.z = 0.0;
+        odom2base_.transform.rotation.w = 1.0;
         tf_odom_pub_.reset(new realtime_tools::RealtimePublisher<tf2_msgs::TFMessage>(root_nh, "/tf", 100));
-		tf_odom_pub_->msg_.transforms.resize(1);
 		tf_odom_pub_->msg_.transforms.push_back(odom2base_);
-        tf_odom_pub_->msg_.transforms[0].transform.translation.z = 0.0;
     }
+
+    void ChassisBase::updateOdom(const ros::Time& time, const ros::Duration& period)
+    {
+        geometry_msgs::Twist vel_base = forwardKinematics();  // on base_link frame
+        geometry_msgs::Vector3 linear_vel_odom, angular_vel_odom;
+        odom2base_.header.stamp = time;
+        // integral vel to pos and angle
+        tf2::doTransform(vel_base.linear, linear_vel_odom, odom2base_);
+        tf2::doTransform(vel_base.angular, angular_vel_odom, odom2base_);
+        odom2base_.transform.translation.x += linear_vel_odom.x * period.toSec();
+        odom2base_.transform.translation.y += linear_vel_odom.y * period.toSec();
+//		std::cout<<odom2base_.transform.translation.x<<" "<<odom2base_.transform.translation.y<<std::endl; 
+//		std::cout<<linear_vel_odom.x<<" "<<linear_vel_odom.y<<std::endl; 
+        odom2base_.transform.translation.z += linear_vel_odom.z * period.toSec();
+        double length =
+            std::sqrt(std::pow(angular_vel_odom.x, 2) + std::pow(angular_vel_odom.y, 2) + std::pow(angular_vel_odom.z, 2));
+        if (length > 0.001)
+        {  // avoid nan quat
+        tf2::Quaternion odom2base_quat, trans_quat;
+        tf2::fromMsg(odom2base_.transform.rotation, odom2base_quat);
+        trans_quat.setRotation(tf2::Vector3(angular_vel_odom.x / length, angular_vel_odom.y / length,
+                                            angular_vel_odom.z / length),
+                                length * period.toSec());
+        odom2base_quat = trans_quat * odom2base_quat;
+        odom2base_quat.normalize();
+        odom2base_.transform.rotation = tf2::toMsg(odom2base_quat);
+        }
+           
+        if (publish_rate_ > 0.0 && last_publish_time_ + ros::Duration(1.0 / publish_rate_) < time)
+        {
+            if (odom_pub_->trylock())
+            {
+                odom_pub_->msg_.header.stamp = time;
+                odom_pub_->msg_.twist.twist.linear.x = vel_base.linear.x;
+                odom_pub_->msg_.twist.twist.linear.y = vel_base.linear.y;
+                odom_pub_->msg_.twist.twist.angular.z = vel_base.angular.z;
+                odom_pub_->unlockAndPublish();
+            }
+            if (tf_odom_pub_->trylock())
+            {
+                geometry_msgs::TransformStamped& odom_frame = tf_odom_pub_->msg_.transforms[0];
+                odom_frame.header.stamp = time;
+                odom_frame.header.frame_id = odom2base_.header.frame_id;
+                odom_frame.child_frame_id = odom2base_.child_frame_id;
+                odom_frame.transform.translation.x = odom2base_.transform.translation.x;
+                odom_frame.transform.translation.y = odom2base_.transform.translation.y;
+                odom_frame.transform.rotation = odom2base_.transform.rotation;
+                tf_odom_pub_->unlockAndPublish();
+            }
+            last_publish_time_ = time;
+        }
+    }
+
 	PLUGINLIB_EXPORT_CLASS(chassis_controller::ChassisBase, controller_interface::ControllerBase);
 }  // namespace rm_chassis_controllers

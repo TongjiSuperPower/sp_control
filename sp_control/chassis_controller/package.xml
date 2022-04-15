@@ -71,12 +71,13 @@
   <depend>control_toolbox</depend>
   <depend>effort_controllers</depend>
 
-  <depend>sp_common</depend>
-  <depend>angles</depend>
-  <depend>tf</depend>
   <depend>tf2</depend>
   <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->

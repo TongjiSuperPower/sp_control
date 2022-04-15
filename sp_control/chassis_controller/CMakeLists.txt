@@ -19,12 +19,10 @@ find_package(catkin REQUIRED COMPONENTS
   control_toolbox
   effort_controllers
 
-  sp_common
-  nav_msgs
-  tf
   tf2
+  tf2_msgs
   tf2_geometry_msgs
-  angles
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -192,12 +190,11 @@ include_directories(
 # )
 
 ## Mark cpp header files for installation
- install(
-	DIRECTORY include/${PROJECT_NAME}/
-    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-    FILES_MATCHING PATTERN "*.h"
+# install(DIRECTORY include/${PROJECT_NAME}/
+#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+#   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
- )
+# )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
