@@ -33,7 +33,6 @@ namespace chassis_controller
 
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
-        // Setup odometry realtime publisher + odom message constant fields
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
 
         ros::NodeHandle nh_lf = ros::NodeHandle(controller_nh, "left_front");
@@ -48,6 +47,7 @@ namespace chassis_controller
         joint_handles_.push_back(ctrl_lb_.joint_);
         joint_handles_.push_back(ctrl_rb_.joint_);
 
+        // Setup odometry realtime publisher + odom message constant fields
         setOdomPubFields(root_nh, controller_nh);
 
         return true;
@@ -199,12 +199,11 @@ namespace chassis_controller
             {
                 geometry_msgs::TransformStamped& odom_frame = tf_odom_pub_->msg_.transforms[0];
                 odom_frame.header.stamp = time;
-                //TODO: delete the following 2 lines
                 odom_frame.header.frame_id = odom2base_.header.frame_id;
                 odom_frame.child_frame_id = odom2base_.child_frame_id;
-                odom_frame.transform.translation.x = odom2base_.transform.translation.x;
-                odom_frame.transform.translation.y = odom2base_.transform.translation.y;
+                odom_frame.transform.translation = odom2base_.transform.translation;
                 odom_frame.transform.rotation = odom2base_.transform.rotation;
+                // WARN: Dont use the following LINE, may lead to the TF Disorder !
                 tf_odom_pub_->unlockAndPublish();
             }
             last_publish_time_ = time;
