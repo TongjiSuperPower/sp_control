@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
+	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_manipulator/engineer_manipulator.xacro"/>
+	<xacro:engineer_manipulator />
+</robot>
+

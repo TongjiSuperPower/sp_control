@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arm">
-	<xacro:include filename="$(find sp_description)/urdf/engineer/rm_arm.xacro"/>
-	<xacro:include filename="$(find sp_description)/urdf/engineer/rm_arm_transmission.xacro"/>
-        
-	        <!--  joint  -->
-	<xacro:rm_arm/>
-</robot>
-

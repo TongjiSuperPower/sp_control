@@ -203,7 +203,9 @@ namespace chassis_controller
                 odom_frame.child_frame_id = odom2base_.child_frame_id;
                 odom_frame.transform.translation = odom2base_.transform.translation;
                 odom_frame.transform.rotation = odom2base_.transform.rotation;
-                // WARN: Dont use the following LINE, may lead to the TF Disorder !
+                // WARN: Dont use the following LINE, may lead to TF Disorder !
+                //tf_odom_pub_->msg_.tranforms.push_back(odom2base_);
+
                 tf_odom_pub_->unlockAndPublish();
             }
             last_publish_time_ = time;
