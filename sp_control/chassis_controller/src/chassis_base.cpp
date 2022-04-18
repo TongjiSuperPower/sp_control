@@ -168,8 +168,6 @@ namespace chassis_controller
         tf2::doTransform(vel_base.angular, angular_vel_odom, odom2base_);
         odom2base_.transform.translation.x += linear_vel_odom.x * period.toSec();
         odom2base_.transform.translation.y += linear_vel_odom.y * period.toSec();
-//		std::cout<<odom2base_.transform.translation.x<<" "<<odom2base_.transform.translation.y<<std::endl; 
-//		std::cout<<linear_vel_odom.x<<" "<<linear_vel_odom.y<<std::endl; 
         odom2base_.transform.translation.z += linear_vel_odom.z * period.toSec();
         double length =
             std::sqrt(std::pow(angular_vel_odom.x, 2) + std::pow(angular_vel_odom.y, 2) + std::pow(angular_vel_odom.z, 2));
@@ -184,7 +182,7 @@ namespace chassis_controller
         odom2base_quat.normalize();
         odom2base_.transform.rotation = tf2::toMsg(odom2base_quat);
         }
-           
+        
         if (publish_rate_ > 0.0 && last_publish_time_ + ros::Duration(1.0 / publish_rate_) < time)
         {
             if (odom_pub_->trylock())
@@ -205,7 +203,6 @@ namespace chassis_controller
                 odom_frame.transform.rotation = odom2base_.transform.rotation;
                 // WARN: Dont use the following LINE, may lead to TF Disorder !
                 //tf_odom_pub_->msg_.tranforms.push_back(odom2base_);
-
                 tf_odom_pub_->unlockAndPublish();
             }
             last_publish_time_ = time;
