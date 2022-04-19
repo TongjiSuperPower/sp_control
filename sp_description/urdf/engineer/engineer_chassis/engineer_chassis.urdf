@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="engineer_chassis">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0113738412352606 -0.0179737884364999 0.0629667320671845"
+        rpy="0 0 0" />
+      <mass
+        value="12.478309558197" />
+      <inertia
+        ixx="0.0306729834251133"
+        ixy="2.06989089203648E-05"
+        ixz="-4.24062281514238E-06"
+        iyy="0.0340671825531538"
+        iyz="-3.89196837584769E-05"
+        izz="0.0558921594392679" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://engineer_chassis/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://engineer_chassis/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="swiping_card">
+    <inertial>
+      <origin
+        xyz="-0.043679 3.1364E-15 0.0024775"
+        rpy="0 0 0" />
+      <mass
+        value="0.12034" />
+      <inertia
+        ixx="0.00013212"
+        ixy="6.8395E-19"
+        ixz="-2.4208E-20"
+        iyy="0.00035298"
+        iyz="-4.3226E-11"
+        izz="0.00048461" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://engineer_chassis/meshes/swiping_card.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://engineer_chassis/meshes/swiping_card.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="swiping_card_joint"
+    type="prismatic">
+    <origin
+      xyz="0.235 0 -0.0155"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="swiping_card" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0.2"
+      effort="80"
+      velocity="2" />
+  </joint>
+</robot>

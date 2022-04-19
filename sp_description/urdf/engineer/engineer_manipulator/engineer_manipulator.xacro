@@ -86,7 +86,7 @@
   </link>
   <joint
     name="arm_joint_1"
-    type="continuous">
+    type="revolute">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -97,6 +97,8 @@
     <axis
       xyz="0 0 1" />
     <limit
+      lower="-9.42478"
+      upper="9.42478"
       effort="8"
       velocity="13" />
   </joint>

@@ -1,10 +1,15 @@
 <launch>
   <arg
-    name="model"
-    default="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.urdf.xacro" />
- <param
+    name="model" default="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer/engineer.xacro'"/>
+  <arg
+    name="gui"
+    default="true" />
+  <param
     name="robot_description"
-    command="$(arg model)" />
+    command="$(arg model)"/>
+  <param
+    name="use_gui"
+    value="true" />
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -17,5 +22,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find sp_description)/urdf.rviz" />
+    args="-d $(find sp_description)/engineer.rviz" />
 </launch>
