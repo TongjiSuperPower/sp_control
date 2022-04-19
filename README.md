@@ -9,6 +9,7 @@ version 0.0.4
 |           | moveit_config      | 使用panda测试了armplanNode的自动规划    |
 | 2022/4/19 | sp_common          | 新增加了RampFilter                      |
 |           | chassis_controller | 修改cmd_vel的处理逻辑                   |
+|           | URDF update        | 工程可在rviz中完整显示                   |
 
 TODO:
 
