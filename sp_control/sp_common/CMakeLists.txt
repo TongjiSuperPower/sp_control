@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(chassis_controller)
+project(sp_common)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -7,24 +7,14 @@ project(chassis_controller)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  controller_interface
+
+add_definitions(-Wall -Werror -Wno-enum-compare)
+
+find_package(catkin REQUIRED 
+  COMPONENTS
   roscpp
   roslint
-  rospy
   std_msgs
-  pluginlib
-  hardware_interface
-  realtime_tools
-  control_toolbox
-  effort_controllers
-
-  tf2
-  tf2_msgs
-  tf2_geometry_msgs
-  geometry_msgs
-
-  sp_common
 )
 
 ## System dependencies are found with CMake's conventions
@@ -84,7 +74,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
+#   std_msgs
 # )
 
 ################################################
@@ -117,9 +107,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES chassis_controller
-#  CATKIN_DEPENDS controller_interface roscpp roslint rospy std_msg
+  CATKIN_DEPENDS roscpp
+  INCLUDE_DIRS include 
+  LIBRARIES sp_common 
+#  CATKIN_DEPENDS controller_interface roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -135,8 +126,9 @@ include_directories(
 )
 
 ## Declare a C++ library
- add_library(chassis_controller src/chassis_base.cpp)
- target_link_libraries(chassis_controller ${catkin_LIBRARIES})
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/sp_common.cpp
+# )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -146,22 +138,23 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/chassis_controller_node.cpp)
-
+# add_executable(filters src/filters/filters.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 # set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
-
+file(GLOB_RECURSE FILTERS_LIB_SRC
+	"src/filters/*.cpp")
+add_library(sp_common ${FILTERS_LIB_SRC})
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+#target_link_libraries(
+#  ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##
@@ -185,18 +178,19 @@ include_directories(
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
-# install(TARGETS ${PROJECT_NAME}
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-# )
+install(
+	TARGETS ${PROJECT_NAME}
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 ## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+install(
+	DIRECTORY include/${PROJECT_NAME}/
+    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+    FILES_MATCHING PATTERN "*.h"
+)
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
@@ -210,7 +204,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_chassis_controller.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_sp_common.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

@@ -33,6 +33,7 @@ namespace chassis_controller
 
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
+        // Setup odometry realtime publisher + odom message constant fields
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
 
         ros::NodeHandle nh_lf = ros::NodeHandle(controller_nh, "left_front");
@@ -47,7 +48,9 @@ namespace chassis_controller
         joint_handles_.push_back(ctrl_lb_.joint_);
         joint_handles_.push_back(ctrl_rb_.joint_);
 
-        // Setup odometry realtime publisher + odom message constant fields
+		ramp_x_ = new sp_common::RampFilter<double>(2.5, 0.001);
+		ramp_y_ = new sp_common::RampFilter<double>(2.5, 0.001);
+		ramp_w_ = new sp_common::RampFilter<double>(2.5, 0.001);
         setOdomPubFields(root_nh, controller_nh);
 
         return true;
@@ -59,16 +62,20 @@ namespace chassis_controller
 
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
         {
-            vel_cmd_.x = 0.;
-            vel_cmd_.y = 0.;
-            vel_cmd_.z = 0.;
+            cmd_vel.linear.x = 0.;
+            cmd_vel.linear.x = 0.;
+            cmd_vel.angular.z = 0.;
         }
         else
         {
-            vel_cmd_.x = cmd_vel.linear.x;
-            vel_cmd_.y = cmd_vel.linear.y;
-            vel_cmd_.z = cmd_vel.angular.z;
         }
+
+		ramp_x_->input(cmd_vel.linear.x);
+		ramp_y_->input(cmd_vel.linear.y);
+        vel_cmd_.x = ramp_x_->output();
+        vel_cmd_.y = ramp_y_->output();
+        vel_cmd_.z = cmd_vel.angular.z;
+        
         updateOdom(time, period);
         moveJoint(time, period);
     }
@@ -203,9 +210,8 @@ namespace chassis_controller
                 odom_frame.child_frame_id = odom2base_.child_frame_id;
                 odom_frame.transform.translation = odom2base_.transform.translation;
                 odom_frame.transform.rotation = odom2base_.transform.rotation;
-                // WARN: Dont use the following LINE, may lead to TF Disorder !
-                //tf_odom_pub_->msg_.tranforms.push_back(odom2base_);
-
+				// Dont use the following code, may lead to the TF Disorder !!!
+				//tf_odom_pub_->msg_.transforms.push_back(odom2base_);
                 tf_odom_pub_->unlockAndPublish();
             }
             last_publish_time_ = time;
@@ -213,4 +219,4 @@ namespace chassis_controller
     }
 
 	PLUGINLIB_EXPORT_CLASS(chassis_controller::ChassisBase, controller_interface::ControllerBase);
-}  // namespace chassis_controller
+}  // namespace rm_chassis_controllers

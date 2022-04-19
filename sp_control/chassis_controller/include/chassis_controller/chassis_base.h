@@ -13,6 +13,8 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <nav_msgs/Odometry.h>
+
+#include <sp_common/filters/filters.h>
 namespace chassis_controller
 {
     struct Command
@@ -81,6 +83,7 @@ namespace chassis_controller
         std::string base_frame_id_ = "base_link";
 		geometry_msgs::Twist forwardKinematics();
 
+		sp_common::RampFilter<double>* ramp_x_{}, *ramp_y_{}, *ramp_w_{};
 		effort_controllers::JointVelocityController ctrl_lf_,ctrl_rf_,ctrl_lb_,ctrl_rb_;
     };
 
