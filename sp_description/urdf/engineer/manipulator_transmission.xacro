@@ -14,9 +14,9 @@
         </transmission>
     </xacro:macro>
 
-    <xacro:manipulator_transmission joint_name="Joint_1"/>
-	<xacro:manipulator_transmission joint_name="Joint_2"/>
-	<xacro:manipulator_transmission joint_name="Joint_3"/>
-	<xacro:manipulator_transmission joint_name="Joint_4"/>
-	<xacro:manipulator_transmission joint_name="Joint_5"/>
+    <xacro:manipulator_transmission joint_name="arm_joint_1"/>
+	<xacro:manipulator_transmission joint_name="arm_joint_2"/>
+	<xacro:manipulator_transmission joint_name="arm_joint_3"/>
+	<xacro:manipulator_transmission joint_name="arm_joint_4"/>
+	<xacro:manipulator_transmission joint_name="arm_joint_5"/>
 </robot>

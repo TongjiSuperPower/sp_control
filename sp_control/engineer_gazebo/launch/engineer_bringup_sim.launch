@@ -1,6 +1,5 @@
 <launch>
-	<include file="$(find engineer_gazebo)/launch/engineer_world.launch" />
-	<include file="$(find engineer_gazebo)/launch/chassis_controller.launch" />
-	<include file="$(find engineer_gazebo)/launch/arm/arm_trajectory_controller.launch" />
-	<include file="$(find arm_moveit_config)/launch/moveit_planning_execution.launch" />
+	<include file="$(find engineer_gazebo)/launch/new_engineer_world.launch" />
+	<include file="$(find engineer_gazebo)/launch/manipulator/arm_trajectory_controller.launch" />
+	<include file="$(find manipulator_moveit_config)/launch/moveit_planning_execution.launch" />
 </launch>

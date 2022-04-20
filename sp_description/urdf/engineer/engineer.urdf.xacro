@@ -3,10 +3,19 @@
 	<xacro:include filename="$(find sp_description)/urdf/engineer/rm_arm.xacro"/>
 	<xacro:include filename="$(find rm_description)/urdf/engineer/chassis.urdf.xacro"/> 
 	<xacro:include filename="$(find sp_description)/urdf/engineer/rm_arm_transmission.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer/kinect.xacro"/>
         
 	<xacro:chassis roller_type="simple"/>
 	        <!--  joint  -->
 	<xacro:rm_arm/>
+	<xacro:kinect_camera prefix="camera"/>
+	<joint name="joint_camera2arm" type="fixed">
+            <axis xyz="0 0 -1"/>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<!--limit not work while type="continuous"-->
+            <parent link="Link_5"/>
+            <child link="camera_link"/>
+	</joint>
 	<joint name="joint_arm2body" type="fixed">
             <axis xyz="0 0 1"/>
 			<origin xyz="0.175 0 0.174" rpy="0 0 -1.5707"/>
