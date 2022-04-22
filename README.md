@@ -1,5 +1,5 @@
 # Engineer_on_ROS
-version 0.0.4
+version 0.1.0
 
 | 时间      | 包名               		| 修改                                    |
 | --------- | ------------------ 		| --------------------------------------- |
@@ -12,6 +12,7 @@ version 0.0.4
 |           | sp_description     		| 工程可在rviz中完整显示                   |
 | 2022/4/20 | sp_description     		| 修改了机械臂工程部分细节                  |
 |           | manipulator_moveit_config | add moveit_config                       |
+| 2022/4/22 | ira_laser_tools           | 用于激光雷达合成，从其他仓库搬过来的       |
 
 TODO:
 
@@ -20,3 +21,7 @@ TODO:
 完成规划路径C++迁移
 
 增加激光雷达并实现nav功能包的导航功能
+
+Reference:
+1. git@github.com:iralabdisco/ira_laser_tools.git
+2. git@github.com:rm-controls/rm_controllers.git
