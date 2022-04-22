@@ -39,6 +39,9 @@
 		<plugin name="chassis_controller" filename="libchassis_controller.so">
 			<robotNamespace>/</robotNamespace>
 		</plugin>
+		<plugin name="gimbal_controller" filename="libgimbal_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
 	</gazebo>
 	
 </robot>

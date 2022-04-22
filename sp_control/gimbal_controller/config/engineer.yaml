@@ -1,0 +1,17 @@
+gimbal:
+  gimbal_controller:
+    type: "gimbal_controller/GimbalController"
+    # ChassisBase
+    publish_rate: 100
+    timeout: 0.1
+
+    yaw:
+      joint: "fpv_yaw_joint"
+      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    pitch:
+      joint: "fpv_pitch_joint"
+      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    height:
+      joint: "mast_joint"
+      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+   
