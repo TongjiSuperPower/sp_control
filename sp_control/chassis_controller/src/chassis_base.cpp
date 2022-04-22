@@ -63,7 +63,7 @@ namespace chassis_controller
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
         {
             cmd_vel.linear.x = 0.;
-            cmd_vel.linear.x = 0.;
+            cmd_vel.linear.y = 0.;
             cmd_vel.angular.z = 0.;
         }
         else

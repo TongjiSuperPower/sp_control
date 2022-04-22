@@ -11,9 +11,13 @@
 	<xacro:engineer_manipulator/>
 	<xacro:fpv_module/>
 
-	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_link"
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_front"
 				   simulation="$(arg use_simulation)"
 				   xyz="0.22 0 0.145" rpy="0 0 0"/>
+		
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_back"
+				   simulation="$(arg use_simulation)"
+				   xyz="-0.22 0 0.145" rpy="0 0 3.14159"/>
 
 	<joint name="joint_arm2body" type="fixed">
 		<axis xyz="0 0 1"/>

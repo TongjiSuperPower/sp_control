@@ -36,7 +36,7 @@
         <xacro:if value="${simulation}">
             <gazebo reference="${lidar_name}">
                 <material>Gazebo/FlatBlack</material>
-                <sensor type="ray" name="lds_lfcd_sensor">
+		<sensor type="ray" name="${lidar_name}_sensor">
                     <pose>0 0 0 0 0 0</pose>
                     <visualize>false</visualize>
                     <update_rate>5</update_rate>
@@ -60,9 +60,9 @@
                             <stddev>0.01</stddev>
                         </noise>
                     </ray>
-                    <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
-                        <topicName>scan</topicName>
-                        <frameName>${lidar_name}</frameName>
+		    <plugin name="gazebo_${lidar_name}_controller" filename="libgazebo_ros_laser.so">
+                        <topicName>scan_${lidar_name}</topicName>
+			<frameName>${lidar_name}</frameName>
                     </plugin>
                 </sensor>
             </gazebo>
