@@ -2,5 +2,5 @@
 	<include file="$(find engineer_gazebo)/launch/new_engineer_world.launch" />
 	<include file="$(find engineer_gazebo)/launch/manipulator/arm_trajectory_controller.launch" />
 	<include file="$(find manipulator_moveit_config)/launch/moveit_planning_execution.launch" />
-	<include file="$(ira_laser_tools)/launch/laserscan_multi_merger.launch" />
+	<include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch" />
 </launch>
