@@ -5,6 +5,7 @@
 <robot
   name="fpv_module"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/camera.xacro"/>
   <xacro:macro name="fpv_module">
   <link
     name="fpv_base_link">
@@ -120,12 +121,12 @@
       <mass
         value="0.0608808554843221" />
       <inertia
-        ixx="9.04027463419959E-06"
-        ixy="9.88988932831204E-08"
-        ixz="4.51337209267773E-08"
-        iyy="1.46381906705228E-05"
-        iyz="3.26266079201928E-07"
-        izz="1.94937658359286E-05" />
+        ixx="9.04027463419959E-03"
+        ixy="9.88988932831204E-05"
+        ixz="4.51337209267773E-05"
+        iyy="1.46381906705228E-02"
+        iyz="3.26266079201928E-04"
+        izz="1.94937658359286E-02" />
     </inertial>
     <visual>
       <origin
@@ -176,10 +177,10 @@
         value="0.790822100365449" />
       <inertia
         ixx="0.000904458627478079"
-        ixy="-1.04817358797102E-06"
-        ixz="3.64987845692274E-07"
+        ixy="-1.04817358797102E-03"
+        ixz="3.64987845692274E-04"
         iyy="0.00117560347818278"
-        iyz="8.43541198126057E-08"
+        iyz="8.43541198126057E-05"
         izz="0.000928104839953432" />
     </inertial>
     <visual>
@@ -222,6 +223,22 @@
       velocity="6" />
   </joint>
 
+  <xacro:usb_camera prefix="camera"/>
+  <joint
+    name="camera_joint"
+    type="fixed">
+    <origin
+      xyz="-0.05 -0.04 0"
+      rpy="-1.5707 0 3.1416" />
+    <parent
+      link="fpv_pitch" />
+    <child
+      link="camera_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+
   <!--Transmission-->
   <transmission name="trans_mast_joint">
     <type>transmission_interface/SimpleTransmission</type>
@@ -252,7 +269,5 @@
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
   </transmission>
-
-  
   </xacro:macro>
 </robot>

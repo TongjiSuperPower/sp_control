@@ -14,9 +14,30 @@
         </transmission>
     </xacro:macro>
 
-    <xacro:manipulator_transmission joint_name="arm_joint_1"/>
+   	<xacro:manipulator_transmission joint_name="arm_joint_1"/>
 	<xacro:manipulator_transmission joint_name="arm_joint_2"/>
 	<xacro:manipulator_transmission joint_name="arm_joint_3"/>
 	<xacro:manipulator_transmission joint_name="arm_joint_4"/>
 	<xacro:manipulator_transmission joint_name="arm_joint_5"/>
+	
+    <gazebo>
+      <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
+        <robotNamespace>/effector_link</robotNamespace>
+        <bodyName>effector_link</bodyName>
+	<topicName>grasping</topicName>
+        <maxForce>100</maxForce>
+        <maxDistance>0.6</maxDistance>
+        <minDistance>0.01</minDistance>
+      </plugin>
+    </gazebo>	
+    <gazebo reference="effector_link">
+        <mu1>50</mu1>
+        <mu2>50</mu2>
+ 　　　 <minDepth>0.003</minDepth>
+        <maxVel>0</maxVel>
+        <kp>10000000000000.0</kp>
+        <kd>1.0</kd>
+	<ki>2.0</ki>
+        <material>Gazebo/Grey</material>
+    </gazebo>
 </robot>

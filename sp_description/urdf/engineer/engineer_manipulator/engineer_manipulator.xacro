@@ -376,7 +376,7 @@
   </link>
   <joint
     name="effector_joint"
-    type="fixed">
+    type="revolute">
     <origin
       xyz="0 0 0.0977"
       rpy="0 0 0" />
@@ -385,7 +385,28 @@
     <child
       link="effector_link" />
     <axis
-      xyz="0 0 0" />
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="2.8"
+      velocity="100" />
   </joint>
- </xacro:macro>
+
+  <link name="grasping_frame"/>
+  <joint
+    name="grasping_frame_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.0977"
+      rpy="0 0 0" />
+    <parent
+      link="link_5" />
+    <child
+      link="grasping_frame" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+  </xacro:macro>
 </robot>

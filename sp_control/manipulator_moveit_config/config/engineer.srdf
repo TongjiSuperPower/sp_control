@@ -10,7 +10,7 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="manipulator">
-        <chain base_link="arm_base_link" tip_link="effector_link"/>
+        <chain base_link="arm_base_link" tip_link="grasping_frame"/>
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="Init" group="manipulator">
@@ -27,22 +27,16 @@
         <joint name="arm_joint_4" value="0.88"/>
         <joint name="arm_joint_5" value="0"/>
     </group_state>
-    <group_state name="Forward" group="manipulator">
-        <joint name="arm_joint_1" value="-1.5707"/>
-        <joint name="arm_joint_2" value="0.8607"/>
-        <joint name="arm_joint_3" value="0.5144"/>
-        <joint name="arm_joint_4" value="0.68"/>
-        <joint name="arm_joint_5" value="0"/>
-    </group_state>
     <group_state name="Place" group="manipulator">
         <joint name="arm_joint_1" value="1.1976"/>
-        <joint name="arm_joint_2" value="0.3541"/>
+        <joint name="arm_joint_2" value="0.2962"/>
         <joint name="arm_joint_3" value="1.9475"/>
-        <joint name="arm_joint_4" value="0.84"/>
+        <joint name="arm_joint_4" value="0.88"/>
         <joint name="arm_joint_5" value="0"/>
     </group_state>
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
     <passive_joint name="card_joint"/>
+    <passive_joint name="effector_joint"/>
     <passive_joint name="mast_joint"/>
     <passive_joint name="fpv_yaw_joint"/>
     <passive_joint name="fpv_pitch_joint"/>
@@ -185,6 +179,8 @@
     <disable_collisions link1="arm_base_link" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="arm_base_link" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="arm_base_link" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="arm_base_link" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="arm_base_link" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="arm_base_link" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="base_link" link2="fpv_base_link" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="fpv_pitch" reason="Never"/>
@@ -255,21 +251,32 @@
     <disable_collisions link1="base_link" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="rplidar_back" reason="Adjacent"/>
+    <disable_collisions link1="base_link" link2="rplidar_front" reason="Adjacent"/>
     <disable_collisions link1="base_link" link2="swiping_card" reason="Adjacent"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_0" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_back_roller_1" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_10" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_back_roller_11" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_12" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_13" reason="Never"/>
-    <disable_collisions link1="effector_link" link2="left_back_roller_14" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_back_roller_2" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_4" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_5" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_back_roller_6" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_back_roller_7" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_8" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_back_roller_9" reason="Never"/>
-    <disable_collisions link1="effector_link" link2="left_front_roller_1" reason="Never"/>
-    <disable_collisions link1="effector_link" link2="left_front_roller_10" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_0" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_11" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_12" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_front_roller_14" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_15" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_2" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_3" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_front_roller_4" reason="Never"/>
     <disable_collisions link1="effector_link" link2="left_front_roller_8" reason="Never"/>
+    <disable_collisions link1="effector_link" link2="left_front_roller_9" reason="Never"/>
     <disable_collisions link1="effector_link" link2="link_3" reason="Never"/>
     <disable_collisions link1="effector_link" link2="link_4" reason="Never"/>
     <disable_collisions link1="effector_link" link2="link_5" reason="Adjacent"/>
@@ -375,6 +382,8 @@
     <disable_collisions link1="fpv_base_link" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="fpv_base_link" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="fpv_base_link" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="fpv_base_link" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="fpv_base_link" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="fpv_base_link" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="fpv_pitch" link2="fpv_yaw" reason="Adjacent"/>
     <disable_collisions link1="fpv_pitch" link2="left_back_roller_0" reason="Never"/>
@@ -443,6 +452,8 @@
     <disable_collisions link1="fpv_pitch" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="fpv_pitch" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="fpv_pitch" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="fpv_pitch" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="fpv_pitch" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="fpv_pitch" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="fpv_yaw" link2="left_back_roller_0" reason="Never"/>
     <disable_collisions link1="fpv_yaw" link2="left_back_roller_1" reason="Never"/>
@@ -511,6 +522,8 @@
     <disable_collisions link1="fpv_yaw" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="fpv_yaw" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="fpv_yaw" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="fpv_yaw" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="fpv_yaw" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="fpv_yaw" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_0" link2="left_back_roller_1" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_0" link2="left_back_roller_10" reason="Adjacent"/>
@@ -581,6 +594,8 @@
     <disable_collisions link1="left_back_roller_0" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_0" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_0" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_0" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_0" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_0" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="left_back_roller_10" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_1" link2="left_back_roller_11" reason="Adjacent"/>
@@ -616,6 +631,7 @@
     <disable_collisions link1="left_back_roller_1" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="link_3" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="link_4" reason="Never"/>
+    <disable_collisions link1="left_back_roller_1" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="mast" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="right_back_roller_0" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="right_back_roller_1" reason="Never"/>
@@ -649,6 +665,8 @@
     <disable_collisions link1="left_back_roller_1" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_1" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_1" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_1" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_10" link2="left_back_roller_11" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_10" link2="left_back_roller_12" reason="Adjacent"/>
@@ -717,6 +735,8 @@
     <disable_collisions link1="left_back_roller_10" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_10" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_10" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_10" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_10" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_10" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="left_back_roller_12" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_11" link2="left_back_roller_13" reason="Adjacent"/>
@@ -749,7 +769,6 @@
     <disable_collisions link1="left_back_roller_11" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="link_3" reason="Never"/>
-    <disable_collisions link1="left_back_roller_11" link2="link_4" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="mast" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="right_back_roller_0" reason="Never"/>
@@ -784,6 +803,8 @@
     <disable_collisions link1="left_back_roller_11" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_11" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_11" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_11" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="left_back_roller_13" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_12" link2="left_back_roller_14" reason="Adjacent"/>
@@ -815,7 +836,6 @@
     <disable_collisions link1="left_back_roller_12" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="link_3" reason="Never"/>
-    <disable_collisions link1="left_back_roller_12" link2="link_4" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="mast" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="right_back_roller_0" reason="Never"/>
@@ -850,6 +870,8 @@
     <disable_collisions link1="left_back_roller_12" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_12" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_12" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_12" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_13" link2="left_back_roller_14" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_13" link2="left_back_roller_15" reason="Adjacent"/>
@@ -915,6 +937,8 @@
     <disable_collisions link1="left_back_roller_13" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_13" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_13" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_13" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_13" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_13" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_14" link2="left_back_roller_15" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_14" link2="left_back_roller_2" reason="Adjacent"/>
@@ -979,6 +1003,8 @@
     <disable_collisions link1="left_back_roller_14" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_14" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_14" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_14" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_14" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_14" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_15" link2="left_back_roller_2" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_15" link2="left_back_roller_3" reason="Adjacent"/>
@@ -1042,6 +1068,8 @@
     <disable_collisions link1="left_back_roller_15" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_15" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_15" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_15" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_15" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_15" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="left_back_roller_3" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_2" link2="left_back_roller_4" reason="Adjacent"/>
@@ -1070,6 +1098,7 @@
     <disable_collisions link1="left_back_roller_2" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="link_3" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="link_4" reason="Never"/>
+    <disable_collisions link1="left_back_roller_2" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="mast" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="right_back_roller_0" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="right_back_roller_1" reason="Never"/>
@@ -1103,6 +1132,8 @@
     <disable_collisions link1="left_back_roller_2" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_2" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_2" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_2" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_3" link2="left_back_roller_4" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_3" link2="left_back_roller_5" reason="Adjacent"/>
@@ -1164,6 +1195,8 @@
     <disable_collisions link1="left_back_roller_3" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_3" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_3" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_3" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_3" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_3" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_4" link2="left_back_roller_5" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_4" link2="left_back_roller_6" reason="Adjacent"/>
@@ -1224,6 +1257,8 @@
     <disable_collisions link1="left_back_roller_4" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_4" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_4" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_4" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_4" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_4" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_5" link2="left_back_roller_6" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_5" link2="left_back_roller_7" reason="Adjacent"/>
@@ -1283,6 +1318,8 @@
     <disable_collisions link1="left_back_roller_5" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_5" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_5" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_5" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_5" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_5" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_6" link2="left_back_roller_7" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_6" link2="left_back_roller_8" reason="Adjacent"/>
@@ -1341,6 +1378,8 @@
     <disable_collisions link1="left_back_roller_6" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_6" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_6" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_6" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_6" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_6" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_7" link2="left_back_roller_8" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_7" link2="left_back_roller_9" reason="Adjacent"/>
@@ -1398,6 +1437,8 @@
     <disable_collisions link1="left_back_roller_7" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_7" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_7" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_7" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_7" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_7" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_8" link2="left_back_roller_9" reason="Adjacent"/>
     <disable_collisions link1="left_back_roller_8" link2="left_front_roller_0" reason="Never"/>
@@ -1454,6 +1495,8 @@
     <disable_collisions link1="left_back_roller_8" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_8" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_8" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_8" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_8" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_8" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_back_roller_9" link2="left_front_roller_0" reason="Never"/>
     <disable_collisions link1="left_back_roller_9" link2="left_front_roller_1" reason="Never"/>
@@ -1509,6 +1552,8 @@
     <disable_collisions link1="left_back_roller_9" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_back_roller_9" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_back_roller_9" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_back_roller_9" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_back_roller_9" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_back_roller_9" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="left_front_roller_1" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_0" link2="left_front_roller_10" reason="Adjacent"/>
@@ -1528,6 +1573,7 @@
     <disable_collisions link1="left_front_roller_0" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="link_3" reason="Never"/>
+    <disable_collisions link1="left_front_roller_0" link2="link_4" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="mast" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="right_back_roller_0" reason="Never"/>
@@ -1562,6 +1608,8 @@
     <disable_collisions link1="left_front_roller_0" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_0" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_0" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_0" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_1" link2="left_front_roller_10" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_1" link2="left_front_roller_11" reason="Adjacent"/>
@@ -1615,6 +1663,8 @@
     <disable_collisions link1="left_front_roller_1" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_1" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_1" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_1" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_1" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_1" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="left_front_roller_11" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_10" link2="left_front_roller_12" reason="Adjacent"/>
@@ -1632,6 +1682,7 @@
     <disable_collisions link1="left_front_roller_10" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="link_3" reason="Never"/>
+    <disable_collisions link1="left_front_roller_10" link2="link_4" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="mast" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="right_back_roller_0" reason="Never"/>
@@ -1666,6 +1717,8 @@
     <disable_collisions link1="left_front_roller_10" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_10" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_10" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_10" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_11" link2="left_front_roller_12" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_11" link2="left_front_roller_13" reason="Adjacent"/>
@@ -1717,6 +1770,8 @@
     <disable_collisions link1="left_front_roller_11" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_11" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_11" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_11" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_11" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_11" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_12" link2="left_front_roller_13" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_12" link2="left_front_roller_14" reason="Adjacent"/>
@@ -1767,6 +1822,8 @@
     <disable_collisions link1="left_front_roller_12" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_12" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_12" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_12" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_12" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_12" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_13" link2="left_front_roller_14" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_13" link2="left_front_roller_15" reason="Adjacent"/>
@@ -1815,6 +1872,8 @@
     <disable_collisions link1="left_front_roller_13" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_13" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_13" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_13" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_13" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_13" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_14" link2="left_front_roller_15" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_14" link2="left_front_roller_2" reason="Adjacent"/>
@@ -1863,6 +1922,8 @@
     <disable_collisions link1="left_front_roller_14" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_14" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_14" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_14" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_14" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_14" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_15" link2="left_front_roller_2" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_15" link2="left_front_roller_3" reason="Adjacent"/>
@@ -1910,6 +1971,8 @@
     <disable_collisions link1="left_front_roller_15" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_15" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_15" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_15" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_15" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_15" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_2" link2="left_front_roller_3" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_2" link2="left_front_roller_4" reason="Adjacent"/>
@@ -1956,6 +2019,8 @@
     <disable_collisions link1="left_front_roller_2" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_2" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_2" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_2" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_2" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_2" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="left_front_roller_4" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_3" link2="left_front_roller_5" reason="Adjacent"/>
@@ -1966,7 +2031,7 @@
     <disable_collisions link1="left_front_roller_3" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="link_3" reason="Never"/>
-    <disable_collisions link1="left_front_roller_3" link2="link_4" reason="Never"/>
+    <disable_collisions link1="left_front_roller_3" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="mast" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="right_back_roller_0" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="right_back_roller_1" reason="Never"/>
@@ -2000,6 +2065,8 @@
     <disable_collisions link1="left_front_roller_3" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_3" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_3" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_3" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="left_front_roller_5" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_4" link2="left_front_roller_6" reason="Adjacent"/>
@@ -2010,6 +2077,7 @@
     <disable_collisions link1="left_front_roller_4" link2="link_2" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="link_3" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="link_4" reason="Never"/>
+    <disable_collisions link1="left_front_roller_4" link2="link_5" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="mast" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="right_back_roller_0" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="right_back_roller_1" reason="Never"/>
@@ -2043,6 +2111,8 @@
     <disable_collisions link1="left_front_roller_4" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_4" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_4" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_4" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_5" link2="left_front_roller_6" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_5" link2="left_front_roller_7" reason="Adjacent"/>
@@ -2085,6 +2155,8 @@
     <disable_collisions link1="left_front_roller_5" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_5" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_5" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_5" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_5" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_5" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_6" link2="left_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_6" link2="left_front_roller_8" reason="Adjacent"/>
@@ -2127,6 +2199,8 @@
     <disable_collisions link1="left_front_roller_6" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_6" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_6" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_6" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_6" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_6" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_7" link2="left_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_7" link2="left_front_roller_9" reason="Adjacent"/>
@@ -2168,6 +2242,8 @@
     <disable_collisions link1="left_front_roller_7" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_7" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_7" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_7" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_7" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_7" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_8" link2="left_front_roller_9" reason="Adjacent"/>
     <disable_collisions link1="left_front_roller_8" link2="link_1" reason="Never"/>
@@ -2208,6 +2284,8 @@
     <disable_collisions link1="left_front_roller_8" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_8" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_8" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_8" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_8" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_8" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="left_front_roller_9" link2="link_1" reason="Never"/>
     <disable_collisions link1="left_front_roller_9" link2="link_2" reason="Never"/>
@@ -2247,6 +2325,8 @@
     <disable_collisions link1="left_front_roller_9" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="left_front_roller_9" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="left_front_roller_9" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="left_front_roller_9" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="left_front_roller_9" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="left_front_roller_9" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="link_1" link2="link_2" reason="Adjacent"/>
     <disable_collisions link1="link_1" link2="link_3" reason="Never"/>
@@ -2283,6 +2363,8 @@
     <disable_collisions link1="link_1" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="link_1" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="link_1" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="link_1" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="link_1" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="link_1" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="link_2" link2="link_3" reason="Adjacent"/>
     <disable_collisions link1="link_2" link2="mast" reason="Never"/>
@@ -2318,6 +2400,8 @@
     <disable_collisions link1="link_2" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="link_2" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="link_2" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="link_2" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="link_2" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="link_2" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="link_3" link2="link_4" reason="Adjacent"/>
     <disable_collisions link1="link_3" link2="link_5" reason="Never"/>
@@ -2353,6 +2437,8 @@
     <disable_collisions link1="link_3" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="link_3" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="link_3" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="link_3" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="link_3" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="link_3" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="link_4" link2="link_5" reason="Adjacent"/>
     <disable_collisions link1="link_4" link2="right_back_roller_0" reason="Never"/>
@@ -2453,6 +2539,8 @@
     <disable_collisions link1="mast" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="mast" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="mast" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="mast" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="mast" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="mast" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_0" link2="right_back_roller_1" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_0" link2="right_back_roller_10" reason="Adjacent"/>
@@ -2485,6 +2573,8 @@
     <disable_collisions link1="right_back_roller_0" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_0" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_0" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_0" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_0" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_0" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_1" link2="right_back_roller_10" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_1" link2="right_back_roller_11" reason="Adjacent"/>
@@ -2516,6 +2606,8 @@
     <disable_collisions link1="right_back_roller_1" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_1" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_1" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_1" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_1" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_1" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_10" link2="right_back_roller_11" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_10" link2="right_back_roller_12" reason="Adjacent"/>
@@ -2546,6 +2638,8 @@
     <disable_collisions link1="right_back_roller_10" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_10" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_10" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_10" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_10" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_10" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_11" link2="right_back_roller_12" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_11" link2="right_back_roller_13" reason="Adjacent"/>
@@ -2575,6 +2669,8 @@
     <disable_collisions link1="right_back_roller_11" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_11" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_11" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_11" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_11" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_11" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_12" link2="right_back_roller_13" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_12" link2="right_back_roller_14" reason="Adjacent"/>
@@ -2603,6 +2699,8 @@
     <disable_collisions link1="right_back_roller_12" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_12" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_12" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_12" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_12" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_12" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_13" link2="right_back_roller_14" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_13" link2="right_back_roller_15" reason="Adjacent"/>
@@ -2630,6 +2728,8 @@
     <disable_collisions link1="right_back_roller_13" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_13" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_13" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_13" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_13" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_13" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_14" link2="right_back_roller_15" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_14" link2="right_back_roller_2" reason="Adjacent"/>
@@ -2656,6 +2756,8 @@
     <disable_collisions link1="right_back_roller_14" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_14" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_14" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_14" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_14" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_14" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_15" link2="right_back_roller_2" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_15" link2="right_back_roller_3" reason="Adjacent"/>
@@ -2681,6 +2783,8 @@
     <disable_collisions link1="right_back_roller_15" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_15" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_15" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_15" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_15" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_15" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_2" link2="right_back_roller_3" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_2" link2="right_back_roller_4" reason="Adjacent"/>
@@ -2705,6 +2809,8 @@
     <disable_collisions link1="right_back_roller_2" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_2" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_2" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_2" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_2" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_2" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_3" link2="right_back_roller_4" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_3" link2="right_back_roller_5" reason="Adjacent"/>
@@ -2728,6 +2834,8 @@
     <disable_collisions link1="right_back_roller_3" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_3" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_3" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_3" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_3" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_3" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_4" link2="right_back_roller_5" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_4" link2="right_back_roller_6" reason="Adjacent"/>
@@ -2750,6 +2858,8 @@
     <disable_collisions link1="right_back_roller_4" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_4" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_4" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_4" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_4" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_4" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_5" link2="right_back_roller_6" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_5" link2="right_back_roller_7" reason="Adjacent"/>
@@ -2771,6 +2881,8 @@
     <disable_collisions link1="right_back_roller_5" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_5" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_5" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_5" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_5" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_5" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_6" link2="right_back_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_6" link2="right_back_roller_8" reason="Adjacent"/>
@@ -2791,6 +2903,8 @@
     <disable_collisions link1="right_back_roller_6" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_6" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_6" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_6" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_6" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_6" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_7" link2="right_back_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_7" link2="right_back_roller_9" reason="Adjacent"/>
@@ -2810,6 +2924,8 @@
     <disable_collisions link1="right_back_roller_7" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_7" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_7" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_7" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_7" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_7" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_8" link2="right_back_roller_9" reason="Adjacent"/>
     <disable_collisions link1="right_back_roller_8" link2="right_front_roller_0" reason="Never"/>
@@ -2828,6 +2944,8 @@
     <disable_collisions link1="right_back_roller_8" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_8" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_8" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_8" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_8" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_8" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_back_roller_9" link2="right_front_roller_0" reason="Never"/>
     <disable_collisions link1="right_back_roller_9" link2="right_front_roller_1" reason="Never"/>
@@ -2845,6 +2963,8 @@
     <disable_collisions link1="right_back_roller_9" link2="right_front_roller_7" reason="Never"/>
     <disable_collisions link1="right_back_roller_9" link2="right_front_roller_8" reason="Never"/>
     <disable_collisions link1="right_back_roller_9" link2="right_front_roller_9" reason="Never"/>
+    <disable_collisions link1="right_back_roller_9" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_back_roller_9" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_back_roller_9" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_0" link2="right_front_roller_1" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_0" link2="right_front_roller_10" reason="Adjacent"/>
@@ -2861,6 +2981,8 @@
     <disable_collisions link1="right_front_roller_0" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_0" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_0" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_0" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_0" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_0" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_1" link2="right_front_roller_10" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_1" link2="right_front_roller_11" reason="Adjacent"/>
@@ -2876,6 +2998,8 @@
     <disable_collisions link1="right_front_roller_1" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_1" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_1" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_1" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_1" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_1" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_10" link2="right_front_roller_11" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_10" link2="right_front_roller_12" reason="Adjacent"/>
@@ -2890,6 +3014,8 @@
     <disable_collisions link1="right_front_roller_10" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_10" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_10" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_10" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_10" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_10" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_11" link2="right_front_roller_12" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_11" link2="right_front_roller_13" reason="Adjacent"/>
@@ -2903,6 +3029,8 @@
     <disable_collisions link1="right_front_roller_11" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_11" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_11" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_11" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_11" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_11" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_12" link2="right_front_roller_13" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_12" link2="right_front_roller_14" reason="Adjacent"/>
@@ -2915,6 +3043,8 @@
     <disable_collisions link1="right_front_roller_12" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_12" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_12" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_12" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_12" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_12" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_13" link2="right_front_roller_14" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_13" link2="right_front_roller_15" reason="Adjacent"/>
@@ -2926,6 +3056,8 @@
     <disable_collisions link1="right_front_roller_13" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_13" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_13" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_13" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_13" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_13" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_14" link2="right_front_roller_15" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_14" link2="right_front_roller_2" reason="Adjacent"/>
@@ -2936,6 +3068,8 @@
     <disable_collisions link1="right_front_roller_14" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_14" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_14" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_14" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_14" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_14" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_15" link2="right_front_roller_2" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_15" link2="right_front_roller_3" reason="Adjacent"/>
@@ -2945,6 +3079,8 @@
     <disable_collisions link1="right_front_roller_15" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_15" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_15" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_15" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_15" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_15" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_2" link2="right_front_roller_3" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_2" link2="right_front_roller_4" reason="Adjacent"/>
@@ -2953,6 +3089,8 @@
     <disable_collisions link1="right_front_roller_2" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_2" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_2" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_2" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_2" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_2" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_3" link2="right_front_roller_4" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_3" link2="right_front_roller_5" reason="Adjacent"/>
@@ -2960,26 +3098,43 @@
     <disable_collisions link1="right_front_roller_3" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_3" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_3" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_3" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_3" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_3" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_4" link2="right_front_roller_5" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_4" link2="right_front_roller_6" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_4" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_4" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_4" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_4" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_4" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_4" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_5" link2="right_front_roller_6" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_5" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_5" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_5" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_5" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_5" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_5" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_6" link2="right_front_roller_7" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_6" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_6" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_6" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_6" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_6" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_7" link2="right_front_roller_8" reason="Adjacent"/>
     <disable_collisions link1="right_front_roller_7" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_7" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_7" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_7" link2="swiping_card" reason="Never"/>
     <disable_collisions link1="right_front_roller_8" link2="right_front_roller_9" reason="Adjacent"/>
+    <disable_collisions link1="right_front_roller_8" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_8" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_8" link2="swiping_card" reason="Never"/>
+    <disable_collisions link1="right_front_roller_9" link2="rplidar_back" reason="Never"/>
+    <disable_collisions link1="right_front_roller_9" link2="rplidar_front" reason="Never"/>
     <disable_collisions link1="right_front_roller_9" link2="swiping_card" reason="Never"/>
+    <disable_collisions link1="rplidar_back" link2="rplidar_front" reason="Never"/>
+    <disable_collisions link1="rplidar_back" link2="swiping_card" reason="Never"/>
+    <disable_collisions link1="rplidar_front" link2="swiping_card" reason="Never"/>
 </robot>

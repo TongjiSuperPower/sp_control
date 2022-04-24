@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_msgs
   gazebo_ros
   gazebo_ros_control
+
+  sp_description
 )
 
 ## System dependencies are found with CMake's conventions

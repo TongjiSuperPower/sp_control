@@ -22,5 +22,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find sp_description)/engineer.rviz" />
+    args="-d $(find sp_description)/urdf.rviz" />
 </launch>

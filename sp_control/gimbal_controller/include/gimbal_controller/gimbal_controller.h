@@ -59,7 +59,7 @@ namespace gimbal_controller
          */
         void cmdPosCallback(const geometry_msgs::Vector3::ConstPtr& msg);
 
-	    double publish_rate_{},timeout_{};
+	double publish_rate_{},timeout_{};
 
         hardware_interface::PositionJointInterface* position_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
@@ -72,10 +72,10 @@ namespace gimbal_controller
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;
-
 	private:
 		void moveJoint(const ros::Time& time, const ros::Duration& period);
-    	position_controllers::JointPositionController ctrl_yaw_,ctrl_pitch_,ctrl_height_;
+
+	position_controllers::JointPositionController ctrl_yaw_,ctrl_pitch_,ctrl_height_;
     };
 
 }

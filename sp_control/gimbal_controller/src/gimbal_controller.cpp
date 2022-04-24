@@ -8,14 +8,14 @@ namespace gimbal_controller
     template <typename T>
     T getParam(ros::NodeHandle& pnh, const std::string& param_name, const T& default_val)
     {
-	    T param_val;
-	    pnh.param<T>(param_name, param_val, default_val);
-	    return param_val;
+	T param_val;
+	pnh.param<T>(param_name, param_val, default_val);
+	return param_val;
     }
 
     bool GimbalController::init(hardware_interface::RobotHW* robot_hw, ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh)
     {
-	    ROS_INFO("GIMBAL: START TO INIT ...");
+	ROS_INFO("GIMBAL: START TO INIT ...");
 
         if (!controller_nh.getParam("publish_rate", publish_rate_) || !controller_nh.getParam("timeout", timeout_)) 
         {
@@ -40,7 +40,7 @@ namespace gimbal_controller
         joint_handles_.push_back(ctrl_pitch_.joint_);
         joint_handles_.push_back(ctrl_height_.joint_);
 
-	    ROS_INFO("GIMBAL: INIT SUCCESS !");
+	ROS_INFO("GIMBAL: INIT SUCCESS !");
 
         return true;
     }
@@ -65,9 +65,10 @@ namespace gimbal_controller
 
     void GimbalController::moveJoint(const ros::Time& time, const ros::Duration& period)
     {
-	    joint_handles_[0].setCommand(pos_cmd_.x);
-	    joint_handles_[1].setCommand(pos_cmd_.y);
-	    joint_handles_[2].setCommand(pos_cmd_.z);
+	joint_handles_[0].setCommand(pos_cmd_.x);
+	joint_handles_[1].setCommand(pos_cmd_.y);
+	joint_handles_[2].setCommand(pos_cmd_.z);
+
 	/*
         ctrl_yaw_.commandCB(float(pos_cmd_.x));
         ctrl_pitch_.commandCB(float(pos_cmd_.y));
@@ -76,6 +77,5 @@ namespace gimbal_controller
         ctrl_pitch_.update(time, period);
         ctrl_height_.update(time, period);*/
     }
-
 	PLUGINLIB_EXPORT_CLASS(gimbal_controller::GimbalController, controller_interface::ControllerBase);
 }  // namespace gimbal_controller

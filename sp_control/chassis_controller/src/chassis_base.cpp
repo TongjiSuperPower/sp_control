@@ -70,8 +70,8 @@ namespace chassis_controller
         {
         }
 
-		ramp_x_->input(cmd_vel.linear.x);
-		ramp_y_->input(cmd_vel.linear.y);
+	ramp_x_->input(cmd_vel.linear.x);
+	ramp_y_->input(cmd_vel.linear.y);
         vel_cmd_.x = ramp_x_->output();
         vel_cmd_.y = ramp_y_->output();
         vel_cmd_.z = cmd_vel.angular.z;
