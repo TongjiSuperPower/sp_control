@@ -1,3 +1,7 @@
+
+
+
+
 # 说明
 
 基于ros1开发，所以用的是moveit1、rviz等ros1的包。
@@ -72,9 +76,7 @@ roscpp的参数服务器类API支持上述的所有数据类型，但不同数�
 
 TODO：去测试一下！
 
-## XMLRPC
 
-我不知道怎么写
 
 ## 参数上载 Param Upload
 
@@ -101,4 +103,109 @@ actuator_coefficient:
 ```
 
 上传：在launch文件中使用`<rosparam>`标签 。`<rosparam>` 标记也可以放在`node`标记内，在这种情况下，参数命名空间使用`Private Name`解析。
+
+## 参数下载 Param Download
+
+参数下载可分为两步：下载 和 赋值。
+
+下载：我们使用ros::NodeHandle.getParam()获取yaml文件中的参数
+
+```cpp
+XmlRpc::XmlRpcValue xml_rpc_value;
+controller_nh.getParam("yamlName", xml_rpc_value);
+```
+
+赋值：根据yaml中具体的数据结构将值赋到cpp文件中的unordered_map结构中。
+
+同样以这个yaml文件为例
+
+```yaml
+actuator_coefficient:
+  rm_3508: # RoboMaster 3508 without reducer
+    act2pos: 0.0007669903  # 2PI/8192
+    act2vel: 0.1047197551   # 2PI/60
+    act2effort: 1.90702994e-5  # 20/16384*0.0156223893
+    effort2act: 52437.561519   # 1/act2effort
+    max_out: 16384
+  rm_2006: # RoboMaster 2006 motor
+    act2pos: 2.13078897e-5  # 2PI/8192*(1/36)
+    act2vel: 0.0029088820   # 2PI/60*(1/36)
+    act2effort: 0.00018  #10/10000*0.18
+    effort2act: 5555.5555555   # 1/act2effort
+    max_out: 10000
+```
+
+设cpp文件中定义了这样的unordered_map
+
+```cpp
+struct Actcoeff
+{
+   double act2pos，act2vel, act2effort, effort2act;
+   int max_out;
+}
+std::unordered_map<std::string, Actcoeff>* MotorPtr;
+```
+
+如下赋值
+
+```cpp
+ROS_ASSERT(xml_rpc_value.getType() == XmlRpc::XmlRpcValue::TypeStruct);
+try
+{
+    for (auto it = xml_rpc_value.begin(); it != xml_rpc_value.end(); ++it)
+    {
+        if (!it->second.hasMember("act2pos"))//it先指向名为rm_3508的map，it->second表示rm_3508的value，即下一级                                                //map。
+                                             //使用.hasMember方法查找下一级map中是否存在名为act2pos的key
+        { 
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated act2pos.");
+            continue;
+        }
+        else if (!it->second.hasMember("act2vel"))
+        {
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated act2vel.");
+            continue;
+        }
+        else if (!it->second.hasMember("act2effort"))
+        {
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated act2effor.");
+            continue;
+        }
+        else if (!it->second.hasMember("effort2act"))
+        {
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated effort2act.");
+            continue;
+        }
+        else if (!it->second.hasMember("max_out"))
+        {
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated max_out.");
+            continue;
+        }
+        MotorPtr[it->first]["act2pos"];
+        MotorPtr[it->first]["act2vel"];
+        MotorPtr[it->first]["act2effort"];
+        MotorPtr[it->first]["effort2act"];
+        MotorPtr[it->first]["max_out"];    
+    }
+}  
+```
+
+尝试输出
+
+```cpp
+std::cout << MotorPtr["rm2006"]["act2pos"] << endl;
+
+0.0007669903
+```
+
+理论上多层`XmlRpc::XmlRpcValue`实际上就是多层`std::map`
+
+`XmlRpc::XmlRpcValue`具有多种`type`，其中` TypeStruct`对应的`value`为
+
+```cpp
+ typedef std::map<std::string, XmlRpcValue> ValueStruct;
+```
+
+即`TypeStruct`类型的`XmlRpc::XmlRpcValue`可视为一个`std::map`，使用`std::string`指向其他类型的`XmlRpc::XmlRpcValue`
+
+故`XmlRpc::XmlRpcValue`类型的数据可以使用`std::map`定义的函数与迭代器。
 
