@@ -55,15 +55,15 @@
       </geometry>
     </collision>
     <collision>
-      <origin xyz="0.2375 0.0 0.13" rpy="0 0 0"/>
+      <origin xyz="0.2375 0.0 0.11" rpy="0 0 0"/>
       <geometry>
-        <box size="0.125 0.6 0.11"/>
+        <box size="0.125 0.6 0.07"/>
       </geometry>
     </collision>
     <collision>
-      <origin xyz="-0.205 0.0 0.13" rpy="0 0 0"/>
+      <origin xyz="-0.205 0.0 0.11" rpy="0 0 0"/>
       <geometry>
-        <box size="0.19 0.6 0.11"/>
+        <box size="0.19 0.6 0.07"/>
       </geometry>
     </collision>
     <collision>
