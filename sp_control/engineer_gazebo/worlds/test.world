@@ -86,24 +86,14 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='gold_mine'>
+    <model name='RMUT_2021_field'>
+      <static>1</static>
       <link name='link'>
-        <inertial>
-          <mass>0.59</mass>
-          <inertia>
-            <ixx>0.004</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.004</iyy>
-            <iyz>0</iyz>
-            <izz>0.004</izz>
-          </inertia>
-          <pose>0 0 0 0 -0 0</pose>
-        </inertial>
         <collision name='collision'>
           <geometry>
             <mesh>
-              <uri>model://gold_mine/meshes/gold_mine.dae</uri>
+              <uri>model://RMUT_2021_field/meshes/RMUT_2021_field.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -123,39 +113,36 @@
         <visual name='visual'>
           <geometry>
             <mesh>
-              <uri>model://gold_mine/meshes/gold_mine.dae</uri>
+              <uri>model://RMUT_2021_field/meshes/RMUT_2021_field.stl</uri>
+              <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Gray</name>
+            </script>
+          </material>
         </visual>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose>-0.046322 0.05166 0 0 -0 0</pose>
+      <pose>0.53178 -0.227301 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>0</sim_time>
-      <real_time>101 922961236</real_time>
-      <wall_time>1650715483 103371989</wall_time>
-      <iterations>101618</iterations>
-      <model name='big_resource'>
-        <pose>1.25 1.2 0 0 -0 0</pose>
+      <sim_time>0 0</sim_time>
+      <real_time>0 0</real_time>
+      <wall_time>1651028960 943725298</wall_time>
+      <iterations>0</iterations>
+      <model name='RMUT_2021_field'>
+        <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>1.25 1.2 0 0 -0 0</pose>
+          <pose>0 0 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='gold_mine'>
-        <pose>0 1.6 0.5 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>0 1.6 0.5 0 -0 0</pose>
-          <velocity>-0.002858 -0.001849 0.00604 0.018487 -0.028575 -0</velocity>
-          <acceleration>-5.71511 -3.69751 12.0806 -0.724171 -0.601854 0.000255</acceleration>
-          <wrench>-3.37191 -2.18153 7.12757 0 -0 0</wrench>
         </link>
       </model>
       <model name='ground_plane'>
@@ -174,54 +161,10 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>1.47254 -1.51315 0.816324 0 0.056791 2.003</pose>
+        <pose>6.94668 14.4585 9.98472 0 0.591643 -1.7478</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <model name='big_resource'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://big_resource/meshes/big_resource.stl</uri>
-              <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://big_resource/meshes/big_resource.stl</uri>
-              <scale>0.001 0.001 0.001</scale>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Gray</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <pose>0.109894 -1.03607 0 0 -0 0</pose>
-    </model>
   </world>
 </sdf>

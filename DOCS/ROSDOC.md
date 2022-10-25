@@ -74,17 +74,15 @@ roscpp的参数服务器类API支持上述的所有数据类型，但不同数�
 
 目前`std::map`支持的参数类型只有`bool、float、double、int、string`，因此如果要使用多级字典（比如<string,map>）则仍只能使用`XmlRpcValue`类型进行解析和检索。
 
-TODO：去测试一下！
-
 
 
 ## 参数上载 Param Upload
 
-参数上载可分为两步：编制 和 上传。
+参数上载可分为两步：编制 和 上载。
 
 编制：我们经常使用一种有层次的结构声明数据，也即是YAML格式语言。参看下述以YAML格式书写的电机参数文件（config）。该文件在工程中用于定义电机的各项参数。可以看到在actuator_coefficient中我们定义了RM比赛中常用的两个电机的参数。
 
->  注：act2effort参数是使用电流转矩系数近似得出的，其真实情况应是非线性的，但以平衡步兵的控制情况来看，该非线性误差可以不考虑，故不深究。
+>  act2effort参数是使用电流转矩系数近似得出的，其真实情况应是非线性的，但以平衡步兵的控制情况来看，该非线性误差可以不考虑，故不深究。
 
 ```yaml
 actuator_coefficient:
@@ -102,7 +100,17 @@ actuator_coefficient:
     max_out: 10000
 ```
 
-上传：在launch文件中使用`<rosparam>`标签 。`<rosparam>` 标记也可以放在`node`标记内，在这种情况下，参数命名空间使用`Private Name`解析。
+上传：在launch文件中使用`<rosparam>`标签配合`load`指令完成上传。下例展示了`chassis_controller`的参数上载写法。
+
+> `<rosparam>` 标记也可以放在`node`标记内，在这种情况下，参数命名空间使用`Private Name`解析。
+
+```yaml
+<launch>
+	<rosparam file="$(find chassis_controller)/config/engineer.yaml" command="load"/>
+</launch>
+```
+
+
 
 ## 参数下载 Param Download
 
@@ -167,7 +175,7 @@ try
         }
         else if (!it->second.hasMember("act2effort"))
         {
-            ROS_ERROR_STREAM("Motor " << it->first << " has no associated act2effor.");
+            ROS_ERROR_STREAM("Motor " << it->first << " has no associated act2effor.");                                                                                
             continue;
         }
         else if (!it->second.hasMember("effort2act"))

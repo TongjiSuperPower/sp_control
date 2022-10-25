@@ -3,12 +3,12 @@
 
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<arg name="paused" value="$(arg paused)"/>
-		<!--arg name="world_name" value="$(find engineer_gazebo)/worlds/test.world"/-->
+		<arg name="world_name" value="$(find engineer_gazebo)/worlds/test.world"/>
 	</include>
 
 	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer/engineer.xacro'"/>
 
-	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model engineer -param robot_description"/>
+	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.5 -x 0.3 -y 0.3 -urdf -model engineer -param robot_description"/>
 
 
 </launch>
