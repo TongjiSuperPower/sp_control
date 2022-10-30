@@ -64,6 +64,19 @@
 
 
 
+在实际开发中，NodeHandle的命名空间是我们格外关注的，通常我们会使用`relative`和`private`的命名方式。下面给出若干例子：
+
+```c++
+/*       Relative        */
+ros::NodeHandle nh("my_namespace");   	// nh  in <node_namespace>/my_namespace
+ros::NodeHandle nh1("ns1");				// nh1 in <node_namespace>/ns1
+ros::NodeHandle nh2(nh1, "ns2");		// nh2 in <node_namespace>/ns1/ns2
+/*       Private         */
+ros::NodeHandle nh3("~my_namespace");	// nh3 in <node_namespace>/<node_name>/my_namespace
+```
+
+应当注意`<node_namespace>`和`<node_name>`是完全两个概念，前者指`node`所在的命名空间，后者指的是`node`的名字，勿混淆。
+
 
 
 # 参数服务器 Parameter Server
