@@ -1,0 +1,8 @@
+actuator_coefficient:
+  rm_3508:
+    act2pos: 0.0007669903
+    act2vel: 0.1047197551
+    act2effort: 1.90702994e-5
+    effort2act: 52437.561519
+    max_out: 16384
+        
