@@ -17,6 +17,7 @@ version 0.1.1
 | 2022/4/23 | gimbal_controller               | 实现工程桅杆的三个自由度                       |
 | 2022/4/24 | sp_description                  | 修复多处导致gazebo崩溃的模型错误               |
 |           | arm_control                     | 该包用于实现机械臂规划，已完成关节空间函数编写 |
+| 2022/11/03| sp_hw                           | Parse.cpp			               |
 
 
 
