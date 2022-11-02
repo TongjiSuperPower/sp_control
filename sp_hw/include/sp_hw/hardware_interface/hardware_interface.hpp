@@ -26,5 +26,6 @@ namespace sp_hw
 
         // Actuator
         std::unordered_map<std::string, ActCoeff> type2act_coeffs_;
+        std::unordered_map<std::string, std::unordered_map<int, ActData>> bus_id2act_data_;
     };
 } // namespace : sp_hw

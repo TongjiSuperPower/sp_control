@@ -5,6 +5,22 @@
 
 namespace sp_hw
 {
+    /*
+     * @brief Plot all actuators in Tree_Form.
+     */
+    void actuator_tree(const std::unordered_map<std::string, std::unordered_map<int, ActData>> &bus_id2act_data)
+    {
+        for (auto bus_it = bus_id2act_data.begin(); bus_it != bus_id2act_data.end(); bus_it++)
+        {
+            std::cout << "|-- " << bus_it->first << std::endl;
+            for (auto act_id = bus_it->second.begin(); act_id != bus_it->second.end(); act_id++)
+                std::cout << "|   "
+                          << "|-- "
+                          << "0x" << std::hex << act_id->first << " - " << std::dec
+                          << act_id->second.type << " - " << act_id->second.name << std::endl;
+        }
+    }
+
     // I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
     // And i hate Misunderstanding.
@@ -93,9 +109,27 @@ namespace sp_hw
 
                 std::string bus = it->second["bus"], type = it->second["type"];
                 int id = it->second["id"];
-                std::cout << it->first << " : "
-                          << "0x" << std::hex << id << std::endl;
+
+                // Constructing the Actuator_Table
+                // Bus_ID  --->  Actuator ID  ---> ActData(Struct)
+                if (bus_id2act_data_.find(bus) == bus_id2act_data_.end())
+                    bus_id2act_data_.emplace(std::make_pair(bus, std::unordered_map<int, ActData>()));
+
+                if (!(bus_id2act_data_[bus].find(id) == bus_id2act_data_[bus].end()))
+                {
+                    ROS_ERROR_STREAM("Repeat actuator on BUS " << bus << " and ID 0x" << std::hex << id);
+                    return false;
+                }
+                else
+                {
+                    bus_id2act_data_[bus].emplace(std::make_pair(id, ActData{
+                                                                         .name = it->first,
+                                                                         .type = type,
+                                                                         .stamp = ros::Time::now()}));
+                }
             }
+            // TESTING !
+            actuator_tree(bus_id2act_data_);
         }
         catch (XmlRpc::XmlRpcException &e)
         {
