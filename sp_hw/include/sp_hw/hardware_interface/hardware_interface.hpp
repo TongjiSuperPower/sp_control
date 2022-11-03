@@ -7,6 +7,8 @@
 
 /* ROS Control */
 #include <hardware_interface/robot_hw.h>
+#include <hardware_interface/joint_state_interface.h>
+#include <hardware_interface/joint_command_interface.h>
 
 /* SP HW */
 #include "sp_hw/hardware_interface/data_types.hpp"
@@ -27,5 +29,9 @@ namespace sp_hw
         // Actuator
         std::unordered_map<std::string, ActCoeff> type2act_coeffs_;
         std::unordered_map<std::string, std::unordered_map<int, ActData>> bus_id2act_data_;
+
+        // Actuator Interface
+        hardware_interface::JointStateInterface jnt_state_interface_;
+        hardware_interface::EffortJointInterface effort_jnt_interface_;
     };
 } // namespace : sp_hw

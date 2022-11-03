@@ -15,5 +15,6 @@ namespace sp_hw
         std::string type;
         ros::Time stamp;
         double pos, vel, effort;
+        double cmd_effort, exe_effort;
     };
 } // namespace : sp_hw

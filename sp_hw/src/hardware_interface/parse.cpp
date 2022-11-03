@@ -127,9 +127,23 @@ namespace sp_hw
                                                                          .type = type,
                                                                          .stamp = ros::Time::now()}));
                 }
+                // TODO : use actuator_coefficient to define
+                if (type.find("rm") != std::string::npos)
+                {
+                    hardware_interface::JointStateHandle jnt_state(bus_id2act_data_[bus][id].name,
+                                                                   &bus_id2act_data_[bus][id].pos,
+                                                                   &bus_id2act_data_[bus][id].vel,
+                                                                   &bus_id2act_data_[bus][id].effort);
+                    jnt_state_interface_.registerHandle(jnt_state);
+                    effort_jnt_interface_.registerHandle(
+                        hardware_interface::JointHandle(jnt_state, &bus_id2act_data_[bus][id].exe_effort));
+                }
+                else
+                {
+                    ROS_ERROR_STREAM("Actuator " << it->first << "'s type has not been declared.");
+                    return false;
+                }
             }
-            // TESTING !
-            actuator_tree(bus_id2act_data_);
         }
         catch (XmlRpc::XmlRpcException &e)
         {
@@ -139,6 +153,9 @@ namespace sp_hw
                              << "Check the Config Yaml.");
             return false;
         }
+        registerInterface(&jnt_state_interface_);
+        registerInterface(&effort_jnt_interface_);
+        actuator_tree(bus_id2act_data_);
         return true;
     }
 }
