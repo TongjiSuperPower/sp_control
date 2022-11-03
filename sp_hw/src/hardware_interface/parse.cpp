@@ -127,8 +127,8 @@ namespace sp_hw
                                                                          .type = type,
                                                                          .stamp = ros::Time::now()}));
                 }
-                // TODO : use actuator_coefficient to define
-                if (type.find("rm") != std::string::npos)
+                // TODO(DONE) : use actuator_coefficient to define
+                if (type2act_coeffs_.find(type) != type2act_coeffs_.end())
                 {
                     hardware_interface::JointStateHandle jnt_state(bus_id2act_data_[bus][id].name,
                                                                    &bus_id2act_data_[bus][id].pos,
