@@ -1,6 +1,6 @@
-chassis:
+chassis: 
   chassis_controller:
-    type: "chassis_controller/ChassisBase"
+    type: "chassis_controller/RollerWheel"
     # ChassisBase
     publish_rate: 100
     power:
@@ -9,7 +9,7 @@ chassis:
       power_offset: -3
     twist_angular: 0.5233
     timeout: 0.1
-    twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.001 ]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
     # MecanumController
     wheel_base: 0.47
     wheel_track: 0.505
@@ -17,13 +17,49 @@ chassis:
 
     left_front:
       joint: "left_front_wheel_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
     right_front:
       joint: "right_front_wheel_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
     left_back:
       joint: "left_back_wheel_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
     right_back:
       joint: "right_back_wheel_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }

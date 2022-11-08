@@ -135,8 +135,12 @@ include_directories(
 )
 
 ## Declare a C++ library
- add_library(chassis_controller src/chassis_base.cpp)
- target_link_libraries(chassis_controller ${catkin_LIBRARIES})
+set(SRC_LIST 
+            src/chassis_base.cpp
+            src/roller_wheel.cpp
+            )
+add_library(chassis_controller ${SRC_LIST}) 
+target_link_libraries(chassis_controller ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

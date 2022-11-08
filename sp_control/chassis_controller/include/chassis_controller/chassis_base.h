@@ -14,6 +14,9 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <nav_msgs/Odometry.h>
 
+#include <angles/angles.h>
+#include <string>
+
 #include <sp_common/filters/filters.h>
 namespace chassis_controller
 {
@@ -51,6 +54,8 @@ namespace chassis_controller
          * @param period The time passed since the last call to update.
          */
         void update(const ros::Time &time, const ros::Duration &period) override;
+        void starting(const ros::Time &time) {}
+        void stopping(const ros::Time &time) {}
 
     protected:
         virtual void moveJoint(const ros::Time &time, const ros::Duration &period) = 0;

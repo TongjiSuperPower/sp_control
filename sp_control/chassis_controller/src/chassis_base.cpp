@@ -1,6 +1,4 @@
 #include "chassis_controller/chassis_base.h"
-#include <angles/angles.h>
-#include <string>
 #include <pluginlib/class_list_macros.hpp>
 
 namespace chassis_controller
@@ -15,8 +13,8 @@ namespace chassis_controller
 
     bool ChassisBase::init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
     {
-        std::cout << "CHASSIS: READY TO INIT" << std::endl;
-        ROS_INFO("CHASSIS: READY TO INIT");
+        ROS_INFO("CHASSIS : Initializing Started");
+
         if (!controller_nh.getParam("publish_rate", publish_rate_) || !controller_nh.getParam("timeout", timeout_) ||
             !controller_nh.getParam("power/vel_coeff", velocity_coeff_) ||
             !controller_nh.getParam("power/effort_coeff", effort_coeff_) ||
@@ -85,33 +83,6 @@ namespace chassis_controller
         cmd_struct_.cmd_vel_ = *msg;
         cmd_struct_.stamp_ = ros::Time::now();
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
-    }
-
-    void ChassisBase::moveJoint(const ros::Time &time, const ros::Duration &period)
-    {
-        double a = (wheel_base_ + wheel_track_) / 2.0;
-        ctrl_lf_.setCommand((vel_cmd_.x - vel_cmd_.y - vel_cmd_.z * a) / wheel_radius_);
-        ctrl_rf_.setCommand((vel_cmd_.x + vel_cmd_.y + vel_cmd_.z * a) / wheel_radius_);
-        ctrl_lb_.setCommand((vel_cmd_.x + vel_cmd_.y - vel_cmd_.z * a) / wheel_radius_);
-        ctrl_rb_.setCommand((vel_cmd_.x - vel_cmd_.y + vel_cmd_.z * a) / wheel_radius_);
-        ctrl_lf_.update(time, period);
-        ctrl_rf_.update(time, period);
-        ctrl_lb_.update(time, period);
-        ctrl_rb_.update(time, period);
-    }
-
-    geometry_msgs::Twist ChassisBase::forwardKinematics()
-    {
-        geometry_msgs::Twist vel_data;
-        double k = wheel_radius_ / 4.0;
-        double lf_velocity = ctrl_lf_.joint_.getVelocity();
-        double rf_velocity = ctrl_rf_.joint_.getVelocity();
-        double lb_velocity = ctrl_lb_.joint_.getVelocity();
-        double rb_velocity = ctrl_rb_.joint_.getVelocity();
-        vel_data.linear.x = (rf_velocity + lf_velocity + lb_velocity + rb_velocity) * k;
-        vel_data.linear.y = (rf_velocity - lf_velocity + lb_velocity - rb_velocity) * k;
-        vel_data.angular.z = 2 * (rf_velocity - lf_velocity - lb_velocity + rb_velocity) * k / (wheel_base_ + wheel_track_);
-        return vel_data;
     }
 
     void ChassisBase::setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
@@ -215,5 +186,4 @@ namespace chassis_controller
         }
     }
 
-    PLUGINLIB_EXPORT_CLASS(chassis_controller::ChassisBase, controller_interface::ControllerBase);
-} // namespace rm_chassis_controllers
+} // namespace chassis_controller
