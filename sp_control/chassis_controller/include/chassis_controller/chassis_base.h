@@ -53,9 +53,12 @@ namespace chassis_controller
         void update(const ros::Time &time, const ros::Duration &period) override;
 
     protected:
+        virtual void moveJoint(const ros::Time &time, const ros::Duration &period) = 0;
+        virtual geometry_msgs::Twist forwardKinematics() = 0;
+
         /** @brief Write current command from  geometry_msgs::Twist.
          *
-         * @param msg This expresses velocity in free space broken into its linear and angular parts.
+         *  @param msg This expresses velocity in free space broken into its linear and angular parts.
          */
         void cmdVelCallback(const geometry_msgs::Twist::ConstPtr &msg);
 
@@ -78,11 +81,8 @@ namespace chassis_controller
         void setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh);
         void updateOdom(const ros::Time &time, const ros::Duration &period);
 
-    private:
-        void moveJoint(const ros::Time &time, const ros::Duration &period);
         std::string odom_frame_id_ = "odom";
         std::string base_frame_id_ = "base_link";
-        geometry_msgs::Twist forwardKinematics();
 
         sp_common::RampFilter<double> *ramp_x_{}, *ramp_y_{}, *ramp_w_{};
         effort_controllers::JointVelocityController ctrl_lf_, ctrl_rf_, ctrl_lb_, ctrl_rb_;
