@@ -38,7 +38,7 @@ namespace chassis_controller
          * @return True if initialization was successful and the controller
          * is ready to be started.
          */
-        bool init(hardware_interface::RobotHW* robot_hw, ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh) override;
+        bool init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh) override;
         /** @brief Receive real_time command from manual. Execute different action according to current mode. Set
          * necessary params of chassis. Execute power limit.
          *
@@ -50,42 +50,42 @@ namespace chassis_controller
          * @param time The current time.
          * @param period The time passed since the last call to update.
          */
-        void update(const ros::Time& time, const ros::Duration& period) override;
+        void update(const ros::Time &time, const ros::Duration &period) override;
 
     protected:
         /** @brief Write current command from  geometry_msgs::Twist.
          *
          * @param msg This expresses velocity in free space broken into its linear and angular parts.
          */
-        void cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg);
+        void cmdVelCallback(const geometry_msgs::Twist::ConstPtr &msg);
 
-        hardware_interface::EffortJointInterface* effort_joint_interface_{};
+        hardware_interface::EffortJointInterface *effort_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
-	geometry_msgs::TransformStamped odom2base_{};
-        geometry_msgs::Vector3 vel_cmd_{};  // x, y
+        geometry_msgs::TransformStamped odom2base_{};
+        geometry_msgs::Vector3 vel_cmd_{}; // x, y
 
-	double wheel_base_{},wheel_track_{},wheel_radius_{},publish_rate_{},twist_angular_{},
-				timeout_{},effort_coeff_{},velocity_coeff_{},power_offset_{};
+        double wheel_base_{}, wheel_track_{}, wheel_radius_{}, publish_rate_{}, twist_angular_{},
+            timeout_{}, effort_coeff_{}, velocity_coeff_{}, power_offset_{};
         ros::Subscriber cmd_chassis_sub_;
         ros::Subscriber cmd_vel_sub_;
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;
-	std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry> > odom_pub_;	
-	std::shared_ptr<realtime_tools::RealtimePublisher<tf2_msgs::TFMessage> > tf_odom_pub_;	
-	void setOdomPubFields(ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh);
-	void updateOdom(const ros::Time& time, const ros::Duration& period);
+        std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::Odometry>> odom_pub_;
+        std::shared_ptr<realtime_tools::RealtimePublisher<tf2_msgs::TFMessage>> tf_odom_pub_;
+        void setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh);
+        void updateOdom(const ros::Time &time, const ros::Duration &period);
 
     private:
-		void moveJoint(const ros::Time& time, const ros::Duration& period);
+        void moveJoint(const ros::Time &time, const ros::Duration &period);
         std::string odom_frame_id_ = "odom";
         std::string base_frame_id_ = "base_link";
-		geometry_msgs::Twist forwardKinematics();
+        geometry_msgs::Twist forwardKinematics();
 
-		sp_common::RampFilter<double>* ramp_x_{}, *ramp_y_{}, *ramp_w_{};
-		effort_controllers::JointVelocityController ctrl_lf_,ctrl_rf_,ctrl_lb_,ctrl_rb_;
+        sp_common::RampFilter<double> *ramp_x_{}, *ramp_y_{}, *ramp_w_{};
+        effort_controllers::JointVelocityController ctrl_lf_, ctrl_rf_, ctrl_lb_, ctrl_rb_;
     };
 
 }
