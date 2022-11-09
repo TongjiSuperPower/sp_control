@@ -230,3 +230,127 @@ std::cout << MotorPtr["rm2006"]["act2pos"] << endl;
 
 故`XmlRpc::XmlRpcValue`类型的数据可以使用`std::map`定义的函数与迭代器。
 
+> 虽然同样能使用迭代器，但同时应当注意有些许函数是不太一样的，比如在XmlRpcValue中定义了hasMember的函数，而显然unorodered_map中没有这种用法。
+
+# C++语法 C++
+
+## 驼峰命名法 Camel-Case
+
+为了使代码具有可读性，我们设定若干规则：
+
+1. `class` 和 `struct`的每个单词首字母都大写
+2. `class` 内部的成员变量结尾增加下划线 `_`
+3. 所有函数尽量以动词开头，并且第一个单词首字母小写，其余单词首字母大写
+4. 一个声明为 `const` 的常量，首字母增加 `k`，其余单词首字母大写
+
+```C++
+int kDaysOfYear = 365;
+
+...
+    
+class MyClass{
+    public:
+    int doSomeThing()
+    {
+        ...
+    }
+    private:
+    std::string name_;
+    int age_;
+};
+```
+
+
+
+## 类与对象 Class and Object
+
+### 类的构造 1  Constructor 1
+
+类的构造是复杂的，且牵涉到相当多的细节，`类的构造`部分只讲述一些基础的内容、应该关注的细节、易错的语法问题，不会关注于移动语义、复制构造，引用构造、隐式构造的知识，也不会牵扯到继承与父类构造函数的联系。（以后的章节我会慢慢写，现阶段不用
+
+我们从最简单的类开始。该类包含两个私有成员和两个公有成员函数。我们可以通过`setProperties()`为我们已经声明的对象内的成员赋值，再利用`readProperties()`读取成员变量的值。该类虽然简单但是也体现了类的封装特性，其他程序必须使用该类提供的公有部分的接口才能够对其内的成员变量进行读取和修改。
+
+```c++
+class Entity{
+public:
+    void setProperties(int x,int y){ 
+        x_ = x;
+		y_ = y;
+    }
+    void readProperties()
+    { std::cout<<"x= "<<x_<<" y= "<<y_<<std::endl; }
+private:
+    int x_, y_;
+}; //别忘了这里的分号
+
+int main()
+{
+    Entity ent;
+    ent.setProperties(1,2);
+    ent.readProperties();
+    return 0;
+}
+```
+
+ 现在让我们`F5`跑一下代码。
+
+```c++
+RESULT:
+x= 1 y= 2
+```
+
+这个结果并不是很奇怪，很符合我们的预期。但是让我们思考一下，有没有更简单的办法对这个对象进行初始化，就像最基础的变量那样？答案是有的，现在改写我们的`Entity`，在类中增加一个没有返回值的与类同名的函数。（我们称其为构造函数）
+
+```c++
+class Entity{
+public:
+	Entity(int x, int y){ 
+        x_ = x;
+		y_ = y;
+    }
+	
+    void setProperties(int x, int y){ 
+        x_ = x;
+		y_ = y;
+    }
+    void readProperties()
+    { std::cout<<"x= "<<x_<<" y= "<<y_<<std::endl; }
+private:
+    int x_, y_;
+};
+
+int main()
+{
+    Entity ent = {1,2};
+    ent.readProperties();
+    return 0;
+}
+```
+
+再让我们`F5`跑一下代码。结果与之前完全一样，完全没有问题。但是我们现在让他来出现一点问题。修改`main`函数为最开始的样子，然后编译。Oops，编译无法通过，问题出现在哪里，又或者说我们改变了什么？`Entity ent;`我们修改了不带参数的初始化语句。由于增加了带参数的构造函数，现在编译器不知道如何在不带参数的情况下初始化我们的对象了！OK，我们继续修改一下我们的类，如下：
+
+```
+class Entity{
+public:
+	Entity(){}
+	Entity(int x, int y){ 
+        x_ = x;
+		y_ = y;
+    }
+	
+    void setProperties(int x, int y){ 
+        x_ = x;
+		y_ = y;
+    }
+    void readProperties()
+    { std::cout<<"x= "<<x_<<" y= "<<y_<<std::endl; }
+private:
+    int x_, y_;
+};
+```
+
+这次程序可以编译了，而且结果也与前几次相同。而我们做的仅仅是增加了一个不带参数的构造函数罢了（这个构造函数是空的）。或许你会疑问，刚开始一个构造函数都没有的时候，程序不是可以正常编译和运行吗？
+
+事实上，C++的类，只有**在你没有定义任何构造函数的时候才会为你提供一个空构造函数**，一旦你自己写了任何一个构造函数，那么这个空构造函数就不会被提供了，必须你自己写（除非你每次都愿意带参构造，那么你可以不写）。
+
+### 类的构造 2  Constructor 2
