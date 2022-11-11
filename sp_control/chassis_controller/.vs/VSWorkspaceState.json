@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\include",
+    "\\include\\chassis_controller",
+    "\\src"
+  ],
+  "SelectedNode": "\\src\\chassis_base.cpp",
+  "PreviewInSolutionExplorer": false
+}
