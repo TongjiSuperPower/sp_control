@@ -2,5 +2,23 @@
     "python.autoComplete.extraPaths": [
         "/home/adminpc/catkin_ws/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
-    ]
+    ],
+    "files.associations": {
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "numeric": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "bitset": "cpp",
+        "algorithm": "cpp",
+        "memory": "cpp",
+        "random": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "ratio": "cpp",
+        "streambuf": "cpp",
+        "*.txx": "cpp"
+    }
 }
