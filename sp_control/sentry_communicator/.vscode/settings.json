@@ -15,6 +15,7 @@
         "lu": "cpp",
         "qr": "cpp",
         "svd": "cpp",
-        "stdvector": "cpp"
+        "stdvector": "cpp",
+        "netlink.h": "c"
     }
 }

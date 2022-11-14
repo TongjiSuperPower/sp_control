@@ -134,6 +134,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}
                 src/sentry_communicator.cpp
+                src/can_bus.cpp
                 src/socketcan.cpp)
 
 ## Rename C++ executable without prefix

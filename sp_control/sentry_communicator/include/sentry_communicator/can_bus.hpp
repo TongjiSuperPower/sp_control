@@ -43,4 +43,21 @@ namespace sentry_communicator
         can_frame frame_;
         // mutable std::mutex mutex_;
     };
+
+    /* @brief : convert flaot into uint16_t, used in pair with uint2float()
+     * @param[in]  bits - number of bits used to transmit the data
+     */
+    static uint16_t float2uint(float x, float x_min, float x_max, uint8_t bits)
+    {
+        float span = x_max - x_min;
+        float offset = x_min;
+        return (uint16_t)((x - offset) * (float)((1 << bits) - 1) / span);
+    }
+
+    static float uint2float(uint16_t x_int, float x_min, float x_max, uint8_t bits)
+    {
+        float span = x_max - x_min;
+        float offset = x_min;
+        return ((float)x_int) * span / ((float)((1 << bits) - 1)) + offset;
+    }
 } //  namespace : sentry_communicator

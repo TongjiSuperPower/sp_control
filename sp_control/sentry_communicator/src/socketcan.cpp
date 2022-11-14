@@ -57,6 +57,21 @@ namespace can
   bool SocketCAN::open(const std::string &interface, boost::function<void(const can_frame &frame)> handler,
                        int thread_priority)
   {
+    /*
+     * If you can run sudo command without a password
+     * Then you can use the code below
+     * Automatically start the socket_can
+    if (interface.find("0") != std::string::npos)
+    {
+      system("ip link set can0 down");
+      system("ip link set can0 up type can bitrate 1000000");
+    }
+    else if (interface.find("0") != std::string::npos)
+    {
+      system("ip link set can1 down");
+      system("ip link set can1 up type can bitrate 1000000");
+    }
+    */
     reception_handler = std::move(handler);
     // Request a socket
     sock_fd_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
