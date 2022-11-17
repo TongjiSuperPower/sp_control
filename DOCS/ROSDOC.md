@@ -232,6 +232,8 @@ std::cout << MotorPtr["rm2006"]["act2pos"] << endl;
 
 > 虽然同样能使用迭代器，但同时应当注意有些许函数是不太一样的，比如在XmlRpcValue中定义了hasMember的函数，而显然unorodered_map中没有这种用法。
 
+
+
 # C++语法 C++
 
 ## 驼峰命名法 Camel-Case
@@ -250,7 +252,7 @@ int kDaysOfYear = 365;
     
 class MyClass{
     public:
-    int doSomeThing()
+    int doSomething()
     {
         ...
     }
@@ -354,3 +356,125 @@ private:
 事实上，C++的类，只有**在你没有定义任何构造函数的时候才会为你提供一个空构造函数**，一旦你自己写了任何一个构造函数，那么这个空构造函数就不会被提供了，必须你自己写（除非你每次都愿意带参构造，那么你可以不写）。
 
 ### 类的构造 2  Constructor 2
+
+TODO : 初始化列表 、 深拷贝&浅拷贝 、 something else ？
+
+
+
+## 一些C11特性  some C11 Feature
+
+### Function 特性  Feature Function
+
+作为引入部分，介绍一下函数指针。利用函数指针，我们可以将返回值数据类型和参数列表数据类型相同的函数归成一类。该功能使得我们可将函数作为参数传入其他函数。这段话或许有点抽象，但请阅读下述代码。我们首先定义了一个 `Person` 类，并提供一个名为 `doSomething` 的公有方法，该方法参数为一个无返回值且参数列表为空的函数（函数指针）。
+
+```c++
+#include <string>
+#include <iostream>
+
+class Student{
+public:
+	Person()=default;
+	void doSomething(void (*something)(void));
+};
+
+void Student::doSomething(void (*something)(void))
+{	something();  }
+
+void something1()
+{	std::cout << "摸鱼" << std::endl;   }
+void something2()
+{	std::cout << "摸更多鱼" << std::endl;   }
+
+int main()
+{
+    Student you;
+    you.doSomething(&something1); // = you.doSomething(something1);  --implicit--
+    you.doSomething(&something2);
+}
+```
+
+结果是显然的，如果不想摸鱼的话，可以传几个其他的函数传入 `doSomething(void(*something)(void))` 中。 现在我们可以建立一个概念：函数也可以作为参数传入其他函数中，而这一功能可以让程序更加的模块化。有了铺垫，现在正式介绍一下 `Function`  特性，可以简单地认为 `Function` 是一种更加安全且可读性更高的函数指针。此外，使用该特性可以更方便的指向类内成员函数。下面的程序分别使用函数指针和 `Function` 特性，其效果是 `useFunctionFeature` 和 `useFunctionPtr` 指向同一函数 `printNum`。总之，在不考虑系统开销的情况下，应尽量使用 `Function` 特性。
+
+```c++
+#include <functional>
+#include <iostream>
+#include <string>
+
+void printNum(int num)
+{
+    std::cout << num << std::endl;
+}
+
+int main()
+{
+    std::function<void(int)> useFunctionFeature;
+	void (*useFunctionPtr)(int);
+    
+    useFunctionFeature = &printNum;
+    useFunctionPtr = &printNum;
+    useFunctionFeature(1);
+    useFunctionPtr(2);
+}
+```
+
+
+
+### bind 特性  Feature bind
+
+作为C++11的新特性，`bind` 和 `Function` 常常成对使用（意思是不成对使用也可以），在我们的项目中，使用这两个特性来完成回调函数的功能，如 `sentry_communicator` 包下的`socketcan.cpp` 和 `can_bus.cpp` 中就运用了这些特性，构建了用于CAN通讯的数据接收回调函数。
+
+> 如果是在 windows 环境下写程序，且没有安装boost库，那么可以使用 std::bind 替代 boost::bind， 对于一般使用两者差别不大。
+
+```c++
+#include <iostream>
+#include <string>
+#include <functional>
+
+class HardwareInterface {
+public:
+    HardwareInterface() = default;
+    HardwareInterface(std::function<void(const int& data)> transmission_handler);
+    void doTransmission(const int& data);
+    std::function<void(const int& )> transmission_handler_;
+};
+
+HardwareInterface::HardwareInterface(std::function<void(const int& )> transmission_handler) {
+    transmission_handler_ = transmission_handler;
+}
+void HardwareInterface::doTransmission(const int& data)
+{
+    printf("Start to Transmit ...\n");
+    transmission_handler_(data);
+}
+
+class User {
+public:
+    std::string username_;
+
+    User() = default;
+    User(std::string username);
+    void Transmission(const int& data)
+    {
+        hardware_interface_.doTransmission(data);
+    }
+private:
+    HardwareInterface hardware_interface_;
+    void doDataParse(const int& data);
+};
+
+User::User(std::string username) :username_(username)
+{
+    
+    hardware_interface_.transmission_handler_= std::bind(&User::doDataParse, this, std::placeholders::_1);
+}
+void User::doDataParse(const int& data) {
+    printf("Parsing Data ...\n");
+}
+
+
+int main() {
+    User user("Lithesh");
+    user.Transmission(4);
+}
+```
+
