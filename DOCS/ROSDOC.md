@@ -4,15 +4,13 @@
 
 # 说明
 
-基于ros1开发，所以用的是moveit1、rviz等ros1的包。
+1. 感谢廖恰源的rm-control项目。
 
-若要迁移至ros2，应至少对代码内有关通讯部分的代码进行更改（不包括socketCAN）
+2. 基于ros1开发，所以用的是moveit1、rviz等ros1的包。若要迁移至ros2，应至少对代码内有关通讯部分的代码进行更改（不包括socketCAN）
 
-队内使用roscpp进行开发，因此文档也只包括cpp的实现，视情况会增加部分命令行的使用。
+3. 使用roscpp进行开发，因此文档也只包括cpp的实现，视情况会增加部分命令行的使用。
 
-易混淆的概念和名词会使用英文书写以方便理解。
-
-感谢廖恰源的rm-control项目。
+4. 易混淆的概念和名词会使用英文书写以方便区分和理解。
 
 
 
@@ -79,7 +77,7 @@ ros::NodeHandle nh3("~my_namespace");	// nh3 in <node_namespace>/<node_name>/my_
 
 
 
-# 参数服务器 Parameter Server
+# 参数服务器  Parameter Server
 
 ROS中使用参数服务器存储用户加载的参数。他支持多种数据类型，例如：整型、字符串、浮点数、布尔、字典、数组。
 
@@ -89,7 +87,7 @@ roscpp的参数服务器类API支持上述的所有数据类型，但不同数�
 
 
 
-## 参数上载 Param Upload
+## 参数上载  Param Upload
 
 参数上载可分为两步：编制 和 上载。
 
@@ -234,6 +232,131 @@ std::cout << MotorPtr["rm2006"]["act2pos"] << endl;
 
 
 
+# 实时工具  realtime_tools
+
+## 线程安全的数据获取  RealtimeBuffer
+
+在控制器设计中，我们常会创建 `Subscriber` 用于接收 `topic` 发出的控制指令。控制器为我们的主线程，由 `controller manager` 管理，可认为是实时线程（RT）。而 `Subscriber` 可简单理解为一个非实时线程（NonRT），那么在实际运行中**有可能出现同时接收指令和解算指令的情况**，相当于对一块内存同时进行读写操作，因此我们会使用ROS提供的实时工具 `RealtimeBuffer` 来保证线程中的数据安全。`RealtimeBuffer` 类在定义在 `realtime_tools` 命名空间下，其实现主要依靠进程锁 `mutex` （值得一提的是该类的实现并不依赖ros）。
+
+现在我们将上面关于线程中数据安全的讨论更加具象一点，仍以控制器设计为例子。
+
+```c++
+MyController::update(const ros::Time& time, const ros::Duration& period) 
+{
+    ....
+    joint_vel_ = processData(data_callback_);   
+    ....
+}
+
+/*
+ * @brief : Subscriber调用的回调函数
+*/
+MyController::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg)
+{
+    data_callback_ = *msg;
+}
+
+/------------------------------- Thread - Safe Code ---------------------------------/
+    
+MyController::update(const ros::Time& time, const ros::Duration& period) 
+{
+    mutex_.lock();
+    ....
+    joint_vel_ = processData(data_callback_);   
+    ....
+    mutex_unlock();
+}
+
+/*
+ * @brief : Subscriber调用的回调函数
+*/
+MyController::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg)
+{
+    mutex_.lock();
+    data_callback_ = *msg;
+    mutex_.unlock();
+}
+```
+
+上述的第一部分程序是数据不安全的，我们可以简单粗暴地将其改写一下，得到第二部分程序，使其在不考虑线程阻塞问题的情况下保证数据安全。或许你说，通过修改进程锁开锁关锁的位置、使用 `try_lock()` 、增加额外判断逻辑可使得阻塞问题彻底消失。每次接收数据都要考虑这么多，这样开发太累了，幸运的是，`RealtimeBuffer` 已经帮我们都想好了。
+
+> [realtime_buffer.h]: https://github.com/ros-controls/realtime_tools/blob/indigo-devel/include/realtime_tools/realtime_buffer.h
+
+```c++
+template <class T>
+class RealtimeBuffer
+{
+ public:
+  RealtimeBuffer()
+    : new_data_available_(false)
+  {
+    // allocate memory
+    non_realtime_data_ = new T();
+    realtime_data_ = new T();
+  }
+    
+  ......
+  
+  T* readFromRT()
+  {
+    // Check if the data is currently being written to (is locked)
+    if (mutex_.try_lock())
+    {
+      // swap pointers
+      if (new_data_available_)
+      {
+        T* tmp = realtime_data_;
+	realtime_data_ = non_realtime_data_;
+        non_realtime_data_ = tmp;
+	new_data_available_ = false;
+      }
+      mutex_.unlock();
+    }
+    return realtime_data_;
+  }
+      
+  ......
+    
+  void writeFromNonRT(const T& data)
+  {
+    // get lock
+    lock();
+
+    // copy data into non-realtime buffer
+    *non_realtime_data_ = data;
+    new_data_available_ = true;
+
+    // release lock
+    mutex_.unlock();
+  }
+};
+```
+
+摘出了 `RealtimeBuffer` 类中两个关键成员函数，`writeFromNonRT` 用于在非实时线程中存储数据，而 `readFromRT` 则用于在实时线程中读取数据。显而易见，在 `NonRT` 和 `RT` 间我们需要构造一个 `RealtimeBuffer` 对象用于作为数据传递的中介。通过一系列逻辑判断，该类使得我们在实时线程中总是能获取到非实时线程中最新一次收到的数据。现在运用该工具来修改我们的控制器。
+
+```c++
+MyController::update(const ros::Time& time, const ros::Duration& period) 
+{
+    ....
+    auto temp_data = *(realtime_buffer_.readFromRT());
+    joint_vel_ = processData(temp_data_);
+    /* 以下写法应该也不会引起数据安全问题：
+     * joint_vel_ = processData(*(realtime_buffer_.readFromRT()));
+    */
+    ....
+}
+
+/*
+ * @brief : Subscriber调用的回调函数
+*/
+MyController::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg)
+{
+    realtime_buffer_.writeFromNonRT(*msg);
+}
+```
+
+
+
 # C++语法 C++
 
 ## 驼峰命名法 Camel-Case
@@ -336,18 +459,17 @@ class Entity{
 public:
 	Entity(){}
 	Entity(int x, int y){ 
-        x_ = x;
+		x_ = x;
 		y_ = y;
-    }
-	
-    void setProperties(int x, int y){ 
-        x_ = x;
+	}
+	void setProperties(int x, int y){ 
+		x_ = x;
 		y_ = y;
-    }
-    void readProperties()
-    { std::cout<<"x= "<<x_<<" y= "<<y_<<std::endl; }
+	}
+	void readProperties()
+	{ std::cout<<"x= "<<x_<<" y= "<<y_<<std::endl; }
 private:
-    int x_, y_;
+	int x_, y_;
 };
 ```
 
@@ -464,7 +586,6 @@ private:
 
 User::User(std::string username) :username_(username)
 {
-    
     hardware_interface_.transmission_handler_= std::bind(&User::doDataParse, this, std::placeholders::_1);
 }
 void User::doDataParse(const int& data) {
