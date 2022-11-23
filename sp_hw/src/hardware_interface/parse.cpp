@@ -10,7 +10,7 @@ namespace sp_hw
      */
     void actuator_tree(const std::unordered_map<std::string, std::unordered_map<int, ActData>> &bus_id2act_data)
     {
-        for (auto bus_it = bus_id2act_data.begin(); bus_it != bus_id2act_data.end(); bus_it++)
+        for (auto bus_it = bus_id2act_data.begin(); bus_it != bus_id2act_data.end(); ++bus_it)
         {
             std::cout << "|-- " << bus_it->first << std::endl;
             for (auto act_id = bus_it->second.begin(); act_id != bus_it->second.end(); act_id++)
@@ -21,7 +21,7 @@ namespace sp_hw
         }
     }
 
-    // I think ParseError is more terrible than ParameterMissing
+    // Lithesh : I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
     // And i hate Misunderstanding.
     bool SpRobotHW::parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs)
@@ -30,7 +30,7 @@ namespace sp_hw
         ROS_ASSERT(act_coeffs.getType() == XmlRpc::XmlRpcValue::TypeStruct);
         try
         {
-            for (auto it = act_coeffs.begin(); it != act_coeffs.end(); it++)
+            for (auto it = act_coeffs.begin(); it != act_coeffs.end(); ++it)
             {
                 ActCoeff act_coeff{};
 
@@ -87,7 +87,7 @@ namespace sp_hw
         ROS_ASSERT(act_data.getType() == XmlRpc::XmlRpcValue::TypeStruct);
         try
         {
-            for (auto it = act_data.begin(); it != act_data.end(); it++)
+            for (auto it = act_data.begin(); it != act_data.end(); ++it)
             {
                 ActCoeff act_coeff{};
 
@@ -130,13 +130,13 @@ namespace sp_hw
                 // TODO(DONE) : use actuator_coefficient to define
                 if (type2act_coeffs_.find(type) != type2act_coeffs_.end())
                 {
-                    hardware_interface::JointStateHandle jnt_state(bus_id2act_data_[bus][id].name,
-                                                                   &bus_id2act_data_[bus][id].pos,
-                                                                   &bus_id2act_data_[bus][id].vel,
-                                                                   &bus_id2act_data_[bus][id].effort);
-                    jnt_state_interface_.registerHandle(jnt_state);
-                    effort_jnt_interface_.registerHandle(
-                        hardware_interface::JointHandle(jnt_state, &bus_id2act_data_[bus][id].exe_effort));
+                    hardware_interface::ActuatorStateHandle act_state(bus_id2act_data_[bus][id].name,
+                                                                      &bus_id2act_data_[bus][id].pos,
+                                                                      &bus_id2act_data_[bus][id].vel,
+                                                                      &bus_id2act_data_[bus][id].effort);
+                    act_state_interface_.registerHandle(act_state);
+                    effort_act_interface_.registerHandle(
+                        hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_effort));
                 }
                 else
                 {
@@ -153,9 +153,48 @@ namespace sp_hw
                              << "Check the Config Yaml.");
             return false;
         }
-        registerInterface(&jnt_state_interface_);
-        registerInterface(&effort_jnt_interface_);
+        registerInterface(&act_state_interface_);
+        registerInterface(&effort_act_interface_);
         actuator_tree(bus_id2act_data_);
+        is_actuator_specified_ = true; // now all the actuators have been parsed.
+
         return true;
+    }
+
+    bool SpRobotHW::loadUrdf(ros::NodeHandle &root_nh)
+    {
+        if (urdf_model_ == nullptr)
+            urdf_model_ = std::make_shared<urdf::Model>();
+        root_nh.getParam("/robot_description", urdf_string_);
+        return !urdf_string_.empty() && urdf_model_->initString(urdf_string_);
+    }
+
+    /*
+     * @brief   First, parse the Transmission block in the URDF
+     *          And
+     */
+    bool SpRobotHW::setupTransmission(ros::NodeHandle &root_nh)
+    {
+        try
+        {
+            transmission_iface_loader_ =
+                std::make_unique<transmission_interface::TransmissionInterfaceLoader>(this, &robot_transmissions_);
+        }
+        catch (const std::invalid_argument &ex)
+        {
+            ROS_ERROR_STREAM("Fariled to create transmission interface loader. " << ex.what());
+            return false;
+        }
+        catch (const pluginlib::LibraryLoadException &ex)
+        {
+            ROS_ERROR_STREAM("Fariled to create transmission interface loader. " << ex.what());
+            return false;
+        }
+        catch (...)
+        {
+            ROS_ERROR_STREAM("Fariled to create transmission interface loader. ");
+            return false;
+        }
+        // TODO : add the load code
     }
 }

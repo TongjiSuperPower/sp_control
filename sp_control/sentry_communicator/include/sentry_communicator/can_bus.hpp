@@ -1,9 +1,11 @@
 #pragma once
-#include "sentry_communicator/socketcan.h"
+#include <string>
+// ros
 #include <geometry_msgs/TwistStamped.h>
 #include <ros/ros.h>
-#include <string>
-
+#include <realtime_tools/realtime_buffer.h>
+// superpower_hardware
+#include "sentry_communicator/socketcan.h"
 namespace sentry_communicator
 {
     struct Command
@@ -36,14 +38,15 @@ namespace sentry_communicator
         can::SocketCAN socket_can_;
         ros::Subscriber cmd_chassis_sub_;
 
-        // Lithesh TODO : if the real-time performance should be concerned ?
+        // Lithesh : use realtime buffer to keep the multi-thread safe.
+        realtime_tools::RealtimeBuffer<Command> realtime_buffer_;
         Command cmd_struct_;
         // the int array used to contain data_frame, which has 8 byte
         uint8_t *can_data_;
         can_frame frame_;
-        // mutable std::mutex mutex_;
     };
 
+    // TODO(Lithesh) : the zero-drift should be concerned.
     /* @brief : convert flaot into uint16_t, used in pair with uint2float()
      * @param[in]  bits - number of bits used to transmit the data
      */

@@ -20,7 +20,7 @@ namespace sentry_communicator
         // set all data_byte to 0
         std::fill(std::begin(frame_.data), std::end(frame_.data), 0);
         // Lithesh TODO : add speed_limit
-        const geometry_msgs::Twist &command_velocity = cmd_struct_.cmd_vel_;
+        const geometry_msgs::Twist &command_velocity = realtime_buffer_.readFromNonRT()->cmd_vel_;
         uint16_t vel_x = float2uint(command_velocity.linear.x, MIN_SPEED, MAX_SPEED, 12);
         uint16_t vel_y = float2uint(command_velocity.linear.y, MIN_SPEED, MAX_SPEED, 12);
         uint16_t vel_z = float2uint(command_velocity.angular.z, MIN_SPEED, MAX_SPEED, 12);
@@ -35,11 +35,8 @@ namespace sentry_communicator
 
     void CanBus::cmdChassisCallback(const geometry_msgs::Twist::ConstPtr &msg)
     {
-        cmd_struct_.cmd_vel_ = *msg;
-        cmd_struct_.stamp_ = ros::Time::now();
-        /* Lithesh : I haven't learn the realtime_tools, so the code may cause realtime problem
-         Sorry :)
-        */
+        Command cmd_struct_temp{.cmd_vel_ = *msg, .stamp_ = ros::Time::now()};
+        realtime_buffer_.writeFromNonRT(cmd_struct_temp);
     }
 
     void CanBus::frameCallback(const can_frame &frame)
