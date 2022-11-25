@@ -1,8 +1,7 @@
 actuator_coefficient:
-  rm_3508:
-    act2pos: 0.0007669903
-    act2vel: 0.1047197551
-    act2effort: 1.90702994e-5
-    effort2act: 52437.561519
+  rm_3508: # without reducer, only the rotor
+    act2pos: 0.0007669903 # 2PI/8192
+    act2vel: 0.1047197551 # 2PI/60
+    act2effort: 1.90702994e-5 #
+    effort2act: 52437.561519 # tau to current
     max_out: 16384
-        

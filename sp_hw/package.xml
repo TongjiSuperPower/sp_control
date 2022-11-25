@@ -56,6 +56,10 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
+  <depend>hardware_interface</depend>
+  <depend>transmission_interface</depend>
+  <depend>urdf</depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

@@ -14,7 +14,23 @@ namespace sp_hw
         std::string name;
         std::string type;
         ros::Time stamp;
+        // encoder, rotor_rpm, multicycle encoder
+        uint16_t q_raw;
+        uint16_t q_last;
+        int16_t qd_raw;
+        int64_t q_circle;
+        int64_t seq;
+
         double pos, vel, effort;
         double cmd_effort, exe_effort;
+
+        bool is_halted = false;
+    };
+
+    // only used in can_bus and store the pointers
+    struct CanDataPtr
+    {
+        std::unordered_map<std::string, ActCoeff> *type2act_coeffs_;
+        std::unordered_map<int, ActData> *id2act_data_;
     };
 } // namespace : sp_hw

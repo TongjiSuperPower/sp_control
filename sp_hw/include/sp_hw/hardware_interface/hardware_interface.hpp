@@ -26,6 +26,8 @@ namespace sp_hw
     public:
         SpRobotHW() = default;
         bool init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) override;
+        void read(const ros::Time &time, const ros::Duration &period);
+        void write(const ros::Time &time, const ros::Duration &period);
 
     private:
         bool is_actuator_specified_ = false;
@@ -39,14 +41,14 @@ namespace sp_hw
         std::string urdf_string_;
         std::shared_ptr<urdf::Model> urdf_model_;
 
-        // Actuator
+        // joint_handle
+        std::vector<hardware_interface::JointHandle> effort_joint_handles_;
+        // ActuatorParam & Actuator Interface
         std::unordered_map<std::string, ActCoeff> type2act_coeffs_;
         std::unordered_map<std::string, std::unordered_map<int, ActData>> bus_id2act_data_;
-
-        // Actuator Interface
         hardware_interface::ActuatorStateInterface act_state_interface_;
         hardware_interface::EffortActuatorInterface effort_act_interface_;
-        // Transmission : ref <transmission_interface/transmission_interface_loader.h>
+        // Transmission
         std::unique_ptr<transmission_interface::TransmissionInterfaceLoader> transmission_iface_loader_;
         transmission_interface::RobotTransmissions robot_transmissions_;
         transmission_interface::ActuatorToJointStateInterface *act_to_jnt_state_;

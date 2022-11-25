@@ -170,8 +170,9 @@ namespace sp_hw
     }
 
     /*
-     * @brief   First, parse the Transmission block in the URDF
-     *          And
+     * @brief   Parse the Transmission block in the URDF.
+     *          Create transmission_interface and register handles
+     *          via robot_transmissions_.
      */
     bool SpRobotHW::setupTransmission(ros::NodeHandle &root_nh)
     {
@@ -195,6 +196,24 @@ namespace sp_hw
             ROS_ERROR_STREAM("Fariled to create transmission interface loader. ");
             return false;
         }
-        // TODO : add the load code
+
+        // Load all the transmission block in Urdf.
+        if (!transmission_iface_loader_->load(urdf_string_))
+            return false;
+
+        act_to_jnt_state_ = robot_transmissions_.get<transmission_interface::ActuatorToJointStateInterface>();
+        jnt_to_act_effort_ = robot_transmissions_.get<transmission_interface::JointToActuatorEffortInterface>();
+
+        /* Lithesh : create a vector of joint_handle used to control joint data directly.
+         * When you use ros-controller, effort_joint_handles is not recommanded to use,
+         * as it may cause data conflict.
+         */
+        // auto eff_jnt_iface = &(loader_data.joint_interfaces.effort_joint_interface)
+        auto effort_jnt_iface = this->get<hardware_interface::EffortJointInterface>();
+        std::vector<std::string> names = effort_jnt_iface->getNames();
+        for (const std::string &name : names)
+            effort_joint_handles_.push_back(effort_jnt_iface->getHandle(name));
+
+        return true;
     }
 }

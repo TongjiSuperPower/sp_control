@@ -34,7 +34,7 @@
 //
 // Created by qiayuan on 3/3/21.
 //
-#include "sp_hw/hardware_interface/socketcan.h"
+#include "sentry_communicator/socketcan.h"
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <utility>
@@ -80,13 +80,16 @@ namespace can
       ROS_ERROR("Error: Unable to create a CAN socket");
       return false;
     }
+
     char name[16] = {}; // avoid stringop-truncation
     strncpy(name, interface.c_str(), interface.size());
     strncpy(interface_request_.ifr_name, name, IFNAMSIZ);
+
     // Get the index of the network interface
+    // Lithesh : Mind the std::string interface, this val must be registered !
     if (ioctl(sock_fd_, SIOCGIFINDEX, &interface_request_) == -1)
     {
-      ROS_ERROR("Unable to select CAN interface %s: I/O control error", name);
+      ROS_ERROR("Unable to select CAN interface %s: I/O control error", interface.c_str());
       // Invalidate unusable socket
       close();
       return false;

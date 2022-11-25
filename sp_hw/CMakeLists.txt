@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(sp_hw)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
@@ -12,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 
   hardware_interface
+  transmission_interface
+  urdf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,11 +108,14 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS 
-   include
+  INCLUDE_DIRS 
+    include
 #  LIBRARIES 
 #  sp_hw
-#  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS
+    hardware_interface 
+    transmission_interface
+    urdf
 # DEPENDS 
 #  system_lib
 )
@@ -137,11 +144,14 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}
-          src/${PROJECT_NAME}.cpp
-          src/hardware_interface/hardware_interface.cpp
-          src/hardware_interface/parse.cpp
-          )
+set(SRC_LIST
+      src/${PROJECT_NAME}.cpp
+      src/hardware_interface/hardware_interface.cpp
+      src/hardware_interface/parse.cpp
+      src/hardware_interface/socketcan.cpp
+      src/hardware_interface/can_bus.cpp
+)
+add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
