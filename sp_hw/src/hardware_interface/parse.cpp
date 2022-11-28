@@ -161,6 +161,30 @@ namespace sp_hw
         return true;
     }
 
+    bool SpRobotHW::initCanBus(XmlRpc::XmlRpcValue &bus_list)
+    {
+        uint8_t EC = 0;
+        for (int i = 0; i < bus_list.size(); ++i)
+        {
+            std::string bus_name = bus_list[i];
+            if (bus_name.find("can") != std::string::npos)
+                // can_buses.push_back(new CanBus) may cause memory leak.
+                can_buses_.push_back(std::make_unique<CanBus>(bus_name,
+                                                              CanDataPtr{.type2act_coeffs_ = &type2act_coeffs_,
+                                                                         .id2act_data_ = &bus_id2act_data_[bus_name]},
+                                                              thread_priority_));
+            else
+            {
+                ROS_ERROR_STREAM("Unknown bus : " << bus_name);
+                EC++;
+            }
+        }
+        if (EC == 0)
+            return true;
+        else
+            return false;
+    }
+
     bool SpRobotHW::loadUrdf(ros::NodeHandle &root_nh)
     {
         if (urdf_model_ == nullptr)

@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   transmission_interface
   urdf
+  controller_manager
 )
 
 ## System dependencies are found with CMake's conventions
@@ -116,6 +117,7 @@ catkin_package(
     hardware_interface 
     transmission_interface
     urdf
+    controller_manager
 # DEPENDS 
 #  system_lib
 )
@@ -150,6 +152,7 @@ set(SRC_LIST
       src/hardware_interface/parse.cpp
       src/hardware_interface/socketcan.cpp
       src/hardware_interface/can_bus.cpp
+      src/hardware_interface_loader.cpp
 )
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 

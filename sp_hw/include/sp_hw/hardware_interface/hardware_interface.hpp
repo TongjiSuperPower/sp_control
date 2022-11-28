@@ -18,6 +18,7 @@
 
 /* SP HW */
 #include "sp_hw/hardware_interface/data_types.hpp"
+#include "sp_hw/hardware_interface/can_bus.hpp"
 
 namespace sp_hw
 {
@@ -25,18 +26,23 @@ namespace sp_hw
     {
     public:
         SpRobotHW() = default;
+        void setCanBusThreadPriority(const int &thread_priority);
         bool init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) override;
         void read(const ros::Time &time, const ros::Duration &period);
         void write(const ros::Time &time, const ros::Duration &period);
 
     private:
         bool is_actuator_specified_ = false;
+        int thread_priority_ = 0;
         // Param Parse
         bool parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs);
         bool parseActData(XmlRpc::XmlRpcValue &act_data);
+        bool initCanBus(XmlRpc::XmlRpcValue &can_bus);
         bool loadUrdf(ros::NodeHandle &root_nh);
         bool setupTransmission(ros::NodeHandle &root_nh);
 
+        // CanBus used as the actuator communication interface
+        std::vector<std::unique_ptr<CanBus>> can_buses_;
         // URDF model of the robot
         std::string urdf_string_;
         std::shared_ptr<urdf::Model> urdf_model_;
