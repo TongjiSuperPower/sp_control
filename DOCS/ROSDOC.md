@@ -230,6 +230,90 @@ std::cout << MotorPtr["rm2006"]["act2pos"] << endl;
 
 > 虽然同样能使用迭代器，但同时应当注意有些许函数是不太一样的，比如在XmlRpcValue中定义了hasMember的函数，而显然unorodered_map中没有这种用法。
 
+# 项目结构
+
+## sp_control
+
+控制层，使用`controller`来实现底盘、云台、机械臂的控制
+
+TODO
+
+```cpp
+sp_control
+|---chassis_controller//底盘控制器
+    |---config
+	|---include
+    |---launch
+    |---src
+    	|---chassis_base.cpp//底盘基类
+    	|---roller_wheel.cpp//麦轮底盘类
+|---engineer_gazebo//gazebo
+|---gimbal_controller//云台控制器
+	|---config
+	|---include
+    |---launch
+    |---src
+    	|---gimbal_controller.cpp//云台控制器类
+|---manipulator_controller//机械臂控制器
+|---manipulator_moveit_config//机械臂moveit配置
+|---sentry_communicator//哨兵通信
+
+```
+
+## sp_description
+
+模型文件夹，存放工程机器人模型
+
+```cpp
+sp_description
+|---launch
+|---urdf
+    |---common
+    	|---lidar2d.urdf.xacro
+    	|---mecanum_wheel.urdf.xacro//通用麦轮模型
+    |---engineer
+    	|---engineer_chassiss//工程底盘总装
+    	|---engineer_manipulator//工程机械臂总装
+    	|---fpv_module//工程云台总装
+    |---engineer.xacro//工程总装
+    |---kinect.xacro//kinect相机
+    |---manipulator_transmission.xacro//机械臂transmission
+    
+```
+
+
+
+## sp_hw
+
+抽象硬件层，提供`read`和`write`两个方法通过`can`总线实现与机器人的交互。
+
+TODO
+
+```cpp
+sp_hw
+|---config
+    |---actuator_coefficient.yaml//电机参数
+    |---hw_config.yaml//can总线参数
+|---include
+    |---hardware_interface
+    	|---can_bus.hp
+    	|---data_types.hpp//定义传输数据类型结构
+    	|---hardware_interface.hpp
+    	|---param_processor.hpp
+    	|---socketcan.h
+    |---hardware_interface_loader.hpp
+|---launch
+    |---sp_hw.launch//加载参数
+|---src
+    |---hardware_interface
+    	|---can_bus.cpp//can总线,上接hardware_interface.cpp,读写自定义can协议帧
+    	|---haraware_interface.cpp//硬件面板，提供读写函数
+    	|---parse.cpp//加载执行系数和执行数据
+    	|---socketcan.cpp//通信底层，上接can_bus,将can帧装入buffer发出或读取buffer中的can帧
+    |---hardware_interface_loader.cpp//循环进程，不断更新抽象硬件层的数据
+    |---sp_hw.cpp//主进程，开启硬件抽象层并开启控制循环
+```
+
 
 
 # 实时工具  realtime_tools
