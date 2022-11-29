@@ -2,7 +2,9 @@
 // ref rm_control.git
 
 #include "sp_hw/hardware_interface_loader.hpp"
-
+/*! TODO :  for the thread priority we should seperate the can_bus thread and
+ *          SpRobotLoader::update() thread.
+ */
 namespace sp_hw
 {
     SpRobotHWLoader::SpRobotHWLoader(ros::NodeHandle &nh, std::shared_ptr<SpRobotHW> hardware_interface)

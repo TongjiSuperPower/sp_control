@@ -117,4 +117,4 @@ namespace sp_hw
         CanFrameStamp can_frame_stamp{.frame = frame, .stamp = ros::Time::now()};
         read_buffer_.push_back(can_frame_stamp);
     }
-}
+} // namespace sp_hw

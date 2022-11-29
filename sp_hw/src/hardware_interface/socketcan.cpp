@@ -188,7 +188,10 @@ namespace can
     }
     ROS_INFO("Successfully started receiver thread with ID %lu", receiver_thread_id_);
     sched_param sched{.sched_priority = thread_priority};
-    pthread_setschedparam(receiver_thread_id_, SCHED_FIFO, &sched);
+    if (pthread_setschedparam(receiver_thread_id_, SCHED_FIFO, &sched) != 0)
+      ROS_WARN_STREAM("Failed to set socket_can threads priority \n"
+                      "possible reason : user permissions are not set properly.\n : "
+                      << std::strerror(errno) << std::endl);
     return true;
   }
 
