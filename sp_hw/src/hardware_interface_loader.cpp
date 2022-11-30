@@ -45,12 +45,12 @@ namespace sp_hw
                     update();
             } 
                 ROS_INFO("[SP_HW] thread deconstructed."); });
+        ROS_INFO("\033[42;37m [SP_HW] Successfully started HW_LOOP thread with ID %lu \033[0m", loop_thread_.native_handle());
         sched_param sched{.sched_priority = thread_priority};
         if (pthread_setschedparam(loop_thread_.native_handle(), SCHED_FIFO, &sched) != 0)
             ROS_WARN_STREAM("Failed to set threads priority (one possible reason could be that the user and the group permissions "
                             "are not set properly.)\n : "
                             << std::strerror(errno) << std::endl);
-        std::cout << "sp_hw init ended" << std::endl;
     }
 
     void SpRobotHWLoader::update()
@@ -86,7 +86,6 @@ namespace sp_hw
 
         // Sleep
         const auto sleep_till = current_time + duration_cast<clock::duration>(desired_duration);
-        // Test
         std::this_thread::sleep_until(sleep_till);
     }
 

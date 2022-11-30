@@ -45,6 +45,7 @@ namespace sp_hw
 
         actuator_state_pub_.reset(
             new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
+        return true;
     }
 
     void SpRobotHW::read(const ros::Time &time, const ros::Duration &period)
