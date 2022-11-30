@@ -168,14 +168,17 @@ namespace sp_hw
         {
             std::string bus_name = bus_list[i];
             if (bus_name.find("can") != std::string::npos)
+            {
                 // can_buses.push_back(new CanBus) may cause memory leak.
                 can_buses_.push_back(std::make_unique<CanBus>(bus_name,
                                                               CanDataPtr{.type2act_coeffs_ = &type2act_coeffs_,
                                                                          .id2act_data_ = &bus_id2act_data_[bus_name]},
                                                               thread_priority_));
+                ROS_INFO("\033[42;37m [SP_HW] *%s* Initialized ! \033[0m", bus_name.c_str());
+            }
             else
             {
-                ROS_ERROR_STREAM("Unknown bus : " << bus_name);
+                ROS_WARN("\033[41;37m [SP_HW] Unknown Bus : %s\033[0m", bus_name.c_str());
                 EC++;
             }
         }

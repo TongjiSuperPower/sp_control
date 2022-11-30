@@ -17,6 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
   transmission_interface
   urdf
   controller_manager
+
+  realtime_tools
+  sp_common
 )
 
 ## System dependencies are found with CMake's conventions

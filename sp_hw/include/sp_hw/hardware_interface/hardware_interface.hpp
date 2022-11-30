@@ -20,6 +20,10 @@
 #include "sp_hw/hardware_interface/data_types.hpp"
 #include "sp_hw/hardware_interface/can_bus.hpp"
 
+/* publish ActuatorState */
+#include <realtime_tools/realtime_publisher.h>
+#include "sp_common/ActuatorState.h"
+
 namespace sp_hw
 {
     class SpRobotHW : public hardware_interface::RobotHW
@@ -30,6 +34,8 @@ namespace sp_hw
         bool init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh) override;
         void read(const ros::Time &time, const ros::Duration &period);
         void write(const ros::Time &time, const ros::Duration &period);
+
+        void publishActuatorState(const ros::Time &time);
 
     private:
         bool is_actuator_specified_ = false;
@@ -59,5 +65,9 @@ namespace sp_hw
         transmission_interface::RobotTransmissions robot_transmissions_;
         transmission_interface::ActuatorToJointStateInterface *act_to_jnt_state_;
         transmission_interface::JointToActuatorEffortInterface *jnt_to_act_effort_;
+
+        // ActuatorState Publisher
+        ros::Time last_publish_time_;
+        std::unique_ptr<realtime_tools::RealtimePublisher<sp_common::ActuatorState>> actuator_state_pub_;
     };
 } // namespace : sp_hw

@@ -61,6 +61,9 @@
   <depend>urdf</depend>
   <depend>controller_manager</depend>
 
+  <depend>sp_common</depend>
+  <depend>realtime_tools</depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

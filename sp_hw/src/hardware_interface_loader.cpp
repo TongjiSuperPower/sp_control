@@ -35,20 +35,22 @@ namespace sp_hw
 
         // Get current time for use with first update
         last_time_ = clock::now();
-
-        // Setup loop thread
+        loop_running_ = true;
+        //  Setup loop thread
         loop_thread_ = std::thread([&]()
                                    {
-    while (loop_running_)
-    {
-      if (loop_running_)
-        update();
-    } });
+            while (loop_running_)
+            {
+                if (loop_running_)
+                    update();
+            } 
+                ROS_INFO("[SP_HW] thread deconstructed."); });
         sched_param sched{.sched_priority = thread_priority};
         if (pthread_setschedparam(loop_thread_.native_handle(), SCHED_FIFO, &sched) != 0)
             ROS_WARN_STREAM("Failed to set threads priority (one possible reason could be that the user and the group permissions "
                             "are not set properly.)\n : "
                             << std::strerror(errno) << std::endl);
+        std::cout << "sp_hw init ended" << std::endl;
     }
 
     void SpRobotHWLoader::update()
@@ -78,10 +80,13 @@ namespace sp_hw
 
         // Output
         // send the new command to hardware
-        hardware_interface_->write(ros::Time::now(), elapsed_time_);
+        // TODO : (Lithesh) until we have urdf and then use this line
+        // hardware_interface_->write(ros::Time::now(), elapsed_time_);
+        hardware_interface_->publishActuatorState(ros::Time::now());
 
         // Sleep
         const auto sleep_till = current_time + duration_cast<clock::duration>(desired_duration);
+        // Test
         std::this_thread::sleep_until(sleep_till);
     }
 
@@ -90,5 +95,6 @@ namespace sp_hw
         loop_running_ = false;
         if (loop_thread_.joinable())
             loop_thread_.join();
+        ROS_INFO("[SP_HW] HW deconstructed.");
     }
 } // namespace sp_hw

@@ -16,9 +16,6 @@ namespace sp_hw
         else if (!parseActData(xml_rpc_value))
             return false;
 
-        // TEST
-        return true;
-
         if (!robot_hw_nh.getParam("bus", xml_rpc_value))
             ROS_WARN("No Bus Specified");
         else if (xml_rpc_value.getType() == XmlRpc::XmlRpcValue::TypeArray)
@@ -28,6 +25,9 @@ namespace sp_hw
             if (!initCanBus(xml_rpc_value))
                 ROS_WARN("Some Bus Communication has not been initialized \n");
         }
+        // TEST
+        actuator_state_pub_.reset(
+            new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
         return true;
 
         // URDF and Transmission
@@ -42,7 +42,11 @@ namespace sp_hw
             ROS_ERROR("hardware_interface : Error occurred while loading Transmission in urdf");
             return false;
         }
+
+        actuator_state_pub_.reset(
+            new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
     }
+
     void SpRobotHW::read(const ros::Time &time, const ros::Duration &period)
     {
         for (auto &bus : can_buses_)
@@ -64,9 +68,12 @@ namespace sp_hw
                     act_data.second.effort = 0;
                 }
             }
-        if (is_actuator_specified_)
-            act_to_jnt_state_->propagate();
+        /*
+    if (is_actuator_specified_)
+        act_to_jnt_state_->propagate();
+        */
     }
+
     void SpRobotHW::write(const ros::Time &time, const ros::Duration &period)
     {
         if (is_actuator_specified_)
@@ -78,7 +85,44 @@ namespace sp_hw
         }
         for (auto &bus : can_buses_)
             bus->write();
+        publishActuatorState(time);
     }
 
     void SpRobotHW::setCanBusThreadPriority(const int &thread_priority) { thread_priority_ = thread_priority; }
+
+    /*! @brief  if you want higher efficiency, this function can be ommited in
+     *          SpRobotHW::write();
+     */
+    void SpRobotHW::publishActuatorState(const ros::Time &time)
+    {
+        if (!is_actuator_specified_)
+            return;
+        if (actuator_state_pub_->trylock())
+        {
+            sp_common::ActuatorState actuator_state;
+            for (const auto &id2act_datas : bus_id2act_data_)
+                for (const auto &act_data : id2act_datas.second)
+                {
+                    actuator_state.stamp.push_back(act_data.second.stamp);
+                    actuator_state.name.push_back(act_data.second.name);
+                    actuator_state.type.push_back(act_data.second.type);
+                    actuator_state.bus.push_back(id2act_datas.first);
+                    actuator_state.id.push_back(act_data.first);
+
+                    actuator_state.position_raw.push_back(act_data.second.q_raw);
+                    actuator_state.velocity_raw.push_back(act_data.second.qd_raw);
+                    actuator_state.circle.push_back(act_data.second.q_circle);
+                    actuator_state.last_position_raw.push_back(act_data.second.q_last);
+
+                    actuator_state.position.push_back(act_data.second.pos);
+                    actuator_state.velocity.push_back(act_data.second.vel);
+                    actuator_state.effort.push_back(act_data.second.effort);
+                    actuator_state.cmd_effort.push_back(act_data.second.cmd_effort);
+                    actuator_state.exe_effort.push_back(act_data.second.exe_effort);
+                }
+            actuator_state_pub_->msg_ = actuator_state;
+            actuator_state_pub_->unlockAndPublish();
+            last_publish_time_ = time;
+        }
+    }
 } // namespace sp_hw
