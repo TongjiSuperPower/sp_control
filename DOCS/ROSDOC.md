@@ -362,9 +362,7 @@ MyController::cmdVelCallback(const geometry_msgs::Twist::ConstPtr& msg)
 }
 ```
 
-上述的第一部分程序是数据不安全的，我们可以简单粗暴地将其改写一下，得到第二部分程序，使其在不考虑线程阻塞问题的情况下保证数据安全。或许你说，通过修改进程锁开锁关锁的位置、使用 `try_lock()` 、增加额外判断逻辑可使得阻塞问题彻底消失。每次接收数据都要考虑这么多，这样开发太累了，幸运的是，`RealtimeBuffer` 已经帮我们都想好了。
-
-> [realtime_buffer.h]: https://github.com/ros-controls/realtime_tools/blob/indigo-devel/include/realtime_tools/realtime_buffer.h
+上述的第一部分程序是数据不安全的，我们可以简单粗暴地将其改写一下，得到第二部分程序，使其在不考虑线程阻塞问题的情况下保证数据安全。或许你说，通过修改进程锁开锁关锁的位置、使用 `try_lock()` 、增加额外判断逻辑可使得阻塞问题彻底消失。每次接收数据都要考虑这么多，这样开发太累了，幸运的是，[**RealtimeBuffer**](https://github.com/ros-controls/realtime_tools/blob/indigo-devel/include/realtime_tools/realtime_buffer ) 已经帮我们都想好了。
 
 ```c++
 template <class T>

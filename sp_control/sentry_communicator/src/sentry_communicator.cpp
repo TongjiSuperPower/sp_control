@@ -9,6 +9,7 @@ int main(int argc, char **argv)
     ros::AsyncSpinner spinner(2);
     spinner.start();
 
+    ros::
     while (ros::ok())
     {
         can_bus.write();
