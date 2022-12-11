@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: sp_description
+    relative_path: urdf/engineer/engineer2_manipulator/manipulator.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/engineer2_manipulator.srdf
+  CONFIG:
+    author_name: Lithesh
+    author_email: 1850056@tongji.edu.cn
+    generated_timestamp: 1670591905

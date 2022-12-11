@@ -1,5 +1,5 @@
 # Engineer_on_ROS
-version 0.1.1
+version 0.2.0
 
 | 时间       | 包名                            | 修改                                           |
 | ---------- | ------------------------------- | ---------------------------------------------- |
@@ -19,13 +19,22 @@ version 0.1.1
 |            | arm_control                     | 该包用于实现机械臂规划，已完成关节空间函数编写 |
 | 2022/11/03 | sp_hw                           | Parse.cpp                                      |
 | 2022/11/14 | sentry_communicator             | 实现                                           |
+| 2022/12/11 | moveit_config                   | 更好的机械臂                                   |
 
 
+
+提醒：
+
+1.  为了保证更高效的机械臂解算，需要安装解算插件包。
+
+   ```c++
+   sudo apt-get install ros-noetic-trac-ik-kinematics-plugin
+   ```
+
+   
 
 
 TODO:
-
-对机械臂模型错位进行修复
 
 对gimbal_controller的msg进行修改
 
