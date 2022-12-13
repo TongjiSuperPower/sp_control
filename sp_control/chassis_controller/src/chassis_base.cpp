@@ -34,18 +34,6 @@ namespace chassis_controller
         // Setup odometry realtime publisher + odom message constant fields
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
 
-        ros::NodeHandle nh_lf = ros::NodeHandle(controller_nh, "left_front");
-        ros::NodeHandle nh_rf = ros::NodeHandle(controller_nh, "right_front");
-        ros::NodeHandle nh_lb = ros::NodeHandle(controller_nh, "left_back");
-        ros::NodeHandle nh_rb = ros::NodeHandle(controller_nh, "right_back");
-        if (!ctrl_lf_.init(effort_joint_interface_, nh_lf) || !ctrl_rf_.init(effort_joint_interface_, nh_rf) ||
-            !ctrl_lb_.init(effort_joint_interface_, nh_lb) || !ctrl_rb_.init(effort_joint_interface_, nh_rb))
-            return false;
-        joint_handles_.push_back(ctrl_lf_.joint_);
-        joint_handles_.push_back(ctrl_rf_.joint_);
-        joint_handles_.push_back(ctrl_lb_.joint_);
-        joint_handles_.push_back(ctrl_rb_.joint_);
-
         ramp_x_ = new sp_common::RampFilter<double>(2.5, 0.001);
         ramp_y_ = new sp_common::RampFilter<double>(2.5, 0.001);
         ramp_w_ = new sp_common::RampFilter<double>(2.5, 0.001);

@@ -6,6 +6,20 @@ namespace chassis_controller
     bool RollerWheel::init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
     {
         ChassisBase::init(robot_hw, root_nh, controller_nh);
+
+        ros::NodeHandle nh_lf = ros::NodeHandle(controller_nh, "left_front");
+        ros::NodeHandle nh_rf = ros::NodeHandle(controller_nh, "right_front");
+        ros::NodeHandle nh_lb = ros::NodeHandle(controller_nh, "left_back");
+        ros::NodeHandle nh_rb = ros::NodeHandle(controller_nh, "right_back");
+        if (!ctrl_lf_.init(effort_joint_interface_, nh_lf) || !ctrl_rf_.init(effort_joint_interface_, nh_rf) ||
+            !ctrl_lb_.init(effort_joint_interface_, nh_lb) || !ctrl_rb_.init(effort_joint_interface_, nh_rb))
+            return false;
+
+        joint_handles_.push_back(ctrl_lf_.joint_);
+        joint_handles_.push_back(ctrl_rf_.joint_);
+        joint_handles_.push_back(ctrl_lb_.joint_);
+        joint_handles_.push_back(ctrl_rb_.joint_);
+
         ROS_INFO("CHASSIS : Initializing Completed");
         return true;
     }

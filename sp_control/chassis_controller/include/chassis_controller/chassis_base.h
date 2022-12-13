@@ -90,7 +90,6 @@ namespace chassis_controller
         std::string base_frame_id_ = "base_link";
 
         sp_common::RampFilter<double> *ramp_x_{}, *ramp_y_{}, *ramp_w_{};
-        effort_controllers::JointVelocityController ctrl_lf_, ctrl_rf_, ctrl_lb_, ctrl_rb_;
     };
 
 }

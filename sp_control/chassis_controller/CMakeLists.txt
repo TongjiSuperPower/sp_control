@@ -138,6 +138,7 @@ include_directories(
 set(SRC_LIST 
             src/chassis_base.cpp
             src/roller_wheel.cpp
+            src/swerve.cpp
             )
 add_library(chassis_controller ${SRC_LIST}) 
 target_link_libraries(chassis_controller ${catkin_LIBRARIES})

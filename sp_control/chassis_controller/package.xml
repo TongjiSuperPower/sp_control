@@ -65,11 +65,14 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
-  <depend>pluginlib</depend>
   <depend>hardware_interface</depend>
   <depend>realtime_tools</depend>
   <depend>control_toolbox</depend>
   <depend>effort_controllers</depend>
+  
+  <!-- For custom controllers -->
+  <build_depend>pluginlib</build_depend>
+  <exec_depend>pluginlib</exec_depend>
 
   <depend>tf2</depend>
   <depend>tf2_geometry_msgs</depend>

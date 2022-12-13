@@ -1,0 +1,118 @@
+chassis: 
+  chassis_controller:
+    # the controller you use
+    type: "chassis_controller/Swerve"
+    
+    # the essential param START here
+    publish_rate: 100
+    power:
+      effort_coeff: 12.0
+      vel_coeff: 0.0048
+      power_offset: -3
+    twist_angular: 0.5233
+    timeout: 0.1
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+
+    wheel_base: 0.47
+    wheel_track: 0.505
+    wheel_radius: 0.07625
+    # the essential param END here
+
+    # DON'T change the ns "left_front_heading" "right_front_driving" U.S.W
+    left_front_heading:
+    # change the joint name, make it the same as URDF
+      joint: "left_front_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    right_front_heading:
+      joint: "right_front_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    left_back_heading:
+      joint: "left_back_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    right_back_heading:
+      joint: "right_back_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    left_front_driving:
+      joint: "left_front_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    right_front_driving:
+      joint: "right_front_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    left_back_driving:
+      joint: "left_back_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }
+    right_back_driving:
+      joint: "right_back_wheel_joint"
+      pid:
+        {
+          p: 0.8,
+          i: 0,
+          d: 0.0,
+          i_max: 0.0,
+          i_min: 0.0,
+          antiwindup: true,
+          publish_state: true,
+        }

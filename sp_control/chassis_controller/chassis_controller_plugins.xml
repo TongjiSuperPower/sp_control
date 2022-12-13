@@ -5,5 +5,12 @@
 		<description>
 		THE FIRST STEP OF OUR ENGINEER.
 		</description>
+	</class>	
+	<class 	name="chassis_controller/Swerve"
+			type="chassis_controller::Swerve"
+			base_class_type="controller_interface::ControllerBase">
+		<description>
+		The chassis controller for Sentry.
+		</description>
 	</class>
 </library>
