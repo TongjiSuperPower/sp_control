@@ -18,6 +18,7 @@
 #include <string>
 
 #include <sp_common/filters/filters.h>
+#include <sp_common/utilities/base_utilities.h>
 namespace chassis_controller
 {
     struct Command

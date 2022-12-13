@@ -3,14 +3,6 @@
 
 namespace chassis_controller
 {
-    template <typename T>
-    T getParam(ros::NodeHandle &pnh, const std::string &param_name, const T &default_val)
-    {
-        T param_val;
-        pnh.param<T>(param_name, param_val, default_val);
-        return param_val;
-    }
-
     bool ChassisBase::init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
     {
         ROS_INFO("CHASSIS : Initializing Started");
@@ -24,10 +16,10 @@ namespace chassis_controller
             std::cout << "Some chassis params doesn't given" << controller_nh.getNamespace().c_str() << std::endl;
             return false;
         }
-        wheel_radius_ = getParam(controller_nh, "wheel_radius", 0.02);
-        wheel_track_ = getParam(controller_nh, "wheel_track", 0.410);
-        wheel_base_ = getParam(controller_nh, "wheel_base", 0.320);
-        twist_angular_ = getParam(controller_nh, "twist_angular", M_PI / 6);
+        wheel_radius_ = sp_common::getParam(controller_nh, "wheel_radius", 0.02);
+        wheel_track_ = sp_common::getParam(controller_nh, "wheel_track", 0.410);
+        wheel_base_ = sp_common::getParam(controller_nh, "wheel_base", 0.320);
+        twist_angular_ = sp_common::getParam(controller_nh, "twist_angular", M_PI / 6);
 
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
