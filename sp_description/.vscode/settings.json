@@ -1,0 +1,7 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/huan/AutoRobot/Engineer_on_ROS/devel/lib/python3/dist-packages",
+        "/home/huan/AutoRobot/RobotRTS_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ]
+}

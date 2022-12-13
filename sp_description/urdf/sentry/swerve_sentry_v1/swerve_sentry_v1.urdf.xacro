@@ -140,7 +140,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ssp_description/meshes/sentry/swerve_sentry_v1/driving_back_left_link.STL" />
+          filename="package://sp_description/meshes/sentry/swerve_sentry_v1/driving_back_left_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -198,7 +198,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ssp_description/meshes/sentry/swerve_sentry_v1/swerve_back_right_link.STL" />
+          filename="package://sp_description/meshes/sentry/swerve_sentry_v1/swerve_back_right_link.STL" />
       </geometry>
     </collision>
   </link>
