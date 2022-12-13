@@ -111,7 +111,7 @@ include_directories(
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
 # set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
 file(GLOB_RECURSE SOURCE_FILE 
-	"src/filters/*.cpp" "src/utilities/*.cpp")
+	"src/filters/*.cpp")
 add_library(sp_common ${SOURCE_FILE})
 ## Add cmake target dependencies of the executable
 ## same as for the library above
