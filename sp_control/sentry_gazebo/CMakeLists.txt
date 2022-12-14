@@ -1,30 +1,16 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(chassis_controller)
-
-## Compile as C++11, supported in ROS Kinetic and newer
+project(sentry_gazebo)
 # add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  controller_interface
-  roscpp
-  roslint
-  rospy
-  std_msgs
-  pluginlib
-  hardware_interface
-  realtime_tools
-  control_toolbox
-  effort_controllers
+  gazebo_msgs
+  gazebo_ros
+  gazebo_ros_control
 
-  tf2
-  tf2_msgs
-  tf2_geometry_msgs
-  geometry_msgs
-
-  sp_common
+  sp_description
 )
 
 ## System dependencies are found with CMake's conventions
@@ -84,7 +70,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
+#   gazebo_msgs
 # )
 
 ################################################
@@ -118,8 +104,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES chassis_controller
-#  CATKIN_DEPENDS controller_interface roscpp roslint rospy std_msg
+#  LIBRARIES engineer_gazebo
+#  CATKIN_DEPENDS gazebo_msgs gazebo_plugins gazebo_ros gazebo_ros_control
 #  DEPENDS system_lib
 )
 
@@ -130,18 +116,14 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+# include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-set(SRC_LIST 
-            src/chassis_base.cpp
-            src/roller_wheel.cpp
-            src/swerve_wheel.cpp
-            )
-add_library(chassis_controller ${SRC_LIST}) 
-target_link_libraries(chassis_controller ${catkin_LIBRARIES})
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/engineer_gazebo.cpp
+# )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -151,7 +133,7 @@ target_link_libraries(chassis_controller ${catkin_LIBRARIES})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/chassis_controller_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/engineer_gazebo_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -215,10 +197,10 @@ target_link_libraries(chassis_controller ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_chassis_controller.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_engineer_gazebo.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
-roslint_cpp()
+
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

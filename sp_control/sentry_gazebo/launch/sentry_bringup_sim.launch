@@ -1,0 +1,13 @@
+<launch>
+	<arg name="paused" default="false"/>
+
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="paused" value="$(arg paused)"/>
+	</include>
+
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/sentry/swerve_sentry_v1/swerve_sentry_v1.urdf.xacro'"/>
+
+	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.5 -x 0.3 -y 0.3 -urdf -model swerve_sentry_v1 -param robot_description"/>
+
+
+</launch>
