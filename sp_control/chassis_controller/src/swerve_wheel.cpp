@@ -60,18 +60,13 @@ namespace chassis_controller
         //注意电机安装方向的不同
         ctrl_rf_driving_.setCommand(-sqrt(para_xy - para_x + para_y)/wheel_radius_);
         ctrl_lf_driving_.setCommand(-sqrt(para_xy - para_x - para_y)/wheel_radius_);
-        ctrl_lb_driving_.setCommand( sqrt(para_xy + para_x - para_y)/wheel_radius_);
-        ctrl_rb_driving_.setCommand( sqrt(para_xy + para_x + para_y)/wheel_radius_);
+        ctrl_lb_driving_.setCommand(-sqrt(para_xy + para_x - para_y)/wheel_radius_);
+        ctrl_rb_driving_.setCommand(-sqrt(para_xy + para_x + para_y)/wheel_radius_);
 
-        ctrl_rf_driving_.setCommand(34.0);
-        ctrl_lf_driving_.setCommand(0);
-        ctrl_lb_driving_.setCommand(0);
-        ctrl_rb_driving_.setCommand(0);
-
-        // ctrl_lf_driving_.update(time, period);
-        // ctrl_rf_driving_.update(time, period);
-        // ctrl_lb_driving_.update(time, period);
-        // ctrl_rb_driving_.update(time, period);
+        ctrl_lf_driving_.update(time, period);
+        ctrl_rf_driving_.update(time, period);
+        ctrl_lb_driving_.update(time, period);
+        ctrl_rb_driving_.update(time, period);
 
         ROS_INFO_STREAM("x:"<<vel_cmd_.x<<" y:"<<vel_cmd_.y<<" z:"<<vel_cmd_.z);
         ROS_INFO_STREAM(test__);

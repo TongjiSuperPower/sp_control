@@ -6,6 +6,11 @@
   name="swerve_sentry_v1"
   xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:property name="driving_jnt_eff_limit" value="10"/>
+  <xacro:property name="driving_jnt_vel_limit" value="70"/>
+  <xacro:property name="heading_jnt_eff_limit" value="12"/>
+  <xacro:property name="heading_jnt_vel_limit" value="50"/>
+
   <link
     name="base_link">
     <inertial>
@@ -87,7 +92,7 @@
     </collision>
   </link>
   <joint
-    name="swerve_back_left_joint"
+    name="left_back_heading_joint"
     type="revolute">
     <origin
       xyz="-0.17 0.17 -0.012"
@@ -98,11 +103,7 @@
       link="swerve_back_left_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
     name="driving_back_left_link">
@@ -145,7 +146,7 @@
     </collision>
   </link>
   <joint
-    name="driving_back_left_joint"
+    name="left_back_driving_joint"
     type="revolute">
     <origin
       xyz="1.3028E-05 -0.028 -0.13395"
@@ -156,11 +157,7 @@
       link="driving_back_left_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
     name="swerve_back_right_link">
@@ -203,7 +200,7 @@
     </collision>
   </link>
   <joint
-    name="swerve_back_right_joint"
+    name="right_back_heading_joint"
     type="revolute">
     <origin
       xyz="-0.17 -0.17 -0.012"
@@ -214,11 +211,7 @@
       link="swerve_back_right_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
     name="driving_back_right_link">
@@ -261,7 +254,7 @@
     </collision>
   </link>
   <joint
-    name="driving_back_right_joint"
+    name="right_back_driving_joint"
     type="revolute">
     <origin
       xyz="1.3028E-05 -0.028 -0.13395"
@@ -272,11 +265,7 @@
       link="driving_back_right_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
     name="swerve_heading_right_link">
@@ -319,7 +308,7 @@
     </collision>
   </link>
   <joint
-    name="swerve_heading_right_joint"
+    name="right_front_heading_joint"
     type="revolute">
     <origin
       xyz="0.17 -0.17 -0.012"
@@ -330,11 +319,7 @@
       link="swerve_heading_right_link" />
     <axis
       xyz="0 0 1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
     name="driving_heading_right_link">
@@ -377,7 +362,7 @@
     </collision>
   </link>
   <joint
-    name="driving_heading_right_joint"
+    name="right_front_driving_joint"
     type="revolute">
     <origin
       xyz="1.3028E-05 -0.028 -0.13395"
@@ -388,11 +373,7 @@
       link="driving_heading_right_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
     name="swerve_heading_left_link">
@@ -435,7 +416,7 @@
     </collision>
   </link>
   <joint
-    name="swerve_heading_left_joint"
+    name="left_front_heading_joint"
     type="revolute">
     <origin
       xyz="0.17 0.17 -0.012"
@@ -446,11 +427,7 @@
       link="swerve_heading_left_link" />
     <axis
       xyz="0 0 1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
     name="driving_heading_left_link">
@@ -493,7 +470,7 @@
     </collision>
   </link>
   <joint
-    name="driving_heading_left_joint"
+    name="left_front_driving_joint"
     type="revolute">
     <origin
       xyz="1.3028E-05 -0.028 -0.13395"
@@ -504,96 +481,36 @@
       link="driving_heading_left_link" />
     <axis
       xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
+    <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
 
-<!-- transmission for back_left_wheel -->
-  <transmission name="trans_swerve_back_left_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="swerve_back_left_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="swerve_back_left_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
+  <xacro:macro name="joint_transmission" params="prefix">
+    <transmission name="trans_${prefix}">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${prefix}_actuator">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="${prefix}_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
+  </xacro:macro>
 
-  <transmission name="trans_driving_back_left_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="driving_back_left_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="driving_back_left_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-  
-<!-- transmission for back_right_wheel -->
-  <transmission name="trans_swerve_back_right_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="swerve_back_right_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="swerve_back_right_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
+<!-- transmission for left_back_wheel-->
+  <xacro:joint_transmission prefix="left_back_heading"/>
+  <xacro:joint_transmission prefix="left_back_driving"/>
 
-  <transmission name="trans_driving_back_right_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="driving_back_right_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="driving_back_right_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
+<!-- transmission for right_back_wheel-->
+  <xacro:joint_transmission prefix="right_back_heading"/>
+  <xacro:joint_transmission prefix="right_back_driving"/>
 
-<!-- transmission for heading_right_wheel -->
-  <transmission name="trans_swerve_heading_right_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="swerve_heading_right_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="swerve_heading_right_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
+<!-- transmission for right_front_wheel-->
+  <xacro:joint_transmission prefix="right_front_heading"/>
+  <xacro:joint_transmission prefix="right_front_driving"/>
 
-  <transmission name="trans_driving_heading_right_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="driving_heading_right_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="driving_heading_right_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-<!-- transmission for heading_left_wheel -->
-  <transmission name="trans_swerve_heading_left_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="swerve_heading_left_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="swerve_heading_left_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
-
-  <transmission name="trans_driving_heading_left_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="driving_heading_left_actuator">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-    <joint name="driving_heading_left_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-  </transmission>
+<!-- transmission for left_front_wheel -->
+  <xacro:joint_transmission prefix="left_front_heading"/>
+  <xacro:joint_transmission prefix="left_front_driving"/>
 
 <!-- gazebo config -->
   <gazebo>
