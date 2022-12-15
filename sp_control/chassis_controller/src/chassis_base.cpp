@@ -46,7 +46,6 @@ namespace chassis_controller
 
     void ChassisBase::update(const ros::Time &time, const ros::Duration &period)
     {
-        ROS_INFO("Update");
         geometry_msgs::Twist cmd_vel = cmd_rt_buffer_.readFromRT()->cmd_vel_;
 
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
