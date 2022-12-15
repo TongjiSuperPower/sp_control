@@ -1,14 +1,14 @@
 <launch>
-	<arg name="paused" default="false"/>
+  <arg name="paused" default="false"/>
+  <arg name="robot_type" value="sentry"/>
 
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="paused" value="$(arg paused)"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="$(arg paused)"/>
 		<!-- arg name="world_name" value="$(find engineer_gazebo)/worlds/test.world"/-->
-	</include>
+  </include>
 
-	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/sentry/swerve_sentry_chassis/swerve_sentry_chassis.urdf.xacro'"/>
-
-	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.5 -x 0.3 -y 0.3 -urdf -model swerve_sentry_chassis -param robot_description"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/sentry/swerve_sentry_chassis/swerve_sentry_chassis.urdf.xacro'"/>
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.5 -x 0.3 -y 0.3 -urdf -model swerve_sentry_chassis -param robot_description"/>
 
   <node
     name="joint_state_publisher"
@@ -24,4 +24,5 @@
     type="rviz"
     args="-d $(find sp_description)/urdf.rviz" />
 
+  <rosparam file="$(find chassis_controller)/config/$(arg robot_type).yaml" command="load"/>
 </launch>
