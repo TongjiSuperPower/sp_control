@@ -6,8 +6,8 @@
 		THE FIRST STEP OF OUR ENGINEER.
 		</description>
 	</class>
-	<class 	name="chassis_controller/Swerve"
-			type="chassis_controller::Swerve"
+	<class 	name="chassis_controller/SwerveWheel"
+			type="chassis_controller::SwerveWheel"
 			base_class_type="controller_interface::ControllerBase">
 		<description>
 		The chassis_controller for sentry.
