@@ -21,55 +21,56 @@ chassis:
     # DON'T change the ns "left_front_heading" "right_front_driving" U.S.W
     left_front_heading:
     # change the joint name, make it the same as URDF
-      joint: "swerve_heading_left_joint"
+      joint: "left_front_heading_joint"
       pid:
         {
-          p: 20.0,
-          i: 0,
-          d: 0.0,
+          p: 2.0,
+          i: 0.1,
+          d: 0.4,
           i_max: 0.0,
           i_min: 0.0,
           antiwindup: true,
           publish_state: true,
         }
     right_front_heading:
-      joint: "swerve_heading_right_joint"
+      joint: "right_front_heading_joint"
       pid:
-        {
-          p: 20.0,
-          i: 0,
-          d: 0.0,
+        {          
+          p: 2.0,
+          i: 0.1,
+          d: 0.4,
           i_max: 0.0,
           i_min: 0.0,
           antiwindup: true,
           publish_state: true,
         }
     left_back_heading:
-      joint: "swerve_back_left_joint"
+      joint: "left_back_heading_joint"
       pid:
         {
-          p: 20.0,
-          i: 0,
-          d: 0.0,
+          p: 2.0,
+          i: 0.1,
+          d: 0.4,
           i_max: 0.0,
           i_min: 0.0,
           antiwindup: true,
           publish_state: true,
         }
     right_back_heading:
-      joint: "swerve_back_right_joint"
+      joint: "right_back_heading_joint"
       pid:
         {
-          p: 20.0,
-          i: 0,
-          d: 0.0,
+          p: 2.0,
+          i: 0.1,
+          d: 0.4,
           i_max: 0.0,
           i_min: 0.0,
           antiwindup: true,
           publish_state: true,
         }
+
     left_front_driving:
-      joint: "driving_heading_left_joint"
+      joint: "left_front_driving_joint"
       pid:
         {
           p: 0.8,
@@ -81,7 +82,7 @@ chassis:
           publish_state: true,
         }
     right_front_driving:
-      joint: "driving_heading_right_joint"
+      joint: "right_front_driving_joint"
       pid:
         {
           p: 0.8,
@@ -93,7 +94,7 @@ chassis:
           publish_state: true,
         }
     left_back_driving:
-      joint: "driving_back_left_joint"
+      joint: "left_back_driving_joint"
       pid:
         {
           p: 0.8,
@@ -105,7 +106,7 @@ chassis:
           publish_state: true,
         }
     right_back_driving:
-      joint: "driving_back_right_joint"
+      joint: "right_back_driving_joint"
       pid:
         {
           p: 0.8,
