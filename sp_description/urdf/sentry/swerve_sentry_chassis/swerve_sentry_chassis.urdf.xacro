@@ -102,7 +102,7 @@
     <child
       link="swerve_back_left_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
@@ -156,7 +156,7 @@
     <child
       link="driving_back_left_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
@@ -210,7 +210,7 @@
     <child
       link="swerve_back_right_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${heading_jnt_eff_limit}" velocity="${heading_jnt_vel_limit}" />
   </joint>
   <link
@@ -264,7 +264,7 @@
     <child
       link="driving_back_right_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
@@ -372,7 +372,7 @@
     <child
       link="driving_heading_right_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
   <link
@@ -480,7 +480,7 @@
     <child
       link="driving_heading_left_link" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit lower="-1e9" upper="1e9" effort="${driving_jnt_eff_limit}" velocity="${driving_jnt_vel_limit}" />
   </joint>
 
