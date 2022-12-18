@@ -1,27 +1,14 @@
 <launch>
-
-	<arg name="paused" default="false"/>
-	<arg name="robot_type" value="sentry"/>
-
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-	<arg name="paused" value="$(arg paused)"/>
-		<arg name="world_name" value="$(find sp_gazebosim)/worlds/rmuc.world"/>
-
-	</include>
-
-	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/sentry/swerve_sentry.xacro'"/>
-	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.5 -x -5 -y -5 -urdf -model swerve_sentry_chassis -param robot_description"/>
-
-	<rosparam file="$(find chassis_controller)/config/$(arg robot_type).yaml" command="load"/>
-
-	<node
-		name="joint_state_publisher"
-		pkg="joint_state_publisher"
-		type="joint_state_publisher" />
-	<node
-		name="robot_state_publisher"
-		pkg="robot_state_publisher"
-		type="robot_state_publisher" />
+    <!-- 注：本文件需要搭配chassis_controller包下的chassis_controller_load.launch一同使用-->
+    <!-- 导入RMUL地图、哨兵模型、打开关节发布 -->
+    <include file="$(find sp_gazebosim)/launch/new_sentry_world.launch" />
+    <!-- 开启实时建图功能 -->
+    <include file="$(find sp_gazebosim)/launch/mapping/sentry_slam.launch" />
+    <!-- 启动AMCL节点进行融合定位 我不确定直接这么调这个包会不会有问题，后面如果定位不准可能是这里有问题-->
+    <include file="$(find sp_gazebosim)/launch/mapping/sentry_amcl.launch" />
+	<!-- 运行move_base导航节点 -->
+    <include file="$(find sp_gazebosim)/launch/mapping/sentry_move_base.launch" />
+    <!-- 打开rviz -->
 	<node
 		name="rviz"
 		pkg="rviz"
