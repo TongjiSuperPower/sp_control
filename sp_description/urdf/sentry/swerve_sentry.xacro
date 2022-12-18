@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_chassis/swerve_sentry_chassis.urdf.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_gimbal/base.xacro"/>
+
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_gimbal/my_camera.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_gimbal/my_laser.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_gimbal/my_laser_sensor.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/sentry/swerve_sentry_gimbal/my_camera_sensor.xacro"/>
+
+
+	<!-- <xacro:arg name="use_simulation" default="true"/>
+	<xacro:engineer_chassis roller_type="simple"/>
+
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_front"
+				   simulation="$(arg use_simulation)"
+				   xyz="0.22 0 0.165" rpy="0 0 0"/>
+		
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_back"
+				   simulation="$(arg use_simulation)"
+				   xyz="-0.22 0 0.165" rpy="0 0 3.14159"/>
+
+	<joint name="joint_arm2body" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin xyz="0.0445 0.197 0.237" rpy="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="arm_base_link"/>
+	</joint>
+        <joint name="joint_mast2body" type="fixed">
+                <axis xyz="0 0 1"/>
+                <origin xyz="-0.2295 -0.0815 0.0157" rpy="0 0 1.5707"/>
+                <parent link="base_link"/>
+                <child link="fpv_base_link"/>
+        </joint> -->
+
+<!-- gazebo config -->
+  <gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+		<plugin name="chassis_controller" filename="libchassis_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+	
+</robot>
+

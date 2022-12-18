@@ -11,6 +11,8 @@
   <xacro:property name="heading_jnt_eff_limit" value="12"/>
   <xacro:property name="heading_jnt_vel_limit" value="50"/>
 
+ 
+
   <link
     name="base_link">
     <inertial>
@@ -51,6 +53,7 @@
       </geometry>
     </collision>
   </link>
+
   <link
     name="swerve_back_left_link">
     <inertial>
@@ -511,15 +514,5 @@
 <!-- transmission for left_front_wheel -->
   <xacro:joint_transmission prefix="left_front_heading"/>
   <xacro:joint_transmission prefix="left_front_driving"/>
-
-<!-- gazebo config -->
-  <gazebo>
-		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-			<robotNamespace>/</robotNamespace>
-		</plugin>
-		<plugin name="chassis_controller" filename="libchassis_controller.so">
-			<robotNamespace>/</robotNamespace>
-		</plugin>
-	</gazebo>
 
 </robot>
