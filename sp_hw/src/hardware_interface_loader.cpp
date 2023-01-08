@@ -18,9 +18,9 @@ namespace sp_hw
         error += !nh_p.getParam("thread_priority", thread_priority);
         if (error > 0)
         {
-            char error_message[] = "could not retrieve one of the required parameters :\n\trm_hw/loop_hz or "
-                                   "rm_hw/cycle_time_error_threshold or "
-                                   "rm_hw/thread_priority";
+            char error_message[] = "could not retrieve one of the required parameters :\n\tsp_hw/loop_hz or "
+                                   "sp_hw/cycle_time_error_threshold or "
+                                   "sp_hw/thread_priority";
             ROS_ERROR_STREAM(error_message);
             throw std::runtime_error(error_message);
         }
@@ -81,8 +81,8 @@ namespace sp_hw
         // Output
         // send the new command to hardware
         // TODO : (Lithesh) until we have urdf and then use this line
-        // hardware_interface_->write(ros::Time::now(), elapsed_time_);
-        hardware_interface_->publishActuatorState(ros::Time::now());
+        hardware_interface_->write(ros::Time::now(), elapsed_time_);
+        // hardware_interface_->publishActuatorState(ros::Time::now());
 
         // Sleep
         const auto sleep_till = current_time + duration_cast<clock::duration>(desired_duration);

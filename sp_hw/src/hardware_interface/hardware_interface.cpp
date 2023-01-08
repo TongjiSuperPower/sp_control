@@ -26,9 +26,9 @@ namespace sp_hw
                 ROS_WARN("Some Bus Communication has not been initialized \n");
         }
         // TEST
-        actuator_state_pub_.reset(
-            new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
-        return true;
+        // actuator_state_pub_.reset(
+        // new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
+        // return true;
 
         // URDF and Transmission
         // Transmission : code reference <transmission_interface/transmission_interface_loader.h>
@@ -69,10 +69,12 @@ namespace sp_hw
                     act_data.second.effort = 0;
                 }
             }
-        /*
-    if (is_actuator_specified_)
-        act_to_jnt_state_->propagate();
-        */
+
+        if (is_actuator_specified_)
+            act_to_jnt_state_->propagate();
+        //  Set all cmd to zero to avoid crazy soft limit oscillation when not controller loaded
+        for (auto effort_joint_handle_ : effort_joint_handles_)
+            effort_joint_handle_.setCommand(0.);
     }
 
     void SpRobotHW::write(const ros::Time &time, const ros::Duration &period)

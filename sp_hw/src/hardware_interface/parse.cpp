@@ -18,6 +18,7 @@ namespace sp_hw
                           << "|-- "
                           << "0x" << std::hex << act_id->first << " - " << std::dec
                           << act_id->second.type << " - " << act_id->second.name << std::endl;
+            ROS_INFO_STREAM("aa");
         }
     }
 
@@ -125,7 +126,17 @@ namespace sp_hw
                     bus_id2act_data_[bus].emplace(std::make_pair(id, ActData{
                                                                          .name = it->first,
                                                                          .type = type,
-                                                                         .stamp = ros::Time::now()}));
+                                                                         .stamp = ros::Time::now(),
+                                                                         .q_raw = 0,
+                                                                         .q_last = 0,
+                                                                         .qd_raw = 0,
+                                                                         .q_circle = 0,
+                                                                         .seq = 0,
+                                                                         .pos = 0,
+                                                                         .vel = 0,
+                                                                         .effort = 0,
+                                                                         .cmd_effort = 0,
+                                                                         .exe_effort = 0}));
                 }
                 // TODO(DONE) : use actuator_coefficient to define
                 if (type2act_coeffs_.find(type) != type2act_coeffs_.end())
