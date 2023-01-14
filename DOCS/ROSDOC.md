@@ -159,8 +159,7 @@ actuator_coefficient:
 ```cpp
 struct Actcoeff
 {
-   double act2pos，act2vel, act2effort, effort2act;
-   int max_out;
+   double act2pos，act2vel, act2effort, effort2act, max_out;
 }
 std::unordered_map<std::string, Actcoeff>* MotorPtr;
 ```
@@ -681,3 +680,124 @@ int main() {
 }
 ```
 
+# 测试说明
+
+## 单电机测试
+
+按照下述顺序，使用单自由度连杆模型进行单电机测试。
+
+（1）修改xacro模型中的减速比参数
+
+文件位于`sp_description/urdf/test/rmrobot.xarco `
+
+```cpp
+<actuator name="right_front_wheel_motor">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+</actuator>
+```
+
+修改`<mechanicalReduction>`标签内的减速比。
+
+各电机减速比：
+
+```cpp
+rm_3508: 19.2032
+DM_J4310: 1
+MG_8016: 6
+```
+
+（2）修改yaml文件
+
+文件位于`sp_hw/config/hw_config.yaml `
+
+```cpp
+actuators:
+  right_front_wheel_motor:
+    bus: can0
+    id: 0x201
+    type: rm_3508
+```
+
+```cpp
+actuators:
+  right_front_wheel_motor:
+    bus: can0
+    id: 0x001
+    type:DM_J4310
+```
+
+```cpp
+actuators:
+  right_front_wheel_motor:
+    bus: can0
+    id: 0x141
+    type: MG_8016
+```
+
+根据所测电机类型修改yaml文件对应参数。
+
+（3）开启测试程序
+
+如下顺序执行命令
+
+```cpp
+roslaunch sp_hw load_hw.launch
+```
+
+此时给电机上电，执行如下命令
+
+```cpp
+sudo ip link set can0 up type can bitrate 1000000
+candump can0
+```
+
+如运行正常，会出现读取的`can`帧信息。
+
+接着执行
+
+```cpp
+roslaunch sp_control load_controller.launch
+```
+
+开启不同`controller`读取/执行操作
+
+`joint_state_controller`:
+
+```cpp
+rosservice call /controller_manager/switch_controller "start_controllers: ['controllers/joint_state_controller']
+stop_controllers: ['']
+strictness: 1
+start_asap: true
+timeout: 0.0"
+
+rostopic echo /joint_states
+```
+
+`joint_position_controller`:
+
+```cpp
+rosservice call /controller_manager/switch_controller "start_controllers: ['controllers/joint1_position_controller']
+stop_controllers: ['controllers/joint1_velocity_controller']
+strictness: 1
+start_asap: true
+timeout: 0.0"
+    
+rostopic pub /controllers/joint1_position_controller/command std_msgs/Float64 "data: 0.0"
+```
+
+更改发送给`data`的数据控制电机位置。
+
+`joint_velocity_controller`:
+
+```cpp
+rosservice call /controller_manager/switch_controller "start_controllers: ['controllers/joint1_velocity_controller']
+stop_controllers: ['controllers/joint1_position_controller']
+strictness: 1
+start_asap: true
+timeout: 0.0"
+
+rostopic pub /controllers/joint1_velocity_controller/command std_msgs/Float64 "data: 3.14159"
+```
+
+更改发送给`data`的数据控制电机转速。
