@@ -1,16 +1,27 @@
 <launch>
+
 	<arg name="paused" default="false"/>
 	<arg name="robot_type" value="sentry"/>
 
-	<!-- 载入世界 -->
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-	<arg name="paused" value="$(arg paused)"/>
-		<arg name="world_name" value="$(find sp_gazebosim)/worlds/rmuc.world"/>
-	</include>
+	<!-- 载入世界 创建的是19赛季的地图
+	<include file="$(find gazebo_ros)/launch/empty_world.launch"> -->
+	<!-- <arg name="paused" value="$(arg paused)"/>
+		<arg name="world_name" value="$(find sp_gazebosim)/worlds/rmus.world"/>
+	</include> -->
+
+	<!-- 创建23赛季的地图，地图模型源自湖北工业大学开源的赛季地图，感谢! https://github.com/HBUTHUANGPX/Hbut_LC_sentry -->
+	<include
+   		 file="$(find gazebo_ros)/launch/empty_world.launch" />
+ 	 <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find sp_gazebosim)/worlds/rmus/rmus.urdf -urdf -model rmus"
+    output="screen" />
 
 	<!-- 载入哨兵模型 -->
 	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/sentry/swerve_sentry.xacro'"/>
-	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.4 -x 1 -y -2 -urdf -model swerve_sentry_chassis -param robot_description"/>
+	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-z 0.4 -x 8 -y 5 -urdf -model swerve_sentry_chassis -param robot_description"/>
 
 	<!-- 载入参数，供控制器使用 -->
 	<rosparam file="$(find chassis_controller)/config/$(arg robot_type).yaml" command="load"/>

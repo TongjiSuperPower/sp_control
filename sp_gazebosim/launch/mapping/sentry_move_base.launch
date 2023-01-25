@@ -6,6 +6,10 @@
         <rosparam file="$(find sp_gazebosim)/move_base_param/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find sp_gazebosim)/move_base_param/global_costmap_params.yaml" command="load" />
         <rosparam file="$(find sp_gazebosim)/move_base_param/base_local_planner_params.yaml" command="load" />
+
+      <!-- 调用teb作为本地路径规划器 局部代价地图更新频率为10 -->
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+        <param name="controller_frequency" value="10.0" />
     </node>
 
 </launch>

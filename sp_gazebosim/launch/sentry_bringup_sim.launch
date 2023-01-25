@@ -3,11 +3,11 @@
     <!-- 导入RMUL地图、哨兵模型、打开关节发布 -->
     <include file="$(find sp_gazebosim)/launch/new_sentry_world.launch" />
     <!-- 开启实时建图功能 -->
-    <include file="$(find sp_gazebosim)/launch/mapping/sentry_slam.launch" />
+    <!-- <include file="$(find sp_gazebosim)/launch/mapping/sentry_slam.launch" /> -->
     <!-- 启动AMCL节点进行融合定位 我不确定直接这么调这个包会不会有问题，后面如果定位不准可能是这里有问题-->
-    <include file="$(find sp_gazebosim)/launch/mapping/sentry_amcl.launch" />
+    <!-- <include file="$(find sp_gazebosim)/launch/mapping/sentry_amcl.launch" /> -->
 	<!-- 运行move_base导航节点 -->
-    <include file="$(find sp_gazebosim)/launch/mapping/sentry_move_base.launch" />
+    <!-- <include file="$(find sp_gazebosim)/launch/mapping/sentry_move_base.launch" /> -->
     <!-- 打开rviz -->
 	<node
 		name="rviz"

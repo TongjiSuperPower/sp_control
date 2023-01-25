@@ -1,4 +1,4 @@
-image: /home/huan/AutoRobot/Engineer_on_ROS/src/sp_gazebosim/map/nav.pgm
+image: /home/huan/Autorobot_ws/src/Engineer_on_ROS/sp_gazebosim/map/nav.pgm
 resolution: 0.050000
 origin: [-50.000000, -50.000000, 0.000000]
 negate: 0
