@@ -1,9 +1,0 @@
-<launch>
-	<include file="$(find manipulator_moveit_config)/launch/move_group.launch">
-		<arg name="publish_monitored_planning_scene" value="true"/>
-		<arg name="moveit_controller_manager" value="manipulator"/>
-	</include>
-
-	<include file="$(find manipulator_moveit_config)/launch/moveit_rviz.launch"/>
-	
-</launch>

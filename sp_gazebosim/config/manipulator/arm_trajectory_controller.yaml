@@ -5,14 +5,18 @@ arm:
     arm_joint_controller:
         type: "position_controllers/JointTrajectoryController"
         joints: 
-          - arm_joint_1
-          - arm_joint_2
-          - arm_joint_3
-          - arm_joint_4
-          - arm_joint_5
+          - joint1
+          - joint2
+          - joint3
+          - joint4
+          - joint5
+          - joint6
+          - joint7
         gains:
-            arm_joint_1:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
-            arm_joint_2:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
-            arm_joint_3:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
-            arm_joint_4:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
-            arm_joint_5:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint1:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint2:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint3:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint4:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint5:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint6:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
+            joint7:    {p: 1000, i: 0.0, d: 0.1, i_clamp: 0.0}
