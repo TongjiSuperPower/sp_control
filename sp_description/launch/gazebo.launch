@@ -1,7 +1,7 @@
 <launch>
   <param
     name="robot_description"
-    command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.urdf.xacro" />
+    command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.xacro" />
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" />
   <node
@@ -15,9 +15,5 @@
     type="spawn_model"
     args="-urdf -model engineer -param robot_description"
     output="screen" />
-  <node
-    name="fake_joint_calibration"
-    pkg="rostopic"
-    type="rostopic"
-    args="pub /calibrated std_msgs/Bool true" />
+
 </launch>
