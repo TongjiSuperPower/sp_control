@@ -23,6 +23,25 @@ namespace sp_hw
         rm_can_frame0_.can_dlc = 8;
         rm_can_frame1_.can_id = 0x1FF;
         rm_can_frame1_.can_dlc = 8;
+        for (auto &id2act_data : *data_ptr_.id2act_data_)
+        {
+            if (id2act_data.second.type.find("DM") != std::string::npos)
+            {
+                can_frame frame{};
+                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                frame.can_id = id2act_data.first;
+                frame.can_dlc = 8;
+                frame.data[0] = 0xFF;
+                frame.data[1] = 0xFF;
+                frame.data[2] = 0xFF;
+                frame.data[3] = 0xFF;
+                frame.data[4] = 0xFF;
+                frame.data[5] = 0xFF;
+                frame.data[6] = 0xFF;
+                frame.data[7] = 0xFC;
+                socket_can_.write(&frame);
+            }
+        }
     }
 
     void CanBus::write()
@@ -56,11 +75,45 @@ namespace sp_hw
                     has_write_frame1 = true;
                 }
             }
-            /*!
-            // Add other type motors here
-            else if (id2act_data.second.type.find("kiTech") != std::string::npos)
-            { ; }
-            */
+            else if (id2act_data.second.type.find("DM") != std::string::npos)
+            {
+                can_frame frame{};
+                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                frame.can_id = id2act_data.first;
+                frame.can_dlc = 8;
+                uint16_t q_des = (int)(act_coeff.pos2act * (id2act_data.second.cmd_pos - act_coeff.act2pos_offset));
+                uint16_t qd_des = (int)(act_coeff.vel2act * (id2act_data.second.cmd_vel - act_coeff.act2vel_offset));
+                uint16_t kp = 0;
+                uint16_t kd = 0;
+                uint16_t tau = (int)(act_coeff.effort2act * (id2act_data.second.exe_effort - act_coeff.act2effort_offset));
+                frame.data[0] = q_des >> 8;
+                frame.data[1] = q_des & 0xFF;
+                frame.data[2] = qd_des >> 8;
+                frame.data[3] = ((qd_des & 0xF) << 4) | (kp >> 8);
+                frame.data[4] = kp & 0xFF;
+                frame.data[5] = kd >> 4;
+                frame.data[6] = ((kd & 0xF) << 4) | (tau >> 8);
+                frame.data[7] = tau & 0xFF;
+                socket_can_.write(&frame);
+            }
+            else if (id2act_data.second.type.find("MG") != std::string::npos)
+            {
+                can_frame frame{};
+                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                frame.can_id = id2act_data.first;
+                frame.can_dlc = 8;
+                double cmd =
+                    limitAmplitude(act_coeff.effort2act * id2act_data.second.exe_effort, act_coeff.max_out);
+                frame.data[0] = 0xA1;
+                frame.data[1] = 0x00;
+                frame.data[2] = 0x00;
+                frame.data[3] = 0x00;
+                frame.data[4] = static_cast<uint8_t>(cmd);
+                frame.data[5] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
+                frame.data[6] = 0x00;
+                frame.data[7] = 0x00;
+                socket_can_.write(&frame);
+            }
         }
 
         if (has_write_frame0)
@@ -74,6 +127,7 @@ namespace sp_hw
      */
     void CanBus::read(ros::Time time)
     {
+
         std::lock_guard<std::mutex> guard(mutex_);
         for (const CanFrameStamp &can_frame_stamp : read_buffer_)
         {
@@ -105,7 +159,63 @@ namespace sp_hw
                                    static_cast<double>(act_data.q_raw + 8192 * act_data.q_circle);
                     act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                     act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
-                    continue; // TODO : ??only process the newest can_frame?? Then why the read_buffer_??
+                    continue; // TODO : ??only process the newest can_frame?? Then why the read_buffer_??S
+                }
+                else if (act_data.type.find("MG") != std::string::npos)
+                {
+                    act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
+                    act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
+                    uint16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
+                    act_data.stamp = can_frame_stamp.stamp;
+
+                    // Basically, motor won't rotate more than 32678 between two time slide.
+                    if (act_data.seq != 0)
+                    {
+                        if (act_data.q_raw - act_data.q_last > 32768)
+                            act_data.q_circle--;
+                        else if (act_data.q_last - act_data.q_raw > 32768)
+                            act_data.q_circle++;
+                    }
+                    act_data.q_last = act_data.q_raw;
+                    act_data.seq++;
+                    // convert raw data into  standard ActuatorState
+                    act_data.pos = act_coeff.act2pos *
+                                   static_cast<double>(act_data.q_raw + 65535 * act_data.q_circle);
+                    act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
+                    act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
+                    continue;
+                }
+            }
+            else if (frame.can_id == static_cast<unsigned int>(0x000))
+            {
+                if (data_ptr_.id2act_data_->find(frame.data[0]) != data_ptr_.id2act_data_->end())
+                {
+                    ActData &act_data = data_ptr_.id2act_data_->find(frame.data[0])->second;
+                    const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(act_data.type)->second;
+                    if (act_data.type.find("DM") != std::string::npos)
+                    {
+                        act_data.q_raw = (frame.data[1] << 8) | frame.data[2];
+                        uint16_t qd = (frame.data[3] << 4) | (frame.data[4] >> 4);
+                        uint16_t eff = ((frame.data[4] & 0xF) << 8) | frame.data[5];
+                        // Multiple cycle
+                        // NOTE: The raw data range is -12.5~12.5
+                        if (act_data.seq != 0)
+                        {
+                            double pos_new = act_coeff.act2pos * static_cast<double>(act_data.q_raw) + act_coeff.act2pos_offset +
+                                             static_cast<double>(act_data.q_circle) * 25;
+                            if (pos_new - act_data.pos > 12.5)
+                                act_data.q_circle--;
+                            else if (pos_new - act_data.pos < -12.5)
+                                act_data.q_circle++;
+                        }
+                        act_data.stamp = can_frame_stamp.stamp;
+                        act_data.seq++;
+                        act_data.pos = act_coeff.act2pos * static_cast<double>(act_data.q_raw) + act_coeff.act2pos_offset +
+                                       static_cast<double>(act_data.q_circle) * 25;
+                        act_data.vel = act_coeff.act2vel * static_cast<double>(qd) + act_coeff.act2vel_offset;
+                        act_data.effort = act_coeff.act2effort * static_cast<double>(eff) + act_coeff.act2effort_offset;
+                        continue;
+                    }
                 }
             }
         }

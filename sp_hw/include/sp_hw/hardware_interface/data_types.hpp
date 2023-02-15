@@ -6,7 +6,7 @@ namespace sp_hw
 {
     struct ActCoeff
     {
-        double act2pos, act2vel, act2effort, effort2act, max_out;
+        double act2pos, act2vel, act2effort, pos2act, vel2act, effort2act, max_out, act2pos_offset, act2vel_offset, act2effort_offset, kp2act, kd2act;
     };
 
     struct ActData
@@ -22,7 +22,7 @@ namespace sp_hw
         int64_t seq;
 
         double pos, vel, effort;
-        double cmd_effort, exe_effort;
+        double cmd_pos, cmd_vel, cmd_effort, exe_effort;
 
         bool is_halted = false;
     };

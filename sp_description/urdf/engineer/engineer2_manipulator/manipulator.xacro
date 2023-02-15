@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot
+  name="engineer2_manipulator"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="engineer2_manipulator">
+  <link
+    name="arm_base_link">
+    <inertial>
+      <origin
+        xyz="-0.0518095743713841 -0.00026336608241872 0.00154016786617812"
+        rpy="0 0 0" />
+      <mass
+        value="0.288208331551669" />
+      <inertia
+        ixx="0.000244031290955245"
+        ixy="8.67714690500338E-09"
+        ixz="-2.40360210663764E-08"
+        iyy="0.000405348993289901"
+        iyz="-4.31198411045797E-09"
+        izz="0.000644301933435004" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/baselink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.333333333333333 0.333333333333333 0.333333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/baselink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-0.000374224071529143 0.0136841926250667 0.0310279395315023"
+        rpy="0 0 0" />
+      <mass
+        value="0.378634616635792" />
+      <inertia
+        ixx="0.000399769050341828"
+        ixy="-1.12279959742056E-07"
+        ixz="7.4174975368788E-07"
+        iyy="0.000605852920055866"
+        iyz="-9.01688301312537E-07"
+        izz="0.000409205953927844" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.333333333333333 0.333333333333333 0.333333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1"
+    type="revolute">
+    <origin
+      xyz="0 0 0.024"
+      rpy="0 0 0" />
+    <parent
+      link="arm_base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="20"
+      velocity="5" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="0.0664236740686057 0.000776109930885217 0.0223130383419596"
+        rpy="0 0 0" />
+      <mass
+        value="0.992951364752065" />
+      <inertia
+        ixx="0.000867761598325693"
+        ixy="-5.62561657469764E-06"
+        ixz="-1.26329828147808E-07"
+        iyy="0.00129570980259147"
+        iyz="1.40832854585324E-06"
+        izz="0.00161881028021324" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2"
+    type="revolute">
+    <origin
+      xyz="0 0.022 0.065"
+      rpy="1.5708 -1.5708 0" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="20"
+      velocity="5" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="0.0529953233929685 -0.00087340330976007 -0.00332798770534426"
+        rpy="0 0 0" />
+      <mass
+        value="1.29043542087694" />
+      <inertia
+        ixx="0.000660438768204008"
+        ixy="-9.41385714382025E-07"
+        ixz="-2.73606948597533E-05"
+        iyy="0.000654878904373999"
+        iyz="-7.84069267827581E-08"
+        izz="0.000611429702633374" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3"
+    type="revolute">
+    <origin
+      xyz="0.199986932336027 0.00228624032540565 0"
+      rpy="0 0 0.0114314489445579" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="20"
+      velocity="5" />
+  </joint>
+  <link
+    name="link4">
+    <inertial>
+      <origin
+        xyz="-1.78032614612046E-05 0.000653332010367862 0.0518930034865562"
+        rpy="0 0 0" />
+      <mass
+        value="0.261692277625223" />
+      <inertia
+        ixx="0.000278655662413573"
+        ixy="-7.33997840057923E-10"
+        ixz="-6.56676131714156E-11"
+        iyy="0.000326143881041862"
+        iyz="-4.17902408992371E-06"
+        izz="0.000487431763861903" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4"
+    type="revolute">
+    <origin
+      xyz="0.122 -0.00028031 0"
+      rpy="1.5708 0.0032097 1.5685" />
+    <parent
+      link="link3" />
+    <child
+      link="link4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="20"
+      velocity="5" />
+  </joint>
+  <link
+    name="link5">
+    <inertial>
+      <origin
+        xyz="0.0142475323057986 -0.000189567059400106 1.15384756165307E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.176051278883872" />
+      <inertia
+        ixx="5.09136503326065E-05"
+        ixy="2.75339151027347E-09"
+        ixz="-2.14620073087954E-11"
+        iyy="4.77354598435487E-05"
+        iyz="4.52891295380232E-08"
+        izz="6.10167356021373E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint5"
+    type="revolute">
+    <origin
+      xyz="0.00015888 0 0.1425"
+      rpy="-1.5674 -1.5703 3.1416" />
+    <parent
+      link="link4" />
+    <child
+      link="link5" />
+    <axis
+      xyz="0 -0.0034079 -0.99999" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="20"
+      velocity="5" />
+  </joint>
+  <link
+    name="link6">
+    <inertial>
+      <origin
+        xyz="1.73672272182559E-05 2.90984903761372E-05 0.0203469955772814"
+        rpy="0 0 0" />
+      <mass
+        value="0.201909883229453" />
+      <inertia
+        ixx="0.000150642486806382"
+        ixy="-4.28102943464515E-08"
+        ixz="2.64375369891719E-08"
+        iyy="0.000150596424377461"
+        iyz="4.42967119928291E-08"
+        izz="0.000285916280519768" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer2_manipulator/link6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint6"
+    type="revolute">
+    <origin
+      xyz="0.039 0.00015888 0"
+      rpy="1.5708 0.00019824 1.5708" />
+    <parent
+      link="link5" />
+    <child
+      link="link6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="20"
+      velocity="5" />
+  </joint>
+
+  </xacro:macro>
+</robot>

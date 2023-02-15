@@ -2,6 +2,34 @@ actuator_coefficient:
   rm_3508: # without reducer, only the rotor
     act2pos: 0.0007669903 # 2PI/8192
     act2vel: 0.1047197551 # 2PI/60
-    act2effort: 1.90702994e-5 #
+    act2effort: 1.90702994e-5 # 20/16384*0.3/19.20320855615
     effort2act: 52437.561519 # tau to current
     max_out: 16384
+
+  rm_2006:
+    act2pos: 2.13078897e-5 # 2PI/8192*(1/36)
+    act2vel: 0.0029088820 # 2PI/60*(1/36)
+    act2effort: 0.00018 # 10/10000*0.18
+    effort2act: 5555.5555555 # tau to current
+    max_out: 10000
+
+  DM_J4310:
+    act2pos: 3.81475547e-4 # 25/65535
+    act2vel: 0.0146520147 # 60/4095
+    act2effort: 0.0048840049 # 20/4095
+    pos2act: 2621.4 # 65535/25
+    vel2act: 68.25 # 4095/60
+    effort2act: 204.75 # 4095/20
+    max_out: 0
+    act2pos_offset: -12.5
+    act2vel_offset: -30
+    act2effort_offset: -10
+    kp2act: 8.19 # 4095/500
+    kd2act: 819 # 4095/5
+
+  MG_8016:
+    act2pos: 9.58737992e-5 # 2PI/65536
+    act2vel: 0.0174532925 # PI/180
+    act2effort: 0.0077880859 # 33/2048*2.9/6
+    effort2act: 129.3103448276 # 2000/32/2.9*6
+    max_out: 2000

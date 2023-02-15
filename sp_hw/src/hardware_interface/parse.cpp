@@ -18,7 +18,6 @@ namespace sp_hw
                           << "|-- "
                           << "0x" << std::hex << act_id->first << " - " << std::dec
                           << act_id->second.type << " - " << act_id->second.name << std::endl;
-            ROS_INFO_STREAM("aa");
         }
     }
 
@@ -59,6 +58,40 @@ namespace sp_hw
                     act_coeff.max_out = xmlRpcGetDouble(it->second, "max_out");
                 else
                     ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated max_out");
+
+                if (it->first == "DM_J4310")
+                {
+                    if (it->second.hasMember("pos2act"))
+                        act_coeff.pos2act = xmlRpcGetDouble(it->second, "pos2act");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated pos2act");
+
+                    if (it->second.hasMember("vel2act"))
+                        act_coeff.vel2act = xmlRpcGetDouble(it->second, "vel2act");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated vel2act");
+
+                    if (it->second.hasMember("act2pos_offset"))
+                        act_coeff.act2pos_offset = xmlRpcGetDouble(it->second, "act2pos_offset");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated act2pos_offset");
+                    if (it->second.hasMember("act2vel_offset"))
+                        act_coeff.act2vel_offset = xmlRpcGetDouble(it->second, "act2vel_offset");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated act2vel_offset");
+                    if (it->second.hasMember("act2effort_offset"))
+                        act_coeff.act2effort_offset = xmlRpcGetDouble(it->second, "act2effort_offset");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated act2effort_offset");
+                    if (it->second.hasMember("kp2act"))
+                        act_coeff.kp2act = xmlRpcGetDouble(it->second, "kp2act");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated kp2act");
+                    if (it->second.hasMember("kd2act"))
+                        act_coeff.kd2act = xmlRpcGetDouble(it->second, "kd2act");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated kd2act");
+                }
 
                 std::string type = it->first;
                 if (type2act_coeffs_.find(type) == type2act_coeffs_.end())
@@ -135,6 +168,8 @@ namespace sp_hw
                                                                          .pos = 0,
                                                                          .vel = 0,
                                                                          .effort = 0,
+                                                                         .cmd_pos = 0,
+                                                                         .cmd_vel = 0,
                                                                          .cmd_effort = 0,
                                                                          .exe_effort = 0}));
                 }

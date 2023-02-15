@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer2_manipulator">
+    <xacro:macro name="manipulator_transmission" params="joint_name">
+
+        <transmission name="trans_${joint_name}">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${joint_name}_motor">
+                <mechanicalReduction>1</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="${joint_name}">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+    </xacro:macro>
+
+   	<xacro:manipulator_transmission joint_name="joint1"/>
+	<xacro:manipulator_transmission joint_name="joint2"/>
+	<xacro:manipulator_transmission joint_name="joint3"/>
+
+    <gazebo>
+      <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
+        <robotNamespace>/effector_link</robotNamespace>
+        <bodyName>effector_link</bodyName>
+	<topicName>grasping</topicName>
+        <maxForce>100</maxForce>
+        <maxDistance>0.6</maxDistance>
+        <minDistance>0.01</minDistance>
+      </plugin>
+    </gazebo>	
+    <gazebo reference="effector_link">
+        <mu1>50</mu1>
+        <mu2>50</mu2>
+ 　　　 <minDepth>0.003</minDepth>
+        <maxVel>0</maxVel>
+        <kp>10000000000000.0</kp>
+        <kd>1.0</kd>
+	<ki>2.0</ki>
+        <material>Gazebo/Grey</material>
+    </gazebo>
+</robot>
