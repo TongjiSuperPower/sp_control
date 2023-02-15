@@ -1,27 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
-	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer2_manipulator/manipulator_test.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_manipulator/engineer_manipulator.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_chassis/engineer_chassis.xacro"/>
-<<<<<<< Updated upstream
 	<xacro:include filename="$(find sp_description)/urdf/engineer/manipulator_transmission.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/fpv_module.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/common/lidar2d.xacro"/>
-=======
-	<xacro:include filename="$(find sp_description)/urdf/engineer/manipulator_transmission_test.xacro"/>
-	<xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/fpv_module_test.xacro"/>
-	<xacro:include filename="$(find sp_description)/urdf/common/lidar2d.urdf.xacro"/>
->>>>>>> Stashed changes
 
 	<xacro:arg name="use_simulation" default="true"/>
 	<xacro:engineer_chassis roller_type="simple"/>
 	<xacro:fpv_module/>
-<<<<<<< Updated upstream
 	<xacro:engineer_manipulator/>
 	
-=======
-	<xacro:engineer2_manipulator/>
-	<xacro:swiping_card />
->>>>>>> Stashed changes
 
 	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_front"
 				   simulation="$(arg use_simulation)"

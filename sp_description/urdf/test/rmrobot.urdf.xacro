@@ -75,7 +75,7 @@
         </joint>
         <actuator name="right_front_wheel_motor">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>6</mechanicalReduction>
+            <mechanicalReduction>19.2032</mechanicalReduction>
         </actuator>
     </transmission>
     <gazebo>

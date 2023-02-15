@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 project(manipulator_control)
 
 # Common cmake code applied to all moveit packages
@@ -31,5 +31,12 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-add_executable(arm_control src/arm_control.cpp)
-target_link_libraries(arm_control ${catkin_LIBRARIES})
+set(SRC_LIST
+      src/${PROJECT_NAME}.cpp
+      src/arm_control.cpp)
+
+
+add_executable(${PROJECT_NAME} ${SRC_LIST})
+target_link_libraries(${PROJECT_NAME}
+   ${catkin_LIBRARIES})
+
