@@ -3,11 +3,26 @@
 namespace sp_hw
 {
     /*!
-     * @brief   retrun the signed number with smaller amplitude.
-     * @return  eg : limitAmplitude(-1,3) returns -1
+     * @brief   constrain the number with limitiation.
+     * @return  eg : limitAmplitude(-3000,1000) returns -1000
      */
     template <typename T>
-    inline T limitAmplitude(T a, T b)
+    inline T limitAmplitude(T a, T limit)
+    {
+        limit = fabs(limit);
+        int8_t sign = a < 0 ? -1 : 1;
+        if (fabs(a) < limit)
+            return a;
+        else
+            return static_cast<float>(sign * limit);
+    }
+
+    /*!
+     * @brief   retrun the signed number with smaller amplitude.
+     * @return  eg : minAbs(-1,3) returns -1
+     */
+    template <typename T>
+    inline T minAbs(T a, T b)
     {
         return (fabs(a) < fabs(b)) ? a : b;
     }
