@@ -171,7 +171,9 @@ namespace sp_hw
                                                                          .cmd_pos = 0,
                                                                          .cmd_vel = 0,
                                                                          .cmd_effort = 0,
-                                                                         .exe_effort = 0}));
+                                                                         .exe_effort = 0,
+                                                                         .offset = 0
+                                                                         }));
                 }
                 // TODO(DONE) : use actuator_coefficient to define
                 if (type2act_coeffs_.find(type) != type2act_coeffs_.end())

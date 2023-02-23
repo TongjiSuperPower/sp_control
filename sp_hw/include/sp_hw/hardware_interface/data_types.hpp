@@ -23,6 +23,7 @@ namespace sp_hw
 
         double pos, vel, effort;
         double cmd_pos, cmd_vel, cmd_effort, exe_effort;
+        double offset;
 
         bool is_halted = false;
     };

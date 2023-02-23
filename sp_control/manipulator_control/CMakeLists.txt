@@ -6,6 +6,7 @@ project(manipulator_control)
 find_package(catkin REQUIRED COMPONENTS
 moveit_ros_planning_interface
 moveit_ros_move_group
+sp_common
 )
 find_package(Eigen3 REQUIRED)
 find_package(control_msgs REQUIRED)
@@ -20,6 +21,7 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_eigen REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
+
 catkin_package(
    INCLUDE_DIRS include
 #  LIBRARIES mrobot_bringup
@@ -33,7 +35,9 @@ include_directories(
 )
 set(SRC_LIST
       src/${PROJECT_NAME}.cpp
-      src/arm_control.cpp)
+      src/arm_control.cpp
+      src/scene_generate.cpp
+      )
 
 
 add_executable(${PROJECT_NAME} ${SRC_LIST})

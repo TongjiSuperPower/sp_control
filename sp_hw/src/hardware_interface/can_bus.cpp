@@ -158,7 +158,10 @@ namespace sp_hw
                     act_data.qd_raw = (frame.data[2] << 8u) | frame.data[3];
                     int16_t mapped_current = (frame.data[4] << 8u) | frame.data[5];
                     act_data.stamp = can_frame_stamp.stamp;
-
+                    if (act_data.seq < 10)
+                    {
+                        act_data.offset = act_data.q_raw;
+                    }
                     // Basically, motor won't rotate more than 4096 between two time slide.
                     if (act_data.seq != 0)
                     {
@@ -171,7 +174,10 @@ namespace sp_hw
                     act_data.seq++;
                     // convert raw data into standard ActuatorState
                     act_data.pos = act_coeff.act2pos *
-                                   static_cast<double>(act_data.q_raw + 8192 * act_data.q_circle);
+                                   static_cast<double>(act_data.q_raw + 8192 * act_data.q_circle - act_data.offset);
+                   
+ 
+
                     act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                     act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
                     continue; // TODO : ??only process the newest can_frame?? Then why the read_buffer_??S

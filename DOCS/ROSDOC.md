@@ -707,6 +707,8 @@ DM_J4310: 1
 MG_8016: 6
 ```
 
+并修改`<joint name="joint1" type="">`中`type`类型，转动关节电机为`revolute`，平动关节电机为`prismatic`。
+
 （2）修改yaml文件
 
 文件位于`sp_hw/config/hw_config.yaml `
@@ -757,7 +759,7 @@ candump can0
 接着执行
 
 ```cpp
-roslaunch sp_control load_controller.launch
+roslaunch chassis_controller load_controllers.launch
 ```
 
 开启不同`controller`读取/执行操作

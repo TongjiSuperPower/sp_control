@@ -5,6 +5,10 @@
     ],
     "files.associations": {
         "thread": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp",
+        "ratio": "cpp",
+        "unordered_set": "cpp"
     }
 }

@@ -35,7 +35,7 @@
                     izz="${mass / 12.0 * (width*width + width*width)}"/>
         </inertial>
     </link>
-    <joint name="joint1" type="revolute">
+    <joint name="joint1" type="prismatic">
         <axis xyz="0 1 0"/>
         <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 1.57 0"/>
         <!--      limit not work while type="continuous"-->
@@ -75,7 +75,7 @@
         </joint>
         <actuator name="right_front_wheel_motor">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>19.2032</mechanicalReduction>
+            <mechanicalReduction>1</mechanicalReduction>
         </actuator>
     </transmission>
     <gazebo>
