@@ -803,3 +803,18 @@ rostopic pub /controllers/joint1_velocity_controller/command std_msgs/Float64 "d
 ```
 
 更改发送给`data`的数据控制电机转速。
+
+# 远程桌面：
+## 向日葵远程桌面控制软件:
+https://sunlogin.oray.com/download?categ=personal
+在客户机ubuntu和主机上分别安装对应的软件。
+## 使用时需要将ubuntu切换到xorg:
+https://service.oray.com/question/11969.html
+## 设置向日葵开机启动：
+将向日葵启动脚本添加到init.d中：
+https://learnku.com/docs/ubuntustudy/linux-service-management-how-to-set-boot-script-in-ubuntu
+设置自动登录：
+在settings-users中开启自动登录
+设置xorg自动登录：
+在/etc/gdm3/custom.conf中，取消注释#WaylandEnable=false
+！开机后需要等1-2分钟才能连接上
