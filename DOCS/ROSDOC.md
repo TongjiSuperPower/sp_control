@@ -744,7 +744,7 @@ actuators:
 如下顺序执行命令
 
 ```cpp
-roslaunch sp_hw load_hw.launch
+roslaunch sp_hw load_hw_test.launch
 ```
 
 此时给电机上电，执行如下命令
@@ -803,6 +803,113 @@ rostopic pub /controllers/joint1_velocity_controller/command std_msgs/Float64 "d
 ```
 
 更改发送给`data`的数据控制电机转速。
+
+## 底盘测试
+
+按照下述顺序，使用工程模型进行底盘测试。
+
+1）修改xacro模型
+
+文件位于`sp_description/urdf/engineer/engineer.xarco `
+
+```
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
+	<!--<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_manipulator/engineer_manipulator.xacro"/>-->
+	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_chassis/engineer_chassis.xacro"/>
+	<!--<xacro:include filename="$(find sp_description)/urdf/engineer/manipulator_transmission.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/fpv_module.xacro"/>-->
+	<xacro:include filename="$(find sp_description)/urdf/common/lidar2d.xacro"/>
+
+	<xacro:arg name="use_simulation" default="true"/>
+	<xacro:engineer_chassis roller_type="simple"/>
+	<!--<xacro:fpv_module/>
+	<xacro:engineer_manipulator/>
+	
+
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_front"
+				   simulation="$(arg use_simulation)"
+				   xyz="0.22 0 0.165" rpy="0 0 0"/>
+		
+	<xacro:lidar2d connected_to="base_link" lidar_name="rplidar_back"
+				   simulation="$(arg use_simulation)"
+				   xyz="-0.22 0 0.165" rpy="0 0 3.1416"/>
+
+	<joint name="joint_arm2body" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin xyz="0.022 0.166 0.228" rpy="0 0 -1.5708"/>
+		<parent link="base_link"/>
+		<child link="arm_base_link"/>
+	</joint>
+	<joint name="joint_mast2body" type="fixed">
+			<axis xyz="0 0 1"/>
+			<origin xyz="-0.2295 -0.0825 0.0177" rpy="0 0 1.5708"/>
+			<parent link="base_link"/>
+			<child link="fpv_base_link"/>
+	</joint>-->
+
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+		<plugin name="chassis_controller" filename="libchassis_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+		<plugin name="gimbal_controller" filename="libgimbal_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+	
+</robot>
+```
+
+只留下底盘轮组四个`transmission`
+
+2）开启测试程序
+
+#注意检查底盘电机及轮组可动部分是否碰到传输线
+
+#在架高底盘或空旷场地情况下进行测试
+
+如下顺序执行命令
+
+```cpp
+roslaunch sp_hw load_hw.launch
+```
+
+此时给电机上电，执行如下命令
+
+```cpp
+sudo ip link set can0 up type can bitrate 1000000
+candump can0
+```
+
+如运行正常，会出现读取的`can`帧信息。
+
+接着执行
+
+```cpp
+roslaunch chassis_controller chassis_controller_load.launch
+```
+
+开启`chassis_controller`
+
+接着发送话题
+
+```
+rostopic pub -r 50 /cmd_vel geometry_msgs/Twist "linear:
+  x: 1.0
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.0" 
+```
+
+可看到麦轮向后旋转。
+
+改变该话题发送的数据以测试不同情况下底盘运动状况。
 
 # 远程桌面(无需局域网):
 ## 向日葵远程桌面控制软件:

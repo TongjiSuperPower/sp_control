@@ -1,0 +1,26 @@
+bus:
+  - can0
+loop_frequency: 800
+cycle_time_error_threshold: 1
+thread_priority: 30
+
+actuators:
+  right_front_wheel_motor:
+    bus: can0
+    id: 0x201
+    type: rm_3508
+  
+  right_back_wheel_motor:
+    bus: can0
+    id: 0x202
+    type: rm_3508
+
+  left_back_wheel_motor:
+    bus: can0
+    id: 0x203
+    type: rm_3508
+
+  left_front_wheel_motor:
+    bus: can0
+    id: 0x204
+    type: rm_3508

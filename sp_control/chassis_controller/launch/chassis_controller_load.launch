@@ -1,4 +1,5 @@
 <launch>
+ 	<rosparam file="$(find chassis_controller)/config/engineer.yaml" command="load"/>
 
 	<node name="chassis_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="chassis/chassis_controller"/>
 

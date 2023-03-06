@@ -18,17 +18,21 @@ namespace manipulator_control
         move_group_interface.setGoalPositionTolerance(0.05);
         move_group_interface.setGoalOrientationTolerance(0.05);
         grip_group_interface.setPoseReferenceFrame("base_link");
-        grip_group_interface.setGoalPositionTolerance(0.005);
-        grip_group_interface.setGoalOrientationTolerance(0.005);
+        grip_group_interface.setGoalPositionTolerance(0.01);
+        grip_group_interface.setGoalOrientationTolerance(0.01);
         EXECUTION_MODE = POSE; 
         return true;
-
     }
 
     void Manipulator::read()
     {
         current_pose = move_group_interface.getCurrentPose().pose;
         current_state = move_group_interface.getCurrentJointValues();
+        current_distance = grip_group_interface.getCurrentJointValues();
+        ROS_INFO_STREAM(current_pose);   
+        ROS_INFO_STREAM("[ joint1: "<<current_state[0]<<" joint2: "<<current_state[1]<<" joint3: "<<current_state[2]<<
+                        " joint4: "<<current_state[3]<<" joint5: "<<current_state[4]<<" joint6: "<<current_state[5]<<" ]"<<std::endl);
+        ROS_INFO_STREAM("joint7: "<<current_distance[0]);
     }
 
     void Manipulator::write(const geometry_msgs::Pose &target_pose_)
@@ -36,7 +40,8 @@ namespace manipulator_control
         target_pose = target_pose_;  
         EXECUTION_MODE = POSE;
         if (executed == true)
-            executed = false;    
+            executed = false;  
+        move_group_interface.setApproximateJointValueTarget(target_pose, "link6"); 
     }
 
     void Manipulator::write(const std::vector<double> &target_state_)
@@ -50,6 +55,7 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false; 
+        move_group_interface.setJointValueTarget(target_state);
     }
 
     void Manipulator::singlewrite(double target_state_, int num)
@@ -60,26 +66,24 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false; 
+        move_group_interface.setJointValueTarget(target_state);
     }
 
 
-    void Manipulator::execute()
+    void Manipulator::move_execute()
     {
-        //ROS_WARN_STREAM(target_pose);
-        if (EXECUTION_MODE == POSE)
-        {
-            move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
-           
-        }
-        else 
-        {
-            move_group_interface.setJointValueTarget(target_state);
-        }
-        
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
         bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
         move_group_interface.execute(my_plan);
+    }
+
+    void Manipulator::grip_execute()
+    {
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        bool success = (grip_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+        ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (grip distance goal) %s", success ? "" : "FAILED");
+        grip_group_interface.execute(my_plan);
     }
 
     bool Manipulator::get_executed()
@@ -90,6 +94,17 @@ namespace manipulator_control
     void Manipulator::set_executed(bool exe)
     {
         executed = exe;
+    }
+
+    void Manipulator::stretch(const std::vector<double> &distance)
+    {
+        target_distance = distance;
+        grip_group_interface.setJointValueTarget(target_distance);
+    }
+
+    void Manipulator::goal(const std::string &name)
+    {  
+        move_group_interface.setNamedTarget(name);
     }
 }
 

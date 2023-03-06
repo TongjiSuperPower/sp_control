@@ -8,4 +8,4 @@ actuators:
   right_front_wheel_motor:
     bus: can0
     id: 0x201
-    type: rm_2006
+    type: rm_3508

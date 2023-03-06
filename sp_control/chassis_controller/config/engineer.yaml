@@ -19,11 +19,11 @@ chassis:
       joint: "left_front_wheel_joint"
       pid:
         {
-          p: 0.8,
-          i: 0,
-          d: 0.0,
-          i_max: 0.0,
-          i_min: 0.0,
+          p: 1.5,
+          i: 0.1,
+          d: 0.003,
+          i_max: 5.0,
+          i_min: -5.0,
           antiwindup: true,
           publish_state: true,
         }
@@ -31,11 +31,11 @@ chassis:
       joint: "right_front_wheel_joint"
       pid:
         {
-          p: 0.8,
-          i: 0,
-          d: 0.0,
-          i_max: 0.0,
-          i_min: 0.0,
+          p: 1.5,
+          i: 0.1,
+          d: 0.003,
+          i_max: 5.0,
+          i_min: -5.0,
           antiwindup: true,
           publish_state: true,
         }
@@ -43,11 +43,11 @@ chassis:
       joint: "left_back_wheel_joint"
       pid:
         {
-          p: 0.8,
-          i: 0,
-          d: 0.0,
-          i_max: 0.0,
-          i_min: 0.0,
+          p: 2.0,
+          i: 0.2,
+          d: 0.005,
+          i_max: 5.0,
+          i_min: -5.0,
           antiwindup: true,
           publish_state: true,
         }
@@ -55,11 +55,11 @@ chassis:
       joint: "right_back_wheel_joint"
       pid:
         {
-          p: 0.8,
-          i: 0,
-          d: 0.0,
-          i_max: 0.0,
-          i_min: 0.0,
+          p: 2.0,
+          i: 0.2,
+          d: 0.005,
+          i_max: 5.0,
+          i_min: -5.0,
           antiwindup: true,
           publish_state: true,
         }

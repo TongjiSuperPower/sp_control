@@ -9,6 +9,9 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "ratio": "cpp",
-        "unordered_set": "cpp"
+        "unordered_set": "cpp",
+        "*.tcc": "cpp",
+        "iterator": "cpp",
+        "cmath": "cpp"
     }
 }

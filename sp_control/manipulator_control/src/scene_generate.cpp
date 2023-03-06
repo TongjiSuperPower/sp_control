@@ -6,6 +6,8 @@ namespace manipulator_control
     bool Scene::init()
     {
         planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
+        ros::WallDuration sleep_t(0.5);
+        sleep_t.sleep();
         moveit_msgs::CollisionObject obj;
         obj.header.frame_id = "base_link";
         obj.id="golden_ore";
@@ -13,7 +15,7 @@ namespace manipulator_control
         initial_pose.orientation.w = 1.0;
         initial_pose.position.x = 0.00;
         initial_pose.position.y = 0.50;
-        initial_pose.position.z = 0.10;     
+        initial_pose.position.z = 0.50;     
         shapes::Mesh *mesh=shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL" );
         bool success = generate(initial_pose, mesh, obj);
         return true;
@@ -36,8 +38,8 @@ namespace manipulator_control
         planning_scene.world.collision_objects.push_back(obj);
         planning_scene.is_diff = true;
         planning_scene_diff_publisher.publish(planning_scene);
-        collision_objects.push_back(obj);
-        current_scene.addCollisionObjects(collision_objects);
+        //collision_objects.push_back(obj);
+        //current_scene.addCollisionObjects(collision_objects);
         ROS_INFO_STREAM("SUCCEED TO GENERATE A MESH");
         return true;       
     }

@@ -18,7 +18,9 @@ namespace manipulator_control
 
             bool init();
 
-            void execute();
+            void move_execute();
+
+            void grip_execute();
 
             void read();
 
@@ -32,6 +34,10 @@ namespace manipulator_control
 
             void set_executed(bool exe);
 
+            void stretch(const std::vector<double> &distance);
+
+            void goal(const std::string &name);
+
 
 
         private:
@@ -40,7 +46,7 @@ namespace manipulator_control
             const moveit::core::JointModelGroup* joint_model_group;
             const moveit::core::JointModelGroup* grip_model_group;
             geometry_msgs::Pose current_pose, target_pose;
-            std::vector<double> current_state, target_state;
+            std::vector<double> current_state, target_state, current_distance, target_distance;
             execution_mode EXECUTION_MODE;
             bool executed;
             
