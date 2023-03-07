@@ -128,6 +128,10 @@ namespace sp_hw
                 frame.data[6] = 0x00;
                 frame.data[7] = 0x00;
                 socket_can_.write(&frame);
+                frame.data[0] = 0x92;
+                frame.data[4] = 0x00;
+                frame.data[5] = 0x00;
+                socket_can_.write(&frame);
             }
         }
 
@@ -184,27 +188,34 @@ namespace sp_hw
                 }
                 else if (act_data.type.find("MG") != std::string::npos)
                 {
-                    act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
-                    act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
-                    uint16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
-                    act_data.stamp = can_frame_stamp.stamp;
-
-                    // Basically, motor won't rotate more than 32678 between two time slide.
-                    if (act_data.seq != 0)
+                    if (frame.data[0] == 0xA1)
                     {
-                        if (act_data.q_raw - act_data.q_last > 32768)
-                            act_data.q_circle--;
-                        else if (act_data.q_last - act_data.q_raw > 32768)
-                            act_data.q_circle++;
+                        act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
+                        act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
+                        uint16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
+                        act_data.stamp = can_frame_stamp.stamp;
+
+                        // Basically, motor won't rotate more than 32678 between two time slide.
+                        if (act_data.seq != 0)
+                        {
+                            if (act_data.q_raw - act_data.q_last > 32768)
+                                act_data.q_circle--;
+                            else if (act_data.q_last - act_data.q_raw > 32768)
+                                act_data.q_circle++;
+                        }
+                        act_data.q_last = act_data.q_raw;
+                        act_data.seq++;
+                        // convert raw data into  standard ActuatorState
+                        act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
+                        act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
+                        continue;
                     }
-                    act_data.q_last = act_data.q_raw;
-                    act_data.seq++;
-                    // convert raw data into  standard ActuatorState
-                    act_data.pos = act_coeff.act2pos *
-                                   static_cast<double>(act_data.q_raw + 65535 * act_data.q_circle);
-                    act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
-                    act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
-                    continue;
+                    else if (frame.data[0] == 0x92)
+                    {
+                        act_data.pos = act_coeff.act2pos * static_cast<double>((frame.data[7] << 24u)|
+                        (frame.data[3] << 16u)|(frame.data[2] << 8u) | frame.data[1]);
+
+                    }
                 }
             }
             else if (frame.can_id == static_cast<unsigned int>(0x000))

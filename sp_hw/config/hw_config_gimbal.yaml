@@ -1,0 +1,23 @@
+bus:
+  - can0
+loop_frequency: 800
+cycle_time_error_threshold: 1
+thread_priority: 30
+
+actuators:
+  mast_joint_motor:
+    bus: can0
+    id: 0x205
+    type: rm_2006
+  
+  fpv_yaw_joint_motor:
+    bus: can0
+    id: 0x126
+    type: MG_995
+
+  fpv_pitch_joint_motor:
+    bus: can0
+    id: 0x127
+    type: MG_995
+
+

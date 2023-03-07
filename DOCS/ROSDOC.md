@@ -741,13 +741,7 @@ actuators:
 
 （3）开启测试程序
 
-如下顺序执行命令
-
-```cpp
-roslaunch sp_hw load_hw_test.launch
-```
-
-此时给电机上电，执行如下命令
+给电机上电，并如下顺序执行命令
 
 ```cpp
 sudo ip link set can0 up type can bitrate 1000000
@@ -755,6 +749,12 @@ candump can0
 ```
 
 如运行正常，会出现读取的`can`帧信息。
+
+执行如下命令
+
+```cpp
+roslaunch sp_hw load_hw_test.launch
+```
 
 接着执行
 
