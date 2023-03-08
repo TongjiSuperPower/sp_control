@@ -4,6 +4,7 @@
 #include <geometry_msgs/TwistStamped.h>
 #include <ros/ros.h>
 #include <realtime_tools/realtime_buffer.h>
+#include <nav_msgs/Odometry.h>
 // superpower_hardware
 #include "sentry_communicator/socketcan.h"
 namespace sentry_communicator
@@ -37,6 +38,10 @@ namespace sentry_communicator
         const std::string bus_name_;
         can::SocketCAN socket_can_;
         ros::Subscriber cmd_chassis_sub_;
+        ros::Publisher lowercom_data_pub;
+        std::mutex mutex_;
+        nav_msgs::Odometry lower_com_data;
+        
 
         // Lithesh : use realtime buffer to keep the multi-thread safe.
         realtime_tools::RealtimeBuffer<Command> realtime_buffer_;
@@ -44,6 +49,7 @@ namespace sentry_communicator
         // the int array used to contain data_frame, which has 8 byte
         uint8_t *can_data_;
         can_frame frame_;
+        uint16_t data;
     };
 
     // TODO(Lithesh) : the zero-drift should be concerned.
