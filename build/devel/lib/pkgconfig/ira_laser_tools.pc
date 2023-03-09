@@ -1,0 +1,8 @@
+prefix=/home/adminpc/catkin_ws/src/build/devel
+
+Name: ira_laser_tools
+Description: Description of ira_laser_tools
+Version: 1.0.7
+Cflags: -I/home/adminpc/catkin_ws/src/build/devel/include
+Libs: -L${prefix}/lib 
+Requires: 

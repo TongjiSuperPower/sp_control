@@ -132,10 +132,10 @@ namespace sp_hw
                 frame.data[7] = 0x00;
                 socket_can_.write(&frame);
             }
-            else if (id2act_data.second.type.find("MG_995") != std::string::npos)
+            /*else if (id2act_data.second.type.find("MG_995") != std::string::npos)
             {
                 double cmd = 0;
-                    //limitAmplitude(id2act_data.second.exe_effort, act_coeff.max_out);
+                // limitAmplitude(id2act_data.second.exe_effort, act_coeff.max_out);
                 int id = id2act_data.first;
                 if (id == 0x101)
                 {
@@ -146,14 +146,15 @@ namespace sp_hw
                 {
                     can_frame2_.data[2] = static_cast<uint8_t>(cmd);
                     can_frame2_.data[3] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
-                }            
-            }
+                }
+            }*/
         }
 
         for (auto &id2gpio_data : *data_ptr_.id2gpio_data_)
         {
-            int id = id2gpio_data.first - 0x160; 
+            int id = id2gpio_data.first - 0x100;
             bool cmd = id2gpio_data.second.value;
+
             if (id <= 4)
             {
                 if (cmd)
@@ -161,6 +162,7 @@ namespace sp_hw
                 else
                     can_frame2_.data[id + 3] = 0x00;
             }
+            has_write_frame2 = true;
         }
 
         if (has_write_frame0)
@@ -168,8 +170,9 @@ namespace sp_hw
         if (has_write_frame1)
             socket_can_.write(&rm_can_frame1_);
         if (has_write_frame2)
+        {
             socket_can_.write(&can_frame2_);
-
+        }
     }
     /*! TODO :  seems that the processing of read_buffer_ will waste a lot of time
      *          because of the thread-switching and mutex_.
@@ -192,6 +195,7 @@ namespace sp_hw
                     act_data.q_raw = (frame.data[0] << 8u) | frame.data[1];
                     act_data.qd_raw = (frame.data[2] << 8u) | frame.data[3];
                     int16_t mapped_current = (frame.data[4] << 8u) | frame.data[5];
+                    // ROS_INFO_STREAM(mapped_current);
                     act_data.stamp = can_frame_stamp.stamp;
                     if (act_data.seq < 10)
                     {
@@ -210,8 +214,6 @@ namespace sp_hw
                     // convert raw data into standard ActuatorState
                     act_data.pos = act_coeff.act2pos *
                                    static_cast<double>(act_data.q_raw + 8192 * act_data.q_circle - act_data.offset);
-                   
- 
 
                     act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                     act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
@@ -223,7 +225,7 @@ namespace sp_hw
                     {
                         act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
                         act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
-                        uint16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
+                        int16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
                         act_data.stamp = can_frame_stamp.stamp;
 
                         // Basically, motor won't rotate more than 32678 between two time slide.
@@ -255,8 +257,8 @@ namespace sp_hw
                     }
                     else if (frame.data[0] == 0x92)
                     {
-                        act_data.pos = act_coeff.act2pos * static_cast<double>((frame.data[7] << 24u)|
-                        (frame.data[3] << 16u)|(frame.data[2] << 8u) | frame.data[1]);
+                        act_data.pos = act_coeff.act2pos * static_cast<double>((frame.data[7] << 24u) |
+                                                                               (frame.data[3] << 16u) | (frame.data[2] << 8u) | frame.data[1]);
                         continue;
                     }
                 }

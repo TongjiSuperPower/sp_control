@@ -8,8 +8,8 @@ controllers:
     pid:
       {
         p: 3.0,
-        i: 0.0,
-        d: 0.3,
+        i: 0.1,
+        d: 0.0,
         i_clamp_max: 4.0,
         i_clamp_min: -4.0,
         antiwindup: true,

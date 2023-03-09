@@ -1,0 +1,8 @@
+prefix=/home/adminpc/catkin_ws/src/build/devel
+
+Name: sp_description
+Description: Description of sp_description
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: chassis_controller
+Description: Description of chassis_controller
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

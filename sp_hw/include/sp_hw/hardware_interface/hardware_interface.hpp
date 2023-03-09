@@ -26,7 +26,6 @@
 #include "sp_common/ActuatorState.h"
 #include "sp_common/GpioData.h"
 
-
 namespace sp_hw
 {
     class SpRobotHW : public hardware_interface::RobotHW
@@ -41,8 +40,8 @@ namespace sp_hw
         void publishActuatorState(const ros::Time &time);
 
     private:
-        bool is_actuator_specified_, is_gpio_specified_= false;
-         
+        bool is_actuator_specified_, is_gpio_specified_ = false;
+
         int thread_priority_ = 0;
         // Param Parse
         bool parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs);
@@ -57,7 +56,7 @@ namespace sp_hw
         // URDF model of the robot
         std::string urdf_string_;
         std::shared_ptr<urdf::Model> urdf_model_;
-        //Gpio
+        // Gpio
         sp_control::GpioStateInterface gpio_state_interface_;
         sp_control::GpioCommandInterface gpio_command_interface_;
 

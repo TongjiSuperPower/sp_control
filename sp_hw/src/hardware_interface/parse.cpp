@@ -185,8 +185,7 @@ namespace sp_hw
                                                                          .cmd_vel = 0,
                                                                          .cmd_effort = 0,
                                                                          .exe_effort = 0,
-                                                                         .offset = 0
-                                                                         }));
+                                                                         .offset = 0}));
                 }
                 // TODO(DONE) : use actuator_coefficient to define
                 if (type2act_coeffs_.find(type) != type2act_coeffs_.end())
@@ -222,9 +221,9 @@ namespace sp_hw
         return true;
     }
 
-    bool SpRobotHW::parseGpioData(XmlRpc::XmlRpcValue& gpio_data)
+    bool SpRobotHW::parseGpioData(XmlRpc::XmlRpcValue &gpio_data)
     {
-         // ROBUST : Ensure the type of XmlRpcValue is ValueStruct
+        // ROBUST : Ensure the type of XmlRpcValue is ValueStruct
         ROS_ASSERT(gpio_data.getType() == XmlRpc::XmlRpcValue::TypeStruct);
         try
         {
@@ -249,7 +248,6 @@ namespace sp_hw
                     type = sp_control::INPUT;
                 int id = it->second["id"];
 
-
                 // Constructing the Actuator_Table
                 // Bus_ID  --->  Gpio ID  ---> GpioData(Struct)
                 if (bus_id2gpio_data_.find(bus) == bus_id2gpio_data_.end())
@@ -263,21 +261,20 @@ namespace sp_hw
                 else
                 {
                     bus_id2gpio_data_[bus].emplace(std::make_pair(id, sp_control::GpioData{
-                                                                         .name = it->first,                                                                    
-                                                                         .stamp = ros::Time::now(),
-                                                                         .type = type,
-                                                                         .value = false
-                                                                         }));
+                                                                          .name = it->first,
+                                                                          .stamp = ros::Time::now(),
+                                                                          .type = sp_control::INPUT,
+                                                                          .value = true}));
                 }
-                sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
-                                                                &bus_id2gpio_data_[bus][id].value);
-                gpio_state_interface_.registerHandle(gpio_state_handle);
-                if (type == sp_control::OUTPUT)
-                {
-                    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
-                                                                &bus_id2gpio_data_[bus][id].value);
-                    gpio_command_interface_.registerHandle(gpio_command_handle);
-                }
+                // sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                //                                               &bus_id2gpio_data_[bus][id].value);
+                // gpio_state_interface_.registerHandle(gpio_state_handle);
+                // if (type == sp_control::OUTPUT)
+                // {
+                //    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                //                                                      &bus_id2gpio_data_[bus][id].value);
+                //     gpio_command_interface_.registerHandle(gpio_command_handle);
+                //}
             }
         }
         catch (XmlRpc::XmlRpcException &e)
@@ -288,12 +285,10 @@ namespace sp_hw
                              << "Check the Config Yaml.");
             return false;
         }
-        registerInterface(&gpio_state_interface_);
-        registerInterface(&gpio_command_interface_);
         gpio_tree(bus_id2gpio_data_);
         is_gpio_specified_ = true; // now all the actuators have been parsed.
         return true;
-    }   
+    }
 
     bool SpRobotHW::initCanBus(XmlRpc::XmlRpcValue &bus_list)
     {
