@@ -20,6 +20,7 @@ find_package(catkin REQUIRED
 add_message_files(
    FILES
    ActuatorState.msg
+   GpioData.msg
    SingleJointWrite.msg
 #   Message2.msg
 )

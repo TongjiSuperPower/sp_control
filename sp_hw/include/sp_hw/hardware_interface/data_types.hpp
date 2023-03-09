@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <sp_common/hardware_interface/gpio_interface.h>
 
 namespace sp_hw
 {
@@ -33,5 +34,6 @@ namespace sp_hw
     {
         std::unordered_map<std::string, ActCoeff> *type2act_coeffs_;
         std::unordered_map<int, ActData> *id2act_data_;
+        std::unordered_map<int, sp_control::GpioData> *id2gpio_data_;
     };
 } // namespace : sp_hw

@@ -1,0 +1,15 @@
+bus:
+  - can0
+loop_frequency: 1000
+cycle_time_error_threshold: 1
+thread_priority: 30
+
+gpios:
+    left_grappler:
+      bus: can0
+      id: 0x101
+      type: out
+    right_grappler:
+     bus: can0
+      id: 0x102
+      type: out

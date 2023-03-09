@@ -34,6 +34,7 @@ namespace sp_hw
 
         can_frame rm_can_frame0_;
         can_frame rm_can_frame1_;
+        can_frame can_frame2_;
 
         mutable std::mutex mutex_;
     };

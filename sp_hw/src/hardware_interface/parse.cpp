@@ -24,6 +24,19 @@ namespace sp_hw
     // Lithesh : I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
     // And i hate Misunderstanding.
+    void gpio_tree(const std::unordered_map<std::string, std::unordered_map<int, sp_control::GpioData>> &bus_id2gpio_data)
+    {
+        for (auto bus_it = bus_id2gpio_data.begin(); bus_it != bus_id2gpio_data.end(); ++bus_it)
+        {
+            std::cout << "|-- " << bus_it->first << std::endl;
+            for (auto gpio_id = bus_it->second.begin(); gpio_id != bus_it->second.end(); gpio_id++)
+                std::cout << "|   "
+                          << "|-- "
+                          << "0x" << std::hex << gpio_id->first << " - " << std::dec
+                          << gpio_id->second.type << " - " << gpio_id->second.name << std::endl;
+        }
+    }
+
     bool SpRobotHW::parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs)
     {
         // ROBUST : Ensure the type of XmlRpcValue is ValueStruct
@@ -209,6 +222,79 @@ namespace sp_hw
         return true;
     }
 
+    bool SpRobotHW::parseGpioData(XmlRpc::XmlRpcValue& gpio_data)
+    {
+         // ROBUST : Ensure the type of XmlRpcValue is ValueStruct
+        ROS_ASSERT(gpio_data.getType() == XmlRpc::XmlRpcValue::TypeStruct);
+        try
+        {
+            for (auto it = gpio_data.begin(); it != gpio_data.end(); ++it)
+            {
+                if (!it->second.hasMember("bus"))
+                {
+                    ROS_ERROR_STREAM("Gpio " << it->first << " has no associated bus.");
+                    continue;
+                }
+                else if (!it->second.hasMember("type"))
+                {
+                    ROS_ERROR_STREAM("Gpio" << it->first << " has no associated type.");
+                    continue;
+                }
+
+                std::string bus = it->second["bus"];
+                sp_control::GpioType type;
+                if (it->second["type"] == "out")
+                    type = sp_control::OUTPUT;
+                else if (it->second["type"] == "in")
+                    type = sp_control::INPUT;
+                int id = it->second["id"];
+
+
+                // Constructing the Actuator_Table
+                // Bus_ID  --->  Gpio ID  ---> GpioData(Struct)
+                if (bus_id2gpio_data_.find(bus) == bus_id2gpio_data_.end())
+                    bus_id2gpio_data_.emplace(std::make_pair(bus, std::unordered_map<int, sp_control::GpioData>()));
+
+                if (!(bus_id2gpio_data_[bus].find(id) == bus_id2gpio_data_[bus].end()))
+                {
+                    ROS_ERROR_STREAM("Repeat actuator on BUS " << bus << " and ID 0x" << std::hex << id);
+                    return false;
+                }
+                else
+                {
+                    bus_id2gpio_data_[bus].emplace(std::make_pair(id, sp_control::GpioData{
+                                                                         .name = it->first,                                                                    
+                                                                         .stamp = ros::Time::now(),
+                                                                         .type = type,
+                                                                         .value = false
+                                                                         }));
+                }
+                sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                                                                &bus_id2gpio_data_[bus][id].value);
+                gpio_state_interface_.registerHandle(gpio_state_handle);
+                if (type == sp_control::OUTPUT)
+                {
+                    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                                                                &bus_id2gpio_data_[bus][id].value);
+                    gpio_command_interface_.registerHandle(gpio_command_handle);
+                }
+            }
+        }
+        catch (XmlRpc::XmlRpcException &e)
+        {
+            // throw TypeError
+            ROS_FATAL_STREAM("Exception raised by XmlRpc while Parsing the"
+                             << "Configuration: " << e.getMessage() << ".\n"
+                             << "Check the Config Yaml.");
+            return false;
+        }
+        registerInterface(&gpio_state_interface_);
+        registerInterface(&gpio_command_interface_);
+        gpio_tree(bus_id2gpio_data_);
+        is_gpio_specified_ = true; // now all the actuators have been parsed.
+        return true;
+    }   
+
     bool SpRobotHW::initCanBus(XmlRpc::XmlRpcValue &bus_list)
     {
         uint8_t EC = 0;
@@ -220,7 +306,8 @@ namespace sp_hw
                 // can_buses.push_back(new CanBus) may cause memory leak.
                 can_buses_.push_back(std::make_unique<CanBus>(bus_name,
                                                               CanDataPtr{.type2act_coeffs_ = &type2act_coeffs_,
-                                                                         .id2act_data_ = &bus_id2act_data_[bus_name]},
+                                                                         .id2act_data_ = &bus_id2act_data_[bus_name],
+                                                                         .id2gpio_data_ = &bus_id2gpio_data_[bus_name]},
                                                               thread_priority_));
                 ROS_INFO("\033[42;37m [SP_HW] *%s* Initialized ! \033[0m", bus_name.c_str());
             }
