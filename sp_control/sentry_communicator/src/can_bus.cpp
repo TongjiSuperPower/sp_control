@@ -8,11 +8,15 @@
 
 #define MAX_GYRO  10.f
 #define MIN_GYRO  -10.f
-#define ID_GYRO  0x110
+#define ID_GYRO  0x112
 
 #define MAX_QUAT  1.f
 #define MIN_QUAT  -1.f
-#define ID_QUAT  0x101
+#define ID_QUAT  0x113
+
+#define MAX_YAW 12.5f
+#define MIN_YAW -12.5f
+#define ID_YAW  0x114
 
 namespace sentry_communicator
 {
@@ -104,6 +108,17 @@ namespace sentry_communicator
             lower_com_data.header.stamp = ros::Time::now();
             lowercom_data_pub.publish(lower_com_data);
 
+        }
+
+        if(frame.can_id == ID_YAW)
+        {
+            data = (frame.data[0] << 8u) | frame.data[1];
+            yaw = uint2float(data, MIN_YAW, MAX_YAW, 16);
+            tf_yaw2chassis.sendTransform(
+                        tf::StampedTransform(
+                                tf::Transform(tf::createQuaternionFromRPY(0.0,0.0,yaw), tf::Vector3(0, 0, 0)),
+                                ros::Time::now(),"base_link","tf_chassis"));
+            
         }
     }
 
