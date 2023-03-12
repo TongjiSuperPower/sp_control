@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: engineer_manipulator_moveit_config
+Description: Description of engineer_manipulator_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: sp_hw
+Description: Description of sp_hw
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: hardware_interface transmission_interface urdf controller_manager

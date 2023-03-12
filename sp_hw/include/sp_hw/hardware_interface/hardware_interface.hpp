@@ -22,7 +22,9 @@
 
 /* publish ActuatorState */
 #include <realtime_tools/realtime_publisher.h>
+#include <sp_common/hardware_interface/gpio_interface.h>
 #include "sp_common/ActuatorState.h"
+#include "sp_common/GpioData.h"
 
 namespace sp_hw
 {
@@ -38,11 +40,13 @@ namespace sp_hw
         void publishActuatorState(const ros::Time &time);
 
     private:
-        bool is_actuator_specified_ = false;
+        bool is_actuator_specified_, is_gpio_specified_ = false;
+
         int thread_priority_ = 0;
         // Param Parse
         bool parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs);
         bool parseActData(XmlRpc::XmlRpcValue &act_data);
+        bool parseGpioData(XmlRpc::XmlRpcValue &gpio_datas);
         bool initCanBus(XmlRpc::XmlRpcValue &can_bus);
         bool loadUrdf(ros::NodeHandle &root_nh);
         bool setupTransmission(ros::NodeHandle &root_nh);
@@ -52,12 +56,16 @@ namespace sp_hw
         // URDF model of the robot
         std::string urdf_string_;
         std::shared_ptr<urdf::Model> urdf_model_;
+        // Gpio
+        sp_control::GpioStateInterface gpio_state_interface_;
+        sp_control::GpioCommandInterface gpio_command_interface_;
 
         // joint_handle
         std::vector<hardware_interface::JointHandle> effort_joint_handles_;
         // ActuatorParam & Actuator Interface
         std::unordered_map<std::string, ActCoeff> type2act_coeffs_;
         std::unordered_map<std::string, std::unordered_map<int, ActData>> bus_id2act_data_;
+        std::unordered_map<std::string, std::unordered_map<int, sp_control::GpioData>> bus_id2gpio_data_;
         hardware_interface::ActuatorStateInterface act_state_interface_;
         hardware_interface::EffortActuatorInterface effort_act_interface_;
         // Transmission

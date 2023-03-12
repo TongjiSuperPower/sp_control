@@ -1,0 +1,8 @@
+prefix=/home/adminpc/catkin_ws/src/build/devel
+
+Name: sp_common
+Description: Description of sp_common
+Version: 0.0.1
+Cflags: -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include
+Libs: -L${prefix}/lib -lsp_common
+Requires: roscpp std_msgs

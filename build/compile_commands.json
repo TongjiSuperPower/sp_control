@@ -1,0 +1,117 @@
+[
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/gtest/googlemock",
+  "command": "/usr/bin/g++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/googletest/googlemock/include -I/usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /usr/src/googletest/googlemock/src/gmock-all.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/gtest/googlemock",
+  "command": "/usr/bin/g++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -isystem /usr/src/googletest/googlemock/include -isystem /usr/src/googletest/googlemock -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /usr/src/googletest/googlemock/src/gmock_main.cc",
+  "file": "/usr/src/googletest/googlemock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/gtest/googletest",
+  "command": "/usr/bin/g++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_EXPORTS -I/usr/src/googletest/googletest/include -I/usr/src/googletest/googletest -g -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++11 -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /usr/src/googletest/googletest/src/gtest-all.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/gtest/googletest",
+  "command": "/usr/bin/g++ -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_main_EXPORTS -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest -g -fPIC -Wall -Wshadow -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -DGTEST_HAS_PTHREAD=1 -std=c++11 -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /usr/src/googletest/googletest/src/gtest_main.cc",
+  "file": "/usr/src/googletest/googletest/src/gtest_main.cc"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_common",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_common\\\" -Dsp_common_EXPORTS -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -fPIC   -Wall -Werror -Wno-enum-compare -std=gnu++14 -o CMakeFiles/sp_common.dir/src/filters/filters.cpp.o -c /home/adminpc/catkin_ws/src/sp_common/src/filters/filters.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_common/src/filters/filters.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/third_party_lib/ira_laser_tools",
+  "command": "/usr/bin/g++ -DDISABLE_LIBUSB_1_0 -DDISABLE_PCAP -DDISABLE_PNG -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"ira_laser_tools\\\" -Dqh_QHpointer -DvtkRenderingContext2D_AUTOINIT=\"1(vtkRenderingContextOpenGL2)\" -DvtkRenderingCore_AUTOINIT=\"3(vtkInteractionStyle,vtkRenderingFreeType,vtkRenderingOpenGL2)\" -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/include/vtk-7.1 -isystem /usr/include/freetype2 -isystem /usr/include/eigen3 -isystem /usr/include/pcl-1.10 -isystem /usr/include/ni -isystem /usr/include/openni2 -g -std=c++14 -o CMakeFiles/laserscan_multi_merger.dir/src/laserscan_multi_merger.cpp.o -c /home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_multi_merger.cpp",
+  "file": "/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_multi_merger.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/third_party_lib/ira_laser_tools",
+  "command": "/usr/bin/g++ -DDISABLE_LIBUSB_1_0 -DDISABLE_PCAP -DDISABLE_PNG -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"ira_laser_tools\\\" -Dqh_QHpointer -DvtkRenderingContext2D_AUTOINIT=\"1(vtkRenderingContextOpenGL2)\" -DvtkRenderingCore_AUTOINIT=\"3(vtkInteractionStyle,vtkRenderingFreeType,vtkRenderingOpenGL2)\" -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/include/vtk-7.1 -isystem /usr/include/freetype2 -isystem /usr/include/eigen3 -isystem /usr/include/pcl-1.10 -isystem /usr/include/ni -isystem /usr/include/openni2 -g -std=c++14 -o CMakeFiles/laserscan_virtualizer.dir/src/laserscan_virtualizer.cpp.o -c /home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_virtualizer.cpp",
+  "file": "/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_virtualizer.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/sp_hw.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/sp_hw.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/sp_hw.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/hardware_interface/hardware_interface.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/hardware_interface.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/hardware_interface.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/hardware_interface/parse.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/parse.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/parse.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/hardware_interface/socketcan.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/socketcan.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/socketcan.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/hardware_interface/can_bus.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/can_bus.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface/can_bus.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_hw",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_hw\\\" -I/home/adminpc/catkin_ws/src/sp_hw/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -std=gnu++14 -o CMakeFiles/sp_hw.dir/src/hardware_interface_loader.cpp.o -c /home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface_loader.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_hw/src/hardware_interface_loader.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/sentry_communicator",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sentry_communicator\\\" -I/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -o CMakeFiles/sentry_communicator.dir/src/sentry_communicator.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/sentry_communicator.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/sentry_communicator.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/sentry_communicator",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sentry_communicator\\\" -I/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -o CMakeFiles/sentry_communicator.dir/src/can_bus.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/can_bus.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/can_bus.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/sentry_communicator",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sentry_communicator\\\" -I/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -o CMakeFiles/sentry_communicator.dir/src/socketcan.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/socketcan.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/sentry_communicator/src/socketcan.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"manipulator_control\\\" -I/home/adminpc/catkin_ws/src/sp_control/manipulator_control/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/include/bullet -g -std=c++14 -o CMakeFiles/manipulator_control.dir/src/manipulator_control.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/manipulator_control.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/manipulator_control.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"manipulator_control\\\" -I/home/adminpc/catkin_ws/src/sp_control/manipulator_control/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/include/bullet -g -std=c++14 -o CMakeFiles/manipulator_control.dir/src/arm_control.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/arm_control.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/arm_control.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"manipulator_control\\\" -I/home/adminpc/catkin_ws/src/sp_control/manipulator_control/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -I/usr/include/bullet -g -std=c++14 -o CMakeFiles/manipulator_control.dir/src/scene_generate.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/scene_generate.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/manipulator_control/src/scene_generate.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/chassis_controller",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"chassis_controller\\\" -Dchassis_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/chassis_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -fPIC -o CMakeFiles/chassis_controller.dir/src/chassis_base.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/chassis_base.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/chassis_base.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/chassis_controller",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"chassis_controller\\\" -Dchassis_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/chassis_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -fPIC -o CMakeFiles/chassis_controller.dir/src/roller_wheel.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/roller_wheel.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/roller_wheel.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/chassis_controller",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"chassis_controller\\\" -Dchassis_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/chassis_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -fPIC -o CMakeFiles/chassis_controller.dir/src/swerve_wheel.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/swerve_wheel.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/chassis_controller/src/swerve_wheel.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/gimbal_controller",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"gimbal_controller\\\" -Dgimbal_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/gimbal_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -fPIC -o CMakeFiles/gimbal_controller.dir/src/gimbal_controller.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/gimbal_controller/src/gimbal_controller.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/gimbal_controller/src/gimbal_controller.cpp"
+}
+]

@@ -25,6 +25,11 @@ namespace sp_hw
             if (!initCanBus(xml_rpc_value))
                 ROS_WARN("Some Bus Communication has not been initialized \n");
         }
+
+        if (!robot_hw_nh.getParam("gpios", xml_rpc_value))
+            ROS_WARN("No gpio specified");
+        else if (!parseGpioData(xml_rpc_value))
+            return false;
         // TEST
         // actuator_state_pub_.reset(
         // new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));

@@ -33,3 +33,6 @@ actuator_coefficient:
     act2effort: 0.0077880859 # 33/2048*2.9/6
     effort2act: 129.3103448276 # 2000/32/2.9*6
     max_out: 2000
+
+  MG_995:
+    max_out: 180
