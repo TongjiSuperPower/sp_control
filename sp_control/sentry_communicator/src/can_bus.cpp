@@ -35,11 +35,13 @@ namespace sentry_communicator
         
         frame_.can_id = 0x111;
         frame_.can_dlc = 8;
+        ROS_INFO("Init ok!");
     }
 
     void CanBus::write()
     {
         // set all data_byte to 0
+        ROS_INFO("Begin to write");
         std::fill(std::begin(frame_.data), std::end(frame_.data), 0);
         // Lithesh TODO : add speed_limit
         const geometry_msgs::Twist &command_velocity = realtime_buffer_.readFromNonRT()->cmd_vel_;
@@ -54,6 +56,8 @@ namespace sentry_communicator
         frame_.data[4] = static_cast<uint8_t>((vel_z & 0xF) << 4u | 0xF);
 
     	socket_can_.write(&frame_);
+
+        ROS_INFO("Successful send data");
     }
 
     void CanBus::cmdChassisCallback(const geometry_msgs::Twist::ConstPtr &msg)
@@ -65,8 +69,6 @@ namespace sentry_communicator
     void CanBus::frameCallback(const can_frame &frame)
     {
         std::lock_guard<std::mutex> guard(mutex_);
-        
-
         if(frame.can_id == ID_ACCEL)//Acceleration of IMU
         {
             data = (frame.data[0] << 8u) | frame.data[1];
@@ -117,7 +119,7 @@ namespace sentry_communicator
             tf_yaw2chassis.sendTransform(
                         tf::StampedTransform(
                                 tf::Transform(tf::createQuaternionFromRPY(0.0,0.0,yaw), tf::Vector3(0, 0, 0)),
-                                ros::Time::now(),"base_link","tf_chassis"));
+                                ros::Time::now(),"base_link","chassis_link"));
             
         }
     }
