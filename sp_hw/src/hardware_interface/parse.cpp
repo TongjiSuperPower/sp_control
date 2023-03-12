@@ -22,34 +22,6 @@ namespace sp_hw
         }
     }
 
-/*
-    void actuator_tree(const std::unordered_map<std::string, std::unordered_map<int, ActData>> &bus_id2act_data)
-    {
-        for (auto bus_it = bus_id2act_data.begin(); bus_it != bus_id2act_data.end(); ++bus_it)
-        {
-            std::cout << "|-- " << bus_it->first << std::endl;
-            for (auto act_id = bus_it->second.begin(); act_id != bus_it->second.end(); act_id++)
-                std::cout << "|   "
-                          << "|-- "
-                          << "0x" << std::hex << act_id->first << " - " << std::dec
-                          << act_id->second.type << " - " << act_id->second.name << std::endl;
-        }
-    }
-
-    void gpio_tree(const std::unordered_map<std::string, std::unordered_map<int, sp_control::GpioData>> &bus_id2gpio_data)
-    {
-        for (auto bus_it = bus_id2gpio_data.begin(); bus_it != bus_id2gpio_data.end(); ++bus_it)
-        {
-            std::cout << "|-- " << bus_it->first << std::endl;
-            for (auto gpio_id = bus_it->second.begin(); gpio_id != bus_it->second.end(); gpio_id++)
-                std::cout << "|   "
-                          << "|-- "
-                          << "0x" << std::hex << gpio_id->first << " - " << std::dec
-                          << gpio_id->second.type << " - " << gpio_id->second.name << std::endl;
-        }
-    }
-*/
-
     // Lithesh : I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
     // And i hate Misunderstanding.
