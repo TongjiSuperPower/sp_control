@@ -67,6 +67,7 @@ all: gtest/all
 all: sp_control/engineer_manipulator_moveit_config/all
 all: sp_description/all
 all: sp_common/all
+all: sp_control/gpio_controller/all
 all: third_party_lib/ira_laser_tools/all
 all: sp_gazebosim/all
 all: sp_hw/all
@@ -81,6 +82,7 @@ preinstall: gtest/preinstall
 preinstall: sp_control/engineer_manipulator_moveit_config/preinstall
 preinstall: sp_description/preinstall
 preinstall: sp_common/preinstall
+preinstall: sp_control/gpio_controller/preinstall
 preinstall: third_party_lib/ira_laser_tools/preinstall
 preinstall: sp_gazebosim/preinstall
 preinstall: sp_hw/preinstall
@@ -100,6 +102,7 @@ clean: gtest/clean
 clean: sp_control/engineer_manipulator_moveit_config/clean
 clean: sp_description/clean
 clean: sp_common/clean
+clean: sp_control/gpio_controller/clean
 clean: third_party_lib/ira_laser_tools/clean
 clean: sp_gazebosim/clean
 clean: sp_hw/clean
@@ -192,6 +195,7 @@ sp_common/clean: sp_common/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir
 sp_common/clean: sp_common/CMakeFiles/geometry_msgs_generate_messages_py.dir/clean
 sp_common/clean: sp_common/CMakeFiles/sp_common_generate_messages.dir/clean
 sp_common/clean: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/clean
+sp_common/clean: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/clean
 sp_common/clean: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/clean
 sp_common/clean: sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/clean
 sp_common/clean: sp_common/CMakeFiles/sp_common_gencpp.dir/clean
@@ -254,6 +258,21 @@ sp_control/gimbal_controller/preinstall:
 sp_control/gimbal_controller/clean: sp_control/gimbal_controller/CMakeFiles/gimbal_controller.dir/clean
 sp_control/gimbal_controller/clean: sp_control/gimbal_controller/CMakeFiles/roslint_gimbal_controller.dir/clean
 .PHONY : sp_control/gimbal_controller/clean
+
+#=============================================================================
+# Directory level rules for directory sp_control/gpio_controller
+
+# Recursive "all" directory target.
+sp_control/gpio_controller/all: sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/all
+.PHONY : sp_control/gpio_controller/all
+
+# Recursive "preinstall" directory target.
+sp_control/gpio_controller/preinstall:
+.PHONY : sp_control/gpio_controller/preinstall
+
+# Recursive "clean" directory target.
+sp_control/gpio_controller/clean: sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/clean
+.PHONY : sp_control/gpio_controller/clean
 
 #=============================================================================
 # Directory level rules for directory sp_control/manipulator_control
@@ -650,7 +669,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/clean:
 gtest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=11,12 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=13,14 "Built target gtest"
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -676,7 +695,7 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 gtest/googletest/CMakeFiles/gtest_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=13,14 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=15,16 "Built target gtest_main"
 .PHONY : gtest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1257,7 +1276,7 @@ sp_common/CMakeFiles/sp_common_generate_messages.dir/all: sp_common/CMakeFiles/s
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 12
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 17
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages.dir/rule
@@ -1298,6 +1317,32 @@ sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/c
 .PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/clean
 
 #=============================================================================
+# Target rules for target sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir
+
+# All Build rule for target.
+sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all:
+	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/depend
+	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num= "Built target _sp_common_generate_messages_check_deps_GpioData"
+.PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
+
+# Build rule for subdir invocation for target.
+sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
+.PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule
+
+# Convenience name for target.
+_sp_common_generate_messages_check_deps_GpioData: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule
+.PHONY : _sp_common_generate_messages_check_deps_GpioData
+
+# clean rule for target.
+sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/clean:
+	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/clean
+.PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/clean
+
+#=============================================================================
 # Target rules for target sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir
 
 # All Build rule for target.
@@ -1329,15 +1374,16 @@ sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.di
 # All Build rule for target.
 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all: sp_common/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/all
+sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=31,32 "Built target sp_common_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=33,34,35 "Built target sp_common_generate_messages_cpp"
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/rule
@@ -1363,7 +1409,7 @@ sp_common/CMakeFiles/sp_common_gencpp.dir/all: sp_common/CMakeFiles/sp_common_ge
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_gencpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_gencpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_gencpp.dir/rule
@@ -1383,15 +1429,16 @@ sp_common/CMakeFiles/sp_common_gencpp.dir/clean:
 # All Build rule for target.
 sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all: sp_common/CMakeFiles/std_msgs_generate_messages_eus.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/all
+sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=33,34,35 "Built target sp_common_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=36,37,38,39 "Built target sp_common_generate_messages_eus"
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/rule
@@ -1417,7 +1464,7 @@ sp_common/CMakeFiles/sp_common_geneus.dir/all: sp_common/CMakeFiles/sp_common_ge
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_geneus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_geneus.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_geneus.dir/rule
@@ -1437,15 +1484,16 @@ sp_common/CMakeFiles/sp_common_geneus.dir/clean:
 # All Build rule for target.
 sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all: sp_common/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/all
+sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=36,37 "Built target sp_common_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=40,41,42 "Built target sp_common_generate_messages_lisp"
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_lisp.dir/rule
@@ -1471,7 +1519,7 @@ sp_common/CMakeFiles/sp_common_genlisp.dir/all: sp_common/CMakeFiles/sp_common_g
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_genlisp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_genlisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_genlisp.dir/rule
@@ -1491,15 +1539,16 @@ sp_common/CMakeFiles/sp_common_genlisp.dir/clean:
 # All Build rule for target.
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all: sp_common/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/all
+sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=38,39 "Built target sp_common_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=43,44,45 "Built target sp_common_generate_messages_nodejs"
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/rule
@@ -1525,7 +1574,7 @@ sp_common/CMakeFiles/sp_common_gennodejs.dir/all: sp_common/CMakeFiles/sp_common
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_gennodejs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_gennodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_gennodejs.dir/rule
@@ -1545,15 +1594,16 @@ sp_common/CMakeFiles/sp_common_gennodejs.dir/clean:
 # All Build rule for target.
 sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all: sp_common/CMakeFiles/std_msgs_generate_messages_py.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir/all
+sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/all
 sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_py.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_py.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common_generate_messages_py.dir/build.make sp_common/CMakeFiles/sp_common_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=40,41,42 "Built target sp_common_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=46,47,48,49 "Built target sp_common_generate_messages_py"
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_generate_messages_py.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_py.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_py.dir/rule
@@ -1579,7 +1629,7 @@ sp_common/CMakeFiles/sp_common_genpy.dir/all: sp_common/CMakeFiles/sp_common_gen
 
 # Build rule for subdir invocation for target.
 sp_common/CMakeFiles/sp_common_genpy.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_genpy.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
 .PHONY : sp_common/CMakeFiles/sp_common_genpy.dir/rule
@@ -1600,7 +1650,7 @@ sp_common/CMakeFiles/sp_common_genpy.dir/clean:
 sp_common/CMakeFiles/sp_common.dir/all:
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common.dir/build.make sp_common/CMakeFiles/sp_common.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/sp_common.dir/build.make sp_common/CMakeFiles/sp_common.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=29,30 "Built target sp_common"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=31,32 "Built target sp_common"
 .PHONY : sp_common/CMakeFiles/sp_common.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1672,6 +1722,32 @@ roslint_sp_common: sp_common/CMakeFiles/roslint_sp_common.dir/rule
 sp_common/CMakeFiles/roslint_sp_common.dir/clean:
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roslint_sp_common.dir/build.make sp_common/CMakeFiles/roslint_sp_common.dir/clean
 .PHONY : sp_common/CMakeFiles/roslint_sp_common.dir/clean
+
+#=============================================================================
+# Target rules for target sp_control/gpio_controller/CMakeFiles/gpio_controller.dir
+
+# All Build rule for target.
+sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/all: sp_common/CMakeFiles/sp_common.dir/all
+	$(MAKE) $(MAKESILENT) -f sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build.make sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/depend
+	$(MAKE) $(MAKESILENT) -f sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build.make sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=11,12 "Built target gpio_controller"
+.PHONY : sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/all
+
+# Build rule for subdir invocation for target.
+sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/adminpc/catkin_ws/src/build/CMakeFiles 0
+.PHONY : sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/rule
+
+# Convenience name for target.
+gpio_controller: sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/rule
+.PHONY : gpio_controller
+
+# clean rule for target.
+sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/clean:
+	$(MAKE) $(MAKESILENT) -f sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build.make sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/clean
+.PHONY : sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/clean
 
 #=============================================================================
 # Target rules for target third_party_lib/ira_laser_tools/CMakeFiles/tf_generate_messages_cpp.dir
@@ -3188,7 +3264,7 @@ third_party_lib/ira_laser_tools/CMakeFiles/topic_tools_generate_messages_py.dir/
 third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/all:
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=15,16 "Built target ira_laser_tools_gencfg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=17,18 "Built target ira_laser_tools_gencfg"
 .PHONY : third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3214,7 +3290,7 @@ third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/clean:
 third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/all: third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/all
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=17,18 "Built target laserscan_multi_merger"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=19,20 "Built target laserscan_multi_merger"
 .PHONY : third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3240,7 +3316,7 @@ third_party_lib/ira_laser_tools/CMakeFiles/laserscan_multi_merger.dir/clean:
 third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/all: third_party_lib/ira_laser_tools/CMakeFiles/ira_laser_tools_gencfg.dir/all
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/depend
 	$(MAKE) $(MAKESILENT) -f third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/build.make third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=19,20 "Built target laserscan_virtualizer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=21,22 "Built target laserscan_virtualizer"
 .PHONY : third_party_lib/ira_laser_tools/CMakeFiles/laserscan_virtualizer.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3968,7 +4044,7 @@ sp_gazebosim/CMakeFiles/control_msgs_generate_messages_py.dir/clean:
 sp_hw/CMakeFiles/sp_hw.dir/all: sp_common/CMakeFiles/sp_common.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_hw/CMakeFiles/sp_hw.dir/build.make sp_hw/CMakeFiles/sp_hw.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_hw/CMakeFiles/sp_hw.dir/build.make sp_hw/CMakeFiles/sp_hw.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=43,44,45,46,47,48,49 "Built target sp_hw"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=50,51,52,53,54,55,56 "Built target sp_hw"
 .PHONY : sp_hw/CMakeFiles/sp_hw.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3994,7 +4070,7 @@ sp_hw/CMakeFiles/sp_hw.dir/clean:
 sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/all:
 	$(MAKE) $(MAKESILENT) -f sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/build.make sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/build.make sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=25,26,27,28 "Built target sentry_communicator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=27,28,29,30 "Built target sentry_communicator"
 .PHONY : sp_control/sentry_communicator/CMakeFiles/sentry_communicator.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4722,7 +4798,7 @@ sp_control/manipulator_control/CMakeFiles/moveit_ros_manipulation_gencfg.dir/cle
 sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/all: sp_common/CMakeFiles/sp_common.dir/all
 	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/build.make sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/depend
 	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/build.make sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=21,22,23,24 "Built target manipulator_control"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=23,24,25,26 "Built target manipulator_control"
 .PHONY : sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/all
 
 # Build rule for subdir invocation for target.

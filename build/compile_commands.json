@@ -25,6 +25,11 @@
   "file": "/home/adminpc/catkin_ws/src/sp_common/src/filters/filters.cpp"
 },
 {
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/gpio_controller",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"gpio_controller\\\" -Dgpio_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/gpio_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -fPIC -o CMakeFiles/gpio_controller.dir/src/gpio_controller.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/gpio_controller/src/gpio_controller.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/gpio_controller/src/gpio_controller.cpp"
+},
+{
   "directory": "/home/adminpc/catkin_ws/src/build/third_party_lib/ira_laser_tools",
   "command": "/usr/bin/g++ -DDISABLE_LIBUSB_1_0 -DDISABLE_PCAP -DDISABLE_PNG -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"ira_laser_tools\\\" -Dqh_QHpointer -DvtkRenderingContext2D_AUTOINIT=\"1(vtkRenderingContextOpenGL2)\" -DvtkRenderingCore_AUTOINIT=\"3(vtkInteractionStyle,vtkRenderingFreeType,vtkRenderingOpenGL2)\" -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/include/vtk-7.1 -isystem /usr/include/freetype2 -isystem /usr/include/eigen3 -isystem /usr/include/pcl-1.10 -isystem /usr/include/ni -isystem /usr/include/openni2 -g -std=c++14 -o CMakeFiles/laserscan_multi_merger.dir/src/laserscan_multi_merger.cpp.o -c /home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_multi_merger.cpp",
   "file": "/home/adminpc/catkin_ws/src/third_party_lib/ira_laser_tools/src/laserscan_multi_merger.cpp"

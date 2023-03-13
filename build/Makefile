@@ -588,6 +588,19 @@ _sp_common_generate_messages_check_deps_ActuatorState/fast:
 .PHONY : _sp_common_generate_messages_check_deps_ActuatorState/fast
 
 #=============================================================================
+# Target rules for targets named _sp_common_generate_messages_check_deps_GpioData
+
+# Build rule for target.
+_sp_common_generate_messages_check_deps_GpioData: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _sp_common_generate_messages_check_deps_GpioData
+.PHONY : _sp_common_generate_messages_check_deps_GpioData
+
+# fast build rule for target.
+_sp_common_generate_messages_check_deps_GpioData/fast:
+	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build
+.PHONY : _sp_common_generate_messages_check_deps_GpioData/fast
+
+#=============================================================================
 # Target rules for targets named _sp_common_generate_messages_check_deps_SingleJointWrite
 
 # Build rule for target.
@@ -768,6 +781,19 @@ roslint_sp_common: cmake_check_build_system
 roslint_sp_common/fast:
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roslint_sp_common.dir/build.make sp_common/CMakeFiles/roslint_sp_common.dir/build
 .PHONY : roslint_sp_common/fast
+
+#=============================================================================
+# Target rules for targets named gpio_controller
+
+# Build rule for target.
+gpio_controller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gpio_controller
+.PHONY : gpio_controller
+
+# fast build rule for target.
+gpio_controller/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build.make sp_control/gpio_controller/CMakeFiles/gpio_controller.dir/build
+.PHONY : gpio_controller/fast
 
 #=============================================================================
 # Target rules for targets named tf_generate_messages_cpp
@@ -2370,6 +2396,7 @@ help:
 	@echo "... test"
 	@echo "... _catkin_empty_exported_target"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
+	@echo "... _sp_common_generate_messages_check_deps_GpioData"
 	@echo "... _sp_common_generate_messages_check_deps_SingleJointWrite"
 	@echo "... actionlib_generate_messages_cpp"
 	@echo "... actionlib_generate_messages_eus"
@@ -2528,6 +2555,7 @@ help:
 	@echo "... gimbal_controller"
 	@echo "... gmock"
 	@echo "... gmock_main"
+	@echo "... gpio_controller"
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... laserscan_multi_merger"

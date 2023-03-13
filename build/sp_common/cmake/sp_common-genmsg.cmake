@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "sp_common: 2 messages, 0 services")
+message(STATUS "sp_common: 3 messages, 0 services")
 
 set(MSG_I_FLAGS "-Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -22,6 +22,11 @@ add_custom_target(_sp_common_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "sp_common" "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" ""
 )
 
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
+add_custom_target(_sp_common_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "sp_common" "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" "std_msgs/Header"
+)
+
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_custom_target(_sp_common_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "sp_common" "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" ""
@@ -37,6 +42,12 @@ _generate_msg_cpp(sp_common
   "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/sp_common
+)
+_generate_msg_cpp(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/sp_common
 )
 _generate_msg_cpp(sp_common
@@ -62,6 +73,8 @@ add_dependencies(sp_common_generate_messages sp_common_generate_messages_cpp)
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
 
@@ -78,6 +91,12 @@ _generate_msg_eus(sp_common
   "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/sp_common
+)
+_generate_msg_eus(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/sp_common
 )
 _generate_msg_eus(sp_common
@@ -103,6 +122,8 @@ add_dependencies(sp_common_generate_messages sp_common_generate_messages_eus)
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
 
@@ -119,6 +140,12 @@ _generate_msg_lisp(sp_common
   "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/sp_common
+)
+_generate_msg_lisp(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/sp_common
 )
 _generate_msg_lisp(sp_common
@@ -144,6 +171,8 @@ add_dependencies(sp_common_generate_messages sp_common_generate_messages_lisp)
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
 
@@ -160,6 +189,12 @@ _generate_msg_nodejs(sp_common
   "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/sp_common
+)
+_generate_msg_nodejs(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/sp_common
 )
 _generate_msg_nodejs(sp_common
@@ -185,6 +220,8 @@ add_dependencies(sp_common_generate_messages sp_common_generate_messages_nodejs)
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
 
@@ -201,6 +238,12 @@ _generate_msg_py(sp_common
   "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/sp_common
+)
+_generate_msg_py(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/sp_common
 )
 _generate_msg_py(sp_common
@@ -225,6 +268,8 @@ add_dependencies(sp_common_generate_messages sp_common_generate_messages_py)
 
 # add dependencies to all check dependencies targets
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})

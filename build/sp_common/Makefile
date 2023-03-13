@@ -480,6 +480,20 @@ _sp_common_generate_messages_check_deps_ActuatorState/fast:
 .PHONY : _sp_common_generate_messages_check_deps_ActuatorState/fast
 
 # Convenience name for target.
+sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule
+.PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule
+
+# Convenience name for target.
+_sp_common_generate_messages_check_deps_GpioData: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/rule
+.PHONY : _sp_common_generate_messages_check_deps_GpioData
+
+# fast build rule for target.
+_sp_common_generate_messages_check_deps_GpioData/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir/build
+.PHONY : _sp_common_generate_messages_check_deps_GpioData/fast
+
+# Convenience name for target.
 sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/rule:
 	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/rule
 .PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir/rule
@@ -713,6 +727,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
+	@echo "... _sp_common_generate_messages_check_deps_GpioData"
 	@echo "... _sp_common_generate_messages_check_deps_SingleJointWrite"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_eus"

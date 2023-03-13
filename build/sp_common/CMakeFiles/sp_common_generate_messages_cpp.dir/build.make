@@ -67,6 +67,7 @@ include sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/compiler_depend
 include sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/progress.make
 
 sp_common/CMakeFiles/sp_common_generate_messages_cpp: devel/include/sp_common/ActuatorState.h
+sp_common/CMakeFiles/sp_common_generate_messages_cpp: devel/include/sp_common/GpioData.h
 sp_common/CMakeFiles/sp_common_generate_messages_cpp: devel/include/sp_common/SingleJointWrite.h
 
 devel/include/sp_common/ActuatorState.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
@@ -75,13 +76,21 @@ devel/include/sp_common/ActuatorState.h: /opt/ros/noetic/share/gencpp/msg.h.temp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from sp_common/ActuatorState.msg"
 	cd /home/adminpc/catkin_ws/src/sp_common && /home/adminpc/catkin_ws/src/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/include/sp_common -e /opt/ros/noetic/share/gencpp/cmake/..
 
+devel/include/sp_common/GpioData.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
+devel/include/sp_common/GpioData.h: /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg
+devel/include/sp_common/GpioData.h: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+devel/include/sp_common/GpioData.h: /opt/ros/noetic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from sp_common/GpioData.msg"
+	cd /home/adminpc/catkin_ws/src/sp_common && /home/adminpc/catkin_ws/src/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/include/sp_common -e /opt/ros/noetic/share/gencpp/cmake/..
+
 devel/include/sp_common/SingleJointWrite.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
 devel/include/sp_common/SingleJointWrite.h: /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg
 devel/include/sp_common/SingleJointWrite.h: /opt/ros/noetic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from sp_common/SingleJointWrite.msg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from sp_common/SingleJointWrite.msg"
 	cd /home/adminpc/catkin_ws/src/sp_common && /home/adminpc/catkin_ws/src/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/include/sp_common -e /opt/ros/noetic/share/gencpp/cmake/..
 
 sp_common_generate_messages_cpp: devel/include/sp_common/ActuatorState.h
+sp_common_generate_messages_cpp: devel/include/sp_common/GpioData.h
 sp_common_generate_messages_cpp: devel/include/sp_common/SingleJointWrite.h
 sp_common_generate_messages_cpp: sp_common/CMakeFiles/sp_common_generate_messages_cpp
 sp_common_generate_messages_cpp: sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/build.make

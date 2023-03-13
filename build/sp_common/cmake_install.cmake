@@ -45,6 +45,7 @@ endif()
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/sp_common/msg" TYPE FILE FILES
     "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
+    "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
     "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg"
     )
 endif()

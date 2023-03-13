@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "../devel/share/gennodejs/ros/sp_common/msg/ActuatorState.js"
+  "../devel/share/gennodejs/ros/sp_common/msg/GpioData.js"
   "../devel/share/gennodejs/ros/sp_common/msg/SingleJointWrite.js"
   "CMakeFiles/sp_common_generate_messages_nodejs"
 )
