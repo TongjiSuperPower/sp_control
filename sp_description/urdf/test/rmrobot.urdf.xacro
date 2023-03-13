@@ -7,11 +7,11 @@
     <xacro:property name="height2" value="0.5"/> <!-- Link 2 -->
     <xacro:property name="axel_offset" value="0.05"/> <!-- Space btw top of beam and the each joint -->
     <!-- Used for fixing robot to Gazebo 'base_link' -->
-    <!--<link name="world"/>
+    <link name="world"/>
     <joint name="fixed" type="fixed">
         <parent link="world"/>
         <child link="link1"/>
-    </joint>-->
+    </joint>
 
     <link name="link1">
         <collision>
@@ -35,7 +35,7 @@
                     izz="${mass / 12.0 * (width*width + width*width)}"/>
         </inertial>
     </link>
-    <!--<<joint name="joint1" type="revolute">
+    <joint name="joint1" type="revolute">
         <axis xyz="0 1 0"/>
         <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 1.57 0"/>
              limit not work while type="continuous"
@@ -75,7 +75,7 @@
         </joint>
         <actuator name="right_front_wheel_motor">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
+            <mechanicalReduction>6</mechanicalReduction>
         </actuator>
     </transmission>
     <gazebo>

@@ -9,46 +9,18 @@ namespace sp_hw
      * @brief Plot all devices in Tree_Form.
      */
     template <typename T>
-    void device_tree(const std::unordered_map<std::string, std::unordered_map<int, T>>& bus_id2device_data)
+    void device_tree(const std::unordered_map<std::string, std::unordered_map<int, T>> &bus_id2device_data)
     {
         for (auto bus_it = bus_id2device_data.begin(); bus_it != bus_id2device_data.end(); ++bus_it)
         {
             std::cout << "|-- " << bus_it->first << std::endl;
             for (auto device_id = bus_it->second.begin(); device_id != bus_it->second.end(); device_id++)
                 std::cout << "|   "
-                << "|-- "
-                << "0x" << std::hex << device_id->first << " - " << std::dec
-                << device_id->second.type << " - " << device_id->second.name << std::endl;
-        }
-    }
-
-/*
-    void actuator_tree(const std::unordered_map<std::string, std::unordered_map<int, ActData>> &bus_id2act_data)
-    {
-        for (auto bus_it = bus_id2act_data.begin(); bus_it != bus_id2act_data.end(); ++bus_it)
-        {
-            std::cout << "|-- " << bus_it->first << std::endl;
-            for (auto act_id = bus_it->second.begin(); act_id != bus_it->second.end(); act_id++)
-                std::cout << "|   "
                           << "|-- "
-                          << "0x" << std::hex << act_id->first << " - " << std::dec
-                          << act_id->second.type << " - " << act_id->second.name << std::endl;
+                          << "0x" << std::hex << device_id->first << " - " << std::dec
+                          << device_id->second.type << " - " << device_id->second.name << std::endl;
         }
     }
-
-    void gpio_tree(const std::unordered_map<std::string, std::unordered_map<int, sp_control::GpioData>> &bus_id2gpio_data)
-    {
-        for (auto bus_it = bus_id2gpio_data.begin(); bus_it != bus_id2gpio_data.end(); ++bus_it)
-        {
-            std::cout << "|-- " << bus_it->first << std::endl;
-            for (auto gpio_id = bus_it->second.begin(); gpio_id != bus_it->second.end(); gpio_id++)
-                std::cout << "|   "
-                          << "|-- "
-                          << "0x" << std::hex << gpio_id->first << " - " << std::dec
-                          << gpio_id->second.type << " - " << gpio_id->second.name << std::endl;
-        }
-    }
-*/
 
     // Lithesh : I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
@@ -301,7 +273,7 @@ namespace sp_hw
                              << "Check the Config Yaml.");
             return false;
         }
-        device_tree<GpioData>(bus_id2gpio_data_);
+        device_tree<sp_control::GpioData>(bus_id2gpio_data_);
         is_gpio_specified_ = true; // now all the actuators have been parsed.
         return true;
     }

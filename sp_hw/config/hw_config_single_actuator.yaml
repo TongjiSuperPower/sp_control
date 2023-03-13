@@ -7,5 +7,5 @@ thread_priority: 30
 actuators:
   right_front_wheel_motor:
     bus: can0
-    id: 0x005
-    type: DM_J4310
+    id: 0x143
+    type: MG_8016

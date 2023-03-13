@@ -131,6 +131,11 @@ namespace sp_hw
                 frame.data[6] = 0x00;
                 frame.data[7] = 0x00;
                 socket_can_.write(&frame);
+
+                frame.data[0] = 0x92;
+                frame.data[4] = 0x00;
+                frame.data[5] = 0x00;
+                socket_can_.write(&frame);
             }
             /*else if (id2act_data.second.type.find("MG_995") != std::string::npos)
             {
@@ -241,18 +246,6 @@ namespace sp_hw
                         // convert raw data into  standard ActuatorState
                         act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                         act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
-                        can_frame frame_{};
-                        frame_.can_id = frame.can_id;
-                        frame_.can_dlc = frame.can_dlc;
-                        frame_.data[0] = 0x92;
-                        frame_.data[1] = 0x00;
-                        frame_.data[2] = 0x00;
-                        frame_.data[3] = 0x00;
-                        frame_.data[4] = 0x00;
-                        frame_.data[5] = 0x00;
-                        frame_.data[6] = 0x00;
-                        frame_.data[7] = 0x00;
-                        socket_can_.write(&frame_);
                         continue;
                     }
                     else if (frame.data[0] == 0x92)

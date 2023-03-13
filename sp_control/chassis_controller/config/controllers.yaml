@@ -7,9 +7,9 @@ controllers:
     joint: joint1
     pid:
       {
-        p: 3.0,
-        i: 0.1,
-        d: 0.0,
+        p: 5.0,
+        i: 0.6,
+        d: 0.1,
         i_clamp_max: 4.0,
         i_clamp_min: -4.0,
         antiwindup: true,
