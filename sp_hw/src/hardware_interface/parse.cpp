@@ -251,18 +251,19 @@ namespace sp_hw
                     bus_id2gpio_data_[bus].emplace(std::make_pair(id, sp_control::GpioData{
                                                                           .name = it->first,
                                                                           .stamp = ros::Time::now(),
-                                                                          .type = sp_control::INPUT,
+                                                                          .type = sp_control::OUTPUT,
                                                                           .value = true}));
                 }
-                // sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
-                //                                               &bus_id2gpio_data_[bus][id].value);
-                // gpio_state_interface_.registerHandle(gpio_state_handle);
-                // if (type == sp_control::OUTPUT)
-                // {
-                //    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
-                //                                                      &bus_id2gpio_data_[bus][id].value);
-                //     gpio_command_interface_.registerHandle(gpio_command_handle);
-                //}
+                sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                                                              &bus_id2gpio_data_[bus][id].value);
+                gpio_state_interface_.registerHandle(gpio_state_handle);
+                if (type == sp_control::OUTPUT)
+                {
+                    ROS_WARN_STREAM("A");
+                    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
+                                                                      &bus_id2gpio_data_[bus][id].value);
+                    gpio_command_interface_.registerHandle(gpio_command_handle);
+                }
             }
         }
         catch (XmlRpc::XmlRpcException &e)

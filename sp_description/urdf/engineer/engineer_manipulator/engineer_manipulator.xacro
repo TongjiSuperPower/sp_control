@@ -153,10 +153,10 @@
       <child
         link="link2" />
       <axis
-        xyz="0 0 -1" />
+        xyz="0 0 1" />
       <limit
-        lower="-1.57"
-        upper="1.57"
+        lower="-1.70"
+        upper="1.70"
         effort="20"
         velocity="5" />
     </joint>
@@ -211,10 +211,10 @@
       <child
         link="link3" />
       <axis
-        xyz="0 0 1" />
+        xyz="0 0 -1" />
       <limit
-        lower="-1.80"
-        upper="1.80"
+        lower="-2.80"
+        upper="2.80"
         effort="20"
         velocity="5" />
     </joint>
@@ -329,7 +329,7 @@
       <axis
         xyz="0 0 1" />
       <limit
-        lower="-1.57"
+        lower="-1.90"
         upper="1.90"
         effort="20"
         velocity="5" />

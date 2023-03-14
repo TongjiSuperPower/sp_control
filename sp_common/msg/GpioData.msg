@@ -1,4 +1,3 @@
-time[] stamp
 string[] bus
 string[] gpio_name
 bool[] gpio_state

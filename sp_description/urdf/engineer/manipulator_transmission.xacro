@@ -17,10 +17,10 @@
 	<xacro:manipulator_transmission joint_name="joint2" mechanical_reduction="6"/>
 	<xacro:manipulator_transmission joint_name="joint3" mechanical_reduction="6"/>
 	<xacro:manipulator_transmission joint_name="joint4" mechanical_reduction="1"/>
-	<!--<xacro:manipulator_transmission joint_name="joint5" mechanical_reduction="1"/>
+	<xacro:manipulator_transmission joint_name="joint5" mechanical_reduction="1"/>
     <xacro:manipulator_transmission joint_name="joint6" mechanical_reduction="1"/>
     <xacro:manipulator_transmission joint_name="joint7" mechanical_reduction="90.9091"/>
--->
+
     <gazebo>
         <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
             <robotNamespace>/vacuum_gripper</robotNamespace>
