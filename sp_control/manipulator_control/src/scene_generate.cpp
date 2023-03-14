@@ -16,8 +16,9 @@ namespace manipulator_control
         initial_pose.position.x = 0.00;
         initial_pose.position.y = 0.50;
         initial_pose.position.z = 0.50;     
-        shapes::Mesh *mesh=shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL" );
-        bool success = generate(initial_pose, mesh, obj);
+        shapes::Mesh *ore=shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL" );
+        shapes::Mesh *sink=shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL" );
+        bool success = generate(initial_pose, ore, obj);
         return true;
 
     }
@@ -38,8 +39,6 @@ namespace manipulator_control
         planning_scene.world.collision_objects.push_back(obj);
         planning_scene.is_diff = true;
         planning_scene_diff_publisher.publish(planning_scene);
-        //collision_objects.push_back(obj);
-        //current_scene.addCollisionObjects(collision_objects);
         ROS_INFO_STREAM("SUCCEED TO GENERATE A MESH");
         return true;       
     }

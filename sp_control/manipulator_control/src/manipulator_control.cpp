@@ -25,6 +25,61 @@ void single_state_callback(const sp_common::SingleJointWrite::ConstPtr& state_, 
     manipulator->singlewrite(state, num);
 }
 
+void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose target_pose)
+{
+    geometry_msgs::Pose pose1;
+    geometry_msgs::Pose pose2;
+    std::vector<double> stretch1;
+    std::vector<double> stretch2;
+    pose1.position.x = 0.00;
+    pose1.position.y = 0.48;
+    pose1.position.z = 0.280;
+    pose1.orientation.w = 0.00;
+    pose1.orientation.x = -1.00;
+    pose1.orientation.y = 0.00;
+    pose1.orientation.z = 0.00;
+    pose2.position.x = 0.044;
+    pose2.position.y = -0.100;
+    pose2.position.z = 0.433;
+    pose2.orientation.w = 0.00;
+    pose2.orientation.x = 0.00;
+    pose2.orientation.y = 1.00;
+    pose2.orientation.z = 0.00;
+    stretch1.push_back(-0.075);
+    stretch2.push_back(0.00);
+    manipulator_->read();
+    manipulator_->goal("home");
+    manipulator_->move_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->write(target_pose);
+    manipulator_->move_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->stretch(stretch1);
+    manipulator_->grip_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->stretch(stretch2);
+    manipulator_->grip_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->write(pose2);
+    manipulator_->move_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->stretch(stretch1);
+    manipulator_->grip_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->stretch(stretch2);
+    manipulator_->grip_execute();
+    sleep(0.3);
+    manipulator_->read();
+    manipulator_->goal("home");
+    manipulator_->move_execute();
+}
+
 
 /*int main(int argc, char **argv)
 {
