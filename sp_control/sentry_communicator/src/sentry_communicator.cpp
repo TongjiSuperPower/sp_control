@@ -8,6 +8,11 @@ int main(int argc, char **argv)
     sentry_communicator::CanBus can_bus("can0", 20, nh);
     ros::AsyncSpinner spinner(2);
     spinner.start();
-
+    while(ros::ok())
+    {
+        can_bus.write();
+        ros::Duration(0.01).sleep();
+        ros::spinOnce();
+    }
     ros::waitForShutdown();
 }
