@@ -20,6 +20,8 @@ namespace manipulator_control
 
             void move_execute();
 
+            void move_execute(moveit_msgs::RobotTrajectory &trajectory);
+
             void grip_execute();
 
             void read();
@@ -29,6 +31,8 @@ namespace manipulator_control
             void write(const std::vector<double> &target_state_);
 
             void singlewrite(double target_state_, int num);
+
+            void CartesianPath(std::vector<geometry_msgs::Pose> waypoints);
 
             bool get_executed();
 

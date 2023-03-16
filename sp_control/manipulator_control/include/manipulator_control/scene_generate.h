@@ -20,19 +20,25 @@ namespace manipulator_control
 
             bool init();
 
-            bool generate(const geometry_msgs::Pose &pose, const shapes::Mesh *mesh, moveit_msgs::CollisionObject &obj);
+            moveit_msgs::CollisionObject generate_collision_obj(const std::string &obj_id, shapes::Mesh *mesh);
 
-            //bool delete(const moveit_msgs::CollisionObject &obj);
+            moveit_msgs::AttachedCollisionObject generate_attach_collision_obj(const std::string &obj_id, shapes::Mesh *mesh);
+
+            bool add(moveit_msgs::CollisionObject &add_obj, const geometry_msgs::Pose &pose);
+    
+            bool remove(const moveit_msgs::CollisionObject &remove_obj);
    
-            //bool move(const geometry_msgs::Pose &pose, const moveit_msgs::CollisionObject &obj);
+            bool move(moveit_msgs::CollisionObject &move_obj, const geometry_msgs::Pose &pose);
+
+            bool attach(moveit_msgs::AttachedCollisionObject &attach_obj, moveit::planning_interface::MoveGroupInterface &grip_group_interface);
+
+            bool detach(const moveit_msgs::AttachedCollisionObject &detach_obj, moveit::planning_interface::MoveGroupInterface &grip_group_interface);
 
 
 
         private:
             std::vector<moveit_msgs::CollisionObject> collision_objects;
-            moveit_msgs::PlanningScene planning_scene; 
-            moveit::planning_interface::PlanningSceneInterface current_scene;
-            ros::Publisher planning_scene_diff_publisher;
+            moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
             ros::NodeHandle nh;
             
             

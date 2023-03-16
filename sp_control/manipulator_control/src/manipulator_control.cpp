@@ -25,6 +25,10 @@ void single_state_callback(const sp_common::SingleJointWrite::ConstPtr& state_, 
     manipulator->singlewrite(state, num);
 }
 
+//void remote_control_callback(const sp_common::RCData::ConstPtr& RCData_, const sp_control::RCData & RCData)
+//{
+//
+//}
 void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose target_pose)
 {
     geometry_msgs::Pose pose1;
@@ -81,7 +85,7 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
 }
 
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     
     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
@@ -91,29 +95,44 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
     manipulator_control::Scene scene;
     scene.init();
+    std::string ore_id ="golden_ore";
+    std::string sink_id ="exchange_sink";
+    geometry_msgs::Pose initial_pose;
+    initial_pose.orientation.w = 1.0;
+    initial_pose.position.x = 0.00;
+    initial_pose.position.y = 0.50;
+    initial_pose.position.z = 1.00;     
+    shapes::Mesh *ore = shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL" );
+    shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL" );
     ros::NodeHandle nh; 
     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub",10, boost::bind(&pose_callback, _1, &manipulator_));
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub",10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub",10, boost::bind(&single_state_callback, _1, &manipulator_));
     spinner.start(); 
-   
+    moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
+    scene.add(ore_.object, initial_pose);
+    scene.attach(ore_, grip_group_interface);
+    //scene.generate(sink_id, initial_pose, sink);
 
     if (manipulator_.init())
     {
         while(ros::ok())
         {       
             manipulator_.read();
-            if (manipulator_.get_executed() == false)
-            {
-                manipulator_.execute();
-                manipulator_.set_executed(true);
-            }
+            manipulator_.goal("grip");
+             manipulator_.move_execute();
+                   
+            //if (manipulator_.get_executed() == false)
+            //{
+           //     manipulator_.move_execute();
+           //     manipulator_.set_executed(true);
+            //}
             ros::spinOnce();
             sleep(1);      
         }
     }    
     return 0;
-}*//*
+}/*
 int main(int argc, char **argv)
 {
     
@@ -245,7 +264,7 @@ int main(int argc, char **argv)
         manipulator_.move_execute();
     }    
     return 0;
-}*/
+}*//*
 int main(int argc, char **argv)
 {
     
@@ -283,19 +302,19 @@ int main(int argc, char **argv)
         manipulator_.move_execute();
         sleep(0.3);
         manipulator_.read();
-        manipulator_.write(pose1);
+        manipulator_.write(pose2);
         manipulator_.move_execute();
         sleep(0.3);
         manipulator_.read();
         manipulator_.stretch(stretch1);
         manipulator_.grip_execute();
-        sleep(0.3);
+        sleep(0.3);/*
         manipulator_.read();
         manipulator_.stretch(stretch2);
         manipulator_.grip_execute();
         sleep(0.3);
         manipulator_.read();
-        manipulator_.write(pose2);
+        manipulator_.write(pose1);
         manipulator_.move_execute();
         sleep(0.3);
         manipulator_.read();
@@ -311,7 +330,7 @@ int main(int argc, char **argv)
         manipulator_.move_execute();
     }    
     return 0;
-}/*
+}*//*
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "trajectory_control");

@@ -69,6 +69,20 @@ namespace manipulator_control
         move_group_interface.setJointValueTarget(target_state);
     }
 
+    void CartesianPath(std::vector<geometry_msgs::Pose> waypoints)
+    {
+        /*moveit_msgs::RobotTrajectory trajectory;
+        const double jump_threshold = 0.0; // 跳跃阈值
+        const double eef_step = 0.01; // 终端步进值                 
+        double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);// 规划路径 ，fraction返回1代表规划成功
+        ROS_INFO_NAMED("tutorial", "Visualizing plan 4 (Cartesian path) (%.2f%% achieved)", fraction * 100.0);
+        if (fraction == 1)
+        {
+            ROS_INFO_NAMED("SUCCEED TO CREATE A CARTESIAN PATH!");
+        }
+        move_execute(trajectory);*/
+    }
+
 
     void Manipulator::move_execute()
     {
@@ -76,6 +90,11 @@ namespace manipulator_control
         bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
         move_group_interface.execute(my_plan);
+    }
+
+    void Manipulator::move_execute(moveit_msgs::RobotTrajectory &trajectory)
+    {
+        move_group_interface.execute(trajectory);
     }
 
     void Manipulator::grip_execute()

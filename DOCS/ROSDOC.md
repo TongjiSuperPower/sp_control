@@ -682,7 +682,49 @@ int main() {
 
 # 测试说明
 
-## 单电机测试
+## Gazebo测试
+
+### 底盘测试
+
+按顺序执行如下命令，在Gazebo中进行底盘测试。
+
+打开Gazebo并在其中加载工程模型
+
+```cpp
+roslaunch sp_description gazebo.launch 
+```
+
+加载底盘控制器chassis_controller
+
+```cpp
+roslaunch chassis_controller chassis_controller_load.launch
+```
+
+接着加载键盘控制器keyboard_control
+
+```
+rosrun keyboard_control keyboard_control
+```
+
+选中加载keyboard_control的命令行界面，并打开大写锁定CapsLock。控制方式为：
+
+W 前
+
+S 后
+
+A 左
+
+D 右
+
+Q 逆时针旋转
+
+E 顺时针旋转
+
+### 机械臂测试
+
+## 实机测试
+
+### 单电机测试
 
 按照下述顺序，使用单自由度连杆模型进行单电机测试。
 
@@ -749,7 +791,6 @@ candump can0
 ```
 
 如运行正常，会出现读取的`can`帧信息。
-+
 执行如下命令
 
 ```cpp
@@ -804,7 +845,7 @@ rostopic pub /controllers/joint1_velocity_controller/command std_msgs/Float64 "d
 
 更改发送给`data`的数据控制电机转速。
 
-## 底盘测试
+### 底盘测试
 
 按照下述顺序，使用工程模型进行底盘测试。
 
