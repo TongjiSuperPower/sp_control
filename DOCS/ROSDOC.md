@@ -706,7 +706,7 @@ roslaunch chassis_controller chassis_controller_load.launch
 rosrun keyboard_control keyboard_control
 ```
 
-选中加载keyboard_control的命令行界面，并打开大写锁定CapsLock。控制方式为：
+选中加载keyboard_control的命令行界面。控制方式为：
 
 W 前
 
