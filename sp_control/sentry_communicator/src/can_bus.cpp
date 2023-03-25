@@ -14,8 +14,8 @@
 #define MIN_QUAT  -1.f
 #define ID_QUAT  0x113
 
-#define MAX_YAW 12.5f
-#define MIN_YAW -12.5f
+#define MAX_YAW 4.f
+#define MIN_YAW -4.f
 #define ID_YAW  0x114
 
 namespace sentry_communicator
