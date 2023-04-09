@@ -335,121 +335,121 @@
         velocity="5" />
     </joint>
     <link
-      name="link6">
-      <inertial>
-        <origin
-          xyz="-0.000654571367492234 -0.0126737517821381 -0.0332087502205121"
-          rpy="0 0 0" />
-        <mass
-          value="0.315054913435457" />
-        <inertia
-          ixx="0.000458132434965079"
-          ixy="-2.89433972150163E-10"
-          ixz="-7.33704234288827E-07"
-          iyy="0.000465485967391261"
-          iyz="-7.04854531919477E-08"
-          izz="4.75075209095847E-05" />
-      </inertial>
-      <visual>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="package://sp_description/meshes/engineer_manipulator/link6.STL" />
-        </geometry>
-        <material
-          name="">
-          <color
-            rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
-        </material>
-      </visual>
-      <collision>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="package://sp_description/meshes/engineer_manipulator/link6.STL" />
-        </geometry>
-      </collision>
-    </link>
-    <joint
-      name="joint6"
-      type="revolute">
+    name="link6">
+    <inertial>
       <origin
-        xyz="0.091 0 -0.025"
-        rpy="-1.5708 0 -1.5708" />
-      <parent
-        link="link5" />
-      <child
-        link="link6" />
-      <axis
-        xyz="0 0 1" />
-      <limit
-        lower="-3.14"
-        upper="3.14"
-        effort="20"
-        velocity="5" />
-    </joint>
-    <link
-      name="link7">
-      <inertial>
-        <origin
-          xyz="0.00107886229538064 -0.0414118830277865 -0.0423739543417845"
-          rpy="0 0 0" />
-        <mass
-          value="0.226011058027853" />
-        <inertia
-          ixx="0.000189616376770721"
-          ixy="-8.61244648544407E-08"
-          ixz="2.17295226724854E-06"
-          iyy="0.000224207133804561"
-          iyz="-3.55837154148388E-07"
-          izz="0.000170070310299291" />
-      </inertial>
-      <visual>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="package://sp_description/meshes/engineer_manipulator/link7.STL" />
-        </geometry>
-        <material
-          name="">
-          <color
-            rgba="1 1 1 1" />
-        </material>
-      </visual>
-      <collision>
-        <origin
-          xyz="0 0 0"
-          rpy="0 0 0" />
-        <geometry>
-          <mesh
-            filename="package://sp_description/meshes/engineer_manipulator/link7.STL" />
-        </geometry>
-      </collision>
-    </link>
-    <joint
-      name="joint7"
-      type="prismatic">
-      <origin
-        xyz="0 0 0.02445"
+        xyz="-4.3008E-05 -0.0079055 -0.013813"
         rpy="0 0 0" />
-      <parent
-        link="link6" />
-      <child
-        link="link7" />
-      <axis
-        xyz="0 0 -1" />
-      <limit
-        lower="-0.075"
-        upper="0"
-        effort="20"
-        velocity="5" />
-    </joint>
+      <mass
+        value="0.25692" />
+      <inertia
+        ixx="0.00021993"
+        ixy="-4.1694E-10"
+        ixz="9.6881E-12"
+        iyy="0.0002338"
+        iyz="-4.2941E-10"
+        izz="6.2378E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/link6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.49804 0.49804 0.49804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/link6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint6"
+    type="revolute">
+    <origin
+      xyz="0.096 0 -0.03"
+      rpy="-1.5708 0.05753 -1.5708" />
+    <parent
+      link="link5" />
+    <child
+      link="link6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="20"
+      velocity="5" />
+</joint>
+  <link
+    name="link7">
+    <inertial>
+      <origin
+        xyz="1.578E-05 -0.032317 -0.028954"
+        rpy="0 0 0" />
+      <mass
+        value="0.20296" />
+      <inertia
+        ixx="9.9818E-05"
+        ixy="-7.9536E-08"
+        ixz="-4.5421E-10"
+        iyy="0.00015416"
+        iyz="-4.0049E-09"
+        izz="0.00019962" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/link7.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.33333 0.33333 0.33333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/link7.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint7"
+    type="prismatic">
+    <origin
+      xyz="0 0 0.025373"
+      rpy="0 0 0" />
+    <parent
+      link="link6" />
+    <child
+      link="link7" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.075"
+      upper="0"
+      effort="20"
+      velocity="5" />
+  </joint>
     <link name="vacuum_gripper"/>
     <joint
       name="vacuum_gripper_joint"
