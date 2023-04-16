@@ -28,11 +28,12 @@ actuator_coefficient:
     kd2act: 819 # 4095/5
 
   MG_8016:
-    act2pos: 1.74532922e-4 # 2PI/360/100
+    act2pos: 9.5875262183e-5 # 2PI/65535
     act2vel: 0.0174532925 # PI/180
     act2effort: 0.0077880859 # 33/2048*2.9/6
     effort2act: 129.3103448276 # 2000/32/2.9*6
     max_out: 2000
+    act2pos2: 1.74532922e-4 # 2PI/360/100
 
   MG_995:
     max_out: 180

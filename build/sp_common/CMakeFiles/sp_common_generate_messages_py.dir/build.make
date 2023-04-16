@@ -69,6 +69,7 @@ include sp_common/CMakeFiles/sp_common_generate_messages_py.dir/progress.make
 sp_common/CMakeFiles/sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py
 sp_common/CMakeFiles/sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py
 sp_common/CMakeFiles/sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py
+sp_common/CMakeFiles/sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py
 sp_common/CMakeFiles/sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/__init__.py
 
 devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
@@ -76,25 +77,32 @@ devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py: /home/adminpc/c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG sp_common/ActuatorState"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/lib/python3/dist-packages/sp_common/msg
 
+devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
+devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py: /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG sp_common/DbusData"
+	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/lib/python3/dist-packages/sp_common/msg
+
 devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py: /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg
 devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG sp_common/GpioData"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python from MSG sp_common/GpioData"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/lib/python3/dist-packages/sp_common/msg
 
 devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py: /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python from MSG sp_common/SingleJointWrite"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Python from MSG sp_common/SingleJointWrite"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/lib/python3/dist-packages/sp_common/msg
 
 devel/lib/python3/dist-packages/sp_common/msg/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 devel/lib/python3/dist-packages/sp_common/msg/__init__.py: devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py
 devel/lib/python3/dist-packages/sp_common/msg/__init__.py: devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py
 devel/lib/python3/dist-packages/sp_common/msg/__init__.py: devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Python msg __init__.py for sp_common"
+devel/lib/python3/dist-packages/sp_common/msg/__init__.py: devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Python msg __init__.py for sp_common"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/adminpc/catkin_ws/src/build/devel/lib/python3/dist-packages/sp_common/msg --initpy
 
 sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py
+sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py
 sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py
 sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py
 sp_common_generate_messages_py: devel/lib/python3/dist-packages/sp_common/msg/__init__.py

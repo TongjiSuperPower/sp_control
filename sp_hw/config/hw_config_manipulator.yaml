@@ -7,7 +7,7 @@ thread_priority: 65
 
 actuators:
   joint1_motor:
-    bus: can1
+    bus: can0
     id: 0x001
     type: DM_J4310
 
@@ -22,7 +22,7 @@ actuators:
     type: MG_8016
 
   joint4_motor:
-    bus: can1
+    bus: can0
     id: 0x004
     type: DM_J4310
 
@@ -40,3 +40,9 @@ actuators:
     bus: can0
     id: 0x201
     type: rm_2006
+
+gpios:
+  sucker:
+    bus: can0
+    id: 0x103
+    type: out

@@ -69,24 +69,31 @@ include sp_common/CMakeFiles/sp_common_generate_messages_nodejs.dir/progress.mak
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/ActuatorState.js
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/GpioData.js
 sp_common/CMakeFiles/sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/SingleJointWrite.js
+sp_common/CMakeFiles/sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/DbusData.js
 
 devel/share/gennodejs/ros/sp_common/msg/ActuatorState.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 devel/share/gennodejs/ros/sp_common/msg/ActuatorState.js: /home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Javascript code from sp_common/ActuatorState.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/gennodejs/ros/sp_common/msg
 
+devel/share/gennodejs/ros/sp_common/msg/DbusData.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
+devel/share/gennodejs/ros/sp_common/msg/DbusData.js: /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from sp_common/DbusData.msg"
+	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/gennodejs/ros/sp_common/msg
+
 devel/share/gennodejs/ros/sp_common/msg/GpioData.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 devel/share/gennodejs/ros/sp_common/msg/GpioData.js: /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg
 devel/share/gennodejs/ros/sp_common/msg/GpioData.js: /opt/ros/noetic/share/std_msgs/msg/Header.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from sp_common/GpioData.msg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Javascript code from sp_common/GpioData.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/gennodejs/ros/sp_common/msg
 
 devel/share/gennodejs/ros/sp_common/msg/SingleJointWrite.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 devel/share/gennodejs/ros/sp_common/msg/SingleJointWrite.js: /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Javascript code from sp_common/SingleJointWrite.msg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Javascript code from sp_common/SingleJointWrite.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/gennodejs/ros/sp_common/msg
 
 sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/ActuatorState.js
+sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/DbusData.js
 sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/GpioData.js
 sp_common_generate_messages_nodejs: devel/share/gennodejs/ros/sp_common/msg/SingleJointWrite.js
 sp_common_generate_messages_nodejs: sp_common/CMakeFiles/sp_common_generate_messages_nodejs

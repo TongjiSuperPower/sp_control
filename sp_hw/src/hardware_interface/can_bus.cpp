@@ -58,6 +58,23 @@ namespace sp_hw
                 frame.data[7] = 0xFC;
                 socket_can_.write(&frame);
             }
+            else if (id2act_data.second.type.find("MG_8016") != std::string::npos)
+            {
+
+                can_frame frame{};
+                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                frame.can_id = id2act_data.first;
+                frame.can_dlc = 8;
+                frame.data[0] = 0x92;
+                frame.data[1] = 0x00;
+                frame.data[2] = 0x00;
+                frame.data[3] = 0x00;
+                frame.data[4] = 0x00;
+                frame.data[5] = 0x00;
+                frame.data[6] = 0x00;
+                frame.data[7] = 0x00;
+                socket_can_.write(&frame);
+            }
         }
     }
 
@@ -73,6 +90,7 @@ namespace sp_hw
             // RM motors : id ranges from 0x201 to 0x208
             if (id2act_data.second.type.find("rm") != std::string::npos)
             {
+
                 if (id2act_data.second.is_halted)
                     continue;
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
@@ -80,6 +98,7 @@ namespace sp_hw
                 // TODO : (Lithesh) is the thread safe here while calcuating the cmd?
                 double cmd =
                     limitAmplitude(act_coeff.effort2act * id2act_data.second.exe_effort, act_coeff.max_out);
+                // ROS_INFO_STREAM(act_coeff.effort2act * id2act_data.second.exe_effort);
                 if (-1 < id && id < 4)
                 {
                     rm_can_frame0_.data[2 * id] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
@@ -116,6 +135,7 @@ namespace sp_hw
             }
             else if (id2act_data.second.type.find("MG_8016") != std::string::npos)
             {
+
                 can_frame frame{};
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 frame.can_id = id2act_data.first;
@@ -130,11 +150,6 @@ namespace sp_hw
                 frame.data[5] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
                 frame.data[6] = 0x00;
                 frame.data[7] = 0x00;
-                socket_can_.write(&frame);
-
-                frame.data[0] = 0x92;
-                frame.data[4] = 0x00;
-                frame.data[5] = 0x00;
                 socket_can_.write(&frame);
             }
             /*else if (id2act_data.second.type.find("MG_995") != std::string::npos)
@@ -228,8 +243,13 @@ namespace sp_hw
                 {
                     if (frame.data[0] == 0xA1)
                     {
-                        act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
+                        if (act_data.seq == 0)
+                        {
+                            act_data.offset2 = (frame.data[7] << 8u) | frame.data[6];
+                        }
+                        act_data.q_raw = ((frame.data[7] << 8u) | frame.data[6]) - act_data.offset2;
                         act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
+
                         int16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
                         act_data.stamp = can_frame_stamp.stamp;
 
@@ -241,17 +261,23 @@ namespace sp_hw
                             else if (act_data.q_last - act_data.q_raw > 32768)
                                 act_data.q_circle++;
                         }
+
                         act_data.q_last = act_data.q_raw;
                         act_data.seq++;
                         // convert raw data into  standard ActuatorState
+                        act_data.pos = act_coeff.act2pos *
+                                           static_cast<double>(act_data.q_raw + 65536 * act_data.q_circle) +
+                                       act_data.offset;
                         act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                         act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
                         continue;
                     }
                     else if (frame.data[0] == 0x92)
                     {
-                        act_data.pos = act_coeff.act2pos * static_cast<double>((frame.data[7] << 24u) |
-                                                                               (frame.data[3] << 16u) | (frame.data[2] << 8u) | frame.data[1]);
+
+                        act_data.offset = act_coeff.act2pos2 * static_cast<double>((frame.data[7] << 24u) |
+                                                                                   (frame.data[3] << 16u) | (frame.data[2] << 8u) | frame.data[1]);
+                        ROS_INFO_STREAM(frame.can_id << " OFFSET" << act_data.offset / 6);
                         continue;
                     }
                 }
@@ -264,6 +290,7 @@ namespace sp_hw
                     const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(act_data.type)->second;
                     if (act_data.type.find("DM") != std::string::npos)
                     {
+
                         act_data.q_raw = (frame.data[1] << 8) | frame.data[2];
                         uint16_t qd = (frame.data[3] << 4) | (frame.data[4] >> 4);
                         uint16_t eff = ((frame.data[4] & 0xF) << 8) | frame.data[5];

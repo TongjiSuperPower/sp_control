@@ -174,6 +174,7 @@ devel/lib/manipulator_control/manipulator_control: /opt/ros/noetic/lib/x86_64-li
 devel/lib/manipulator_control/manipulator_control: /usr/lib/x86_64-linux-gnu/libccd.so
 devel/lib/manipulator_control/manipulator_control: /usr/lib/x86_64-linux-gnu/libm.so
 devel/lib/manipulator_control/manipulator_control: /opt/ros/noetic/lib/liboctomap.so.1.9.8
+devel/lib/manipulator_control/manipulator_control: /opt/ros/noetic/lib/x86_64-linux-gnu/libruckig.so
 devel/lib/manipulator_control/manipulator_control: /usr/lib/x86_64-linux-gnu/libBulletSoftBody.so
 devel/lib/manipulator_control/manipulator_control: /usr/lib/x86_64-linux-gnu/libBulletDynamics.so
 devel/lib/manipulator_control/manipulator_control: /usr/lib/x86_64-linux-gnu/libBulletCollision.so

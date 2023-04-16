@@ -37,13 +37,14 @@
 
 #include "sp_dbus/dbus_node.h"
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   ros::init(argc, argv, "sp_dbus");
   DBusNode dbus_node;
   ros::Rate loop_rate(60);
   while (ros::ok())
   {
+
     dbus_node.run();
     loop_rate.sleep();
   }
@@ -53,8 +54,8 @@ int main(int argc, char** argv)
 DBusNode::DBusNode()
 {
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
-  cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-  nh_.param<std::string>("serial_port", serial_port_, "/dev/usbDbus");
+  cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+  nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
 
   dbus_.init(serial_port_.data());
 }
@@ -65,10 +66,14 @@ void DBusNode::run()
   cmd_vel_.linear.y = 0.00;
   cmd_vel_.angular.z = 0.00;
   dbus_.read();
-  dbus_.getData(&dbus_cmd_);
-  dbus_pub_.publish(dbus_cmd_);
-  cmd_vel_.linear.x = dbus_cmd_.ch_r_x;
-  cmd_vel_.linear.y = dbus_cmd_.ch_r_y;
-  cmd_vel_.angular.z = dbus_cmd_.ch_l_x;
-  cmd_vel_pub_.publish(cmd_vel_);
+  if (dbus_.get_update())
+  {
+    dbus_.getData(&dbus_cmd_);
+    dbus_pub_.publish(dbus_cmd_);
+    ROS_INFO_STREAM(dbus_cmd_.ch_r_x);
+    cmd_vel_.linear.x = dbus_cmd_.ch_r_x;
+    cmd_vel_.linear.y = dbus_cmd_.ch_r_y;
+    cmd_vel_.angular.z = dbus_cmd_.ch_l_x;
+    cmd_vel_pub_.publish(cmd_vel_);
+  }
 }

@@ -508,6 +508,20 @@ _sp_common_generate_messages_check_deps_SingleJointWrite/fast:
 .PHONY : _sp_common_generate_messages_check_deps_SingleJointWrite/fast
 
 # Convenience name for target.
+sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/rule
+.PHONY : sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/rule
+
+# Convenience name for target.
+_sp_common_generate_messages_check_deps_DbusData: sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/rule
+.PHONY : _sp_common_generate_messages_check_deps_DbusData
+
+# fast build rule for target.
+_sp_common_generate_messages_check_deps_DbusData/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build
+.PHONY : _sp_common_generate_messages_check_deps_DbusData/fast
+
+# Convenience name for target.
 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/rule:
 	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/rule
 .PHONY : sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir/rule
@@ -727,6 +741,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
+	@echo "... _sp_common_generate_messages_check_deps_DbusData"
 	@echo "... _sp_common_generate_messages_check_deps_GpioData"
 	@echo "... _sp_common_generate_messages_check_deps_SingleJointWrite"
 	@echo "... geometry_msgs_generate_messages_cpp"

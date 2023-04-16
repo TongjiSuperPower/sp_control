@@ -1,4 +1,4 @@
 controllers:
   gpio_controller:
     type: gpio_controller/Controller
-    gpios: ["left_grappler", "right_grappler"]
+    gpios: ["sucker"]

@@ -699,6 +699,12 @@ bond_DIR:PATH=/opt/ros/noetic/share/bond/cmake
 //The directory containing a CMake configuration file for bondcpp.
 bondcpp_DIR:PATH=/opt/ros/noetic/share/bondcpp/cmake
 
+//The directory containing a CMake configuration file for camera_calibration_parsers.
+camera_calibration_parsers_DIR:PATH=/opt/ros/noetic/share/camera_calibration_parsers/cmake
+
+//The directory containing a CMake configuration file for camera_info_manager.
+camera_info_manager_DIR:PATH=/opt/ros/noetic/share/camera_info_manager/cmake
+
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/noetic/share/catkin/cmake
 
@@ -761,6 +767,9 @@ forward_command_controller_DIR:PATH=/opt/ros/noetic/share/forward_command_contro
 
 //The directory containing a CMake configuration file for gazebo_msgs.
 gazebo_msgs_DIR:PATH=/opt/ros/noetic/share/gazebo_msgs/cmake
+
+//The directory containing a CMake configuration file for gazebo_plugins.
+gazebo_plugins_DIR:PATH=/opt/ros/noetic/share/gazebo_plugins/cmake
 
 //The directory containing a CMake configuration file for gazebo_ros.
 gazebo_ros_DIR:PATH=/opt/ros/noetic/share/gazebo_ros/cmake
@@ -895,11 +904,20 @@ joint_limits_interface_DIR:PATH=/opt/ros/noetic/share/joint_limits_interface/cma
 //The directory containing a CMake configuration file for kdl_parser.
 kdl_parser_DIR:PATH=/opt/ros/noetic/share/kdl_parser/cmake
 
+//Value Computed by CMake
+keyboard_control_BINARY_DIR:STATIC=/home/adminpc/catkin_ws/src/build/sp_control/keyboard_control
+
+//Value Computed by CMake
+keyboard_control_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+keyboard_control_SOURCE_DIR:STATIC=/home/adminpc/catkin_ws/src/sp_control/keyboard_control
+
 //The directory containing a CMake configuration file for laser_geometry.
 laser_geometry_DIR:PATH=/opt/ros/noetic/share/laser_geometry/cmake
 
 //Path to a library.
-lib:FILEPATH=/opt/ros/noetic/lib/libmessage_filters.so
+lib:FILEPATH=/opt/ros/noetic/lib/libcamera_calibration_parsers.so
 
 //Value Computed by CMake
 manipulator_control_BINARY_DIR:STATIC=/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control
@@ -945,6 +963,9 @@ moveit_ros_planning_interface_DIR:PATH=/opt/ros/noetic/share/moveit_ros_planning
 
 //The directory containing a CMake configuration file for moveit_ros_warehouse.
 moveit_ros_warehouse_DIR:PATH=/opt/ros/noetic/share/moveit_ros_warehouse/cmake
+
+//The directory containing a CMake configuration file for nav_msgs.
+nav_msgs_DIR:PATH=/opt/ros/noetic/share/nav_msgs/cmake
 
 //The directory containing a CMake configuration file for nodelet.
 nodelet_DIR:PATH=/opt/ros/noetic/share/nodelet/cmake
@@ -1071,6 +1092,15 @@ sp_common_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
 sp_common_SOURCE_DIR:STATIC=/home/adminpc/catkin_ws/src/sp_common
+
+//Value Computed by CMake
+sp_dbus_BINARY_DIR:STATIC=/home/adminpc/catkin_ws/src/build/sp_control/sp_dbus
+
+//Value Computed by CMake
+sp_dbus_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+sp_dbus_SOURCE_DIR:STATIC=/home/adminpc/catkin_ws/src/sp_control/sp_dbus
 
 //Value Computed by CMake
 sp_description_BINARY_DIR:STATIC=/home/adminpc/catkin_ws/src/build/sp_description
@@ -1323,7 +1353,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=15
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=17
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

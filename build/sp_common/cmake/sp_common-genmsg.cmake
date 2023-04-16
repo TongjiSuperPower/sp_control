@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "sp_common: 3 messages, 0 services")
+message(STATUS "sp_common: 4 messages, 0 services")
 
 set(MSG_I_FLAGS "-Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -32,6 +32,11 @@ add_custom_target(_sp_common_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "sp_common" "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" ""
 )
 
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
+add_custom_target(_sp_common_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "sp_common" "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -56,6 +61,12 @@ _generate_msg_cpp(sp_common
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/sp_common
 )
+_generate_msg_cpp(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/sp_common
+)
 
 ### Generating Services
 
@@ -76,6 +87,8 @@ add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_ch
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_cpp _sp_common_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -105,6 +118,12 @@ _generate_msg_eus(sp_common
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/sp_common
 )
+_generate_msg_eus(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/sp_common
+)
 
 ### Generating Services
 
@@ -125,6 +144,8 @@ add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_ch
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_eus _sp_common_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -154,6 +175,12 @@ _generate_msg_lisp(sp_common
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/sp_common
 )
+_generate_msg_lisp(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/sp_common
+)
 
 ### Generating Services
 
@@ -174,6 +201,8 @@ add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_c
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_lisp _sp_common_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -203,6 +232,12 @@ _generate_msg_nodejs(sp_common
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/sp_common
 )
+_generate_msg_nodejs(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/sp_common
+)
 
 ### Generating Services
 
@@ -223,6 +258,8 @@ add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_nodejs _sp_common_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -252,6 +289,12 @@ _generate_msg_py(sp_common
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/sp_common
 )
+_generate_msg_py(sp_common
+  "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/sp_common
+)
 
 ### Generating Services
 
@@ -272,6 +315,8 @@ add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_che
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg" NAME_WE)
+add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg" NAME_WE)
 add_dependencies(sp_common_generate_messages_py _sp_common_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

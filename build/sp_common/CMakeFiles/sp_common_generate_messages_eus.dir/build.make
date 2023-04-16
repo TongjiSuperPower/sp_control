@@ -69,6 +69,7 @@ include sp_common/CMakeFiles/sp_common_generate_messages_eus.dir/progress.make
 sp_common/CMakeFiles/sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/ActuatorState.l
 sp_common/CMakeFiles/sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/GpioData.l
 sp_common/CMakeFiles/sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/SingleJointWrite.l
+sp_common/CMakeFiles/sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/DbusData.l
 sp_common/CMakeFiles/sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/manifest.l
 
 devel/share/roseus/ros/sp_common/manifest.l: /opt/ros/noetic/lib/geneus/gen_eus.py
@@ -80,19 +81,25 @@ devel/share/roseus/ros/sp_common/msg/ActuatorState.l: /home/adminpc/catkin_ws/sr
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from sp_common/ActuatorState.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/roseus/ros/sp_common/msg
 
+devel/share/roseus/ros/sp_common/msg/DbusData.l: /opt/ros/noetic/lib/geneus/gen_eus.py
+devel/share/roseus/ros/sp_common/msg/DbusData.l: /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from sp_common/DbusData.msg"
+	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/roseus/ros/sp_common/msg
+
 devel/share/roseus/ros/sp_common/msg/GpioData.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 devel/share/roseus/ros/sp_common/msg/GpioData.l: /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg
 devel/share/roseus/ros/sp_common/msg/GpioData.l: /opt/ros/noetic/share/std_msgs/msg/Header.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from sp_common/GpioData.msg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp code from sp_common/GpioData.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/roseus/ros/sp_common/msg
 
 devel/share/roseus/ros/sp_common/msg/SingleJointWrite.l: /opt/ros/noetic/lib/geneus/gen_eus.py
 devel/share/roseus/ros/sp_common/msg/SingleJointWrite.l: /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp code from sp_common/SingleJointWrite.msg"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/adminpc/catkin_ws/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating EusLisp code from sp_common/SingleJointWrite.msg"
 	cd /home/adminpc/catkin_ws/src/build/sp_common && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg -Isp_common:/home/adminpc/catkin_ws/src/sp_common/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p sp_common -o /home/adminpc/catkin_ws/src/build/devel/share/roseus/ros/sp_common/msg
 
 sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/manifest.l
 sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/ActuatorState.l
+sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/DbusData.l
 sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/GpioData.l
 sp_common_generate_messages_eus: devel/share/roseus/ros/sp_common/msg/SingleJointWrite.l
 sp_common_generate_messages_eus: sp_common/CMakeFiles/sp_common_generate_messages_eus

@@ -614,6 +614,19 @@ _sp_common_generate_messages_check_deps_SingleJointWrite/fast:
 .PHONY : _sp_common_generate_messages_check_deps_SingleJointWrite/fast
 
 #=============================================================================
+# Target rules for targets named _sp_common_generate_messages_check_deps_DbusData
+
+# Build rule for target.
+_sp_common_generate_messages_check_deps_DbusData: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _sp_common_generate_messages_check_deps_DbusData
+.PHONY : _sp_common_generate_messages_check_deps_DbusData
+
+# fast build rule for target.
+_sp_common_generate_messages_check_deps_DbusData/fast:
+	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build
+.PHONY : _sp_common_generate_messages_check_deps_DbusData/fast
+
+#=============================================================================
 # Target rules for targets named sp_common_generate_messages_cpp
 
 # Build rule for target.
@@ -781,6 +794,19 @@ roslint_sp_common: cmake_check_build_system
 roslint_sp_common/fast:
 	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roslint_sp_common.dir/build.make sp_common/CMakeFiles/roslint_sp_common.dir/build
 .PHONY : roslint_sp_common/fast
+
+#=============================================================================
+# Target rules for targets named sp_dbus
+
+# Build rule for target.
+sp_dbus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_dbus
+.PHONY : sp_dbus
+
+# fast build rule for target.
+sp_dbus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/sp_dbus/CMakeFiles/sp_dbus.dir/build.make sp_control/sp_dbus/CMakeFiles/sp_dbus.dir/build
+.PHONY : sp_dbus/fast
 
 #=============================================================================
 # Target rules for targets named gpio_controller
@@ -2381,6 +2407,240 @@ roslint_gimbal_controller/fast:
 	$(MAKE) $(MAKESILENT) -f sp_control/gimbal_controller/CMakeFiles/roslint_gimbal_controller.dir/build.make sp_control/gimbal_controller/CMakeFiles/roslint_gimbal_controller.dir/build
 .PHONY : roslint_gimbal_controller/fast
 
+#=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_cpp
+
+# Build rule for target.
+nav_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_cpp
+.PHONY : nav_msgs_generate_messages_cpp
+
+# fast build rule for target.
+nav_msgs_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build.make sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build
+.PHONY : nav_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_eus
+
+# Build rule for target.
+nav_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_eus
+.PHONY : nav_msgs_generate_messages_eus
+
+# fast build rule for target.
+nav_msgs_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_eus.dir/build.make sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_eus.dir/build
+.PHONY : nav_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_lisp
+
+# Build rule for target.
+nav_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_lisp
+.PHONY : nav_msgs_generate_messages_lisp
+
+# fast build rule for target.
+nav_msgs_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_lisp.dir/build.make sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_lisp.dir/build
+.PHONY : nav_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_nodejs
+
+# Build rule for target.
+nav_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_nodejs
+.PHONY : nav_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+nav_msgs_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build.make sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
+.PHONY : nav_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_py
+
+# Build rule for target.
+nav_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_py
+.PHONY : nav_msgs_generate_messages_py
+
+# fast build rule for target.
+nav_msgs_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_py.dir/build.make sp_control/keyboard_control/CMakeFiles/nav_msgs_generate_messages_py.dir/build
+.PHONY : nav_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named gazebo_plugins_gencfg
+
+# Build rule for target.
+gazebo_plugins_gencfg: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gazebo_plugins_gencfg
+.PHONY : gazebo_plugins_gencfg
+
+# fast build rule for target.
+gazebo_plugins_gencfg/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/gazebo_plugins_gencfg.dir/build.make sp_control/keyboard_control/CMakeFiles/gazebo_plugins_gencfg.dir/build
+.PHONY : gazebo_plugins_gencfg/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages
+
+# Build rule for target.
+keyboard_control_generate_messages: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages
+.PHONY : keyboard_control_generate_messages
+
+# fast build rule for target.
+keyboard_control_generate_messages/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages.dir/build
+.PHONY : keyboard_control_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages_cpp
+
+# Build rule for target.
+keyboard_control_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages_cpp
+.PHONY : keyboard_control_generate_messages_cpp
+
+# fast build rule for target.
+keyboard_control_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_cpp.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_cpp.dir/build
+.PHONY : keyboard_control_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_gencpp
+
+# Build rule for target.
+keyboard_control_gencpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_gencpp
+.PHONY : keyboard_control_gencpp
+
+# fast build rule for target.
+keyboard_control_gencpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_gencpp.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_gencpp.dir/build
+.PHONY : keyboard_control_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages_eus
+
+# Build rule for target.
+keyboard_control_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages_eus
+.PHONY : keyboard_control_generate_messages_eus
+
+# fast build rule for target.
+keyboard_control_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_eus.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_eus.dir/build
+.PHONY : keyboard_control_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_geneus
+
+# Build rule for target.
+keyboard_control_geneus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_geneus
+.PHONY : keyboard_control_geneus
+
+# fast build rule for target.
+keyboard_control_geneus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_geneus.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_geneus.dir/build
+.PHONY : keyboard_control_geneus/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages_lisp
+
+# Build rule for target.
+keyboard_control_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages_lisp
+.PHONY : keyboard_control_generate_messages_lisp
+
+# fast build rule for target.
+keyboard_control_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_lisp.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_lisp.dir/build
+.PHONY : keyboard_control_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_genlisp
+
+# Build rule for target.
+keyboard_control_genlisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_genlisp
+.PHONY : keyboard_control_genlisp
+
+# fast build rule for target.
+keyboard_control_genlisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_genlisp.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_genlisp.dir/build
+.PHONY : keyboard_control_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages_nodejs
+
+# Build rule for target.
+keyboard_control_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages_nodejs
+.PHONY : keyboard_control_generate_messages_nodejs
+
+# fast build rule for target.
+keyboard_control_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_nodejs.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_nodejs.dir/build
+.PHONY : keyboard_control_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_gennodejs
+
+# Build rule for target.
+keyboard_control_gennodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_gennodejs
+.PHONY : keyboard_control_gennodejs
+
+# fast build rule for target.
+keyboard_control_gennodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_gennodejs.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_gennodejs.dir/build
+.PHONY : keyboard_control_gennodejs/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_generate_messages_py
+
+# Build rule for target.
+keyboard_control_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_generate_messages_py
+.PHONY : keyboard_control_generate_messages_py
+
+# fast build rule for target.
+keyboard_control_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_py.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_generate_messages_py.dir/build
+.PHONY : keyboard_control_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control_genpy
+
+# Build rule for target.
+keyboard_control_genpy: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control_genpy
+.PHONY : keyboard_control_genpy
+
+# fast build rule for target.
+keyboard_control_genpy/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control_genpy.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control_genpy.dir/build
+.PHONY : keyboard_control_genpy/fast
+
+#=============================================================================
+# Target rules for targets named keyboard_control
+
+# Build rule for target.
+keyboard_control: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 keyboard_control
+.PHONY : keyboard_control
+
+# fast build rule for target.
+keyboard_control/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/keyboard_control/CMakeFiles/keyboard_control.dir/build.make sp_control/keyboard_control/CMakeFiles/keyboard_control.dir/build
+.PHONY : keyboard_control/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2396,6 +2656,7 @@ help:
 	@echo "... test"
 	@echo "... _catkin_empty_exported_target"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
+	@echo "... _sp_common_generate_messages_check_deps_DbusData"
 	@echo "... _sp_common_generate_messages_check_deps_GpioData"
 	@echo "... _sp_common_generate_messages_check_deps_SingleJointWrite"
 	@echo "... actionlib_generate_messages_cpp"
@@ -2443,6 +2704,7 @@ help:
 	@echo "... gazebo_msgs_generate_messages_lisp"
 	@echo "... gazebo_msgs_generate_messages_nodejs"
 	@echo "... gazebo_msgs_generate_messages_py"
+	@echo "... gazebo_plugins_gencfg"
 	@echo "... gazebo_ros_gencfg"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_eus"
@@ -2450,6 +2712,17 @@ help:
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... ira_laser_tools_gencfg"
+	@echo "... keyboard_control_gencpp"
+	@echo "... keyboard_control_generate_messages"
+	@echo "... keyboard_control_generate_messages_cpp"
+	@echo "... keyboard_control_generate_messages_eus"
+	@echo "... keyboard_control_generate_messages_lisp"
+	@echo "... keyboard_control_generate_messages_nodejs"
+	@echo "... keyboard_control_generate_messages_py"
+	@echo "... keyboard_control_geneus"
+	@echo "... keyboard_control_genlisp"
+	@echo "... keyboard_control_gennodejs"
+	@echo "... keyboard_control_genpy"
 	@echo "... moveit_msgs_generate_messages_cpp"
 	@echo "... moveit_msgs_generate_messages_eus"
 	@echo "... moveit_msgs_generate_messages_lisp"
@@ -2457,6 +2730,11 @@ help:
 	@echo "... moveit_msgs_generate_messages_py"
 	@echo "... moveit_ros_manipulation_gencfg"
 	@echo "... moveit_ros_planning_gencfg"
+	@echo "... nav_msgs_generate_messages_cpp"
+	@echo "... nav_msgs_generate_messages_eus"
+	@echo "... nav_msgs_generate_messages_lisp"
+	@echo "... nav_msgs_generate_messages_nodejs"
+	@echo "... nav_msgs_generate_messages_py"
 	@echo "... nodelet_generate_messages_cpp"
 	@echo "... nodelet_generate_messages_eus"
 	@echo "... nodelet_generate_messages_lisp"
@@ -2558,11 +2836,13 @@ help:
 	@echo "... gpio_controller"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... keyboard_control"
 	@echo "... laserscan_multi_merger"
 	@echo "... laserscan_virtualizer"
 	@echo "... manipulator_control"
 	@echo "... sentry_communicator"
 	@echo "... sp_common"
+	@echo "... sp_dbus"
 	@echo "... sp_hw"
 .PHONY : help
 

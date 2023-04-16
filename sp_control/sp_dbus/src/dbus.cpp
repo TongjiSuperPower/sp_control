@@ -48,11 +48,12 @@
 
 #include <termios.h>
 
-extern "C" {
-extern int ioctl(int __fd, unsigned long int __request, ...) throw();
+extern "C"
+{
+  extern int ioctl(int __fd, unsigned long int __request, ...) throw();
 }
 
-void DBus::init(const char* serial)
+void DBus::init(const char *serial)
 {
   int fd = open(serial, O_RDWR | O_NOCTTY | O_SYNC);
 
@@ -68,26 +69,27 @@ void DBus::init(const char* serial)
 
   // Even parity(8E1):
   options.c_cflag &= ~CBAUD;
-  options.c_cflag |= BOTHER;
+  options.c_cflag |= B115200;
 
-  options.c_cflag |= PARENB;
-  options.c_cflag &= ~PARODD;
-  options.c_cflag &= ~CSTOPB;
+  // options.c_cflag |= PARENB;
+  options.c_cflag &= ~PARENB;
+  // options.c_cflag &= ~PARODD;
+  options.c_cflag |= CSTOPB;
   options.c_cflag &= ~CSIZE;
   options.c_cflag |= CS8;
 
-  options.c_ispeed = 100000;
-  options.c_ospeed = 100000;
+  options.c_ispeed = 115200;
+  options.c_ospeed = 115200;
   options.c_iflag &= ~(IXON | IXOFF | IXANY);
-  options.c_iflag &= ~IGNBRK;  // disable break processing
+  options.c_iflag &= ~IGNBRK; // disable break processing
 
   /* set input mode (non−canonical, no echo,...) */
   options.c_lflag = 0;
   options.c_cc[VTIME] = 0;
   options.c_cc[VMIN] = 0;
 
-  options.c_oflag = 0;                  // no remapping, no delays
-  options.c_cflag |= (CLOCAL | CREAD);  // ignore modem controls, enable reading
+  options.c_oflag = 0;                 // no remapping, no delays
+  options.c_cflag |= (CLOCAL | CREAD); // ignore modem controls, enable reading
   ioctl(fd, TCSETS2, &options);
 
   port_ = fd;
@@ -96,9 +98,9 @@ void DBus::init(const char* serial)
 void DBus::read()
 {
   uint8_t read_byte;
-  int timeout = 0;  // time out of one package
-  int count = 0;    // count of bit of one package
-  while (timeout < 10)
+  int timeout = 0; // time out of one package
+  int count = 0;   // count of bit of one package
+  while (timeout < 2)
   {
     // Read a byte //
     size_t n = ::read(port_, &read_byte, sizeof(read_byte));
@@ -114,22 +116,31 @@ void DBus::read()
         buff_[i] = buff_[i + 1];
       }
       buff_[17] = read_byte;
+      // ROS_INFO_STREAM("READ:" << buff_[17]);
       count++;
     }
   }
-  unpack();
-  if (count < 17)
+  if (count < 17 || !unpack())
   {
     memset(&d_bus_data_, 0, sizeof(d_bus_data_));
     is_update_ = false;
   }
   else
   {
+    // ROS_INFO_STREAM("ch0:" << d_bus_data_.ch0);
+    // ROS_INFO_STREAM("ch1:" << d_bus_data_.ch1);
+    // ROS_INFO_STREAM("ch2:" << d_bus_data_.ch2);
+    // ROS_INFO_STREAM("ch3:" << d_bus_data_.ch3);
     is_update_ = true;
   }
 }
 
-void DBus::unpack()
+bool DBus::channel_valid(int16_t chval)
+{
+  return (-660 <= chval && chval <= 660);
+}
+
+bool DBus::unpack()
 {
   d_bus_data_.ch0 = (buff_[0] | buff_[1] << 8) & 0x07FF;
   d_bus_data_.ch0 -= 1024;
@@ -139,6 +150,13 @@ void DBus::unpack()
   d_bus_data_.ch2 -= 1024;
   d_bus_data_.ch3 = (buff_[4] >> 1 | buff_[5] << 7) & 0x07FF;
   d_bus_data_.ch3 -= 1024;
+  // if (!channel_valid(d_bus_data_.ch0) ||
+  //     !channel_valid(d_bus_data_.ch1) ||
+  //     !channel_valid(d_bus_data_.ch2) ||
+  //     !channel_valid(d_bus_data_.ch3))
+  // {
+  //   return false;
+  // }
   /* prevent remote control zero deviation */
   if (d_bus_data_.ch0 <= 10 && d_bus_data_.ch0 >= -10)
     d_bus_data_.ch0 = 0;
@@ -156,19 +174,21 @@ void DBus::unpack()
       (abs(d_bus_data_.ch3) > 660))
   {
     is_success = false;
-    return;
+    return false;
   }
   d_bus_data_.x = buff_[6] | (buff_[7] << 8);
   d_bus_data_.y = buff_[8] | (buff_[9] << 8);
   d_bus_data_.z = buff_[10] | (buff_[11] << 8);
   d_bus_data_.l = buff_[12];
   d_bus_data_.r = buff_[13];
-  d_bus_data_.key = buff_[14] | buff_[15] << 8;  // key board code
+  d_bus_data_.key = buff_[14] | buff_[15] << 8; // key board code
   d_bus_data_.wheel = (buff_[16] | buff_[17] << 8) - 1024;
   is_success = true;
+
+  return true;
 }
 
-void DBus::getData(sp_common::DbusData* d_bus_data) const
+void DBus::getData(sp_common::DbusData *d_bus_data) const
 {
   if (is_success)
   {

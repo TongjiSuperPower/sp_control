@@ -25,6 +25,16 @@
   "file": "/home/adminpc/catkin_ws/src/sp_common/src/filters/filters.cpp"
 },
 {
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/sp_dbus",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_dbus\\\" -I/home/adminpc/catkin_ws/src/sp_control/sp_dbus/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g   -Wall -Werror -std=gnu++14 -o CMakeFiles/sp_dbus.dir/src/dbus_node.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/sp_dbus/src/dbus_node.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/sp_dbus/src/dbus_node.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/sp_dbus",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"sp_dbus\\\" -I/home/adminpc/catkin_ws/src/sp_control/sp_dbus/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g   -Wall -Werror -std=gnu++14 -o CMakeFiles/sp_dbus.dir/src/dbus.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/sp_dbus/src/dbus.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/sp_dbus/src/dbus.cpp"
+},
+{
   "directory": "/home/adminpc/catkin_ws/src/build/sp_control/gpio_controller",
   "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"gpio_controller\\\" -Dgpio_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/gpio_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -g -fPIC -o CMakeFiles/gpio_controller.dir/src/gpio_controller.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/gpio_controller/src/gpio_controller.cpp",
   "file": "/home/adminpc/catkin_ws/src/sp_control/gpio_controller/src/gpio_controller.cpp"
@@ -118,5 +128,10 @@
   "directory": "/home/adminpc/catkin_ws/src/build/sp_control/gimbal_controller",
   "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"gimbal_controller\\\" -Dgimbal_controller_EXPORTS -I/home/adminpc/catkin_ws/src/sp_control/gimbal_controller/include -I/home/adminpc/catkin_ws/src/build/devel/include -I/home/adminpc/catkin_ws/src/sp_common/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -fPIC -o CMakeFiles/gimbal_controller.dir/src/gimbal_controller.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/gimbal_controller/src/gimbal_controller.cpp",
   "file": "/home/adminpc/catkin_ws/src/sp_control/gimbal_controller/src/gimbal_controller.cpp"
+},
+{
+  "directory": "/home/adminpc/catkin_ws/src/build/sp_control/keyboard_control",
+  "command": "/usr/bin/g++ -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\\\"keyboard_control\\\" -I/home/adminpc/catkin_ws/src/sp_control/keyboard_control/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 -g -o CMakeFiles/keyboard_control.dir/src/keyboard_control.cpp.o -c /home/adminpc/catkin_ws/src/sp_control/keyboard_control/src/keyboard_control.cpp",
+  "file": "/home/adminpc/catkin_ws/src/sp_control/keyboard_control/src/keyboard_control.cpp"
 }
 ]

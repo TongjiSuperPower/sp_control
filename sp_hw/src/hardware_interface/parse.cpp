@@ -94,6 +94,14 @@ namespace sp_hw
                         ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated kd2act");
                 }
 
+                if (it->first == "MG_8016")
+                {
+                    if (it->second.hasMember("act2pos2"))
+                        act_coeff.act2pos2 = xmlRpcGetDouble(it->second, "act2pos2");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated pos2act2");
+                }
+
                 std::string type = it->first;
                 if (type2act_coeffs_.find(type) == type2act_coeffs_.end())
                     type2act_coeffs_.emplace(make_pair(type, act_coeff));
@@ -173,7 +181,8 @@ namespace sp_hw
                                                                          .cmd_vel = 0,
                                                                          .cmd_effort = 0,
                                                                          .exe_effort = 0,
-                                                                         .offset = 0}));
+                                                                         .offset = 0,
+                                                                         .offset2 = 0}));
                 }
                 // TODO(DONE) : use actuator_coefficient to define
                 if (type2act_coeffs_.find(type) != type2act_coeffs_.end())
@@ -252,14 +261,13 @@ namespace sp_hw
                                                                           .name = it->first,
                                                                           .stamp = ros::Time::now(),
                                                                           .type = sp_control::OUTPUT,
-                                                                          .value = true}));
+                                                                          .value = false}));
                 }
                 sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
                                                               &bus_id2gpio_data_[bus][id].value);
                 gpio_state_interface_.registerHandle(gpio_state_handle);
                 if (type == sp_control::OUTPUT)
                 {
-                    ROS_WARN_STREAM("A");
                     sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
                                                                       &bus_id2gpio_data_[bus][id].value);
                     gpio_command_interface_.registerHandle(gpio_command_handle);

@@ -55,5 +55,6 @@ public:
   DBusNode();
   ~DBusNode() = default;
   void run();
+  bool is_update() { return dbus_.get_update(); }
 };
-#endif  // SRC_RM_BRIDGE_INCLUDE_DBUS_NODE_H_
+#endif // SRC_RM_BRIDGE_INCLUDE_DBUS_NODE_H_

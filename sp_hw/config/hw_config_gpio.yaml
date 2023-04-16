@@ -7,15 +7,11 @@ thread_priority: 30
 actuators:
   right_front_wheel_motor:
     bus: can0
-    id: 0x201
-    type: rm_2006
+    id: 0x202
+    type: rm_3508
 
 gpios:
-  left_grappler:
+  sucker:
     bus: can0
-    id: 0x101
-    type: out
-  right_grappler:
-    bus: can0
-    id: 0x102
+    id: 0x103
     type: out

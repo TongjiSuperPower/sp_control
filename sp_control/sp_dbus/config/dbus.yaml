@@ -1,2 +1,2 @@
-rm_dbus:
-  serial_port: "/dev/usbDbus"
+sp_dbus:
+  serial_port: "/dev/ttyUSB0"

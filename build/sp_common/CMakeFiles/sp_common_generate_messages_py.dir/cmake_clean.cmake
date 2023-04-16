@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "../devel/lib/python3/dist-packages/sp_common/msg/_ActuatorState.py"
+  "../devel/lib/python3/dist-packages/sp_common/msg/_DbusData.py"
   "../devel/lib/python3/dist-packages/sp_common/msg/_GpioData.py"
   "../devel/lib/python3/dist-packages/sp_common/msg/_SingleJointWrite.py"
   "../devel/lib/python3/dist-packages/sp_common/msg/__init__.py"

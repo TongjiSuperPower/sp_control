@@ -6,6 +6,6 @@ thread_priority: 30
 
 actuators:
   right_front_wheel_motor:
-    bus: can1
-    id: 0x142
-    type: MG_8016
+    bus: can0
+    id: 0x201
+    type: rm_2006

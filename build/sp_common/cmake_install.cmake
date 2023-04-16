@@ -47,6 +47,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg"
     "/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg"
     "/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg"
+    "/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
     )
 endif()
 

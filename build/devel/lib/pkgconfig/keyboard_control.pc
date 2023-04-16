@@ -1,0 +1,8 @@
+prefix=/home/adminpc/catkin_ws/src/build/devel
+
+Name: keyboard_control
+Description: Description of keyboard_control
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs roscpp std_msgs tf2 tf2_geometry_msgs tf2_ros message_runtime

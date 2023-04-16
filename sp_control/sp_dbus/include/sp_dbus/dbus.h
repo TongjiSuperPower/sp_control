@@ -67,8 +67,9 @@ class DBus
 public:
   DBus() = default;
   ~DBus() = default;
-  void init(const char* serial);
-  void getData(sp_common::DbusData* d_bus_data) const;
+  void init(const char *serial);
+  void getData(sp_common::DbusData *d_bus_data) const;
+  bool get_update() { return is_update_; };
   void read();
 
 private:
@@ -77,7 +78,8 @@ private:
   int16_t buff_[18]{};
   bool is_success{};
   bool is_update_ = false;
-  void unpack();
+  bool unpack();
+  bool channel_valid(int16_t chval);
 };
 
-#endif  // SRC_RM_BRIDGE_INCLUDE_RT_RT_DBUS_H_
+#endif // SRC_RM_BRIDGE_INCLUDE_RT_RT_DBUS_H_

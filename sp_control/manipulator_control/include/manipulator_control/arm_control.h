@@ -1,59 +1,62 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_trajectory/robot_trajectory.h>
-#define PLANNING_GROUP_MANIPULATOR "engineer_manipulator" 
-#define PLANNING_GROUP_GRIPPER  "gripper" 
+#include <sp_common/GpioData.h>
+#define PLANNING_GROUP_MANIPULATOR "engineer_manipulator"
+#define PLANNING_GROUP_GRIPPER "gripper"
 
 namespace manipulator_control
 {
-    enum execution_mode{POSE, STATE};
-
-
-
+    enum execution_mode
+    {
+        POSE,
+        STATE
+    };
 
     class Manipulator
     {
-        public:
-            Manipulator(moveit::planning_interface::MoveGroupInterface &move_group_interface,
-                        moveit::planning_interface::MoveGroupInterface &grip_group_interface);
+    public:
+        Manipulator(moveit::planning_interface::MoveGroupInterface &move_group_interface,
+                    moveit::planning_interface::MoveGroupInterface &grip_group_interface);
 
-            bool init();
+        bool init();
 
-            void move_execute();
+        void move_execute();
 
-            void move_execute(moveit_msgs::RobotTrajectory &trajectory);
+        void move_execute(moveit_msgs::RobotTrajectory &trajectory);
 
-            void grip_execute();
+        void grip_execute();
 
-            void read();
+        void read();
 
-            void write(const geometry_msgs::Pose &target_pose_);
+        void write(const geometry_msgs::Pose &target_pose_);
 
-            void write(const std::vector<double> &target_state_);
+        void write(const std::vector<double> &target_state_);
 
-            void singlewrite(double target_state_, int num);
+        void singlewrite(double target_state_, int num);
 
-            void CartesianPath(std::vector<geometry_msgs::Pose> waypoints);
+        void CartesianPath(std::vector<geometry_msgs::Pose> waypoints);
 
-            bool get_executed();
+        bool get_executed();
 
-            void set_executed(bool exe);
+        void set_executed(bool exe);
 
-            void stretch(const std::vector<double> &distance);
+        void stretch(const std::vector<double> &distance);
 
-            void goal(const std::string &name);
+        void goal(const std::string &name);
 
+        void suck(const bool &suck_it);
 
-
-        private:
-            moveit::planning_interface::MoveGroupInterface &move_group_interface;
-            moveit::planning_interface::MoveGroupInterface &grip_group_interface;
-            const moveit::core::JointModelGroup* joint_model_group;
-            const moveit::core::JointModelGroup* grip_model_group;
-            geometry_msgs::Pose current_pose, target_pose;
-            std::vector<double> current_state, target_state, current_distance, target_distance;
-            execution_mode EXECUTION_MODE;
-            bool executed;
-            
+    private:
+        moveit::planning_interface::MoveGroupInterface &move_group_interface;
+        moveit::planning_interface::MoveGroupInterface &grip_group_interface;
+        const moveit::core::JointModelGroup *joint_model_group;
+        const moveit::core::JointModelGroup *grip_model_group;
+        geometry_msgs::Pose current_pose, target_pose;
+        std::vector<double> current_state, target_state, current_distance, target_distance;
+        execution_mode EXECUTION_MODE;
+        bool executed;
+        ros::NodeHandle nh_;
+        ros::Publisher sucker_publisher_;
     };
 
 }
