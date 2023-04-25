@@ -4,7 +4,7 @@
     command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.xacro" />
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" >
-    <arg name="world_name" value="$(find sp_gazebosim)/worlds/test.world"/>
+    <!--<arg name="world_name" value="$(find sp_gazebosim)/worlds/test.world"/>-->
   </include>
   <node
     name="tf_footprint_base"

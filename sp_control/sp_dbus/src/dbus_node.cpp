@@ -73,30 +73,46 @@ void DBusNode::run()
     dbus_pub_.publish(dbus_cmd_);
     if (dbus_cmd_.s_r == 1) // right paddle up,using remote control
     {
-      cmd_vel_.linear.x = x_coefficient * dbus_cmd_.ch_r_x;
-      cmd_vel_.linear.y = -y_coefficient * dbus_cmd_.ch_r_y;
-      cmd_vel_.angular.z = -z_coefficient * dbus_cmd_.ch_l_x;
-      cmd_pos_.y += 0.05 * dbus_cmd_.ch_l_y;
+      cmd_vel_.linear.x = chassis_x_coeff * dbus_cmd_.ch_r_x;
+      cmd_vel_.linear.y = -chassis_y_coeff * dbus_cmd_.ch_r_y;
+      cmd_vel_.angular.z = -chassis_z_coeff_rc * dbus_cmd_.ch_l_x;
+      cmd_pos_.y += gimbal_y_coeff_rc * dbus_cmd_.ch_l_y;
+      if (cmd_pos_.y > 1.57)
+        cmd_pos_.y = 1.57;
+      else if (cmd_pos_.y < -1.57)
+        cmd_pos_.y = -1.57;
     }
-    /*else if (dbus_cmd_.s_r == 3) // right paddle middle, using keyboard control
+    else if (dbus_cmd_.s_r == 3) // right paddle middle, using keyboard control
     {
-      if (dbus_cmd_.key_w) // forward
-        cmd_vel_.linear.x = x_coefficient;
-      else if (dbus_cmd_.key_s) // back
-        cmd_vel_.linear.x = -x_coefficient;
-      else if (dbus_cmd_.key_a) // left
-        cmd_vel_.linear.y = y_coefficient;
-      else if (dbus_cmd_.key_d) // right
-        cmd_vel_.linear.z = -y_coefficient;
-      else if (dbus_cmd_.key_q) // counterclockwise
-        cmd_vel_.angular.z = z_coefficient;
-      else if (dbus_cmd_.key_e) // clockwise
-        cmd_vel_.angular.z = -z_coefficient;
+      if (dbus_cmd_.key_w) // chassis_forward
+        cmd_vel_.linear.x = chassis_x_coeff;
+      if (dbus_cmd_.key_s) // chassis_back
+        cmd_vel_.linear.x = -chassis_x_coeff;
+      if (dbus_cmd_.key_a) // chassis_left
+        cmd_vel_.linear.y = chassis_y_coeff;
+      if (dbus_cmd_.key_d) // chassis_right
+        cmd_vel_.linear.y = -chassis_y_coeff;
+      if (dbus_cmd_.key_q) // gimbal_counterclockwise
+        cmd_pos_.x += gimbal_x_coeff;
+      if (dbus_cmd_.key_e) // gimbal_clockwise
+        cmd_pos_.x += -gimbal_x_coeff;
 
-      cmd_pos_.x += dbus_cmd_.m_x;
-      cmd_pos_.y += dbus_cmd_.m_y;
-      cmd_pos_.z += dbus_cmd_.m_z;
-    }*/
+      cmd_vel_.angular.z = -chassis_z_coeff_kb * dbus_cmd_.m_x; // chassis_trun
+      cmd_pos_.y += -gimbal_y_coeff_kb * dbus_cmd_.m_y;         // gimbal_pitch
+      cmd_pos_.z += gimbal_z_coeff * dbus_cmd_.m_z;             // gimbal_height
+      if (cmd_pos_.x > 1.57)
+        cmd_pos_.x = 1.57;
+      else if (cmd_pos_.x < -1.57)
+        cmd_pos_.x = -1.57;
+      if (cmd_pos_.y > 1.57)
+        cmd_pos_.y = 1.57;
+      else if (cmd_pos_.y < -1.57)
+        cmd_pos_.y = -1.57;
+      if (cmd_pos_.z > 0.235)
+        cmd_pos_.z = 0.235;
+      else if (cmd_pos_.z < 0)
+        cmd_pos_.z = 0;
+    }
 
     else if (dbus_cmd_.s_r == 2) // right paddle down, stop chassis
     {

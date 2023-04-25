@@ -41,9 +41,14 @@
 #include <ros/ros.h>
 #include <sp_common/DbusData.h>
 
-#define x_coefficient 2.0
-#define y_coefficient 2.0
-#define z_coefficient 1.5
+#define chassis_x_coeff 2.0
+#define chassis_y_coeff 2.0
+#define chassis_z_coeff_kb 70
+#define chassis_z_coeff_rc 1.5
+#define gimbal_x_coeff 0.05
+#define gimbal_y_coeff_kb 7
+#define gimbal_y_coeff_rc 0.07
+#define gimbal_z_coeff 2.5
 class DBusNode
 {
 private:

@@ -125,7 +125,7 @@ int main(int argc, char **argv)
             manipulator_.goal("home");
             // else if () // go forward grip
 
-            // else if () // go left grip
+            // else if () // go left grip205083
 
             // else if () // go
 

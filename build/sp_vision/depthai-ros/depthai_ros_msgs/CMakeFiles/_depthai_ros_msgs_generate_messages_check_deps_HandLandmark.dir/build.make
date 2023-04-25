@@ -67,7 +67,7 @@ include sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_gene
 include sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark.dir/progress.make
 
 sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark:
-	cd /home/adminpc/catkin_ws/src/build/sp_vision/depthai-ros/depthai_ros_msgs && ../../../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py depthai_ros_msgs /home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg geometry_msgs/Point:geometry_msgs/Pose2D
+	cd /home/adminpc/catkin_ws/src/build/sp_vision/depthai-ros/depthai_ros_msgs && ../../../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py depthai_ros_msgs /home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg geometry_msgs/Pose2D:geometry_msgs/Point
 
 _depthai_ros_msgs_generate_messages_check_deps_HandLandmark: sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark
 _depthai_ros_msgs_generate_messages_check_deps_HandLandmark: sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark.dir/build.make

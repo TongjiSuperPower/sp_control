@@ -24,22 +24,22 @@ add_custom_target(_depthai_ros_msgs_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg" NAME_WE)
 add_custom_target(_depthai_ros_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg" "geometry_msgs/Point:geometry_msgs/Pose2D"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg" "geometry_msgs/Pose2D:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg" NAME_WE)
 add_custom_target(_depthai_ros_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg" "std_msgs/Header:depthai_ros_msgs/HandLandmark:geometry_msgs/Pose2D:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg" "std_msgs/Header:geometry_msgs/Pose2D:depthai_ros_msgs/HandLandmark:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg" NAME_WE)
 add_custom_target(_depthai_ros_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg" "vision_msgs/BoundingBox2D:vision_msgs/ObjectHypothesis:geometry_msgs/Pose2D:geometry_msgs/Point"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg" "geometry_msgs/Pose2D:vision_msgs/ObjectHypothesis:vision_msgs/BoundingBox2D:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg" NAME_WE)
 add_custom_target(_depthai_ros_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg" "std_msgs/Header:geometry_msgs/Point:vision_msgs/BoundingBox2D:vision_msgs/ObjectHypothesis:geometry_msgs/Pose2D:depthai_ros_msgs/SpatialDetection"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "depthai_ros_msgs" "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg" "std_msgs/Header:vision_msgs/ObjectHypothesis:geometry_msgs/Point:depthai_ros_msgs/SpatialDetection:geometry_msgs/Pose2D:vision_msgs/BoundingBox2D"
 )
 
 get_filename_component(_filename "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/srv/TriggerNamed.srv" NAME_WE)
@@ -67,25 +67,25 @@ _generate_msg_cpp(depthai_ros_msgs
 _generate_msg_cpp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_cpp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_cpp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_cpp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/depthai_ros_msgs
 )
 
@@ -148,25 +148,25 @@ _generate_msg_eus(depthai_ros_msgs
 _generate_msg_eus(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_eus(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_eus(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_eus(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/depthai_ros_msgs
 )
 
@@ -229,25 +229,25 @@ _generate_msg_lisp(depthai_ros_msgs
 _generate_msg_lisp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_lisp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_lisp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_lisp(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/depthai_ros_msgs
 )
 
@@ -310,25 +310,25 @@ _generate_msg_nodejs(depthai_ros_msgs
 _generate_msg_nodejs(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_nodejs(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_nodejs(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_nodejs(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/depthai_ros_msgs
 )
 
@@ -391,25 +391,25 @@ _generate_msg_py(depthai_ros_msgs
 _generate_msg_py(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_py(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmarkArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/HandLandmark.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_py(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/depthai_ros_msgs
 )
 _generate_msg_py(depthai_ros_msgs
   "/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/ObjectHypothesis.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose2D.msg;/opt/ros/noetic/share/vision_msgs/cmake/../msg/BoundingBox2D.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/depthai_ros_msgs
 )
 
