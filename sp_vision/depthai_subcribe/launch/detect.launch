@@ -1,0 +1,4 @@
+<launch>
+    <node name="ore_detect" pkg="depthai_subcribe" type="ore_subscribe.py" />     
+    <node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
+</launch>

@@ -2,6 +2,7 @@
 #include "manipulator_control/scene_generate.h"
 #include <std_msgs/Float64MultiArray.h>
 #include "sp_common/SingleJointWrite.h"
+#include "sp_common/DbusData.h"
 
 void pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, manipulator_control::Manipulator *manipulator)
 {
@@ -23,6 +24,8 @@ void single_state_callback(const sp_common::SingleJointWrite::ConstPtr &state_, 
     num = state_->num;
     manipulator->singlewrite(state, num);
 }
+
+// void remote_control_callback(const sp_common::DbusData::ConstPtr &data_, )
 
 // void remote_control_callback(const sp_common::RCData::ConstPtr& RCData_, const sp_control::RCData & RCData)
 //{
@@ -82,7 +85,7 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     manipulator_->goal("home");
     manipulator_->move_execute();
 }
-/*
+
 int main(int argc, char **argv)
 {
 
@@ -106,17 +109,29 @@ int main(int argc, char **argv)
     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub", 10, boost::bind(&pose_callback, _1, &manipulator_));
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
+    // ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &manipulator_));
     spinner.start();
     moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
     scene.add(ore_.object, initial_pose);
     scene.attach(ore_, grip_group_interface);
     // scene.generate(sink_id, initial_pose, sink);
+    // moveit_visual_tools::MoveitVisualTool visual_tools("link7");
 
     if (manipulator_.init())
     {
         while (ros::ok())
         {
-            manipulator_.read();
+            // if () // go home
+            manipulator_.goal("home");
+            // else if () // go forward grip
+
+            // else if () // go left grip
+
+            // else if () // go
+
+            // if ()
+            // auto_take_silver_ore(*manipulator_, target_pose);
+            // manipulator_.read();
             // manipulator_.goal("grip");
             // manipulator_.move_execute();
             manipulator_.suck(true);
@@ -135,9 +150,9 @@ int main(int argc, char **argv)
         }
     }
     return 0;
-}*/
+}
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
 
     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
@@ -180,6 +195,7 @@ int main(int argc, char **argv)
     spinner.start();
     if (manipulator_.init())
     {
+
         manipulator_.read();
         manipulator_.goal("home");
         manipulator_.move_execute();
@@ -243,11 +259,11 @@ int main(int argc, char **argv)
         manipulator_.read();
         manipulator_.goal("home");
         manipulator_.move_execute();
-        */
+
     }
     return 0;
 }
-
+*/
 /*
 int main(int argc, char **argv)
 {

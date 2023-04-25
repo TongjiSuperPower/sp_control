@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: depthai_ros_msgs
+Description: Description of depthai_ros_msgs
+Version: 2.6.4
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs message_runtime sensor_msgs std_msgs vision_msgs

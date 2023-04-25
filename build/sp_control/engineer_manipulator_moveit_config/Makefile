@@ -171,20 +171,6 @@ depend:
 	cd /home/adminpc/catkin_ws/src/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-# Convenience name for target.
-sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/rule:
-	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/rule
-.PHONY : sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/rule
-
-# Convenience name for target.
-_catkin_empty_exported_target: sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/rule
-.PHONY : _catkin_empty_exported_target
-
-# fast build rule for target.
-_catkin_empty_exported_target/fast:
-	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/build.make sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/build
-.PHONY : _catkin_empty_exported_target/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -198,7 +184,6 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
-	@echo "... _catkin_empty_exported_target"
 .PHONY : help
 
 

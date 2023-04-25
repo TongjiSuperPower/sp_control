@@ -68,18 +68,27 @@ void DBus::init(const char *serial)
   }
 
   // Even parity(8E1):
+  /*
   options.c_cflag &= ~CBAUD;
   options.c_cflag |= B115200;
-
-  // options.c_cflag |= PARENB;
   options.c_cflag &= ~PARENB;
-  // options.c_cflag &= ~PARODD;
   options.c_cflag |= CSTOPB;
   options.c_cflag &= ~CSIZE;
   options.c_cflag |= CS8;
-
   options.c_ispeed = 115200;
   options.c_ospeed = 115200;
+  */
+  options.c_cflag &= ~CBAUD;
+  options.c_cflag |= BOTHER;
+
+  options.c_cflag |= PARENB;
+  options.c_cflag &= ~PARODD;
+  options.c_cflag &= ~CSTOPB;
+  options.c_cflag &= ~CSIZE;
+  options.c_cflag |= CS8;
+
+  options.c_ispeed = 100000;
+  options.c_ospeed = 100000;
   options.c_iflag &= ~(IXON | IXOFF | IXANY);
   options.c_iflag &= ~IGNBRK; // disable break processing
 
@@ -192,8 +201,8 @@ void DBus::getData(sp_common::DbusData *d_bus_data) const
 {
   if (is_success)
   {
-    d_bus_data->ch_r_x = static_cast<double>(d_bus_data_.ch0 / 660.0);
-    d_bus_data->ch_r_y = static_cast<double>(d_bus_data_.ch1 / 660.0);
+    d_bus_data->ch_r_x = static_cast<double>(d_bus_data_.ch1 / 660.0);
+    d_bus_data->ch_r_y = static_cast<double>(d_bus_data_.ch0 / 660.0);
     d_bus_data->ch_l_x = static_cast<double>(d_bus_data_.ch2 / 660.0);
     d_bus_data->ch_l_y = static_cast<double>(d_bus_data_.ch3 / 660.0);
     d_bus_data->m_x = static_cast<double>(d_bus_data_.x / 1600.0);

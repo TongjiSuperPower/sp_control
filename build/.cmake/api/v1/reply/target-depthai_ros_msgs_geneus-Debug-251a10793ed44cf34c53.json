@@ -1,0 +1,69 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"include",
+			"generate_messages",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"build/sp_vision/depthai-ros/depthai_ros_msgs/cmake/depthai_ros_msgs-genmsg.cmake",
+			"/opt/ros/noetic/share/genmsg/cmake/genmsg-extras.cmake",
+			"sp_vision/depthai-ros/depthai_ros_msgs/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 43,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 307,
+				"parent" : 1
+			},
+			{
+				"file" : 0,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 215,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 216,
+				"parent" : 3
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "depthai_ros_msgs_generate_messages_eus::@26872ff2d4aec390a2dd"
+		}
+	],
+	"id" : "depthai_ros_msgs_geneus::@26872ff2d4aec390a2dd",
+	"name" : "depthai_ros_msgs_geneus",
+	"paths" : 
+	{
+		"build" : "sp_vision/depthai-ros/depthai_ros_msgs",
+		"source" : "sp_vision/depthai-ros/depthai_ros_msgs"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

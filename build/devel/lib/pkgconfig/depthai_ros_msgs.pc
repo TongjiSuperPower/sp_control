@@ -1,0 +1,8 @@
+prefix=/home/adminpc/catkin_ws/src/build/devel
+
+Name: depthai_ros_msgs
+Description: Description of depthai_ros_msgs
+Version: 2.6.4
+Cflags: -I/home/adminpc/catkin_ws/src/build/devel/include
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs message_runtime sensor_msgs std_msgs vision_msgs

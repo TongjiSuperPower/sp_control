@@ -55,9 +55,10 @@ DBusNode::DBusNode()
 {
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
   cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+  cmd_pos_pub_ = nh_.advertise<geometry_msgs::Vector3>("/cmd_pos", 1);
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
-
   dbus_.init(serial_port_.data());
+  cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
 }
 
 void DBusNode::run()
@@ -70,10 +71,40 @@ void DBusNode::run()
   {
     dbus_.getData(&dbus_cmd_);
     dbus_pub_.publish(dbus_cmd_);
-    ROS_INFO_STREAM(dbus_cmd_.ch_r_x);
-    cmd_vel_.linear.x = dbus_cmd_.ch_r_x;
-    cmd_vel_.linear.y = dbus_cmd_.ch_r_y;
-    cmd_vel_.angular.z = dbus_cmd_.ch_l_x;
+    if (dbus_cmd_.s_r == 1) // right paddle up,using remote control
+    {
+      cmd_vel_.linear.x = x_coefficient * dbus_cmd_.ch_r_x;
+      cmd_vel_.linear.y = -y_coefficient * dbus_cmd_.ch_r_y;
+      cmd_vel_.angular.z = -z_coefficient * dbus_cmd_.ch_l_x;
+      cmd_pos_.y += 0.05 * dbus_cmd_.ch_l_y;
+    }
+    /*else if (dbus_cmd_.s_r == 3) // right paddle middle, using keyboard control
+    {
+      if (dbus_cmd_.key_w) // forward
+        cmd_vel_.linear.x = x_coefficient;
+      else if (dbus_cmd_.key_s) // back
+        cmd_vel_.linear.x = -x_coefficient;
+      else if (dbus_cmd_.key_a) // left
+        cmd_vel_.linear.y = y_coefficient;
+      else if (dbus_cmd_.key_d) // right
+        cmd_vel_.linear.z = -y_coefficient;
+      else if (dbus_cmd_.key_q) // counterclockwise
+        cmd_vel_.angular.z = z_coefficient;
+      else if (dbus_cmd_.key_e) // clockwise
+        cmd_vel_.angular.z = -z_coefficient;
+
+      cmd_pos_.x += dbus_cmd_.m_x;
+      cmd_pos_.y += dbus_cmd_.m_y;
+      cmd_pos_.z += dbus_cmd_.m_z;
+    }*/
+
+    else if (dbus_cmd_.s_r == 2) // right paddle down, stop chassis
+    {
+      cmd_vel_.linear.x = 0;
+      cmd_vel_.linear.y = 0;
+      cmd_vel_.angular.z = 0;
+    }
     cmd_vel_pub_.publish(cmd_vel_);
+    cmd_pos_pub_.publish(cmd_pos_);
   }
 }

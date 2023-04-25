@@ -1,0 +1,249 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"include",
+			"generate_messages",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"build/sp_vision/depthai-ros/depthai_ros_msgs/cmake/depthai_ros_msgs-genmsg.cmake",
+			"/opt/ros/noetic/share/genmsg/cmake/genmsg-extras.cmake",
+			"sp_vision/depthai-ros/depthai_ros_msgs/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 43,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 307,
+				"parent" : 1
+			},
+			{
+				"file" : 0,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 274,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 520,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 514,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 517,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 523,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 281,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 283,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 285,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 287,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 289,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 291,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 293,
+				"parent" : 3
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "std_msgs_generate_messages_lisp::@875ff8901a35d1ebe8c3"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "geometry_msgs_generate_messages_lisp::@bbf4cb0a0dc6c336e214"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "sensor_msgs_generate_messages_lisp::@65fcd4882f83acc91008"
+		},
+		{
+			"backtrace" : 8,
+			"id" : "vision_msgs_generate_messages_lisp::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_HandLandmark::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_SpatialDetection::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_TriggerNamed::@26872ff2d4aec390a2dd"
+		},
+		{
+			"backtrace" : 15,
+			"id" : "_depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop::@26872ff2d4aec390a2dd"
+		}
+	],
+	"id" : "depthai_ros_msgs_generate_messages_lisp::@26872ff2d4aec390a2dd",
+	"name" : "depthai_ros_msgs_generate_messages_lisp",
+	"paths" : 
+	{
+		"build" : "sp_vision/depthai-ros/depthai_ros_msgs",
+		"source" : "sp_vision/depthai-ros/depthai_ros_msgs"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"isGenerated" : true,
+			"path" : "build/sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_lisp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/msg/AutoFocusCtrl.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/msg/HandLandmark.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/msg/HandLandmarkArray.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/msg/SpatialDetection.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/msg/SpatialDetectionArray.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/srv/NormalizedImageCrop.lisp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/devel/share/common-lisp/ros/depthai_ros_msgs/srv/TriggerNamed.lisp.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

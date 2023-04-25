@@ -40,15 +40,21 @@
 #include "dbus.h"
 #include <ros/ros.h>
 #include <sp_common/DbusData.h>
+
+#define x_coefficient 2.0
+#define y_coefficient 2.0
+#define z_coefficient 1.5
 class DBusNode
 {
 private:
   ros::NodeHandle nh_;
   ros::Publisher dbus_pub_;
   ros::Publisher cmd_vel_pub_;
+  ros::Publisher cmd_pos_pub_;
   std::string serial_port_;
   sp_common::DbusData dbus_cmd_;
   geometry_msgs::Twist cmd_vel_;
+  geometry_msgs::Vector3 cmd_pos_;
   DBus dbus_{};
 
 public:

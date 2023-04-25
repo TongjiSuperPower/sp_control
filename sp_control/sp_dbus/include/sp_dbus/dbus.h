@@ -41,7 +41,7 @@
 #include <cstdint>
 #include <sp_common/DbusData.h>
 #include <geometry_msgs/Twist.h>
-
+#include <geometry_msgs/Vector3.h>
 typedef struct
 {
   int16_t ch0;

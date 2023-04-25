@@ -298,7 +298,7 @@ _catkin_empty_exported_target: cmake_check_build_system
 
 # fast build rule for target.
 _catkin_empty_exported_target/fast:
-	$(MAKE) $(MAKESILENT) -f sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/build.make sp_control/engineer_manipulator_moveit_config/CMakeFiles/_catkin_empty_exported_target.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai-ros/CMakeFiles/_catkin_empty_exported_target.dir/build.make sp_vision/depthai-ros/depthai-ros/CMakeFiles/_catkin_empty_exported_target.dir/build
 .PHONY : _catkin_empty_exported_target/fast
 
 #=============================================================================
@@ -311,7 +311,7 @@ roscpp_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_cpp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make sp_common/CMakeFiles/roscpp_generate_messages_cpp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_cpp.dir/build
 .PHONY : roscpp_generate_messages_cpp/fast
 
 #=============================================================================
@@ -324,7 +324,7 @@ roscpp_generate_messages_eus: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_eus/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roscpp_generate_messages_eus.dir/build.make sp_common/CMakeFiles/roscpp_generate_messages_eus.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_eus.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_eus.dir/build
 .PHONY : roscpp_generate_messages_eus/fast
 
 #=============================================================================
@@ -337,7 +337,7 @@ roscpp_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_lisp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make sp_common/CMakeFiles/roscpp_generate_messages_lisp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_lisp.dir/build
 .PHONY : roscpp_generate_messages_lisp/fast
 
 #=============================================================================
@@ -350,7 +350,7 @@ roscpp_generate_messages_nodejs: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_nodejs/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make sp_common/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
 .PHONY : roscpp_generate_messages_nodejs/fast
 
 #=============================================================================
@@ -363,7 +363,7 @@ roscpp_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 roscpp_generate_messages_py/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/roscpp_generate_messages_py.dir/build.make sp_common/CMakeFiles/roscpp_generate_messages_py.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_py.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
 
 #=============================================================================
@@ -376,7 +376,7 @@ rosgraph_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_cpp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make sp_common/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -389,7 +389,7 @@ rosgraph_msgs_generate_messages_eus: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_eus/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make sp_common/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
 .PHONY : rosgraph_msgs_generate_messages_eus/fast
 
 #=============================================================================
@@ -402,7 +402,7 @@ rosgraph_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_lisp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make sp_common/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -415,7 +415,7 @@ rosgraph_msgs_generate_messages_nodejs: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_nodejs/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make sp_common/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
 .PHONY : rosgraph_msgs_generate_messages_nodejs/fast
 
 #=============================================================================
@@ -428,7 +428,7 @@ rosgraph_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 rosgraph_msgs_generate_messages_py/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make sp_common/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 #=============================================================================
@@ -441,7 +441,7 @@ std_msgs_generate_messages_cpp: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_cpp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make sp_common/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
 .PHONY : std_msgs_generate_messages_cpp/fast
 
 #=============================================================================
@@ -454,7 +454,7 @@ std_msgs_generate_messages_eus: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_eus/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make sp_common/CMakeFiles/std_msgs_generate_messages_eus.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_eus.dir/build
 .PHONY : std_msgs_generate_messages_eus/fast
 
 #=============================================================================
@@ -467,7 +467,7 @@ std_msgs_generate_messages_lisp: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_lisp/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make sp_common/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 .PHONY : std_msgs_generate_messages_lisp/fast
 
 #=============================================================================
@@ -480,7 +480,7 @@ std_msgs_generate_messages_nodejs: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_nodejs/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make sp_common/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
 .PHONY : std_msgs_generate_messages_nodejs/fast
 
 #=============================================================================
@@ -493,7 +493,7 @@ std_msgs_generate_messages_py: cmake_check_build_system
 
 # fast build rule for target.
 std_msgs_generate_messages_py/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/std_msgs_generate_messages_py.dir/build.make sp_common/CMakeFiles/std_msgs_generate_messages_py.dir/build
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_py.dir/build.make sp_vision/depthai_subcribe/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
 
 #=============================================================================
@@ -1992,6 +1992,383 @@ sentry_communicator/fast:
 .PHONY : sentry_communicator/fast
 
 #=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_cpp
+
+# Build rule for target.
+vision_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_cpp
+.PHONY : vision_msgs_generate_messages_cpp
+
+# fast build rule for target.
+vision_msgs_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_cpp.dir/build
+.PHONY : vision_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_eus
+
+# Build rule for target.
+vision_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_eus
+.PHONY : vision_msgs_generate_messages_eus
+
+# fast build rule for target.
+vision_msgs_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_eus.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_eus.dir/build
+.PHONY : vision_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_lisp
+
+# Build rule for target.
+vision_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_lisp
+.PHONY : vision_msgs_generate_messages_lisp
+
+# fast build rule for target.
+vision_msgs_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_lisp.dir/build
+.PHONY : vision_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_nodejs
+
+# Build rule for target.
+vision_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_nodejs
+.PHONY : vision_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+vision_msgs_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_nodejs.dir/build
+.PHONY : vision_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named vision_msgs_generate_messages_py
+
+# Build rule for target.
+vision_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vision_msgs_generate_messages_py
+.PHONY : vision_msgs_generate_messages_py
+
+# fast build rule for target.
+vision_msgs_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_py.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/vision_msgs_generate_messages_py.dir/build
+.PHONY : vision_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages
+.PHONY : depthai_ros_msgs_generate_messages
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages.dir/build
+.PHONY : depthai_ros_msgs_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_HandLandmark
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_HandLandmark: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_HandLandmark
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_HandLandmark
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_HandLandmark/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmark.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_HandLandmark/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_SpatialDetection
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_SpatialDetection: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_SpatialDetection
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_SpatialDetection
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_SpatialDetection/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetection.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetection.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_SpatialDetection/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_TriggerNamed: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_TriggerNamed/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_TriggerNamed.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_TriggerNamed.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed/fast
+
+#=============================================================================
+# Target rules for targets named _depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop
+
+# Build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop
+
+# fast build rule for target.
+_depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop.dir/build
+.PHONY : _depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages_cpp
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages_cpp
+.PHONY : depthai_ros_msgs_generate_messages_cpp
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_cpp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_cpp.dir/build
+.PHONY : depthai_ros_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_gencpp
+
+# Build rule for target.
+depthai_ros_msgs_gencpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_gencpp
+.PHONY : depthai_ros_msgs_gencpp
+
+# fast build rule for target.
+depthai_ros_msgs_gencpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_gencpp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_gencpp.dir/build
+.PHONY : depthai_ros_msgs_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages_eus
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages_eus
+.PHONY : depthai_ros_msgs_generate_messages_eus
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_eus.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_eus.dir/build
+.PHONY : depthai_ros_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_geneus
+
+# Build rule for target.
+depthai_ros_msgs_geneus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_geneus
+.PHONY : depthai_ros_msgs_geneus
+
+# fast build rule for target.
+depthai_ros_msgs_geneus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_geneus.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_geneus.dir/build
+.PHONY : depthai_ros_msgs_geneus/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages_lisp
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages_lisp
+.PHONY : depthai_ros_msgs_generate_messages_lisp
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_lisp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_lisp.dir/build
+.PHONY : depthai_ros_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_genlisp
+
+# Build rule for target.
+depthai_ros_msgs_genlisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_genlisp
+.PHONY : depthai_ros_msgs_genlisp
+
+# fast build rule for target.
+depthai_ros_msgs_genlisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_genlisp.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_genlisp.dir/build
+.PHONY : depthai_ros_msgs_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages_nodejs
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages_nodejs
+.PHONY : depthai_ros_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_nodejs.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_nodejs.dir/build
+.PHONY : depthai_ros_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_gennodejs
+
+# Build rule for target.
+depthai_ros_msgs_gennodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_gennodejs
+.PHONY : depthai_ros_msgs_gennodejs
+
+# fast build rule for target.
+depthai_ros_msgs_gennodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_gennodejs.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_gennodejs.dir/build
+.PHONY : depthai_ros_msgs_gennodejs/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_generate_messages_py
+
+# Build rule for target.
+depthai_ros_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_generate_messages_py
+.PHONY : depthai_ros_msgs_generate_messages_py
+
+# fast build rule for target.
+depthai_ros_msgs_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_py.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_generate_messages_py.dir/build
+.PHONY : depthai_ros_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_msgs_genpy
+
+# Build rule for target.
+depthai_ros_msgs_genpy: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_msgs_genpy
+.PHONY : depthai_ros_msgs_genpy
+
+# fast build rule for target.
+depthai_ros_msgs_genpy/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_genpy.dir/build.make sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/depthai_ros_msgs_genpy.dir/build
+.PHONY : depthai_ros_msgs_genpy/fast
+
+#=============================================================================
+# Target rules for targets named stereo_msgs_generate_messages_cpp
+
+# Build rule for target.
+stereo_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_msgs_generate_messages_cpp
+.PHONY : stereo_msgs_generate_messages_cpp
+
+# fast build rule for target.
+stereo_msgs_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_cpp.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_cpp.dir/build
+.PHONY : stereo_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named stereo_msgs_generate_messages_eus
+
+# Build rule for target.
+stereo_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_msgs_generate_messages_eus
+.PHONY : stereo_msgs_generate_messages_eus
+
+# fast build rule for target.
+stereo_msgs_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_eus.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_eus.dir/build
+.PHONY : stereo_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named stereo_msgs_generate_messages_lisp
+
+# Build rule for target.
+stereo_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_msgs_generate_messages_lisp
+.PHONY : stereo_msgs_generate_messages_lisp
+
+# fast build rule for target.
+stereo_msgs_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_lisp.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_lisp.dir/build
+.PHONY : stereo_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named stereo_msgs_generate_messages_nodejs
+
+# Build rule for target.
+stereo_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_msgs_generate_messages_nodejs
+.PHONY : stereo_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+stereo_msgs_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_nodejs.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_nodejs.dir/build
+.PHONY : stereo_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named stereo_msgs_generate_messages_py
+
+# Build rule for target.
+stereo_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_msgs_generate_messages_py
+.PHONY : stereo_msgs_generate_messages_py
+
+# fast build rule for target.
+stereo_msgs_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_py.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/stereo_msgs_generate_messages_py.dir/build
+.PHONY : stereo_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named depthai_bridge
+
+# Build rule for target.
+depthai_bridge: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_bridge
+.PHONY : depthai_bridge
+
+# fast build rule for target.
+depthai_bridge/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_bridge/CMakeFiles/depthai_bridge.dir/build.make sp_vision/depthai-ros/depthai_bridge/CMakeFiles/depthai_bridge.dir/build
+.PHONY : depthai_bridge/fast
+
+#=============================================================================
 # Target rules for targets named moveit_msgs_generate_messages_cpp
 
 # Build rule for target.
@@ -2356,6 +2733,162 @@ manipulator_control/fast:
 .PHONY : manipulator_control/fast
 
 #=============================================================================
+# Target rules for targets named nodelet_stereo
+
+# Build rule for target.
+nodelet_stereo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nodelet_stereo
+.PHONY : nodelet_stereo
+
+# fast build rule for target.
+nodelet_stereo/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/nodelet_stereo.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/nodelet_stereo.dir/build
+.PHONY : nodelet_stereo/fast
+
+#=============================================================================
+# Target rules for targets named crop_control_service
+
+# Build rule for target.
+crop_control_service: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 crop_control_service
+.PHONY : crop_control_service
+
+# fast build rule for target.
+crop_control_service/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/crop_control_service.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/crop_control_service.dir/build
+.PHONY : crop_control_service/fast
+
+#=============================================================================
+# Target rules for targets named mobilenet_node
+
+# Build rule for target.
+mobilenet_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mobilenet_node
+.PHONY : mobilenet_node
+
+# fast build rule for target.
+mobilenet_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/mobilenet_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/mobilenet_node.dir/build
+.PHONY : mobilenet_node/fast
+
+#=============================================================================
+# Target rules for targets named rgb_node
+
+# Build rule for target.
+rgb_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rgb_node
+.PHONY : rgb_node
+
+# fast build rule for target.
+rgb_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_node.dir/build
+.PHONY : rgb_node/fast
+
+#=============================================================================
+# Target rules for targets named rgb_stereo_node
+
+# Build rule for target.
+rgb_stereo_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rgb_stereo_node
+.PHONY : rgb_stereo_node
+
+# fast build rule for target.
+rgb_stereo_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_stereo_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_stereo_node.dir/build
+.PHONY : rgb_stereo_node/fast
+
+#=============================================================================
+# Target rules for targets named rgb_stereo_publisher
+
+# Build rule for target.
+rgb_stereo_publisher: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rgb_stereo_publisher
+.PHONY : rgb_stereo_publisher
+
+# fast build rule for target.
+rgb_stereo_publisher/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_stereo_publisher.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_stereo_publisher.dir/build
+.PHONY : rgb_stereo_publisher/fast
+
+#=============================================================================
+# Target rules for targets named rgb_subscriber_node
+
+# Build rule for target.
+rgb_subscriber_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rgb_subscriber_node
+.PHONY : rgb_subscriber_node
+
+# fast build rule for target.
+rgb_subscriber_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_subscriber_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/rgb_subscriber_node.dir/build
+.PHONY : rgb_subscriber_node/fast
+
+#=============================================================================
+# Target rules for targets named stereo_inertial_node
+
+# Build rule for target.
+stereo_inertial_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_inertial_node
+.PHONY : stereo_inertial_node
+
+# fast build rule for target.
+stereo_inertial_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/stereo_inertial_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/stereo_inertial_node.dir/build
+.PHONY : stereo_inertial_node/fast
+
+#=============================================================================
+# Target rules for targets named stereo_node
+
+# Build rule for target.
+stereo_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 stereo_node
+.PHONY : stereo_node
+
+# fast build rule for target.
+stereo_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/stereo_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/stereo_node.dir/build
+.PHONY : stereo_node/fast
+
+#=============================================================================
+# Target rules for targets named yolov4_spatial_node
+
+# Build rule for target.
+yolov4_spatial_node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 yolov4_spatial_node
+.PHONY : yolov4_spatial_node
+
+# fast build rule for target.
+yolov4_spatial_node/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_examples/CMakeFiles/yolov4_spatial_node.dir/build.make sp_vision/depthai-ros/depthai_examples/CMakeFiles/yolov4_spatial_node.dir/build
+.PHONY : yolov4_spatial_node/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_driver_gencfg
+
+# Build rule for target.
+depthai_ros_driver_gencfg: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_driver_gencfg
+.PHONY : depthai_ros_driver_gencfg
+
+# fast build rule for target.
+depthai_ros_driver_gencfg/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_driver/CMakeFiles/depthai_ros_driver_gencfg.dir/build.make sp_vision/depthai-ros/depthai_ros_driver/CMakeFiles/depthai_ros_driver_gencfg.dir/build
+.PHONY : depthai_ros_driver_gencfg/fast
+
+#=============================================================================
+# Target rules for targets named depthai_ros_driver
+
+# Build rule for target.
+depthai_ros_driver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 depthai_ros_driver
+.PHONY : depthai_ros_driver
+
+# fast build rule for target.
+depthai_ros_driver/fast:
+	$(MAKE) $(MAKESILENT) -f sp_vision/depthai-ros/depthai_ros_driver/CMakeFiles/depthai_ros_driver.dir/build.make sp_vision/depthai-ros/depthai_ros_driver/CMakeFiles/depthai_ros_driver.dir/build
+.PHONY : depthai_ros_driver/fast
+
+#=============================================================================
 # Target rules for targets named chassis_controller
 
 # Build rule for target.
@@ -2655,6 +3188,13 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... _catkin_empty_exported_target"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_AutoFocusCtrl"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_HandLandmark"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_HandLandmarkArray"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_NormalizedImageCrop"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_SpatialDetection"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray"
+	@echo "... _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
 	@echo "... _sp_common_generate_messages_check_deps_DbusData"
 	@echo "... _sp_common_generate_messages_check_deps_GpioData"
@@ -2691,6 +3231,18 @@ help:
 	@echo "... controller_manager_msgs_generate_messages_lisp"
 	@echo "... controller_manager_msgs_generate_messages_nodejs"
 	@echo "... controller_manager_msgs_generate_messages_py"
+	@echo "... depthai_ros_driver_gencfg"
+	@echo "... depthai_ros_msgs_gencpp"
+	@echo "... depthai_ros_msgs_generate_messages"
+	@echo "... depthai_ros_msgs_generate_messages_cpp"
+	@echo "... depthai_ros_msgs_generate_messages_eus"
+	@echo "... depthai_ros_msgs_generate_messages_lisp"
+	@echo "... depthai_ros_msgs_generate_messages_nodejs"
+	@echo "... depthai_ros_msgs_generate_messages_py"
+	@echo "... depthai_ros_msgs_geneus"
+	@echo "... depthai_ros_msgs_genlisp"
+	@echo "... depthai_ros_msgs_gennodejs"
+	@echo "... depthai_ros_msgs_genpy"
 	@echo "... download_extra_data"
 	@echo "... doxygen"
 	@echo "... dynamic_reconfigure_gencfg"
@@ -2803,6 +3355,11 @@ help:
 	@echo "... std_srvs_generate_messages_lisp"
 	@echo "... std_srvs_generate_messages_nodejs"
 	@echo "... std_srvs_generate_messages_py"
+	@echo "... stereo_msgs_generate_messages_cpp"
+	@echo "... stereo_msgs_generate_messages_eus"
+	@echo "... stereo_msgs_generate_messages_lisp"
+	@echo "... stereo_msgs_generate_messages_nodejs"
+	@echo "... stereo_msgs_generate_messages_py"
 	@echo "... tests"
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... tf2_msgs_generate_messages_eus"
@@ -2824,12 +3381,20 @@ help:
 	@echo "... trajectory_msgs_generate_messages_lisp"
 	@echo "... trajectory_msgs_generate_messages_nodejs"
 	@echo "... trajectory_msgs_generate_messages_py"
+	@echo "... vision_msgs_generate_messages_cpp"
+	@echo "... vision_msgs_generate_messages_eus"
+	@echo "... vision_msgs_generate_messages_lisp"
+	@echo "... vision_msgs_generate_messages_nodejs"
+	@echo "... vision_msgs_generate_messages_py"
 	@echo "... visualization_msgs_generate_messages_cpp"
 	@echo "... visualization_msgs_generate_messages_eus"
 	@echo "... visualization_msgs_generate_messages_lisp"
 	@echo "... visualization_msgs_generate_messages_nodejs"
 	@echo "... visualization_msgs_generate_messages_py"
 	@echo "... chassis_controller"
+	@echo "... crop_control_service"
+	@echo "... depthai_bridge"
+	@echo "... depthai_ros_driver"
 	@echo "... gimbal_controller"
 	@echo "... gmock"
 	@echo "... gmock_main"
@@ -2840,10 +3405,19 @@ help:
 	@echo "... laserscan_multi_merger"
 	@echo "... laserscan_virtualizer"
 	@echo "... manipulator_control"
+	@echo "... mobilenet_node"
+	@echo "... nodelet_stereo"
+	@echo "... rgb_node"
+	@echo "... rgb_stereo_node"
+	@echo "... rgb_stereo_publisher"
+	@echo "... rgb_subscriber_node"
 	@echo "... sentry_communicator"
 	@echo "... sp_common"
 	@echo "... sp_dbus"
 	@echo "... sp_hw"
+	@echo "... stereo_inertial_node"
+	@echo "... stereo_node"
+	@echo "... yolov4_spatial_node"
 .PHONY : help
 
 
