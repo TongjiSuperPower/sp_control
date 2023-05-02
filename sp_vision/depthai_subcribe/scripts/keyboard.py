@@ -27,9 +27,9 @@ def keyboardLoop():
         finally :
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         if ch == 'i':
-            msg.data = 3000
+            msg.data = 2000
         if ch == 'o':
-            msg.data = 12000
+            msg.data = 10000
         elif ch == 'q':
             exit()
         pub.publish(msg) 

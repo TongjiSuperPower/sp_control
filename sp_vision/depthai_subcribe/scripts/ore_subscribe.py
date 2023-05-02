@@ -418,7 +418,6 @@ class ImageConverter:
             # 把轮廓描绘出来，并绘制中心点
             # cv2.drawContours(self.cv_image, [c], -1, (0, 0, 255), 2)
                 cv2.drawContours(self.cv_image, contours_new_n, -1, (0, 0, 255), 2)
-                print(1)
 
                 # cv2.circle(self.cv_image, (cX, cY), 1, (0, 0, 255), -1)
                 
