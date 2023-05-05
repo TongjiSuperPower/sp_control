@@ -43,7 +43,7 @@ namespace sentry_communicator
         ros::Publisher lowercom_data_pub;
         std::mutex mutex_;
 
-        nav_msgs::Odometry lower_com_data;
+        geometry_msgs::Point lower_com_data;
         tf::TransformBroadcaster tf_yaw2chassis;
         
 
@@ -54,7 +54,7 @@ namespace sentry_communicator
         uint8_t *can_data_;
         can_frame frame_;
         uint16_t data;
-        float yaw;
+        uint16_t Robot_ID,Keyboard;
     };
 
     // TODO(Lithesh) : the zero-drift should be concerned.
