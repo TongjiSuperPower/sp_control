@@ -308,25 +308,25 @@ class ImageConverter:
             cx = spatials['x']
             cy = spatials['y']
             cz = spatials['z']
-        else:
-                cx = 0
-                cy = 0
-                cz = 0
-                qw = 0
-                qx = 0
-                qy = 0
-                qz = 0
+        # else:
+        #         cx = 0
+        #         cy = 0
+        #         cz = 0
+        #         qw = 0
+        #         qx = 0
+        #         qy = 0
+        #         qz = 0
 
-        objPose = Pose()
-        objPose.position.x = cx
-        objPose.position.y = cy
-        objPose.position.z = cz
-        objPose.orientation.w = qw 
-        objPose.orientation.x = qx 
-        objPose.orientation.y = qy 
-        objPose.orientation.z = qz 
-        self.target_pub.publish(objPose)
-        # print(objPose)
+            objPose = Pose()
+            objPose.position.x = cx
+            objPose.position.y = cy
+            objPose.position.z = cz
+            objPose.orientation.w = qw 
+            objPose.orientation.x = qx 
+            objPose.orientation.y = qy 
+            objPose.orientation.z = qz 
+            self.target_pub.publish(objPose)
+            # print(objPose)
 
         # 再将opencv格式额数据转换成ros image格式的数据发布
         try:
