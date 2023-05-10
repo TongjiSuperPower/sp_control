@@ -455,7 +455,7 @@
       name="vacuum_gripper_joint"
       type="fixed">
       <origin
-        xyz="0 0 0.054"
+        xyz="0 0 0.048"
         rpy="0 0 0" />
       <parent
         link="link7" />

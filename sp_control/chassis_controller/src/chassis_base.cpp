@@ -38,7 +38,7 @@ namespace chassis_controller
 
         ramp_x_ = new sp_common::RampFilter<double>(2.5, 0.001);
         ramp_y_ = new sp_common::RampFilter<double>(2.5, 0.001);
-        ramp_w_ = new sp_common::RampFilter<double>(2.5, 0.001);
+        ramp_z_ = new sp_common::RampFilter<double>(5, 0.001);
         setOdomPubFields(root_nh, controller_nh);
 
         return true;
@@ -60,9 +60,10 @@ namespace chassis_controller
 
         ramp_x_->input(cmd_vel.linear.x);
         ramp_y_->input(cmd_vel.linear.y);
+        ramp_z_->input(cmd_vel.angular.z);
         vel_cmd_.x = ramp_x_->output();
         vel_cmd_.y = ramp_y_->output();
-        vel_cmd_.z = cmd_vel.angular.z;
+        vel_cmd_.z = ramp_z_->output();
 
         updateOdom(time, period);
         moveJoint(time, period);

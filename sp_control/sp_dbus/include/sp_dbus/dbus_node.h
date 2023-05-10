@@ -40,6 +40,7 @@
 #include "dbus.h"
 #include <ros/ros.h>
 #include <sp_common/DbusData.h>
+#include <sp_common/SingleJointWrite.h>
 
 #define chassis_x_coeff 2.0
 #define chassis_y_coeff 2.0
@@ -49,6 +50,7 @@
 #define gimbal_y_coeff_kb 7
 #define gimbal_y_coeff_rc 0.07
 #define gimbal_z_coeff 2.5
+#define joint_coeff 0.05
 class DBusNode
 {
 private:

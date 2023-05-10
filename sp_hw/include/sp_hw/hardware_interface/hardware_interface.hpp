@@ -62,17 +62,20 @@ namespace sp_hw
 
         // joint_handle
         std::vector<hardware_interface::JointHandle> effort_joint_handles_;
+        std::vector<hardware_interface::JointHandle> position_joint_handles_;
         // ActuatorParam & Actuator Interface
         std::unordered_map<std::string, ActCoeff> type2act_coeffs_;
         std::unordered_map<std::string, std::unordered_map<int, ActData>> bus_id2act_data_;
         std::unordered_map<std::string, std::unordered_map<int, sp_control::GpioData>> bus_id2gpio_data_;
         hardware_interface::ActuatorStateInterface act_state_interface_;
         hardware_interface::EffortActuatorInterface effort_act_interface_;
+        hardware_interface::PositionActuatorInterface position_act_interface_;
         // Transmission
         std::unique_ptr<transmission_interface::TransmissionInterfaceLoader> transmission_iface_loader_;
         transmission_interface::RobotTransmissions robot_transmissions_;
         transmission_interface::ActuatorToJointStateInterface *act_to_jnt_state_;
         transmission_interface::JointToActuatorEffortInterface *jnt_to_act_effort_;
+        transmission_interface::JointToActuatorPositionInterface *jnt_to_act_pos_;
 
         // ActuatorState Publisher
         ros::Time last_publish_time_;

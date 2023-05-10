@@ -108,8 +108,8 @@ void DBusNode::run()
         cmd_pos_.y = 1.57;
       else if (cmd_pos_.y < -1.57)
         cmd_pos_.y = -1.57;
-      if (cmd_pos_.z > 0.235)
-        cmd_pos_.z = 0.235;
+      if (cmd_pos_.z > 0.220)
+        cmd_pos_.z = 0.220;
       else if (cmd_pos_.z < 0)
         cmd_pos_.z = 0;
     }

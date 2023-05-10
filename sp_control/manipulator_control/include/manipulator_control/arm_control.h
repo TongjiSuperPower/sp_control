@@ -3,9 +3,13 @@
 #include <sp_common/GpioData.h>
 #define PLANNING_GROUP_MANIPULATOR "engineer_manipulator"
 #define PLANNING_GROUP_GRIPPER "gripper"
+#include <moveit_visual_tools/moveit_visual_tools.h>
+
+#define joint_eff 0.03
 
 namespace manipulator_control
 {
+
     enum execution_mode
     {
         POSE,
@@ -34,6 +38,8 @@ namespace manipulator_control
 
         void singlewrite(double target_state_, int num);
 
+        void singleaddwrite(double delta_theta, int num);
+
         void CartesianPath(std::vector<geometry_msgs::Pose> waypoints);
 
         bool get_executed();
@@ -56,6 +62,7 @@ namespace manipulator_control
         execution_mode EXECUTION_MODE;
         bool executed;
         ros::NodeHandle nh_;
+        ros::Publisher pose_publisher_;
         ros::Publisher sucker_publisher_;
     };
 

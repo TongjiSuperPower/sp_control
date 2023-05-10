@@ -67,7 +67,7 @@ include sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_gene
 include sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray.dir/progress.make
 
 sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray:
-	cd /home/adminpc/catkin_ws/src/build/sp_vision/depthai-ros/depthai_ros_msgs && ../../../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py depthai_ros_msgs /home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg std_msgs/Header:vision_msgs/ObjectHypothesis:geometry_msgs/Point:depthai_ros_msgs/SpatialDetection:geometry_msgs/Pose2D:vision_msgs/BoundingBox2D
+	cd /home/adminpc/catkin_ws/src/build/sp_vision/depthai-ros/depthai_ros_msgs && ../../../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py depthai_ros_msgs /home/adminpc/catkin_ws/src/sp_vision/depthai-ros/depthai_ros_msgs/msg/SpatialDetectionArray.msg geometry_msgs/Point:vision_msgs/ObjectHypothesis:std_msgs/Header:geometry_msgs/Pose2D:vision_msgs/BoundingBox2D:depthai_ros_msgs/SpatialDetection
 
 _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray: sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray
 _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray: sp_vision/depthai-ros/depthai_ros_msgs/CMakeFiles/_depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray.dir/build.make

@@ -46,12 +46,14 @@ namespace sp_hw
         {
             ROS_ERROR("hardware_interface : Error occurred while loading Transmission in urdf");
             return false;
-        }
-        registerInterface(&gpio_command_interface_);
-        registerInterface(&gpio_state_interface_);
 
-        actuator_state_pub_.reset(
-            new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
+            registerInterface(&gpio_command_interface_);
+            registerInterface(&gpio_state_interface_);
+
+            actuator_state_pub_.reset(
+                new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
+        }
+
         return true;
     }
 
@@ -80,6 +82,7 @@ namespace sp_hw
         if (is_actuator_specified_)
             act_to_jnt_state_->propagate();
         //  Set all cmd to zero to avoid crazy soft limit oscillation when not controller loaded
+        // TODO :Test whether the following codes can be deleted
         for (auto effort_joint_handle_ : effort_joint_handles_)
             effort_joint_handle_.setCommand(0.);
     }
@@ -88,13 +91,21 @@ namespace sp_hw
     {
         if (is_actuator_specified_)
         {
-            jnt_to_act_effort_->propagate();
+            if (jnt_to_act_effort_)
+                jnt_to_act_effort_->propagate();
+            if (jnt_to_act_pos_)
+                jnt_to_act_pos_->propagate();
+
             for (auto &id2act_data : bus_id2act_data_)
                 for (auto &act_data : id2act_data.second)
+                {
                     act_data.second.cmd_effort = act_data.second.exe_effort;
+                    act_data.second.cmd_pos = act_data.second.exe_pos;
+                }
         }
         for (auto &bus : can_buses_)
             bus->write();
+
         publishActuatorState(time);
     }
 
@@ -107,32 +118,35 @@ namespace sp_hw
     {
         if (!is_actuator_specified_)
             return;
-        if (actuator_state_pub_->trylock())
-        {
-            sp_common::ActuatorState actuator_state;
-            for (const auto &id2act_datas : bus_id2act_data_)
-                for (const auto &act_data : id2act_datas.second)
-                {
-                    actuator_state.stamp.push_back(act_data.second.stamp);
-                    actuator_state.name.push_back(act_data.second.name);
-                    actuator_state.type.push_back(act_data.second.type);
-                    actuator_state.bus.push_back(id2act_datas.first);
-                    actuator_state.id.push_back(act_data.first);
 
-                    actuator_state.position_raw.push_back(act_data.second.q_raw);
-                    actuator_state.velocity_raw.push_back(act_data.second.qd_raw);
-                    actuator_state.circle.push_back(act_data.second.q_circle);
-                    actuator_state.last_position_raw.push_back(act_data.second.q_last);
+        /*if (actuator_state_pub_->trylock())
+         {
+             ROS_INFO_STREAM("J");
 
-                    actuator_state.position.push_back(act_data.second.pos);
-                    actuator_state.velocity.push_back(act_data.second.vel);
-                    actuator_state.effort.push_back(act_data.second.effort);
-                    actuator_state.cmd_effort.push_back(act_data.second.cmd_effort);
-                    actuator_state.exe_effort.push_back(act_data.second.exe_effort);
-                }
-            actuator_state_pub_->msg_ = actuator_state;
-            actuator_state_pub_->unlockAndPublish();
-            last_publish_time_ = time;
-        }
+             sp_common::ActuatorState actuator_state;
+             for (const auto &id2act_datas : bus_id2act_data_)
+                 for (const auto &act_data : id2act_datas.second)
+                 {
+                     actuator_state.stamp.push_back(act_data.second.stamp);
+                     actuator_state.name.push_back(act_data.second.name);
+                     actuator_state.type.push_back(act_data.second.type);
+                     actuator_state.bus.push_back(id2act_datas.first);
+                     actuator_state.id.push_back(act_data.first);
+
+                     actuator_state.position_raw.push_back(act_data.second.q_raw);
+                     actuator_state.velocity_raw.push_back(act_data.second.qd_raw);
+                     actuator_state.circle.push_back(act_data.second.q_circle);
+                     actuator_state.last_position_raw.push_back(act_data.second.q_last);
+
+                     actuator_state.position.push_back(act_data.second.pos);
+                     actuator_state.velocity.push_back(act_data.second.vel);
+                     actuator_state.effort.push_back(act_data.second.effort);
+                     actuator_state.cmd_effort.push_back(act_data.second.cmd_effort);
+                     actuator_state.exe_effort.push_back(act_data.second.exe_effort);
+                 }
+             actuator_state_pub_->msg_ = actuator_state;
+             actuator_state_pub_->unlockAndPublish();
+             last_publish_time_ = time;
+         }*/
     }
 } // namespace sp_hw

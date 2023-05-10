@@ -25,7 +25,11 @@ void single_state_callback(const sp_common::SingleJointWrite::ConstPtr &state_, 
     manipulator->singlewrite(state, num);
 }
 
-// void remote_control_callback(const sp_common::DbusData::ConstPtr &data_, )
+void remote_control_callback(const sp_common::DbusData::ConstPtr &data_, sp_common::DbusData *dbusdata_)
+{
+
+    *dbusdata_ = *data_;
+}
 
 // void remote_control_callback(const sp_common::RCData::ConstPtr& RCData_, const sp_control::RCData & RCData)
 //{
@@ -103,26 +107,63 @@ int main(int argc, char **argv)
     initial_pose.position.x = 0.00;
     initial_pose.position.y = 0.50;
     initial_pose.position.z = 1.00;
+    sp_common::DbusData dbusdata_;
     shapes::Mesh *ore = shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL");
     shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL");
     ros::NodeHandle nh;
     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub", 10, boost::bind(&pose_callback, _1, &manipulator_));
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
-    // ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &manipulator_));
+    ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &dbusdata_));
     spinner.start();
     moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
-    scene.add(ore_.object, initial_pose);
-    scene.attach(ore_, grip_group_interface);
-    // scene.generate(sink_id, initial_pose, sink);
-    // moveit_visual_tools::MoveitVisualTool visual_tools("link7");
+    // scene.add(ore_.object, initial_pose);
+    // scene.attach(ore_, grip_group_interface);
+    //  scene.generate(sink_id, initial_pose, sink);
+    ros::Rate loop_rate(0.2);
 
     if (manipulator_.init())
     {
+
         while (ros::ok())
         {
-            // if () // go home
-            manipulator_.goal("home");
+            manipulator_.read();
+            if (dbusdata_.s_l == 3) // enter the fine turing modd
+            {
+                int plus;
+                int sign;
+                if (dbusdata_.key_shift)
+                    plus = 0;
+                else
+                    plus = 3;
+                if (dbusdata_.key_ctrl)
+                    sign = -1;
+                else
+                    sign = 1;
+
+                if (dbusdata_.key_z)
+                    manipulator_.singleaddwrite(sign * joint_eff, 1 + plus);
+                else if (dbusdata_.key_x)
+                    manipulator_.singleaddwrite(sign * joint_eff, 2 + plus);
+                else if (dbusdata_.key_c)
+                    manipulator_.singleaddwrite(sign * joint_eff, 3 + plus);
+                manipulator_.move_execute();
+            }
+
+            if (dbusdata_.key_f) // go home
+            {
+                ROS_INFO_STREAM("f");
+                manipulator_.goal("home");
+                manipulator_.move_execute();
+            }
+            else if (dbusdata_.key_r)
+            {
+                ROS_INFO_STREAM("G");
+                manipulator_.goal("grip");
+                manipulator_.move_execute();
+            }
+            //   }
+
             // else if () // go forward grip
 
             // else if () // go left grip205083
@@ -134,17 +175,17 @@ int main(int argc, char **argv)
             // manipulator_.read();
             // manipulator_.goal("grip");
             // manipulator_.move_execute();
-            manipulator_.suck(true);
-            sleep(3);
-            manipulator_.suck(false);
-            sleep(3);
+            // manipulator_.suck(true);
+            // sleep(3);
+            // manipulator_.suck(false);
+            // sleep(3);
 
             // if (manipulator_.get_executed() == false)
             //{
             //     manipulator_.move_execute();
             //     manipulator_.set_executed(true);
             //}
-            // sleep(5);
+            // loop_rate.sleep();
 
             ros::spinOnce();
         }
@@ -152,116 +193,82 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/*int main(int argc, char **argv)
+/*
+int main(int argc, char **argv)
 {
 
-    ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
-    ros::AsyncSpinner spinner(3);
-    moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
-    moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
-    manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
-    geometry_msgs::Pose pose1;
-    geometry_msgs::Pose pose2;
-    geometry_msgs::Pose pose3;
-    std::vector<geometry_msgs::Pose> waypoints;
+ ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
+ ros::AsyncSpinner spinner(3);
+ moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
+ moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
+ manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
+ geometry_msgs::Pose pose1;
+ geometry_msgs::Pose pose2;
+ geometry_msgs::Pose pose3;
+ std::vector<geometry_msgs::Pose> waypoints;
 
-    std::vector<double> stretch1;
-    std::vector<double> stretch2;
-    pose1.position.x = 0.00;
-    pose1.position.y = 0.320;
-    pose1.position.z = 0.580;
-    pose1.orientation.w = sqrt(2) / 2;
-    pose1.orientation.x = -sqrt(2) / 2;
-    pose1.orientation.y = 0.00;
-    pose1.orientation.z = 0.00;
-    pose2.position.x = 0.00;
-    pose2.position.y = 0.480;
-    pose2.position.z = 0.580;
-    pose2.orientation.w = sqrt(2) / 2;
-    pose2.orientation.x = -sqrt(2) / 2;
-    pose2.orientation.y = 0.00;
-    pose2.orientation.z = 0.00;
-    pose3.position.x = 0.00;
-    pose3.position.y = 0.10;
-    pose3.position.z = 0.62;
-    pose3.orientation.w = sqrt(2) / 2;
-    pose3.orientation.x = -sqrt(2) / 2;
-    pose3.orientation.y = 0.00;
-    pose3.orientation.z = 0.00;
-    waypoints.push_back(pose1);
-    waypoints.push_back(pose2);
-    stretch1.push_back(-0.045);
-    stretch2.push_back(-0.01);
-    spinner.start();
-    if (manipulator_.init())
-    {
+ std::vector<double> stretch1;
+ std::vector<double> stretch2;
+ pose1.position.x = 0.00;
+ pose1.position.y = 0.320;
+ pose1.position.z = 0.580;
+ pose1.orientation.w = sqrt(2) / 2;
+ pose1.orientation.x = -sqrt(2) / 2;
+ pose1.orientation.y = 0.00;
+ pose1.orientation.z = 0.00;
+ pose2.position.x = 0.00;
+ pose2.position.y = 0.480;
+ pose2.position.z = 0.580;
+ pose2.orientation.w = sqrt(2) / 2;
+ pose2.orientation.x = -sqrt(2) / 2;
+ pose2.orientation.y = 0.00;
+ pose2.orientation.z = 0.00;
+ pose3.position.x = 0.00;
+ pose3.position.y = 0.10;
+ pose3.position.z = 0.62;
+ pose3.orientation.w = sqrt(2) / 2;
+ pose3.orientation.x = -sqrt(2) / 2;
+ pose3.orientation.y = 0.00;
+ pose3.orientation.z = 0.00;
+ waypoints.push_back(pose1);
+ waypoints.push_back(pose2);
+ stretch1.push_back(-0.045);
+ stretch2.push_back(-0.01);
+ spinner.start();
+ if (manipulator_.init())
+ {
 
-        manipulator_.read();
-        manipulator_.goal("home");
-        manipulator_.move_execute();
-        sleep(0.5);
-        // manipulator_.suck(true);
-        // manipulator_.read();
-        // manipulator_.goal("grip");
-        // manipulator_.move_execute();
-        // sleep(0.7);
-        manipulator_.read();
-        manipulator_.write(pose1);
-        manipulator_.move_execute();
-        sleep(0.7);
-        manipulator_.read();
-        manipulator_.CartesianPath(waypoints);
-        sleep(0.7);
-        // manipulator_.stretch(stretch1);
-        // manipulator_.grip_execute();
-        //  sleep(0.3);
-        //  manipulator_.suck(false);
-        sleep(0.7);
-        // manipulator_.read();
-        // manipulator_.stretch(stretch2);
-        // manipulator_.grip_execute();
-        sleep(0.3);
-        manipulator_.read();
-        // manipulator_.goal("home");
-        // manipulator_.move_execute();
-        sleep(0.5);
-        /*
-        manipulator_.goal("home");
-        manipulator_.move_execute();
-        sleep(0.5);
-        manipulator_.read();
-
-        manipulator_.read();
-        manipulator_.goal("home");
-        manipulator_.move_execute();
-        sleep(0.3);
-        manipulator_.read();
-        manipulator_.stretch(stretch1);
-        manipulator_.grip_execute();
-        sleep(0.3);
-        manipulator_.read();
-        manipulator_.stretch(stretch2);
-        manipulator_.grip_execute();
-        sleep(0.3);
-
-        manipulator_.read();
-        manipulator_.write(pose2);
-        manipulator_.move_execute();
-        sleep(0.3);
-        manipulator_.read();
-        manipulator_.stretch(stretch1);
-        manipulator_.grip_execute();
-        sleep(0.3);
-        manipulator_.read();
-        manipulator_.stretch(stretch2);
-        manipulator_.grip_execute();
-        sleep(0.3);
-        manipulator_.read();
-        manipulator_.goal("home");
-        manipulator_.move_execute();
-
-    }
-    return 0;
+     manipulator_.read();
+     manipulator_.goal("home");
+     manipulator_.move_execute();
+     sleep(0.5);
+     // manipulator_.suck(true);
+     // manipulator_.read();
+     // manipulator_.goal("grip");
+     // manipulator_.move_execute();
+     // sleep(0.7);
+     manipulator_.read();
+     manipulator_.write(pose1);
+     manipulator_.move_execute();
+     sleep(0.7);
+     manipulator_.read();
+     manipulator_.CartesianPath(waypoints);
+     sleep(0.7);
+     // manipulator_.stretch(stretch1);
+     // manipulator_.grip_execute();
+     //  sleep(0.3);
+     //  manipulator_.suck(false);
+     sleep(0.7);
+     // manipulator_.read();
+     // manipulator_.stretch(stretch2);
+     // manipulator_.grip_execute();
+     sleep(0.3);
+     manipulator_.read();
+     manipulator_.goal("home");
+     manipulator_.move_execute();
+     sleep(0.5);
+ }
+ return 0;
 }
 */
 /*

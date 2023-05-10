@@ -614,19 +614,6 @@ _sp_common_generate_messages_check_deps_SingleJointWrite/fast:
 .PHONY : _sp_common_generate_messages_check_deps_SingleJointWrite/fast
 
 #=============================================================================
-# Target rules for targets named _sp_common_generate_messages_check_deps_DbusData
-
-# Build rule for target.
-_sp_common_generate_messages_check_deps_DbusData: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _sp_common_generate_messages_check_deps_DbusData
-.PHONY : _sp_common_generate_messages_check_deps_DbusData
-
-# fast build rule for target.
-_sp_common_generate_messages_check_deps_DbusData/fast:
-	$(MAKE) $(MAKESILENT) -f sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build.make sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir/build
-.PHONY : _sp_common_generate_messages_check_deps_DbusData/fast
-
-#=============================================================================
 # Target rules for targets named sp_common_generate_messages_cpp
 
 # Build rule for target.
@@ -2720,6 +2707,71 @@ moveit_ros_manipulation_gencfg/fast:
 .PHONY : moveit_ros_manipulation_gencfg/fast
 
 #=============================================================================
+# Target rules for targets named graph_msgs_generate_messages_cpp
+
+# Build rule for target.
+graph_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graph_msgs_generate_messages_cpp
+.PHONY : graph_msgs_generate_messages_cpp
+
+# fast build rule for target.
+graph_msgs_generate_messages_cpp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/build
+.PHONY : graph_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named graph_msgs_generate_messages_eus
+
+# Build rule for target.
+graph_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graph_msgs_generate_messages_eus
+.PHONY : graph_msgs_generate_messages_eus
+
+# fast build rule for target.
+graph_msgs_generate_messages_eus/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/build
+.PHONY : graph_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named graph_msgs_generate_messages_lisp
+
+# Build rule for target.
+graph_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graph_msgs_generate_messages_lisp
+.PHONY : graph_msgs_generate_messages_lisp
+
+# fast build rule for target.
+graph_msgs_generate_messages_lisp/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/build
+.PHONY : graph_msgs_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named graph_msgs_generate_messages_nodejs
+
+# Build rule for target.
+graph_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graph_msgs_generate_messages_nodejs
+.PHONY : graph_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+graph_msgs_generate_messages_nodejs/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/build
+.PHONY : graph_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named graph_msgs_generate_messages_py
+
+# Build rule for target.
+graph_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 graph_msgs_generate_messages_py
+.PHONY : graph_msgs_generate_messages_py
+
+# fast build rule for target.
+graph_msgs_generate_messages_py/fast:
+	$(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/build
+.PHONY : graph_msgs_generate_messages_py/fast
+
+#=============================================================================
 # Target rules for targets named manipulator_control
 
 # Build rule for target.
@@ -3196,7 +3248,6 @@ help:
 	@echo "... _depthai_ros_msgs_generate_messages_check_deps_SpatialDetectionArray"
 	@echo "... _depthai_ros_msgs_generate_messages_check_deps_TriggerNamed"
 	@echo "... _sp_common_generate_messages_check_deps_ActuatorState"
-	@echo "... _sp_common_generate_messages_check_deps_DbusData"
 	@echo "... _sp_common_generate_messages_check_deps_GpioData"
 	@echo "... _sp_common_generate_messages_check_deps_SingleJointWrite"
 	@echo "... actionlib_generate_messages_cpp"
@@ -3263,6 +3314,11 @@ help:
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_py"
+	@echo "... graph_msgs_generate_messages_cpp"
+	@echo "... graph_msgs_generate_messages_eus"
+	@echo "... graph_msgs_generate_messages_lisp"
+	@echo "... graph_msgs_generate_messages_nodejs"
+	@echo "... graph_msgs_generate_messages_py"
 	@echo "... ira_laser_tools_gencfg"
 	@echo "... keyboard_control_gencpp"
 	@echo "... keyboard_control_generate_messages"

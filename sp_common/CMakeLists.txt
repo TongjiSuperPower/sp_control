@@ -22,7 +22,7 @@ add_message_files(
    ActuatorState.msg
    GpioData.msg
    SingleJointWrite.msg
-   DbusData.msg
+
 #   Message2.msg
 )
 

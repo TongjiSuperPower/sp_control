@@ -99,7 +99,14 @@ namespace sp_hw
                     if (it->second.hasMember("act2pos2"))
                         act_coeff.act2pos2 = xmlRpcGetDouble(it->second, "act2pos2");
                     else
-                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated pos2act2");
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated act2pos2");
+                }
+                if (it->first == "MG_995")
+                {
+                    if (it->second.hasMember("pos2act"))
+                        act_coeff.pos2act = xmlRpcGetDouble(it->second, "pos2act");
+                    else
+                        ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated pos2act");
                 }
 
                 std::string type = it->first;
@@ -180,6 +187,7 @@ namespace sp_hw
                                                                          .cmd_pos = 0,
                                                                          .cmd_vel = 0,
                                                                          .cmd_effort = 0,
+                                                                         .exe_pos = 0,
                                                                          .exe_effort = 0,
                                                                          .offset = 0,
                                                                          .offset2 = 0}));
@@ -192,8 +200,10 @@ namespace sp_hw
                                                                       &bus_id2act_data_[bus][id].vel,
                                                                       &bus_id2act_data_[bus][id].effort);
                     act_state_interface_.registerHandle(act_state);
-                    effort_act_interface_.registerHandle(
-                        hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_effort));
+                    if (type != "MG_995")
+                        effort_act_interface_.registerHandle(hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_effort));
+                    else
+                        position_act_interface_.registerHandle(hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_pos));
                 }
                 else
                 {
@@ -212,6 +222,7 @@ namespace sp_hw
         }
         registerInterface(&act_state_interface_);
         registerInterface(&effort_act_interface_);
+        registerInterface(&position_act_interface_);
         device_tree<ActData>(bus_id2act_data_);
         is_actuator_specified_ = true; // now all the actuators have been parsed.
 
@@ -357,6 +368,7 @@ namespace sp_hw
 
         act_to_jnt_state_ = robot_transmissions_.get<transmission_interface::ActuatorToJointStateInterface>();
         jnt_to_act_effort_ = robot_transmissions_.get<transmission_interface::JointToActuatorEffortInterface>();
+        jnt_to_act_pos_ = robot_transmissions_.get<transmission_interface::JointToActuatorPositionInterface>();
 
         /* Lithesh : create a vector of joint_handle used to control joint data directly.
          * When you use ros-controller, effort_joint_handles is not recommanded to use,
@@ -364,10 +376,22 @@ namespace sp_hw
          */
         // auto eff_jnt_iface = &(loader_data.joint_interfaces.effort_joint_interface)
         auto effort_jnt_iface = this->get<hardware_interface::EffortJointInterface>();
-        std::vector<std::string> names = effort_jnt_iface->getNames();
-        for (const std::string &name : names)
-            effort_joint_handles_.push_back(effort_jnt_iface->getHandle(name));
+        auto position_jnt_iface = this->get<hardware_interface::PositionJointInterface>();
+        std::vector<std::string> names;
 
+        if (effort_jnt_iface)
+        {
+
+            names = effort_jnt_iface->getNames();
+            for (const std::string &name : names)
+                effort_joint_handles_.push_back(effort_jnt_iface->getHandle(name));
+        }
+        if (position_jnt_iface)
+        {
+            names = position_jnt_iface->getNames();
+            for (const std::string &name : names)
+                position_joint_handles_.push_back(position_jnt_iface->getHandle(name));
+        }
         return true;
     }
 }

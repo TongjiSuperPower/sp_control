@@ -97,7 +97,7 @@
     <child
       link="mast" />
     <axis
-      xyz="0 0 1" />
+      xyz="0 0 -1" />
     <limit
       lower="0"
       upper="0.235"
@@ -225,10 +225,10 @@
   <transmission name="trans_mast_joint">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="mast_joint_motor">
-      <mechanicalReduction>1</mechanicalReduction>
+      <mechanicalReduction>50</mechanicalReduction>
     </actuator>
     <joint name="mast_joint">
-      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     </joint>
   </transmission>
 

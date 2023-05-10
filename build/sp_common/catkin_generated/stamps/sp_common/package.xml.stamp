@@ -51,7 +51,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
 
-  <!-- Used to generate message, action, u.s.w -->>
+  <!-- Used to generate message, action, u.s.w -->
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>message_generation</depend>
