@@ -74,6 +74,13 @@ class HostSpatialsCalc_ROS:
         }
         return spatials, centroid
 
+params = {'hue_low': 8, 'saturation_low': 110, 'value_low': 0,
+          'hue_high': 30, 'saturation_high': 255, 'value_high': 255,
+          'min_area_size': 5000, 'max_area_size': 400000}
+thresh_low = (params['hue_low'], params['saturation_low'], params['value_low'])
+thresh_high = (params['hue_high'], params['saturation_high'], params['value_high'])
+min_area_size = params['min_area_size']
+max_area_size = params['max_area_size']
 lower_black = np.array([0,0,0]) 
 upper_black= np.array([180, 255, 43])
 Camera_intrinsic = {
@@ -84,6 +91,7 @@ Camera_intrinsic = {
     "dist": np.array([[0.220473935504143, -1.294976334542626, 0.003407354582097702, -0.001096689035107743, 2.91864887650898]], dtype=np.double),
 
 }
+
 def EulerAndQuaternionTransform( intput_data):
     """
         四元素与欧拉角互换
@@ -161,21 +169,30 @@ def JudgeBeveling(point1,point2,point3):
         D = CalcFourthPoint(point2,point3,point1)
     return D
 
-def rota_rect( x, y,theta,a,b):
-    """
-    :param a,b: 长宽
-    :param theta: 旋转角度
-    :param x: 旋转中心(x,y)
-    :param y: 旋转中心(x,y)
-    :return: 旋转矩形的四个顶点坐标
-    """
-    theta = theta /180* math.pi
-    left_top = (x+round(a/2*math.cos(theta))-round(b/2*math.sin(theta)),y+round(a/2*math.sin(theta))+round(b/2*math.cos(theta)))
-    right_top = (x+round(a/2*math.cos(theta))+round(b/2*math.sin(theta)),y+round(a/2*math.sin(theta))-round(b/2*math.cos(theta)))
-    left_down = (x-round(a/2*math.cos(theta))-round(b/2*math.sin(theta)),y-round(a/2*math.sin(theta))+round(b/2*math.cos(theta)))
-    right_down = (x-round(a/2*math.cos(theta))+round(b/2*math.sin(theta)),y-round(a/2*math.sin(theta))-round(b/2*math.cos(theta)))
-    new_box = [left_top,right_top,left_down,right_down]
-    return new_box
+def find_ore(color_image):
+    # 高斯滤波
+    cv2.GaussianBlur(color_image, (5, 5), 3, dst=color_image)
+    # 把BGR通道转化为HSV色彩空间
+    hsv_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2HSV)
+    # 识别矿石的颜色特征
+    ore_image = cv2.inRange(hsv_image, thresh_low, thresh_high)
+    # 对识别后的图像进行腐蚀与膨胀，消除较小的连通域
+    kernal = cv2.getStructuringElement(0, (3, 3))
+    cv2.erode(ore_image, kernal, dst=ore_image)
+    cv2.dilate(ore_image, kernal, dst=ore_image)
+	# 轮廓识别
+    contours, hierarchy = cv2.findContours(ore_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    if len(contours) > 0:
+        # 计算所有轮廓的面积
+        area_size = list(map(cv2.contourArea, contours))
+        # 取最大面积
+        max_size = max(area_size)
+        max_area_index = area_size.index(max_size)
+        # 若面积在阈值范围内，则认为识别到了矿石
+        if min_area_size < max_size < max_area_size:
+            box = cv2.boundingRect(contours[max_area_index])
+            return box
+    return None
 
 
 class ImageConverter:
@@ -240,210 +257,214 @@ class ImageConverter:
 
     def detect_ore(self):
 
-        # 高斯滤波，对图像邻域内像素进行平滑
-        hsv_image = cv2.GaussianBlur(self.cv_image, (5, 5), 0)
+        frame = self.cv_image
+        ore_box = find_ore(frame)
+        if ore_box is not None:
 
-        # 颜色空间转换，将RGB图像转换成HSV图像
-        hsv_image = cv2.cvtColor(hsv_image, cv2.COLOR_BGR2HSV)
-        
-        # # 根据阈值，去除背景
-        mask = cv2.inRange(hsv_image, lower_black, upper_black)
-        # output = cv2.bitwise_and(self.cv_image, self.cv_image, mask=mask)
+            # 高斯滤波，对图像邻域内像素进行平滑
+            hsv_image = cv2.GaussianBlur(self.cv_image, (5, 5), 0)
 
-        # # 将彩色图像转换成灰度图像
-        # cvImg = cv2.cvtColor(output, 6)  # cv2.COLOR_BGR2GRAY
-        # npImg = np.asarray(cvImg)
-        # thresh = cv2.threshold(npImg, 1, 255, cv2.THRESH_BINARY)[1]
-        # # 对识别后的图像进行腐蚀与膨胀，消除较小的连通域 交叉型 7x7 效果较好
-        kernal = cv2.getStructuringElement(cv2.MORPH_CROSS, (15, 15))
-        # 先膨胀后腐蚀
-        cv2.dilate(mask, kernal, dst=mask)
-        cv2.erode(mask, kernal, dst=mask)
-
-        # 检测目标物体的轮廓
-        # cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST,
-        #                                         cv2.CHAIN_APPROX_NONE)
-        contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-        contours_new = []
-        width_array = []
-        height_array = []
-        point_array = []
-        angle_array = []
-        if len(contours) > 0:
-            for cont in contours:
-                rect = cv2.minAreaRect(cont)
-                width = rect[1][0]
-                height = rect[1][1]
-                area = cv2.contourArea(cont)
-                if width > height:
-                    width,height = height,width
-                #先交换长宽
-                if width != 0:
-                    # 面积大小会随分辨率的改变而改变，注意在固定分辨率下进行调参
-                    # if height < 200 and width < 200 and height/width < 5  and 1500 < area < 5000 :                   
-                    if  height/width < 2.5 and 2000 < area < 10000 :                   
-                        width_array.append(width)
-                        height_array.append(height)
-                        point_array.append(rect[0])
-                        contours_new.append(cont)
-                        angle_array.append(rect[2])
-                        
-            framecopy = np.copy(self.cv_image)
-            # 用深度会是部分角轮廓丢失
-            width_array_n=[]
-            height_array_n=[]
-            point_array_n=[]
-            contours_new_n=[] 
-            q = []
-            for i in range(len(contours_new)):
-                    # print(len(contours_new[i]))  
-                    # 不知道为什么在方形轮廓点数为50+ ，可能要多边形逼近 
-                    hull = cv2.convexHull(contours_new[i])
-                    quad = cv2.approxPolyDP(hull, 3, True)                           
-                    if 3 < len(quad) <6:
-                        contours_new_n.append(contours_new[i])
-                        point_array_n.append(point_array[i]) 
-                        width_array_n.append(width_array[i])
-                        height_array_n.append(height_array[i])
-                        q.append(quad)
-            # for i in range(len(contours_new)):
-            #     # print(len(contours_new[i]))  
-            #     # 不知道为什么在方形轮廓点数为50+ ，可能要多边形逼近            
-            #     if 3 < len(contours_new[i]) <90:
-            #         contours_new_n.append(contours_new[i])
-            #         point_array_n.append(point_array[i]) 
-            quads = [] #array of quad including four peak points
-            hulls = []
+            # 颜色空间转换，将RGB图像转换成HSV图像
+            hsv_image = cv2.cvtColor(hsv_image, cv2.COLOR_BGR2HSV)
             
-            suc = True
-            for i in range(len(contours_new_n)):
-                if (hierarchy[0, i, 3] < 0 and contours_new_n[i].shape[0] >= 4):
-                    area = cv2.contourArea(contours_new_n[i])
-                    # if 2000 < area < 8000 :
-                    hull = cv2.convexHull(contours_new_n[i])
-                    if (area / cv2.contourArea(hull) > 0.8):
-                        hulls.append(hull)
-                        # 阈值越小，越容易逼近
-                        quad = cv2.approxPolyDP(hull, 1, True)#maximum_area_inscribed
-                        if (len(quad) == 4):
-                            areaqued = cv2.contourArea(quad)
-                            areahull = cv2.contourArea(hull)
-                            if areaqued / areahull > 0.8 and areahull >= areaqued:
-                                quads.append(quad)
-                                
-            if len(point_array_n)>0:
-                point_array_n.sort(key=lambda c: c[0], reverse=False)
-                if len(point_array_n) >= 3:
-                    if len(quads) == 1:
-                        point_array_n = point_array_n[:3]
-                    else:
-                        point_array_n = point_array_n[-3:]
+            # # 根据阈值，去除背景
+            mask = cv2.inRange(hsv_image, lower_black, upper_black)
+            # output = cv2.bitwise_and(self.cv_image, self.cv_image, mask=mask)
 
-                    obj = np.array([[-50, 50, 0], [50, 50, 0], [50,-50 , 0],[-50, -50 ,0]
-                    ],dtype=np.float64)  # 世界坐标
-                    point_four = JudgeBeveling(point_array_n[0],point_array_n[1],point_array_n[2])
-                    point_array_n.append(point_four)
+            # # 将彩色图像转换成灰度图像
+            # cvImg = cv2.cvtColor(output, 6)  # cv2.COLOR_BGR2GRAY
+            # npImg = np.asarray(cvImg)
+            # thresh = cv2.threshold(npImg, 1, 255, cv2.THRESH_BINARY)[1]
+            # # 对识别后的图像进行腐蚀与膨胀，消除较小的连通域 交叉型 7x7 效果较好
+            kernal = cv2.getStructuringElement(cv2.MORPH_CROSS, (15, 15))
+            # 先膨胀后腐蚀
+            cv2.dilate(mask, kernal, dst=mask)
+            cv2.erode(mask, kernal, dst=mask)
+
+            # 检测目标物体的轮廓
+            # cnts, hierarchy = cv2.findContours(thresh, cv2.RETR_LIST,
+            #                                         cv2.CHAIN_APPROX_NONE)
+            contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+            contours_new = []
+            width_array = []
+            height_array = []
+            point_array = []
+            angle_array = []
+            if len(contours) > 0:
+                for cont in contours:
+                    rect = cv2.minAreaRect(cont)
+                    width = rect[1][0]
+                    height = rect[1][1]
+                    area = cv2.contourArea(cont)
+                    if width > height:
+                        width,height = height,width
+                    #先交换长宽
+                    if width != 0:
+                        # 面积大小会随分辨率的改变而改变，注意在固定分辨率下进行调参
+                        # if height < 200 and width < 200 and height/width < 5  and 1500 < area < 5000 :                   
+                        if  height/width < 2.5 and 2000 < area < 30000 :                   
+                            width_array.append(width)
+                            height_array.append(height)
+                            point_array.append(rect[0])
+                            contours_new.append(cont)
+                            angle_array.append(rect[2])
+                            
+                # 用深度会是部分角轮廓丢失
+                width_array_n=[]
+                height_array_n=[]
+                point_array_n=[]
+                contours_new_n=[] 
+                q = []
+                for i in range(len(contours_new)):
+                        # print(len(contours_new[i]))  
+                        # 不知道为什么在方形轮廓点数为50+ ，可能要多边形逼近 
+                        hull = cv2.convexHull(contours_new[i])
+                        quad = cv2.approxPolyDP(hull, 3, True)                           
+                        if 3 < len(quad) <6:
+                            if ore_box[0] < point_array[i][0] < ore_box[0]+ore_box[2] and ore_box[1] < point_array[i][1] < ore_box[1]+ore_box[3]:
+                                contours_new_n.append(contours_new[i])
+                                point_array_n.append(point_array[i]) 
+                                width_array_n.append(width_array[i])
+                                height_array_n.append(height_array[i])
+                                q.append(quad)
+                # for i in range(len(contours_new)):
+                #     # print(len(contours_new[i]))  
+                #     # 不知道为什么在方形轮廓点数为50+ ，可能要多边形逼近            
+                #     if 3 < len(contours_new[i]) <90:
+                #         contours_new_n.append(contours_new[i])
+                #         point_array_n.append(point_array[i]) 
+                quads = [] #array of quad including four peak points
+                hulls = []
                 
-                elif len(point_array_n) == 2:
-                        # points = point_array_n
-                    dis_points = round(math.sqrt((point_array_n[0][0]-point_array_n[1][0])**2+(point_array_n[0][1]+point_array_n[1][1])**2))
-                    if dis_points > 450:
-                        suc = False
-                    else:
-                        p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
-                        p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
-                        p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
-                        p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
-                        point_array_n = [p1,p2,p3,p4]
-                        # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
-                        # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
-                        # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
-                        obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
-                        ],dtype=np.float64)
-                else:
-                    suc = False
-                
-                global qw,qx,qy,qz,cx,cy,cz
+                suc = True
+                for i in range(len(contours_new_n)):
+                    if (hierarchy[0, i, 3] < 0 and contours_new_n[i].shape[0] >= 4):
+                        area = cv2.contourArea(contours_new_n[i])
+                        # if 2000 < area < 8000 :
+                        hull = cv2.convexHull(contours_new_n[i])
+                        if (area / cv2.contourArea(hull) > 0.8):
+                            hulls.append(hull)
+                            # 阈值越小，越容易逼近
+                            quad = cv2.approxPolyDP(hull, 1, True)#maximum_area_inscribed
+                            if (len(quad) == 4):
+                                areaqued = cv2.contourArea(quad)
+                                areahull = cv2.contourArea(hull)
+                                if areaqued / areahull > 0.8 and areahull >= areaqued:
+                                    quads.append(quad)
+                                    
+                if len(point_array_n)>0:
+                    point_array_n.sort(key=lambda c: c[0], reverse=False)
+                    if len(point_array_n) >= 3:
+                        if len(quads) == 1:
+                            point_array_n = point_array_n[:3]
+                        else:
+                            point_array_n = point_array_n[-3:]
+
+                        obj = np.array([[-50, 50, 0], [50, 50, 0], [50,-50 , 0],[-50, -50 ,0]
+                        ],dtype=np.float64)  # 世界坐标
+                        point_four = JudgeBeveling(point_array_n[0],point_array_n[1],point_array_n[2])
+                        point_array_n.append(point_four)
                     
-                if suc:
-                    center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
-                    center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
-                    roi = [center_x-10,center_y-10,center_x+10,center_y+10]
-                    # get 3D zuobiao
-                    spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
-                    cx = spatials['x']
-                    cy = spatials['y']
-                    cz = spatials['z']
-                    point_array_n = np.int32(point_array_n)
-                    pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
-                    success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
-                    rvec_matrix = cv2.Rodrigues(rvec)[0]
-                    proj_matrix = np.hstack((rvec_matrix, rvec))
-                    eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
-                    pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
-                    rot_params = [roll, pitch, yaw]  # 欧拉角 数组
-                    Quaternion = EulerAndQuaternionTransform(rot_params)
-                    print(0)
-                    qw = Quaternion[0]
-                    qx = Quaternion[1]
-                    qy = Quaternion[2]
-                    qz = Quaternion[3]
-                else:
-                    cx = 0
-                    cy = 0
-                    cz = 0
-                    qw = 0
-                    qx = 0
-                    qy = 0
-                    qz = 0
+                    elif len(point_array_n) == 2:
+                            # points = point_array_n
+                        dis_points = round(math.sqrt((point_array_n[0][0]-point_array_n[1][0])**2+(point_array_n[0][1]+point_array_n[1][1])**2))
+                        if dis_points > 450:
+                            suc = False
+                        else:
+                            p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
+                            p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
+                            p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
+                            p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
+                            point_array_n = [p1,p2,p3,p4]
+                            # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
+                            # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
+                            # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
+                            obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
+                            ],dtype=np.float64)
+                    else:
+                        suc = False
+                    
+                    global qw,qx,qy,qz,cx,cy,cz
+                        
+                    if suc:
+                        center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
+                        center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+                        roi = [center_x-10,center_y-10,center_x+10,center_y+10]
+                        # get 3D zuobiao
+                        spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
+                        cx = spatials['x']
+                        cy = spatials['y']
+                        cz = spatials['z']
+                        point_array_n = np.int32(point_array_n)
+                        pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
+                        success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
+                        rvec_matrix = cv2.Rodrigues(rvec)[0]
+                        proj_matrix = np.hstack((rvec_matrix, rvec))
+                        eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
+                        pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
+                        rot_params = [roll, pitch, yaw]  # 欧拉角 数组
+                        Quaternion = EulerAndQuaternionTransform(rot_params)
+                        print(0)
+                        qw = Quaternion[0]
+                        qx = Quaternion[1]
+                        qy = Quaternion[2]
+                        qz = Quaternion[3]
+                    # else:
+                    #     cx = 0
+                    #     cy = 0
+                    #     cz = 0
+                    #     qw = 0
+                    #     qx = 0
+                    #     qy = 0
+                    #     qz = 0
 
-        # # 遍历找到的所有轮廓线
-        # for c in cnts:
+            # # 遍历找到的所有轮廓线
+            # for c in cnts:
 
-        #     # 去除一些面积太小的噪声
-        #     if c.shape[0] < 150:
-        #         continue
+            #     # 去除一些面积太小的噪声
+            #     if c.shape[0] < 150:
+            #         continue
 
-        #     # 提取轮廓的特征
-        #     M = cv2.moments(c)
+            #     # 提取轮廓的特征
+            #     M = cv2.moments(c)
 
-        #     if int(M["m00"]) not in range(500, 22500):
-        #         continue
+            #     if int(M["m00"]) not in range(500, 22500):
+            #         continue
 
-        #     cX = int(M["m10"] / M["m00"])
-        #     cY = int(M["m01"] / M["m00"])
+            #     cX = int(M["m10"] / M["m00"])
+            #     cY = int(M["m01"] / M["m00"])
 
-        #     print("x: {}, y: {}, size: {}".format(cX, cY, M["m00"]))
+            #     print("x: {}, y: {}, size: {}".format(cX, cY, M["m00"]))
 
-            # 把轮廓描绘出来，并绘制中心点
-            # cv2.drawContours(self.cv_image, [c], -1, (0, 0, 255), 2)
-                cv2.drawContours(self.cv_image, contours_new_n, -1, (0, 0, 255), 2)
-                print(1)
+                # 把轮廓描绘出来，并绘制中心点
+                # cv2.drawContours(self.cv_image, [c], -1, (0, 0, 255), 2)
+                        cv2.drawContours(self.cv_image, contours_new_n, -1, (0, 0, 255), 2)
 
-                # cv2.circle(self.cv_image, (cX, cY), 1, (0, 0, 255), -1)
+                        # cv2.circle(self.cv_image, (cX, cY), 1, (0, 0, 255), -1)
+                        
+                        # 将目标位置通过话题发布
+                        objPose = Pose()
+                        objPose.position.x = cx
+                        objPose.position.y = cy
+                        objPose.position.z = cz
+                        objPose.orientation.w = qw 
+                        objPose.orientation.x = qx 
+                        objPose.orientation.y = qy 
+                        objPose.orientation.z = qz 
+                        self.target_pub.publish(objPose)
+                        print(objPose)
+                # else:
+                #     objPose = Pose()
+                #     objPose.position.x = 0
+                #     objPose.position.y = 0
+                #     objPose.position.z = 0
+                #     objPose.orientation.w = 0 
+                #     objPose.orientation.x = 0
+                #     objPose.orientation.y = 0 
+                #     objPose.orientation.z = 0 
+                #     # objPose.position.y = cY
+                    # objPose.position.z = M["m00"]
                 
-                # 将目标位置通过话题发布
-                objPose = Pose()
-                objPose.position.x = cx
-                objPose.position.y = cy
-                objPose.position.z = cz
-                objPose.orientation.w = qw 
-                objPose.orientation.x = qx 
-                objPose.orientation.y = qy 
-                objPose.orientation.z = qz 
-            else:
-                objPose = Pose()
-                objPose.position.x = 0
-                objPose.position.y = 0
-                objPose.position.z = 0
-                objPose.orientation.w = 0 
-                objPose.orientation.x = 0
-                objPose.orientation.y = 0 
-                objPose.orientation.z = 0 
-                # objPose.position.y = cY
-                # objPose.position.z = M["m00"]
-            self.target_pub.publish(objPose)
-            print(objPose)
 
         # 再将opencv格式额数据转换成ros image格式的数据发布
         try:

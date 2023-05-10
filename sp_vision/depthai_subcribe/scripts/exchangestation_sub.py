@@ -74,6 +74,12 @@ class HostSpatialsCalc_ROS:
         }
         return spatials, centroid
 
+
+class Contour:
+    def __init__(self,centerpoint,obj) -> None:
+        self.centerpoint = centerpoint
+        self.obj = obj
+        
 Camera_intrinsic = {
 
     "mtx": np.array([[1025.35323576971, 0, 678.7266096913569],
@@ -196,9 +202,9 @@ class ImageConverter:
     def detect_exchangestation(self):
         frame = self.cv_image
         blue, _, red = cv2.split(frame)
-        subtracted = cv2.subtract(red, blue)
+        # subtracted = cv2.subtract(red, blue)
         # subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # subtracted = cv2.subtract(blue, red)
+        subtracted = cv2.subtract(blue, red)
         _, threshed = cv2.threshold(subtracted, 100, 255, cv2.THRESH_BINARY)
         kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
         cv2.erode(threshed, kernal, dst=threshed)
@@ -208,7 +214,7 @@ class ImageConverter:
         contours_new = []
         point_array = []
         for contour in contours:
-            if 1000 < cv2.contourArea(contour) < 5000 :
+            if 2000 < cv2.contourArea(contour) < 8000 :
                 rect = cv2.minAreaRect(contour)
                 center = rect[0]
                 h, w = rect[1]
@@ -229,14 +235,56 @@ class ImageConverter:
             quad = cv2.approxPolyDP(hull, 3, True)# maximum_area_inscribed
             quads.append(quad)
             point_array.append(center)
-        # 按照y坐标的大小进行排列
-        point_array.sort(key=lambda c: c[1], reverse=False)
+        
         global qw,qx,qy,qz,cx,cy,cz
-        obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
-                        ],dtype=np.float64)
+        # obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
+        #                 ],dtype=np.float64)
         cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
         
         if len(point_array) == 4:
+            area_list = list(map(cv2.contourArea,quads))
+            # print(area_list)
+            id_min = area_list.index(min(area_list))
+            # print(id_min)
+            # print(point_array)
+            origin = point_array[id_min]
+            def clockwiseangle_and_distance(point):
+                refvec = [0,1]
+                # Vector between point and the origin: v = p - o
+                vector = [point[0]-origin[0], point[1]-origin[1]]
+                # Length of vector: ||v||
+                lenvector = math.hypot(vector[0], vector[1])
+                # If length is zero there is no angle
+                if lenvector == 0:
+                    return -math.pi, 0
+                # Normalize vector: v/||v||
+                normalized = [vector[0]/lenvector, vector[1]/lenvector]
+                dotprod  = normalized[0]*refvec[0] + normalized[1]*refvec[1]     # x1*x2 + y1*y2
+                diffprod = refvec[1]*normalized[0] - refvec[0]*normalized[1]     # x1*y2 - y1*x2
+                angle = math.atan2(diffprod, dotprod)
+                # Negative angles represent counter-clockwise angles so we need to subtract them 
+                # from 2*pi (360 degrees)
+                if angle < 0:
+                    return 2*math.pi+angle, lenvector
+                # I return first the angle because that's the primary sorting criterium
+                # but if two vectors have the same angle then the shorter distance should come first.
+                return angle, lenvector        
+            point_array = sorted(point_array, key=clockwiseangle_and_distance)
+            # print(point_array)
+            point_rt = Contour(point_array[0],[112.5, 112.5, 0])
+            point_lt = Contour(point_array[1],[-112.5, 112.5, 0])
+            point_lb = Contour(point_array[2],[-112.5, -112.5, 0])
+            point_rb = Contour(point_array[3],[112.5, -112.5, 0])
+                
+            point_array = np.array(point_array,np.int32)
+            # print(np.argsort(point_array[:,1]))
+            # bbox = np.array(bbox,np.int32)
+            cv2.polylines(frame, [point_array], True, (0, 255, 0), 2) 
+            # cv2.polylines(frame, bbox, True, (255, 255, 0), 2)   
+            
+            
+            obj = np.array([point_rt.obj,point_lt.obj,point_lb.obj,point_rb.obj
+                            ],dtype=np.float64)
             point_array_n = point_array
             point_array_n = np.int32(point_array_n)
             pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
@@ -260,25 +308,25 @@ class ImageConverter:
             cx = spatials['x']
             cy = spatials['y']
             cz = spatials['z']
-        else:
-                cx = 0
-                cy = 0
-                cz = 0
-                qw = 0
-                qx = 0
-                qy = 0
-                qz = 0
+        # else:
+        #         cx = 0
+        #         cy = 0
+        #         cz = 0
+        #         qw = 0
+        #         qx = 0
+        #         qy = 0
+        #         qz = 0
 
-        objPose = Pose()
-        objPose.position.x = cx
-        objPose.position.y = cy
-        objPose.position.z = cz
-        objPose.orientation.w = qw 
-        objPose.orientation.x = qx 
-        objPose.orientation.y = qy 
-        objPose.orientation.z = qz 
-        self.target_pub.publish(objPose)
-        # print(objPose)
+            objPose = Pose()
+            objPose.position.x = cx
+            objPose.position.y = cy
+            objPose.position.z = cz
+            objPose.orientation.w = qw 
+            objPose.orientation.x = qx 
+            objPose.orientation.y = qy 
+            objPose.orientation.z = qz 
+            self.target_pub.publish(objPose)
+            # print(objPose)
 
         # 再将opencv格式额数据转换成ros image格式的数据发布
         try:

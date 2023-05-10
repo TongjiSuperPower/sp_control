@@ -1,5 +1,5 @@
-# Engineer_on_ROS
-version 0.2.0
+# sp_control
+version 0.3.0
 
 | 时间       | 包名                            | 修改                                           |
 | ---------- | ------------------------------- | ---------------------------------------------- |
@@ -18,8 +18,10 @@ version 0.2.0
 | 2022/4/24  | sp_description                  | 修复多处导致gazebo崩溃的模型错误               |
 |            | arm_control                     | 该包用于实现机械臂规划，已完成关节空间函数编写 |
 | 2022/11/03 | sp_hw                           | Parse.cpp                                      |
-| 2022/11/14 | sentry_communicator             | 实现                                           |
+| 2022/11/14 | sp_hw && sentry_communicator    | 实现                                           |
 | 2022/12/11 | moveit_config                   | 更好的机械臂                                   |
+| 2023/4/15  | sp_dbus && keyboard_controller  | 支持遥控器和键盘直接控制                       |
+| 2023/5/2   | sp_vision                       | 矿石识别包                                     |
 
 
 
@@ -37,8 +39,6 @@ version 0.2.0
 TODO:
 
 对gimbal_controller的msg进行修改
-
-修改ira_laser_tools包，使之支持realtime_tools
 
 实现nav功能包的导航功能
 
