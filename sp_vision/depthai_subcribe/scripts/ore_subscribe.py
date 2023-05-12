@@ -10,6 +10,7 @@ from geometry_msgs.msg import Pose
 # from modules.calc import HostSpatialsCalc_ROS
 # from calc import HostSpatialsCalc_ROS
 import depthai as dai
+from scipy.spatial.transform import Rotation as R
 
 class HostSpatialsCalc_ROS:
     # We need device object to get calibration data
@@ -91,6 +92,14 @@ Camera_intrinsic = {
     "dist": np.array([[0.220473935504143, -1.294976334542626, 0.003407354582097702, -0.001096689035107743, 2.91864887650898]], dtype=np.double),
 
 }
+
+R_camera2gimbal = np.float32([[0.41016693024568496, 0.8763608546753984, -0.2524970133000318], [-0.909749552097839, 0.41263930117435166, -0.04565697738707521], [0.06417820339190353, 0.24843602701489942, 0.9665198904784318]])
+t_camera2gimbal = np.float32([[-18.959828191075893], [1.5586220537514408], [-1.4427664518406154]])
+R_gripper2base = 0
+T_gripper2base = 0
+
+
+
 
 def EulerAndQuaternionTransform( intput_data):
     """
@@ -194,6 +203,20 @@ def find_ore(color_image):
             return box
     return None
 
+def getpose(pose):
+    global R_gripper2base,T_gripper2base
+    Gripperq=[pose.orientation.w, pose.orientation.x ,pose.orientation.y, pose.orientation.z]
+    Grippert=[pose.position.x,pose.position.y,pose.position.z]
+    Gripperq = np.array(Gripperq)
+    Grippert = np.array(Grippert)
+    Rm = R.from_quat(Gripperq)
+    # R_gripper2base = Rm.as_matrix()
+    print("successfully")
+    R_gripper2base = Rm.as_matrix()
+    print(R_gripper2base)
+    # T_gripper2base = Grippert
+    T_gripper2base = Grippert
+    sub.unregister() 
 
 class ImageConverter:
     def __init__(self):
@@ -259,7 +282,11 @@ class ImageConverter:
 
         frame = self.cv_image
         ore_box = find_ore(frame)
+
         if ore_box is not None:
+            global sub
+            sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10)
+
 
             # 高斯滤波，对图像邻域内像素进行平滑
             hsv_image = cv2.GaussianBlur(self.cv_image, (5, 5), 0)
@@ -395,16 +422,19 @@ class ImageConverter:
                         cx = spatials['x']
                         cy = spatials['y']
                         cz = spatials['z']
+                        position = np.array([cx,cy,cz])
+                        position = np.dot(R_camera2gimbal,position) + t_camera2gimbal
+                        position = np.dot(R_gripper2base,position) + T_gripper2base
                         point_array_n = np.int32(point_array_n)
                         pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
                         success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
                         rvec_matrix = cv2.Rodrigues(rvec)[0]
+                        rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
                         proj_matrix = np.hstack((rvec_matrix, rvec))
                         eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
                         pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
                         rot_params = [roll, pitch, yaw]  # 欧拉角 数组
                         Quaternion = EulerAndQuaternionTransform(rot_params)
-                        print(0)
                         qw = Quaternion[0]
                         qx = Quaternion[1]
                         qy = Quaternion[2]
@@ -417,24 +447,6 @@ class ImageConverter:
                     #     qx = 0
                     #     qy = 0
                     #     qz = 0
-
-            # # 遍历找到的所有轮廓线
-            # for c in cnts:
-
-            #     # 去除一些面积太小的噪声
-            #     if c.shape[0] < 150:
-            #         continue
-
-            #     # 提取轮廓的特征
-            #     M = cv2.moments(c)
-
-            #     if int(M["m00"]) not in range(500, 22500):
-            #         continue
-
-            #     cX = int(M["m10"] / M["m00"])
-            #     cY = int(M["m01"] / M["m00"])
-
-            #     print("x: {}, y: {}, size: {}".format(cX, cY, M["m00"]))
 
                 # 把轮廓描绘出来，并绘制中心点
                 # cv2.drawContours(self.cv_image, [c], -1, (0, 0, 255), 2)
