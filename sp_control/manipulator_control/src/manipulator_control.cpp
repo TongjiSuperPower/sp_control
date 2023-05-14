@@ -86,6 +86,31 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     manipulator_->move_execute();
 }
 
+int main(int argc, char **argv)
+{
+ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
+ros::AsyncSpinner spinner(3);
+moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
+moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
+manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
+geometry_msgs::Pose pose1;
+// ros::Rate rate(10);
+spinner.start();
+ros::init(argc,argv,"calibrate");
+ros::NodeHandle nh;
+ros::Publisher pub = nh.advertise<geometry_msgs::Pose>("pose",10);
+// rate.sleep();
+while(ros::ok())
+{
+    pose1 = move_group_interface.getCurrentPose().pose;
+    //逻辑(一秒10次)
+    ros::Rate r(1);
+    pub.publish(pose1);
+
+}
+return 0;
+}
+
 // int main(int argc, char **argv)
 // {
 
@@ -265,7 +290,7 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
 }
 */
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
 
 ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
@@ -331,6 +356,7 @@ if (manipulator_.init())
 }
 return 0;
 }
+*/
 /*
 int main(int argc, char **argv)
 {
