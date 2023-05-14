@@ -939,6 +939,9 @@ gpio_controller_LIB_DEPENDS:STATIC=general;sp_common;general;/opt/ros/noetic/lib
 //Value Computed by CMake
 gpio_controller_SOURCE_DIR:STATIC=/home/adminpc/catkin_ws/src/sp_control/gpio_controller
 
+//The directory containing a CMake configuration file for graph_msgs.
+graph_msgs_DIR:PATH=/opt/ros/noetic/share/graph_msgs/cmake
+
 //Value Computed by CMake
 gtest_BINARY_DIR:STATIC=/home/adminpc/catkin_ws/src/build/gtest/googletest
 
@@ -1054,6 +1057,9 @@ moveit_ros_planning_interface_DIR:PATH=/opt/ros/noetic/share/moveit_ros_planning
 //The directory containing a CMake configuration file for moveit_ros_warehouse.
 moveit_ros_warehouse_DIR:PATH=/opt/ros/noetic/share/moveit_ros_warehouse/cmake
 
+//The directory containing a CMake configuration file for moveit_visual_tools.
+moveit_visual_tools_DIR:PATH=/opt/ros/noetic/share/moveit_visual_tools/cmake
+
 //The directory containing a CMake configuration file for nav_msgs.
 nav_msgs_DIR:PATH=/opt/ros/noetic/share/nav_msgs/cmake
 
@@ -1158,6 +1164,9 @@ rospy_DIR:PATH=/opt/ros/noetic/share/rospy/cmake
 
 //The directory containing a CMake configuration file for rostime.
 rostime_DIR:PATH=/opt/ros/noetic/share/rostime/cmake
+
+//The directory containing a CMake configuration file for rviz_visual_tools.
+rviz_visual_tools_DIR:PATH=/opt/ros/noetic/share/rviz_visual_tools/cmake
 
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake

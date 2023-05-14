@@ -2,31 +2,13 @@
 #define MAX_SPEED 10.f
 #define MIN_SPEED -10.f
 
-#define MAX_ACCEL 20.f
-#define MIN_ACCEL -20.f
-#define ID_ACCEL 0x111
-
-#define MAX_GYRO  10.f
-#define MIN_GYRO  -10.f
-#define ID_GYRO  0x112
-
-#define MAX_QUAT  1.f
-#define MIN_QUAT  -1.f
-#define ID_QUAT  0x113
-
-#define MAX_YAW 4.f
-#define MIN_YAW -4.f
-#define ID_YAW  0x114
-
 namespace sentry_communicator
 {
 
     CanBus::CanBus(const std::string &bus_name, int thread_priority, ros::NodeHandle &root_nh)
         : bus_name_(bus_name)
     {
-        lowercom_data_pub = root_nh.advertise<nav_msgs::Odometry>("lowercom_data",1000);
-        lower_com_data.header.frame_id = "odom";
-        lower_com_data.child_frame_id = "base_link";
+        lowercom_data_pub = root_nh.advertise<geometry_msgs::Point>("referee_data",1000);
 
         while (!socket_can_.open(bus_name, boost::bind(&CanBus::frameCallback, this, _1), thread_priority) && ros::ok())
             ros::Duration(.5).sleep();
@@ -65,59 +47,18 @@ namespace sentry_communicator
     void CanBus::frameCallback(const can_frame &frame)
     {
         std::lock_guard<std::mutex> guard(mutex_);
-        if(frame.can_id == ID_ACCEL)//Acceleration of IMU
-        {
-            data = (frame.data[0] << 8u) | frame.data[1];
-            lower_com_data.twist.twist.linear.x = uint2float(data, MIN_ACCEL, MAX_ACCEL, 16);
+        if(frame.can_id == 0x1FF){
+            Robot_ID = frame.data[0];
+            Keyboard = frame.data[1];
             data = (frame.data[2] << 8u) | frame.data[3];
-            lower_com_data.twist.twist.linear.y = uint2float(data, MIN_ACCEL, MAX_ACCEL, 16);
+            float vel_x = uint2float(data, 0, 20, 16);
             data = (frame.data[4] << 8u) | frame.data[5];
-            lower_com_data.twist.twist.linear.z = uint2float(data, MIN_ACCEL, MAX_ACCEL, 16);
+            float vel_y = uint2float(data, 0, 20, 16);
+            lower_com_data.x = vel_x;
+            lower_com_data.y = vel_y;
+            lower_com_data.z = Keyboard;
 
-            lower_com_data.header.stamp = ros::Time::now();
             lowercom_data_pub.publish(lower_com_data);
-            
-        }
-        if(frame.can_id == ID_GYRO)//Angular velocity of IMU
-        {
-            data = (frame.data[0] << 8u) | frame.data[1];
-            lower_com_data.twist.twist.angular.x = uint2float(data, MIN_GYRO, MAX_GYRO, 16);
-            data = (frame.data[2] << 8u) | frame.data[3];
-            lower_com_data.twist.twist.angular.y = uint2float(data, MIN_GYRO, MAX_GYRO, 16);
-            data = (frame.data[4] << 8u) | frame.data[5];
-            lower_com_data.twist.twist.angular.z = uint2float(data, MIN_GYRO, MAX_GYRO, 16);
-
-            lower_com_data.header.stamp = ros::Time::now();
-            lowercom_data_pub.publish(lower_com_data);
-
-        }
-
-        if(frame.can_id == ID_QUAT)//Quat of IMU
-        {
-            data = (frame.data[0] << 8u) | frame.data[1];
-            lower_com_data.pose.pose.orientation.x = uint2float(data, MIN_QUAT, MAX_QUAT, 16);
-            data = (frame.data[2] << 8u) | frame.data[3];
-            lower_com_data.pose.pose.orientation.y = uint2float(data, MIN_QUAT, MAX_QUAT, 16);
-            data = (frame.data[4] << 8u) | frame.data[5];
-            lower_com_data.pose.pose.orientation.z = uint2float(data, MIN_QUAT, MAX_QUAT, 16);
-            data = (frame.data[6] << 8u) | frame.data[7];
-            lower_com_data.pose.pose.orientation.w = uint2float(data, MIN_QUAT, MAX_QUAT, 16);
-
-            lower_com_data.header.stamp = ros::Time::now();
-            lowercom_data_pub.publish(lower_com_data);
-
-        }
-
-        if(frame.can_id == ID_YAW)
-        {
-            data = (frame.data[0] << 8u) | frame.data[1];
-            yaw = uint2float(data, MIN_YAW, MAX_YAW, 16);
-            // ROS_INFO("YAW %.2lf",yaw);
-            tf_yaw2chassis.sendTransform(
-                        tf::StampedTransform(
-                                tf::Transform(tf::createQuaternionFromRPY(0.0, 0.0, yaw), tf::Vector3(0, 0, 0)),
-                                ros::Time::now(),"base_link","chassis_link"));
-            
         }
     }
 

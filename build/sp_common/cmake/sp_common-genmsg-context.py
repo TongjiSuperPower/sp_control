@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg;/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg;/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg;/home/adminpc/catkin_ws/src/sp_common/msg/DbusData.msg"
+messages_str = "/home/adminpc/catkin_ws/src/sp_common/msg/ActuatorState.msg;/home/adminpc/catkin_ws/src/sp_common/msg/GpioData.msg;/home/adminpc/catkin_ws/src/sp_common/msg/SingleJointWrite.msg"
 services_str = ""
 pkg_name = "sp_common"
 dependencies_str = "std_msgs"

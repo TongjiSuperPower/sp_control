@@ -1,7 +1,7 @@
 <launch>
     <!-- push robot_description to factory and spawn robot in gazebo -->
     <param name="robot_description"
-           command="$(find xacro)/xacro $(find sp_description)/urdf/test/rmrobot.urdf.xacro"/>
+           command="$(find xacro)/xacro $(find sp_description)/urdf/test/rmrobot.xacro"/>
     <rosparam file="$(find sp_hw)/config/actuator_coefficient.yaml" command="load" ns="sp_hw"/>
     <rosparam file="$(find sp_hw)/config/hw_config_single_actuator.yaml" command="load" ns="sp_hw"/>
     <node name="sp_hw" pkg="sp_hw" type="sp_hw" respawn="false" clear_params="true" output="screen"/>

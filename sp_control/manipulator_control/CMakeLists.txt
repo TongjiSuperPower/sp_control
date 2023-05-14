@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
 moveit_ros_planning_interface
 moveit_ros_move_group
 sp_common
+moveit_visual_tools
 )
 find_package(Eigen3 REQUIRED)
 find_package(control_msgs REQUIRED)

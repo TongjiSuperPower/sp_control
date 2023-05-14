@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "../devel/include/sp_common/ActuatorState.h"
-  "../devel/include/sp_common/DbusData.h"
   "../devel/include/sp_common/GpioData.h"
   "../devel/include/sp_common/SingleJointWrite.h"
   "CMakeFiles/sp_common_generate_messages_cpp"

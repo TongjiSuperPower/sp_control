@@ -1,7 +1,6 @@
 file(REMOVE_RECURSE
   "../devel/share/roseus/ros/sp_common/manifest.l"
   "../devel/share/roseus/ros/sp_common/msg/ActuatorState.l"
-  "../devel/share/roseus/ros/sp_common/msg/DbusData.l"
   "../devel/share/roseus/ros/sp_common/msg/GpioData.l"
   "../devel/share/roseus/ros/sp_common/msg/SingleJointWrite.l"
   "CMakeFiles/sp_common_generate_messages_eus"

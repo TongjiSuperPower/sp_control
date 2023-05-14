@@ -550,6 +550,76 @@ moveit_ros_manipulation_gencfg/fast:
 .PHONY : moveit_ros_manipulation_gencfg/fast
 
 # Convenience name for target.
+sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/rule
+.PHONY : sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+graph_msgs_generate_messages_cpp: sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/rule
+.PHONY : graph_msgs_generate_messages_cpp
+
+# fast build rule for target.
+graph_msgs_generate_messages_cpp/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir/build
+.PHONY : graph_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/rule
+.PHONY : sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+graph_msgs_generate_messages_eus: sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/rule
+.PHONY : graph_msgs_generate_messages_eus
+
+# fast build rule for target.
+graph_msgs_generate_messages_eus/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir/build
+.PHONY : graph_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/rule
+.PHONY : sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+graph_msgs_generate_messages_lisp: sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/rule
+.PHONY : graph_msgs_generate_messages_lisp
+
+# fast build rule for target.
+graph_msgs_generate_messages_lisp/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir/build
+.PHONY : graph_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+graph_msgs_generate_messages_nodejs: sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/rule
+.PHONY : graph_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+graph_msgs_generate_messages_nodejs/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir/build
+.PHONY : graph_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/rule:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/rule
+.PHONY : sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+graph_msgs_generate_messages_py: sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/rule
+.PHONY : graph_msgs_generate_messages_py
+
+# fast build rule for target.
+graph_msgs_generate_messages_py/fast:
+	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/build.make sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir/build
+.PHONY : graph_msgs_generate_messages_py/fast
+
+# Convenience name for target.
 sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/rule:
 	cd /home/adminpc/catkin_ws/src/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/rule
 .PHONY : sp_control/manipulator_control/CMakeFiles/manipulator_control.dir/rule
@@ -648,6 +718,11 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... graph_msgs_generate_messages_cpp"
+	@echo "... graph_msgs_generate_messages_eus"
+	@echo "... graph_msgs_generate_messages_lisp"
+	@echo "... graph_msgs_generate_messages_nodejs"
+	@echo "... graph_msgs_generate_messages_py"
 	@echo "... moveit_msgs_generate_messages_cpp"
 	@echo "... moveit_msgs_generate_messages_eus"
 	@echo "... moveit_msgs_generate_messages_lisp"

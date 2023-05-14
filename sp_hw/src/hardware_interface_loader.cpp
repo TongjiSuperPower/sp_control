@@ -41,6 +41,7 @@ namespace sp_hw
                                    {
             while (loop_running_)
             {
+                
                 if (loop_running_)
                     update();
             } 

@@ -88,7 +88,6 @@
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_ActuatorState.dir
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_GpioData.dir
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_SingleJointWrite.dir
-/home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/_sp_common_generate_messages_check_deps_DbusData.dir
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/sp_common_generate_messages_cpp.dir
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/sp_common_gencpp.dir
 /home/adminpc/catkin_ws/src/build/sp_common/CMakeFiles/sp_common_generate_messages_eus.dir
@@ -313,6 +312,11 @@
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/visualization_msgs_generate_messages_py.dir
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/moveit_ros_manipulation_gencfg.dir
+/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_cpp.dir
+/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_eus.dir
+/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_lisp.dir
+/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_nodejs.dir
+/home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/graph_msgs_generate_messages_py.dir
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/manipulator_control.dir
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/test.dir
 /home/adminpc/catkin_ws/src/build/sp_control/manipulator_control/CMakeFiles/edit_cache.dir

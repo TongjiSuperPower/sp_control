@@ -26,7 +26,7 @@ namespace sp_hw
         int64_t seq;
 
         double pos, vel, effort;
-        double cmd_pos, cmd_vel, cmd_effort, exe_effort;
+        double cmd_pos, cmd_vel, cmd_effort, exe_pos, exe_effort;
         double offset, offset2;
 
         bool is_halted = false;

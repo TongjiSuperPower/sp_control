@@ -7,17 +7,15 @@ thread_priority: 30
 actuators:
   mast_joint_motor:
     bus: can0
-    id: 0x205
+    id: 0x201
     type: rm_2006
-  
+
   fpv_yaw_joint_motor:
     bus: can0
-    id: 0x126
+    id: 0x101
     type: MG_995
 
   fpv_pitch_joint_motor:
     bus: can0
-    id: 0x127
+    id: 0x102
     type: MG_995
-
-

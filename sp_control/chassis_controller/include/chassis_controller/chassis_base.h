@@ -90,7 +90,7 @@ namespace chassis_controller
         std::string odom_frame_id_ = "odom";
         std::string base_frame_id_ = "base_link";
 
-        sp_common::RampFilter<double> *ramp_x_{}, *ramp_y_{}, *ramp_w_{};
+        sp_common::RampFilter<double> *ramp_x_{}, *ramp_y_{}, *ramp_z_{};
     };
 
 }

@@ -17,22 +17,25 @@ namespace manipulator_control
         move_group_interface.setPoseReferenceFrame("base_link");
         move_group_interface.setGoalPositionTolerance(0.005);
         move_group_interface.setGoalOrientationTolerance(0.005);
+        move_group_interface.setEndEffectorLink("vacuum_gripper");
         grip_group_interface.setPoseReferenceFrame("base_link");
         grip_group_interface.setGoalPositionTolerance(0.01);
         grip_group_interface.setGoalOrientationTolerance(0.01);
         sucker_publisher_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
+        pose_publisher_ = nh_.advertise<geometry_msgs::Pose>("calibrate", 1000);
         EXECUTION_MODE = POSE;
         return true;
     }
 
     void Manipulator::read()
     {
-        current_pose = move_group_interface.getCurrentPose().pose;
+        current_pose = move_group_interface.getCurrentPose("vacuum_gripper").pose;
         current_state = move_group_interface.getCurrentJointValues();
         current_distance = grip_group_interface.getCurrentJointValues();
         ROS_INFO_STREAM(current_pose);
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
         ROS_INFO_STREAM("joint7: " << current_distance[0]);
+        pose_publisher_.publish(current_pose);
     }
 
     void Manipulator::write(const geometry_msgs::Pose &target_pose_)
@@ -69,6 +72,17 @@ namespace manipulator_control
         move_group_interface.setJointValueTarget(target_state);
     }
 
+    void Manipulator::singleaddwrite(double delta_theta, int num)
+    {
+        read();
+        target_state = current_state;
+        target_state[num - 1] += delta_theta;
+        EXECUTION_MODE = STATE;
+        if (executed == true)
+            executed = false;
+        move_group_interface.setJointValueTarget(target_state);
+    }
+
     void Manipulator::CartesianPath(std::vector<geometry_msgs::Pose> waypoints)
     {
         moveit_msgs::RobotTrajectory trajectory;
@@ -94,12 +108,16 @@ namespace manipulator_control
 
     void Manipulator::move_execute(moveit_msgs::RobotTrajectory &trajectory)
     {
+        // moveit_visual_tools::MoveItVisualTools visual_tools;
+        // visual_tools.publishTrajectoryLine(trajectory, joint_model_group);
+        // visual_tools.trigger();
         move_group_interface.setStartStateToCurrentState();
         move_group_interface.execute(trajectory);
     }
 
     void Manipulator::grip_execute()
     {
+
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
         bool success = (grip_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (grip distance goal) %s", success ? "" : "FAILED");
@@ -137,4 +155,5 @@ namespace manipulator_control
             gpio_data.gpio_state.push_back(false);
         sucker_publisher_.publish(gpio_data);
     };
+
 }

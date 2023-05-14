@@ -11,7 +11,9 @@ namespace sp_hw
     {
         limit = fabs(limit);
         int8_t sign = a < 0 ? -1 : 1;
-        if (fabs(a) < limit)
+        if (isnan(a))
+            return 0.0;
+        else if (fabs(a) < limit)
             return a;
         else
             return static_cast<float>(sign * limit);
@@ -87,6 +89,7 @@ namespace sp_hw
 
         for (auto &id2act_data : *data_ptr_.id2act_data_)
         {
+
             // RM motors : id ranges from 0x201 to 0x208
             if (id2act_data.second.type.find("rm") != std::string::npos)
             {
@@ -152,10 +155,13 @@ namespace sp_hw
                 frame.data[7] = 0x00;
                 socket_can_.write(&frame);
             }
-            /*else if (id2act_data.second.type.find("MG_995") != std::string::npos)
+            else if (id2act_data.second.type.find("MG_995") != std::string::npos)
             {
-                double cmd = 0;
-                // limitAmplitude(id2act_data.second.exe_effort, act_coeff.max_out);
+                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                double cmd =
+                    limitAmplitude(act_coeff.pos2act * id2act_data.second.exe_pos, act_coeff.max_out);
+                // ROS_INFO_STREAM(cmd);
+
                 int id = id2act_data.first;
                 if (id == 0x101)
                 {
@@ -167,7 +173,8 @@ namespace sp_hw
                     can_frame2_.data[2] = static_cast<uint8_t>(cmd);
                     can_frame2_.data[3] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
                 }
-            }*/
+                has_write_frame2 = true;
+            }
         }
 
         for (auto &id2gpio_data : *data_ptr_.id2gpio_data_)
@@ -190,9 +197,7 @@ namespace sp_hw
         if (has_write_frame1)
             socket_can_.write(&rm_can_frame1_);
         if (has_write_frame2)
-        {
             socket_can_.write(&can_frame2_);
-        }
     }
     /*! TODO :  seems that the processing of read_buffer_ will waste a lot of time
      *          because of the thread-switching and mutex_.
@@ -309,6 +314,8 @@ namespace sp_hw
                         act_data.seq++;
                         act_data.pos = act_coeff.act2pos * static_cast<double>(act_data.q_raw) + act_coeff.act2pos_offset +
                                        static_cast<double>(act_data.q_circle) * 25;
+                        if (frame.data[0] == 0x01)
+                            ROS_INFO_STREAM(frame.data[0] << "  " << act_data.pos << " " << act_coeff.act2pos_offset << " " << act_data.q_circle);
                         act_data.vel = act_coeff.act2vel * static_cast<double>(qd) + act_coeff.act2vel_offset;
                         act_data.effort = act_coeff.act2effort * static_cast<double>(eff) + act_coeff.act2effort_offset;
                         continue;

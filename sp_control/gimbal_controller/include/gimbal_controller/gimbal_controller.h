@@ -4,6 +4,7 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <position_controllers/joint_position_controller.h>
+#include <effort_controllers/joint_position_controller.h>
 
 #include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
@@ -23,7 +24,7 @@ namespace gimbal_controller
         ros::Time stamp_;
     };
 
-    class GimbalController : public controller_interface::MultiInterfaceController<hardware_interface::PositionJointInterface>
+    class GimbalController : public controller_interface::MultiInterfaceController<hardware_interface::PositionJointInterface, hardware_interface::EffortJointInterface>
     {
     public:
         GimbalController() = default;
@@ -38,7 +39,7 @@ namespace gimbal_controller
          * @return True if initialization was successful and the controller
          * is ready to be started.
          */
-        bool init(hardware_interface::RobotHW* robot_hw, ros::NodeHandle& root_nh, ros::NodeHandle& controller_nh) override;
+        bool init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh) override;
         /** @brief Receive real_time command from manual. Execute different action according to current mode. Set
          * necessary params of chassis. Execute power limit.
          *
@@ -50,32 +51,35 @@ namespace gimbal_controller
          * @param time The current time.
          * @param period The time passed since the last call to update.
          */
-        void update(const ros::Time& time, const ros::Duration& period) override;
+        void update(const ros::Time &time, const ros::Duration &period) override;
 
     protected:
         /** @brief Write current command from  geometry_msgs::Twist.
          *
          * @param msg This expresses velocity in free space broken into its linear and angular parts.
          */
-        void cmdPosCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+        void cmdPosCallback(const geometry_msgs::Vector3::ConstPtr &msg);
 
-	double publish_rate_{},timeout_{};
+        double publish_rate_{}, timeout_{};
 
-        hardware_interface::PositionJointInterface* position_joint_interface_{};
+        hardware_interface::PositionJointInterface *position_joint_interface_{};
+        hardware_interface::EffortJointInterface *effort_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
-        geometry_msgs::Vector3 pos_cmd_{};  // x, y
+        geometry_msgs::Vector3 pos_cmd_{}; // x, y
 
         ros::Subscriber cmd_gimbal_sub_;
         ros::Subscriber cmd_pos_sub_;
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;
-	private:
-		void moveJoint(const ros::Time& time, const ros::Duration& period);
 
-	position_controllers::JointPositionController ctrl_yaw_,ctrl_pitch_,ctrl_height_;
+    private:
+        void moveJoint(const ros::Time &time, const ros::Duration &period);
+
+        position_controllers::JointPositionController ctrl_yaw_, ctrl_pitch_;
+        effort_controllers::JointPositionController ctrl_height_;
     };
 
 }

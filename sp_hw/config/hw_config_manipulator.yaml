@@ -1,6 +1,7 @@
 bus:
   - can0
   - can1
+
 loop_frequency: 650
 cycle_time_error_threshold: 1
 thread_priority: 65
