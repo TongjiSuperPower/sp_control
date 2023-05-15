@@ -45,57 +45,7 @@ def calibrate_camera(img):
         end = time.time()
         # print((end-begin)/60)
     cv2.imshow('a',img_copy)
-    # h, w, _ = frame.shape #  获取图像尺寸
-    # _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(points_3d, points_2d, (w, h), None, None)
-    # R_target2cam.append(rvecs)
-    # t_target2cam.append(tvecs)
 
-
-    # key = cv2.waitKey(1)
-    # if key == ord('q'):
-    #     break
-        # elif key == ord('c'):
-        #     ctrl = dai.CameraControl()
-        #     ctrl.setCaptureStill(True)
-        #     qControl.send(ctrl)
-        #     print("Sent 'still' event to the camera!")
-
-        # if qStill.has():
-        #     fName = f"{dirName}/{int(time.time() * 1000)}.jpeg"
-        #     with open(fName, "wb") as f:
-        #         f.write(qStill.get().getData())
-        #         print('Image saved to', fName)
-        #     sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10) 
-
-    # if len(points_2d) > 3:
-    # if key == ord('a'):
-    #     # 相机标定
-    #     h, w, _ = img.shape #  获取图像尺寸
-    #     _, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(points_3d, points_2d, (w, h), None, None)
-    #     print(f'cameraMatrix = np.float32({mtx.tolist()})')
-    #     print(f'distCoeffs = np.float32({dist[0].tolist()})')
-
-    #     # 手眼标定
-    #     R_target2cam = rvecs
-    #     t_target2cam = tvecs
-    #     R_cam2gripper, t_cam2gripper = cv2.calibrateHandEye(R_gripper2base, T_gripper2base, R_target2cam, t_target2cam)
-    #     print(f'R_camera2gimbal = np.float32({R_cam2gripper.tolist()})')
-    #     print(f't_camera2gimbal = np.float32({t_cam2gripper.tolist()})')
-
-    #     # 重投影误差
-    #     mean_error = 0
-    #     for i in range(len(points_3d)):
-    #         projected_points, _ = cv2.projectPoints(
-    #             points_3d[i],
-    #             rvecs[i],
-    #             tvecs[i],
-    #             mtx,
-    #             dist
-    #         )
-    #         error = cv2.norm(points_2d[i], projected_points, cv2.NORM_L2) / len(projected_points)
-    #         mean_error += error
-    #     mean_error /= len(points_3d)
-    #     print(f"# 重投影误差: {mean_error:.4f}px")
 
 
 
