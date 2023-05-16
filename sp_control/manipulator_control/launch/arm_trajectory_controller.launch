@@ -1,8 +1,8 @@
 <launch>
 	<rosparam file="$(find manipulator_control)/config/arm_trajectory_controller.yaml" command="load"/>
-
+	<node name="state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
 	<node name="arm_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="arm/arm_joint_controller"/>
 	<node name="gripper_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="arm/arm_gripper_controller"/>
-	<node name="state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
+
 
 </launch>

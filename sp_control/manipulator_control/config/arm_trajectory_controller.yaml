@@ -12,12 +12,12 @@ arm:
       - joint5
       - joint6
     gains:
-      joint1: { p: 15.0, i: 0.3, d: 0.0, i_clamp: 4.0 }
-      joint2: { p: 480.0, i: 1.2, d: 0.2, i_clamp: 4.0 }
-      joint3: { p: 250.0, i: 0.5, d: 0.2, i_clamp: 4.0 }
-      joint4: { p: 5.0, i: 0.05, d: 0.0, i_clamp: 4.0 }
-      joint5: { p: 70.0, i: 0.5, d: 0.1, i_clamp: 4.0 }
-      joint6: { p: 5.0, i: 0.05, d: 0.0, i_clamp: 4.0 }
+      joint1: { p: 18.0, i: 0.5, d: 0.15, i_clamp: 4.0 }
+      joint2: { p: 450.0, i: 55.0, d: 10.0, i_clamp: 100.0 }
+      joint3: { p: 280.0, i: 228.0, d: 8.0, i_clamp: 50.0 }
+      joint4: { p: 18.0, i: 0.05, d: 0.15, i_clamp: 4.0 }
+      joint5: { p: 70.0, i: 1.5, d: 0.15, i_clamp: 4.0 }
+      joint6: { p: 6.0, i: 0.05, d: 0.1, i_clamp: 4.0 }
 
   arm_gripper_controller:
     type: "effort_controllers/JointTrajectoryController"

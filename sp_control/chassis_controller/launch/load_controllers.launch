@@ -5,8 +5,7 @@
           respawn="false" output="screen"
           args="load
           controllers/joint_state_controller
-          controllers/joint1_position_controller
-          controllers/joint1_velocity_controller
+
 
     "/>
 </launch>

@@ -15,8 +15,9 @@ namespace manipulator_control
         grip_model_group = grip_group_interface.getCurrentState()->getJointModelGroup(PLANNING_GROUP_GRIPPER);
         executed = true;
         move_group_interface.setPoseReferenceFrame("base_link");
-        move_group_interface.setGoalPositionTolerance(0.005);
-        move_group_interface.setGoalOrientationTolerance(0.005);
+        move_group_interface.setGoalPositionTolerance(0.015);
+        move_group_interface.setGoalOrientationTolerance(0.015);
+        move_group_interface.setGoalJointTolerance(0.015);
         move_group_interface.setEndEffectorLink("vacuum_gripper");
         grip_group_interface.setPoseReferenceFrame("base_link");
         grip_group_interface.setGoalPositionTolerance(0.01);
