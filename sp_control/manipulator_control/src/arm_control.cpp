@@ -18,7 +18,7 @@ namespace manipulator_control
         move_group_interface.setGoalPositionTolerance(0.015);
         move_group_interface.setGoalOrientationTolerance(0.015);
         move_group_interface.setGoalJointTolerance(0.015);
-        move_group_interface.setEndEffectorLink("vacuum_gripper");
+        move_group_interface.setEndEffectorLink("link6");
         grip_group_interface.setPoseReferenceFrame("base_link");
         grip_group_interface.setGoalPositionTolerance(0.01);
         grip_group_interface.setGoalOrientationTolerance(0.01);

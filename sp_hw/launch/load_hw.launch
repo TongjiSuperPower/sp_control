@@ -1,12 +1,48 @@
 <launch>
     <!-- push robot_description to factory and spawn robot in gazebo -->
+
     <param name="robot_description"
-       command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.xacro"/>
+    command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.xacro"/>
     <rosparam file="$(find sp_hw)/config/actuator_coefficient.yaml" command="load" ns="sp_hw"/>
     <rosparam file="$(find sp_hw)/config/hw_config_manipulator.yaml" command="load" ns="sp_hw"/>
     <node name="sp_hw" pkg="sp_hw" type="sp_hw" respawn="false" clear_params="true" output="screen"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
+
+
+    <group ns = "oak">
+        <arg name="camera_model"         default="OAK-D" />
+        <arg name="tf_prefix"            default="oak" />
+
+        <arg name="base_frame"           default="oak-d_frame" />
+        <arg name="parent_frame"         default="oak-d-base-frame" />
+
+        <arg name="cam_pos_x"             default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+        <arg name="cam_pos_y"             default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+        <arg name="cam_pos_z"             default="0.0" /> <!-- Position respect to base frame (i.e. "base_link) -->
+        <arg name="cam_roll"              default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+        <arg name="cam_pitch"             default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+        <arg name="cam_yaw"               default="0.0" /> <!-- Orientation respect to base frame (i.e. "base_link) -->
+
+
+        <param name="robot_description"
+                command="$(find xacro)/xacro '$(find depthai_bridge)/urdf/depthai_descr.urdf.xacro'
+                            camera_name:=$(arg tf_prefix)
+                            camera_model:=$(arg camera_model)
+                            base_frame:=$(arg base_frame)
+                            parent_frame:=$(arg parent_frame)
+                            cam_pos_x:=$(arg cam_pos_x)
+                            cam_pos_y:=$(arg cam_pos_y)
+                            cam_pos_z:=$(arg cam_pos_z)
+                            cam_roll:=$(arg cam_roll)
+                            cam_pitch:=$(arg cam_pitch)
+                            cam_yaw:=$(arg cam_yaw)"/>
+    <!--  <param name="robot_description"
+        command="$(find xacro)/xacro $(find sp_description)/urdf/engineer/engineer.xacro"/> -->
+
+        <node name="$(arg tf_prefix)_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" required="true"/>
+    
+    </group>   
 
 
 

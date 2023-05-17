@@ -75,25 +75,24 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_)
     manipulator_->read();
     manipulator_->write(pose1);
     manipulator_->move_execute();
-    sleep(2.0);
+   
     manipulator_->suck(true);
     manipulator_->read();
-    sleep(2.0);
+   
     manipulator_->CartesianPath(waypoints);
     sleep(2.0);
     manipulator_->read();
-    /*manipulator_->singleaddwrite(-0.7,2);
+    manipulator_->singleaddwrite(-0.7,2);
     manipulator_->move_execute();
-    sleep(0.3);
     manipulator_->read();
-    manipulator_->write(pose2);
+    manipulator_->singleaddwrite(-0.3,3);
     manipulator_->move_execute();
+    //sleep(0.3);
+    //manipulator_->read();
+    //manipulator_->goal("left");
+    //manipulator_->move_execute();
     sleep(0.3);
-    manipulator_->read();
-    manipulator_->goal("left");
-    manipulator_->move_execute();
-    sleep(0.3);
-    manipulator_->suck(false);*/
+    manipulator_->suck(false);
 }
 
 

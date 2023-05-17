@@ -60,7 +60,7 @@
     <arg name="floodLightmA"          default="200.0"/>
     <arg name="enableRviz"            default="true"/>
     <arg name="enableMarkerPublish"   default="false" />
-
+<!--
     <include file="$(find depthai_bridge)/launch/urdf.launch">
         <arg name="base_frame"      value="$(arg  base_frame)"  />
         <arg name="parent_frame"    value="$(arg  parent_frame)"/>
@@ -72,7 +72,7 @@
         <arg name="cam_roll"        value="$(arg  cam_roll)"    />
         <arg name="cam_pitch"       value="$(arg  cam_pitch)"   />
         <arg name="cam_yaw"         value="$(arg  cam_yaw)"     />
-    </include>
+    </include>-->
 
     <!-- launch-prefix="xterm -e gdb (add [- - args] without space) -->
     <node name="stereo_inertial_publisher" pkg="depthai_examples" type="stereo_inertial_node" output="screen" required="true">
@@ -121,7 +121,7 @@
 
     <node name="ore_detect" pkg="depthai_subcribe" type="ore_subscribe.py" />     
     <node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
-    <node name="OAK_teleop" pkg="depthai_subcribe" type="keyboard.py" />     
+    <!--<node name="OAK_teleop" pkg="depthai_subcribe" type="keyboard.py" />     -->
 
     <!-- <node pkg="nodelet" type="nodelet" name="nodelet_manager"  args="manager" output="screen"/>
 
