@@ -10,6 +10,8 @@ from geometry_msgs.msg import Pose
 # from modules.calc import HostSpatialsCalc_ROS
 # from calc import HostSpatialsCalc_ROS
 import depthai as dai
+from scipy.spatial.transform import Rotation as R
+
 
 class HostSpatialsCalc_ROS:
     # We need device object to get calibration data
@@ -88,6 +90,14 @@ Camera_intrinsic = {
     "dist": np.array([[0.220473935504143, -1.294976334542626, 0.003407354582097702, -0.001096689035107743, 2.91864887650898]], dtype=np.double),
 
 }
+
+R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
+t_camera2gimbal = np.float32([[-0.0], [-0.1499257336343296], [-0.26959728856029563]])
+
+
+R_gripper2base = 0
+T_gripper2base = 0
+
 def EulerAndQuaternionTransform( intput_data):
     """
         四元素与欧拉角互换
@@ -139,6 +149,28 @@ def EulerAndQuaternionTransform( intput_data):
             y = math.degrees(y)
         return [r,p,y]
     
+
+def getpose(pose):
+    global R_gripper2base,T_gripper2base
+    Gripperq=[ pose.orientation.x ,pose.orientation.y, pose.orientation.z,pose.orientation.w]
+    Grippert=[[pose.position.x],[pose.position.y],[pose.position.z]]
+    # print(Gripperq)
+    # print(Grippert)
+    Gripperq = np.array(Gripperq)
+    Grippert = np.array(Grippert)
+    Rm = R.from_quat(Gripperq)
+    # R_gripper2base = Rm.as_matrix()
+    # print("successfully")
+    R_gripper2base = Rm.as_matrix()
+    # print(R_gripper2base)
+    # T_gripper2base = -np.dot(R_gripper2base.T,Grippert)
+    # R_gripper2base = np.linalg.inv(R_gripper2base)
+
+    # print(R_gripper2base)
+    T_gripper2base = Grippert
+    sub.unregister() 
+
+
 class ImageConverter:
     def __init__(self):
         # 创建图像缓存相关的变量
@@ -201,6 +233,8 @@ class ImageConverter:
             
     def detect_exchangestation(self):
         frame = self.cv_image
+        global sub
+        sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10)
         blue, _, red = cv2.split(frame)
         # subtracted = cv2.subtract(red, blue)
         # subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -290,24 +324,32 @@ class ImageConverter:
             pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
             success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
             rvec_matrix = cv2.Rodrigues(rvec)[0]
-            proj_matrix = np.hstack((rvec_matrix, rvec))
-            eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
-            pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
-            # print(pitch ,yaw, roll)
-            rot_params = [roll, pitch, yaw]  # 欧拉角 数组
-            Quaternion = EulerAndQuaternionTransform(rot_params)
-            qw = Quaternion[0]
-            qx = Quaternion[1]
-            qy = Quaternion[2]
-            qz = Quaternion[3]
+            rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
+            r = R.from_matrix(rvec_matrix)
+            Quaternion = r.as_quat()
+            qx = Quaternion[0]
+            qy = Quaternion[1]
+            qz = Quaternion[2]
+            qw = Quaternion[3]
+    
             center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
             center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
             roi = [center_x-10,center_y-10,center_x+10,center_y+10]
             # get 3D zuobiao
             spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
-            cx = spatials['x']
-            cy = spatials['y']
-            cz = spatials['z']
+            cx = spatials['x']*0.001
+            cy = spatials['y']*0.001
+            cz = spatials['z']*0.001
+            position = np.array([[cx],[-cy],[cz]])
+            # print(position)
+            position = np.dot(R_camera2gimbal,position)
+            # print(position)
+            position = position + t_camera2gimbal
+            position = np.dot(R_gripper2base,position) + T_gripper2base
+            # position = np.dot(R_gripper2base,(position - T_gripper2base)) 
+            cx = float(position[0])
+            cy = float(position[1])
+            cz = float(position[2])
         # else:
         #         cx = 0
         #         cy = 0

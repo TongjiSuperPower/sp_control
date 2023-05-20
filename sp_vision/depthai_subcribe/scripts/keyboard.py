@@ -30,7 +30,7 @@ def keyboardLoop():
             msg.data = 2000
         if ch == 'o':
             msg.data = 20000
-        else:
+        if ch == 'q':
             exit()
         pub.publish(msg) 
         rate.sleep()

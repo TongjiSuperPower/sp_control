@@ -22,7 +22,7 @@ def calibrate_camera(img):
     # print("T_gripper2base",T_gripper2base)
     w = 10  # 棋盘格角点每行数量
     h = 8  # 棋盘格角点每列数量
-    a = 8 # cm or mm
+    a = 0.08 # m
     # while True:
     # 生成棋盘格三维坐标
     obj_points = np.zeros(((w*h), 3), np.float32)
@@ -50,7 +50,7 @@ def calibrate_camera(img):
 
 
 def getpose(pose):
-    Gripperq=[pose.orientation.w, pose.orientation.x ,pose.orientation.y, pose.orientation.z]
+    Gripperq=[ pose.orientation.x ,pose.orientation.y, pose.orientation.z,pose.orientation.w]
     Grippert=[pose.position.x,pose.position.y,pose.position.z]
     Gripperq = np.array(Gripperq)
     Grippert = np.array(Grippert)
