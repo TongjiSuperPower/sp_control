@@ -91,8 +91,10 @@ Camera_intrinsic = {
 
 }
 
-R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
-t_camera2gimbal = np.float32([[-0.0], [-0.1499257336343296], [-0.26959728856029563]])
+R_camera2gimbal = np.float32([[1, 0, -0], [-0, 1, 0], [0, -0, 1]])
+# R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
+t_camera2gimbal = np.float32([[-0.0], [-0.166], [-0.166]])
+# t_camera2gimbal = np.float32([[-0.06471684338670468], [-0.1499257336343296], [-0.26959728856029563]])
 
 
 R_gripper2base = 0
@@ -154,18 +156,12 @@ def getpose(pose):
     global R_gripper2base,T_gripper2base
     Gripperq=[ pose.orientation.x ,pose.orientation.y, pose.orientation.z,pose.orientation.w]
     Grippert=[[pose.position.x],[pose.position.y],[pose.position.z]]
-    # print(Gripperq)
-    # print(Grippert)
     Gripperq = np.array(Gripperq)
     Grippert = np.array(Grippert)
     Rm = R.from_quat(Gripperq)
     # R_gripper2base = Rm.as_matrix()
     # print("successfully")
     R_gripper2base = Rm.as_matrix()
-    # print(R_gripper2base)
-    # T_gripper2base = -np.dot(R_gripper2base.T,Grippert)
-    # R_gripper2base = np.linalg.inv(R_gripper2base)
-
     # print(R_gripper2base)
     T_gripper2base = Grippert
     sub.unregister() 
@@ -241,7 +237,7 @@ class ImageConverter:
         # subtracted = cv2.subtract(blue, red)
         _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
         # _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
-        kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+        kernal = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         cv2.erode(threshed, kernal, dst=threshed)
         cv2.dilate(threshed, kernal, dst=threshed)
         # cv2.imshow("hsv_image",threshed)
@@ -249,14 +245,14 @@ class ImageConverter:
         contours_new = []
         point_array = []
         for contour in contours:
-            if 2000 < cv2.contourArea(contour) < 8000 :
+            if 500 < cv2.contourArea(contour) < 5000 :
                 rect = cv2.minAreaRect(contour)
                 center = rect[0]
                 h, w = rect[1]
                 if h < w:
                     h, w = w, h
                 ratio = h / w
-                if 0.25 < ratio < 4:
+                if 0.25 < ratio < 5:
                     contours_new.append(contour)
 
         quads = [] #array of quad including four peak points{}
@@ -274,8 +270,9 @@ class ImageConverter:
         global qw,qx,qy,qz,cx,cy,cz
         # obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
         #                 ],dtype=np.float64)
-        cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
-        
+        # cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
+        # cv2.imshow('a',frame)
+        print(point_array)
         if len(point_array) == 4:
             area_list = list(map(cv2.contourArea,quads))
             # print(area_list)
@@ -369,7 +366,8 @@ class ImageConverter:
             objPose.orientation.x = qx 
             objPose.orientation.y = qy 
             objPose.orientation.z = qz 
-            self.target_pub.publish(objPose)
+            if not math.isnan(objPose.position.x):
+                self.target_pub.publish(objPose)
             # print(objPose)
 
         # 再将opencv格式额数据转换成ros image格式的数据发布

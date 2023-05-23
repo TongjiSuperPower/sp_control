@@ -120,9 +120,9 @@
     </node>       
 
    <node name="ore_detect" pkg="depthai_subcribe" type="ore_subscribe.py" />     
-  <node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
+   <!--<node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
     <node name="OAK_teleop" pkg="depthai_subcribe" type="keyboard.py" />     
-    <!-- <node name="save_image" pkg="depthai_subcribe" type="save_image.py" />     -->
+    <node name="save_image" pkg="depthai_subcribe" type="save_image.py" />     -->
 
     <!-- <node pkg="nodelet" type="nodelet" name="nodelet_manager"  args="manager" output="screen"/>
 

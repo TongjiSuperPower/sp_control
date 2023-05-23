@@ -33,9 +33,9 @@ namespace manipulator_control
         current_pose = move_group_interface.getCurrentPose("vacuum_gripper").pose;
         current_state = move_group_interface.getCurrentJointValues();
         current_distance = grip_group_interface.getCurrentJointValues();
-        //ROS_INFO_STREAM(current_pose);
-        //ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
-        //ROS_INFO_STREAM("joint7: " << current_distance[0]);
+        ROS_INFO_STREAM(current_pose<<"   calibrate   ");
+        ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
+        ROS_INFO_STREAM("joint7: " << current_distance[0]);
         pose_publisher_.publish(current_pose);
     }
 
@@ -121,9 +121,10 @@ namespace manipulator_control
                 }
             }  
             ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory.points.size());
+            
         }
         
-        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)");
+        ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory);
         move_group_interface.execute(best_trajectory);
     }
 

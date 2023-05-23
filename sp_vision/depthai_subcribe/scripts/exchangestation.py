@@ -102,6 +102,19 @@ stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
 stereo.setLeftRightCheck(True)
 stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
 stereo.setExtendedDisparity(True)
+# Options: MEDIAN_OFF, KERNEL_3x3, KERNEL_5x5, KERNEL_7x7 (default)
+stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+config = stereo.initialConfig.get()
+config.postProcessing.speckleFilter.enable = False
+config.postProcessing.speckleFilter.speckleRange = 50
+config.postProcessing.temporalFilter.enable = True
+config.postProcessing.spatialFilter.enable = True
+config.postProcessing.spatialFilter.holeFillingRadius = 2
+config.postProcessing.spatialFilter.numIterations = 1
+config.postProcessing.thresholdFilter.minRange = 400
+config.postProcessing.thresholdFilter.maxRange = 30000
+config.postProcessing.decimationFilter.decimationFactor = 1
+stereo.initialConfig.set(config)
 # Linking
 camRgb.isp.link(rgbOut.input)
 left.out.link(stereo.left)
@@ -194,7 +207,7 @@ with device:
             contours_new = []
             point_array = []
             for contour in contours:
-                if  1000 < cv2.contourArea(contour) < 5000 :
+                if  500 < cv2.contourArea(contour) < 5000 :
                     rect = cv2.minAreaRect(contour)
                     center = rect[0]
                     h, w = rect[1]
@@ -222,7 +235,7 @@ with device:
             # obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
             #                 ],dtype=np.float64)
             cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
-            # print(quads)
+            print(point_array)
             if len(point_array) == 4:
                 area_list = list(map(cv2.contourArea,quads))
                 # print(area_list)

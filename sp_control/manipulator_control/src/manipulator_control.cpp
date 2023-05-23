@@ -48,13 +48,16 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     std::vector<geometry_msgs::Pose> waypoints;
     std::vector<double> stretch1;
     std::vector<double> stretch2;
-    pose.position.y -= 0.08;
+    // pose.position.x -= 0.08;
+    pose.position.y -= 0.11;
+    // pose.position.y -= 0.20;
+    // pose.position.z += 0.10;
     //pose.position.x -= 0.02;
     pose.orientation.w = -sqrt(2)/2;
     pose.orientation.x = sqrt(2)/2;
     pose.orientation.y = 0.0;
     pose.orientation.z = 0.0;
-    ROS_INFO_STREAM(pose);
+    ROS_INFO_STREAM(pose<<"    pose     ");
     pose2 = pose;
     pose2.position.y += 0.03;
     /*pose1.position.x = 0.00;
@@ -84,24 +87,24 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     waypoints.push_back(pose2);
     stretch1.push_back(-0.075);
     stretch2.push_back(0.00);
-    manipulator_->read();
+    //manipulator_->read();
     //manipulator_->goal("left");
-    sleep(0.1);
-    manipulator_->read();
-    manipulator_->write(pose);
+    sleep(2.0);
+    //manipulator_->read();
+    //manipulator_->write(pose);
  
     manipulator_->suck(true);
-    manipulator_->read();
+    //manipulator_->read();
  
-    manipulator_->CartesianPath(waypoints);
+    //manipulator_->CartesianPath(waypoints);
     sleep(2.0);
-    manipulator_->read();
+    //manipulator_->read();
     //manipulator_->singleaddwrite(-0.7,2);
-    manipulator_->read();
+    //manipulator_->read();
     //manipulator_->singleaddwrite(0.3,3);
-    manipulator_->read();
+    //manipulator_->read();
     //manipulator_->goal("left");
-    sleep(0.1);
+    sleep(2);
     manipulator_->suck(false);
 }
 
@@ -147,15 +150,16 @@ int main(int argc, char **argv)
     if (manipulator_.init())
     {
         manipulator_.read();
-        sleep(5);
-        auto_take_silver_ore(&manipulator_, ore_pose);
+        sleep(2);
+        
        // manipulator_.write(pose4);
         //manipulator_.move_execute();
        
 
         while (ros::ok())
         {
-            manipulator_.read();
+            auto_take_silver_ore(&manipulator_, ore_pose);
+            //manipulator_.read();
             //manipulator_.write(pose4);
          
             if (dbusdata_.s_l == 3) // enter the fine turing modd

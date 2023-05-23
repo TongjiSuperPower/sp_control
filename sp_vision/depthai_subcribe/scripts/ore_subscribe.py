@@ -337,7 +337,7 @@ class ImageConverter:
                     if width != 0:
                         # 面积大小会随分辨率的改变而改变，注意在固定分辨率下进行调参
                         # if height < 200 and width < 200 and height/width < 5  and 1500 < area < 5000 :                   
-                        if  height/width < 2.5 and 1000 < area < 30000 :                   
+                        if  height/width < 2.5 and 500 < area < 20000 :                   
                             width_array.append(width)
                             height_array.append(height)
                             point_array.append(rect[0])
