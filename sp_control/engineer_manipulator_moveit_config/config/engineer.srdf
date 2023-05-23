@@ -39,12 +39,12 @@
         <joint name="joint6" value="1.7405"/>
     </group_state>
     <group_state name="left" group="engineer_manipulator">
-        <joint name="joint1" value="1.6786"/>
-        <joint name="joint2" value="-0.6945"/>
-        <joint name="joint3" value="-1.923"/>
-        <joint name="joint4" value="-1.8827"/>
-        <joint name="joint5" value="0.3584"/>
-        <joint name="joint6" value="1.8066"/>
+        <joint name="joint1" value="1.5644"/>
+        <joint name="joint2" value="-1.3178"/>
+        <joint name="joint3" value="-1.6071"/>
+        <joint name="joint4" value="1.5644"/>
+        <joint name="joint5" value="-1.7272"/>
+        <joint name="joint6" value="-1.6762"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="gripper" parent_link="link6" group="gripper"/>

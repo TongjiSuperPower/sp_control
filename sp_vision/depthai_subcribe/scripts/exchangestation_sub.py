@@ -235,11 +235,12 @@ class ImageConverter:
         frame = self.cv_image
         global sub
         sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10)
-        blue, _, red = cv2.split(frame)
+        # blue, _, red = cv2.split(frame)
         # subtracted = cv2.subtract(red, blue)
-        # subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        subtracted = cv2.subtract(blue, red)
-        _, threshed = cv2.threshold(subtracted, 100, 255, cv2.THRESH_BINARY)
+        subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # subtracted = cv2.subtract(blue, red)
+        _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
+        # _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
         kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
         cv2.erode(threshed, kernal, dst=threshed)
         cv2.dilate(threshed, kernal, dst=threshed)
@@ -255,7 +256,7 @@ class ImageConverter:
                 if h < w:
                     h, w = w, h
                 ratio = h / w
-                if 0.8 < ratio < 1.25 :
+                if 0.25 < ratio < 4:
                     contours_new.append(contour)
 
         quads = [] #array of quad including four peak points{}
@@ -347,6 +348,7 @@ class ImageConverter:
             position = position + t_camera2gimbal
             position = np.dot(R_gripper2base,position) + T_gripper2base
             # position = np.dot(R_gripper2base,(position - T_gripper2base)) 
+            print(position)
             cx = float(position[0])
             cy = float(position[1])
             cz = float(position[2])

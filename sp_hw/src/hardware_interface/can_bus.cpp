@@ -159,19 +159,19 @@ namespace sp_hw
             {
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 double cmd =
-                    limitAmplitude(act_coeff.pos2act * id2act_data.second.exe_pos, act_coeff.max_out);
+                    limitAmplitude(act_coeff.pos2act * id2act_data.second.exe_pos , act_coeff.max_out);
                 // ROS_INFO_STREAM(cmd);
 
                 int id = id2act_data.first;
                 if (id == 0x101)
                 {
-                    can_frame2_.data[0] = static_cast<uint8_t>(cmd);
-                    can_frame2_.data[1] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
+                    can_frame2_.data[0] = static_cast<int8_t>(cmd);
+                    can_frame2_.data[1] = static_cast<int8_t>(static_cast<int16_t>(cmd) >> 8u);
                 }
                 else if (id == 0x102)
                 {
-                    can_frame2_.data[2] = static_cast<uint8_t>(cmd);
-                    can_frame2_.data[3] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
+                    can_frame2_.data[2] = static_cast<int8_t>(cmd);
+                    can_frame2_.data[3] = static_cast<int8_t>(static_cast<int16_t>(cmd) >> 8u);
                 }
                 has_write_frame2 = true;
             }

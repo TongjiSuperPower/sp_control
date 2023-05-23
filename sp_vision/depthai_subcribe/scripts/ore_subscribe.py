@@ -93,8 +93,9 @@ Camera_intrinsic = {
 
 }
 
-R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
-t_camera2gimbal = np.float32([[-0.0], [-0.1499257336343296], [-0.26959728856029563]])
+R_camera2gimbal = np.float32([[1, 0, -0], [-0, 1, 0], [0, -0, 1]])
+# R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
+t_camera2gimbal = np.float32([[-0.0], [-0.166], [-0.166]])
 # t_camera2gimbal = np.float32([[-0.06471684338670468], [-0.1499257336343296], [-0.26959728856029563]])
 
 R_gripper2base = 0
@@ -392,23 +393,20 @@ class ImageConverter:
                         ],dtype=np.float64)  # 世界坐标
                         point_four = JudgeBeveling(point_array_n[0],point_array_n[1],point_array_n[2])
                         point_array_n.append(point_four)
+                        print(point_array_n)
                     
                     elif len(point_array_n) == 2:
                             # points = point_array_n
-                        dis_points = round(math.sqrt((point_array_n[0][0]-point_array_n[1][0])**2+(point_array_n[0][1]+point_array_n[1][1])**2))
-                        if dis_points > 450:
-                            suc = False
-                        else:
-                            p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
-                            p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
-                            p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
-                            p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
-                            point_array_n = [p1,p2,p3,p4]
-                            # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
-                            # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
-                            # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
-                            obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
-                            ],dtype=np.float64)
+                        p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
+                        p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
+                        p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
+                        p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
+                        point_array_n = [p1,p2,p3,p4]
+                        # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
+                        # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
+                        # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
+                        obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
+                        ],dtype=np.float64)
                     else:
                         suc = False
                     
@@ -424,13 +422,12 @@ class ImageConverter:
                         cy = spatials['y']*0.001
                         cz = spatials['z']*0.001
                         position = np.array([[cx],[-cy],[cz]])
-                        # print(position)
+                        # # print(position)
                         position = np.dot(R_camera2gimbal,position)
-                        # print(position)
+                        # # print(position)
                         position = position + t_camera2gimbal
                         position = np.dot(R_gripper2base,position) + T_gripper2base
-                        print(T_gripper2base)
-                        # position = np.dot(R_gripper2base,(position - T_gripper2base)) 
+                        # print(T_gripper2base)
                         cx = float(position[0])
                         cy = float(position[1])
                         cz = float(position[2])
@@ -458,7 +455,8 @@ class ImageConverter:
                         objPose.orientation.x = qx 
                         objPose.orientation.y = qy 
                         objPose.orientation.z = qz 
-                        self.target_pub.publish(objPose)
+                        if not math.isnan(objPose.position.x):
+                            self.target_pub.publish(objPose)
                         print(objPose)
                 # else:
                 #     objPose = Pose()

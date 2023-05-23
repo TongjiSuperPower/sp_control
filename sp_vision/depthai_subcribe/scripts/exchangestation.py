@@ -21,6 +21,10 @@ sensIso = 800
 def clamp(num, v0, v1):
     return max(v0, min(num, v1))
 
+class Contour:
+    def __init__(self,centerpoint,obj) -> None:
+        self.centerpoint = centerpoint
+        self.obj = obj
 
 #qie ge huang se
 params = {'hue_low': 8, 'saturation_low': 110, 'value_low': 0,
@@ -113,10 +117,16 @@ hostSpatials = HostSpatialsCalc(device)
 delta = 5
 hostSpatials.setDeltaRoi(delta)
 
+
 # Connect to device and start pipeline
 with device:
     device.startPipeline(pipeline)
     controlQueue = device.getInputQueue('control')
+
+
+    ctrl = dai.CameraControl()
+    ctrl.setManualExposure(2000, sensIso)
+    controlQueue.send(ctrl)
 
     frameRgb = None
     frameDisp = None
@@ -155,11 +165,11 @@ with device:
             # Optional, apply false colorization
             # if 1: frameDisp = cv2.applyColorMap(frameDisp, cv2.COLORMAP_HOT)
             frameDisp = np.ascontiguousarray(frameDisp)
-            # cv2.imshow(depthWindowName, frameDisp)
+            cv2.imshow(depthWindowName, frameDisp)
 
         if latestPacket["dep"] is not None:
             framedepth = latestPacket["dep"].getFrame()
-            # cv2.imshow("depth",framedepth)
+            cv2.imshow("depth",framedepth)
 
         # Blend when both received
         if frameRgb is not None and frameDisp is not None and framedepth is not None:
@@ -168,17 +178,118 @@ with device:
                 frameDisp = cv2.cvtColor(frameDisp, cv2.COLOR_GRAY2BGR)
 
             frame = frameRgb
-            blue, _, red = cv2.split(frame)
+            # blue, _, red = cv2.split(frame)
             # subtracted = cv2.subtract(red, blue)
-            # subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            subtracted = cv2.subtract(blue, red)
+            subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # subtracted = cv2.subtract(blue, red)
             # subtracted = cv2.subtract(red,blue)
-            _, threshed = cv2.threshold(subtracted, 100, 255, cv2.THRESH_BINARY)
-            kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+            _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
+            kernal = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
             cv2.erode(threshed, kernal, dst=threshed)
             cv2.dilate(threshed, kernal, dst=threshed)
             cv2.imshow("hsv_image",threshed)
             cv2.imshow('b',frame) 
+            contours, _ = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(frame,contours,-1,(0, 255, 255),thickness = 2)
+            contours_new = []
+            point_array = []
+            for contour in contours:
+                if  1000 < cv2.contourArea(contour) < 5000 :
+                    rect = cv2.minAreaRect(contour)
+                    center = rect[0]
+                    h, w = rect[1]
+                    if h < w:
+                        h, w = w, h
+                    ratio = h / w
+                    if 0.25 < ratio < 5 :
+                       contours_new.append(contour)
+            # cv2.drawContours(frame,contours_new,-1,(0, 255, 255),thickness = 2)
+            print(len(contours_new))
+
+            quads = [] #array of quad including four peak points{}
+            hulls = []
+            for i in range(len(contours_new)):
+                rect = cv2.minAreaRect(contours_new[i])
+                center = rect[0]
+                hull = cv2.convexHull(contours_new[i])
+                # 阈值越小，越容易逼近
+                quad = cv2.approxPolyDP(hull, 3, True)# maximum_area_inscribed
+                # if 3 < len(quad) <6:
+                #     print(quad)
+                hulls.append(hull)
+                quads.append(quad)
+                point_array.append(center)
+            # obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
+            #                 ],dtype=np.float64)
+            cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
+            # print(quads)
+            if len(point_array) == 4:
+                area_list = list(map(cv2.contourArea,quads))
+                # print(area_list)
+                id_min = area_list.index(min(area_list))
+                # print(id_min)
+                # print(point_array)
+                origin = point_array[id_min]
+                def clockwiseangle_and_distance(point):
+                    refvec = [0,1]
+                    # Vector between point and the origin: v = p - o
+                    vector = [point[0]-origin[0], point[1]-origin[1]]
+                    # Length of vector: ||v||
+                    lenvector = math.hypot(vector[0], vector[1])
+                    # If length is zero there is no angle
+                    if lenvector == 0:
+                        return -math.pi, 0
+                    # Normalize vector: v/||v||
+                    normalized = [vector[0]/lenvector, vector[1]/lenvector]
+                    dotprod  = normalized[0]*refvec[0] + normalized[1]*refvec[1]     # x1*x2 + y1*y2
+                    diffprod = refvec[1]*normalized[0] - refvec[0]*normalized[1]     # x1*y2 - y1*x2
+                    angle = math.atan2(diffprod, dotprod)
+                    # Negative angles represent counter-clockwise angles so we need to subtract them 
+                    # from 2*pi (360 degrees)
+                    if angle < 0:
+                        return 2*math.pi+angle, lenvector
+                    # I return first the angle because that's the primary sorting criterium
+                    # but if two vectors have the same angle then the shorter distance should come first.
+                    return angle, lenvector        
+                point_array = sorted(point_array, key=clockwiseangle_and_distance)
+                # print(point_array)
+                point_rt = Contour(point_array[0],[112.5, 112.5, 0])
+                point_lt = Contour(point_array[1],[-112.5, 112.5, 0])
+                point_lb = Contour(point_array[2],[-112.5, -112.5, 0])
+                point_rb = Contour(point_array[3],[112.5, -112.5, 0])
+                    
+                point_array = np.array(point_array,np.int32)
+                # print(np.argsort(point_array[:,1]))
+                # bbox = np.array(bbox,np.int32)
+                cv2.polylines(frame, [point_array], True, (0, 255, 0), 2) 
+                # cv2.polylines(frame, bbox, True, (255, 255, 0), 2)   
+                
+                
+                obj = np.array([point_rt.obj,point_lt.obj,point_lb.obj,point_rb.obj
+                                ],dtype=np.float64)
+                point_array_n = point_array
+                point_array_n = np.int32(point_array_n)
+                pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
+                success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
+                rvec_matrix = cv2.Rodrigues(rvec)[0]
+                # rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
+                r = R.from_matrix(rvec_matrix)
+                Quaternion = r.as_quat()
+                qx = Quaternion[0]
+                qy = Quaternion[1]
+                qz = Quaternion[2]
+                qw = Quaternion[3]
+        
+                center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
+                center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+                roi = [center_x-10,center_y-10,center_x+10,center_y+10]
+                # get 3D zuobiao
+                spatials, centroid = hostSpatials.calc_spatials(framedepth, roi)
+                cx = spatials['x']*0.001
+                cy = spatials['y']*0.001
+                cz = spatials['z']*0.001
+                print(spatials)
+
         key = cv2.waitKey(1)
         if key == ord('q'):
             break

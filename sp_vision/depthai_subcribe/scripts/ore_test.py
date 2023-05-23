@@ -188,7 +188,7 @@ def getpose(pose):
     print(R_gripper2base)
     # T_gripper2base = Grippert
     T_gripper2base = Grippert
-    sub.unregister() 
+    # sub.unregister() 
 
 # Optional. If set (True), the ColorCamera is downscaled from 1080p to 720p.
 # Otherwise (False), the aligned depth is automatically upscaled to 1080p
@@ -245,6 +245,22 @@ stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
 stereo.setLeftRightCheck(True)
 stereo.setDepthAlign(dai.CameraBoardSocket.RGB)
 stereo.setExtendedDisparity(True)
+# Create a node that will produce the depth map (using disparity output as it's easier to visualize depth this way)
+# stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
+# # Options: MEDIAN_OFF, KERNEL_3x3, KERNEL_5x5, KERNEL_7x7 (default)
+# stereo.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+# config = stereo.initialConfig.get()
+# config.postProcessing.speckleFilter.enable = False
+# config.postProcessing.speckleFilter.speckleRange = 50
+# config.postProcessing.temporalFilter.enable = True
+# config.postProcessing.spatialFilter.enable = True
+# config.postProcessing.spatialFilter.holeFillingRadius = 2
+# config.postProcessing.spatialFilter.numIterations = 1
+# config.postProcessing.thresholdFilter.minRange = 400
+# config.postProcessing.thresholdFilter.maxRange = 15000
+# config.postProcessing.decimationFilter.decimationFactor = 1
+# stereo.initialConfig.set(config)
+
 # Linking
 camRgb.isp.link(rgbOut.input)
 left.out.link(stereo.left)
@@ -264,6 +280,9 @@ hostSpatials.setDeltaRoi(delta)
 with device:
     device.startPipeline(pipeline)
     controlQueue = device.getInputQueue('control')
+    ctrl = dai.CameraControl()
+    ctrl.setManualExposure(8000, sensIso)
+    controlQueue.send(ctrl)
 
     frameRgb = None
     frameDisp = None
@@ -323,23 +342,26 @@ with device:
                 ore_box = ore_golden_box
             else:
                 ore_box = ore_silver_box
+            # ore_box = 1
 
             if ore_box != None:
 
-                rospy.init_node("cali_listener")
-                sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10)
-                print("a")
+                # rospy.init_node("cali_listener")
+                # sub = rospy.Subscriber("calibrate",Pose,getpose,queue_size=10)
+                # print("a")
                 # rospy.spin() 
 
                 hsv_image = cv2.GaussianBlur(frame, (5, 5), 0)
 
-                # 颜色空间转换，将RGB图像转换成HSV图像
-                hsv_image = cv2.cvtColor(hsv_image, cv2.COLOR_BGR2HSV)
+                # # 颜色空间转换，将RGB图像转换成HSV图像
+                # hsv_image = cv2.cvtColor(hsv_image, cv2.COLOR_BGR2HSV)
+                subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                threshed = cv2.adaptiveThreshold(subtracted,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,0,11,2)
                 
                 # # 根据阈值，去除背景
                 mask = cv2.inRange(hsv_image, lower_black, upper_black)
                 # # 对识别后的图像进行腐蚀与膨胀，消除较小的连通域 交叉型 7x7 效果较好
-                kernal = cv2.getStructuringElement(cv2.MORPH_CROSS, (15, 15))
+                kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
                 # 先膨胀后腐蚀
                 cv2.dilate(mask, kernal, dst=mask)
                 cv2.erode(mask, kernal, dst=mask)
@@ -408,7 +430,8 @@ with device:
                                             quads.append(quad)
                     # print("quads",quads)
                     cv2.drawContours(frame,q,-1,(0,255,0),3)      
-                    cv2.drawContours(frame,contours_new_n,-1,(255,255,0),3)      
+                    cv2.drawContours(frame,contours_new_n,-1,(255,255,0),3)  
+                    print(len(contours_new_n))    
                     if len(point_array_n)>0:
                         point_array_n.sort(key=lambda c: c[0], reverse=False)
                         if len(point_array_n) >= 3:
@@ -425,16 +448,16 @@ with device:
                         elif len(point_array_n) == 2:
                                 # points = point_array_n
                             dis_points = round(math.sqrt((point_array_n[0][0]-point_array_n[1][0])**2+(point_array_n[0][1]+point_array_n[1][1])**2))
-                            if dis_points > 450:
-                                suc = False
-                            else:
-                                p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
-                                p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
-                                p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
-                                p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
-                                point_array_n = [p1,p2,p3,p4]
-                                obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
-                                ],dtype=np.float64)
+                            # if dis_points > 450:
+                            #     suc = False
+                            # else:
+                            p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
+                            p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
+                            p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
+                            p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
+                            point_array_n = [p1,p2,p3,p4]
+                            obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
+                            ],dtype=np.float64)
                         else:
                             suc = False
                             
@@ -449,31 +472,42 @@ with device:
                             cy = spatials['y']
                             cz = spatials['z']
                             position = np.array([cx,cy,cz])
-                            position = np.dot(R_camera2gimbal,position) + t_camera2gimbal
-                            position = np.dot(R_gripper2base,position) + T_gripper2base
+                            # position = np.dot(R_camera2gimbal,position) + t_camera2gimbal
+                            # position = np.dot(R_gripper2base,position) + T_gripper2base
                             print(position)
-                            print(R_gripper2base)
+                            # print(R_gripper2base)
                             point_array_n = np.int32(point_array_n)
                             # print(point_array_n)  point_array_n [[497 587][755 273][785 557][466 303]],should add one more []
                             cv2.polylines(frame,[point_array_n],True,(0,0,255),2)
                             # cv2.polylines(frame,[ore_box],True,(0,255,255),2)
-
                             pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
                             success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
                             rvec_matrix, _  = cv2.Rodrigues(rvec)
-                            rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
+                            # rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
                             proj_matrix = np.hstack((rvec_matrix, rvec))
-                            print("proj_matrix:")
-                            print(proj_matrix)
-                            print(rvec_matrix)
-                            eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
-                            pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
-                            rot_params = [roll, pitch, yaw]  # 欧拉角 数组
-                            Quaternion = EulerAndQuaternionTransform(rot_params)
-                            print(Quaternion)
+                            r = R.from_matrix(rvec_matrix)
+                            Quaternion = r.as_quat()
+                            qx = Quaternion[0]
+                            qy = Quaternion[1]
+                            qz = Quaternion[2]
+                            qw = Quaternion[3]
 
-# cv2.imshow(blendedWindowName, frame)
             cv2.imshow('b',frame) 
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
+        elif key in [ord('i'), ord('o'), ord('k'), ord('l')]:
+            if key == ord('i'):
+                expTime -= EXP_STEP
+            if key == ord('o'):
+                expTime += EXP_STEP
+            if key == ord('k'):
+                sensIso -= ISO_STEP
+            if key == ord('l'):
+                sensIso += ISO_STEP
+            expTime = clamp(expTime, 1, 33000)
+            sensIso = clamp(sensIso, 100, 1600)
+            print("Setting manual exposure, time: ", expTime, "iso: ", sensIso)
+            ctrl = dai.CameraControl()
+            ctrl.setManualExposure(expTime, sensIso)
+            controlQueue.send(ctrl)

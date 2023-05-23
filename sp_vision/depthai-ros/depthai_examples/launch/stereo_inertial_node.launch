@@ -27,7 +27,7 @@
     <arg name="depth_aligned"         default="true" />
     <!-- <arg name="manualExposure"        default="false"/> -->
     <arg name="manualExposure"        default="true"/>
-    <arg name="expTime"               default="9000"/>
+    <arg name="expTime"               default="33000"/>
     <arg name="sensIso"               default="800" />
 
     <arg name="enableSpatialDetection" default="false" />
@@ -60,8 +60,8 @@
     <arg name="floodLightmA"          default="200.0"/>
     <arg name="enableRviz"            default="true"/>
     <arg name="enableMarkerPublish"   default="false" />
-<!--
-    <include file="$(find depthai_bridge)/launch/urdf.launch">
+
+    <!--<include file="$(find depthai_bridge)/launch/urdf.launch">
         <arg name="base_frame"      value="$(arg  base_frame)"  />
         <arg name="parent_frame"    value="$(arg  parent_frame)"/>
         <arg name="camera_model"    value="$(arg  camera_model)"/>
@@ -120,9 +120,9 @@
     </node>       
 
    <node name="ore_detect" pkg="depthai_subcribe" type="ore_subscribe.py" />     
-    <!-- <node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
+  <node name="exchangestation_detect" pkg="depthai_subcribe" type="exchangestation_sub.py" />     
     <node name="OAK_teleop" pkg="depthai_subcribe" type="keyboard.py" />     
-    <node name="save_image" pkg="depthai_subcribe" type="save_image.py" />     -->
+    <!-- <node name="save_image" pkg="depthai_subcribe" type="save_image.py" />     -->
 
     <!-- <node pkg="nodelet" type="nodelet" name="nodelet_manager"  args="manager" output="screen"/>
 

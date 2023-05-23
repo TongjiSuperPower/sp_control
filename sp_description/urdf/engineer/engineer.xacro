@@ -2,9 +2,9 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
 	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_manipulator/engineer_manipulator.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer/engineer_chassis/engineer_chassis.xacro"/>
-	<xacro:include filename="$(find sp_description)/urdf/engineer/manipulator_transmission.xacro"/> 
-	<!--<xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/fpv_module.xacro"/>
--->
+	<xacro:include filename="$(find sp_description)/urdf/engineer/manipulator_transmission.xacro"/>
+	<!--xacro:include filename="$(find sp_description)/urdf/engineer/fpv_module/fpv_module.xacro"/>-->
+
 	<xacro:arg name="use_simulation" default="true"/>
 	<xacro:engineer_chassis roller_type="simple"/>
 	<!--<xacro:fpv_module/>-->
