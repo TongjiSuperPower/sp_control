@@ -15,15 +15,18 @@ namespace manipulator_control
         grip_model_group = grip_group_interface.getCurrentState()->getJointModelGroup(PLANNING_GROUP_GRIPPER);
         executed = true;
         move_group_interface.setPoseReferenceFrame("base_link");
-        move_group_interface.setGoalPositionTolerance(0.005);
-        move_group_interface.setGoalOrientationTolerance(0.005);
-        move_group_interface.setEndEffectorLink("vacuum_gripper");
+        move_group_interface.setGoalPositionTolerance(0.015);
+        move_group_interface.setGoalOrientationTolerance(0.015);
+        move_group_interface.setGoalJointTolerance(0.015);
+        move_group_interface.setEndEffectorLink("link6");
         grip_group_interface.setPoseReferenceFrame("base_link");
         grip_group_interface.setGoalPositionTolerance(0.01);
         grip_group_interface.setGoalOrientationTolerance(0.01);
-        sucker_publisher_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
+        //sucker_pub_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
+        //sucker_sub_ = nh_.subscribe<sp_common::GpioData>("/controllers/gpio_controller/state", 10, boost::bind(&Manipulator::sucker_callback, this, _1));
         pose_publisher_ = nh_.advertise<geometry_msgs::Pose>("calibrate", 1000);
         EXECUTION_MODE = POSE;
+       // gpio_size = 4;
         return true;
     }
 
@@ -32,7 +35,7 @@ namespace manipulator_control
         current_pose = move_group_interface.getCurrentPose("vacuum_gripper").pose;
         current_state = move_group_interface.getCurrentJointValues();
         current_distance = grip_group_interface.getCurrentJointValues();
-        ROS_INFO_STREAM(current_pose);
+        ROS_INFO_STREAM(current_pose<<"   calibrate   ");
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
         ROS_INFO_STREAM("joint7: " << current_distance[0]);
         pose_publisher_.publish(current_pose);
@@ -44,7 +47,7 @@ namespace manipulator_control
         EXECUTION_MODE = POSE;
         if (executed == true)
             executed = false;
-        move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
+        move_execute();
     }
 
     void Manipulator::write(const std::vector<double> &target_state_)
@@ -58,7 +61,9 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
-        move_group_interface.setJointValueTarget(target_state);
+        move_group_interface.setJointValueTarget(target_state);   
+        joint_execute();  
+        
     }
 
     void Manipulator::singlewrite(double target_state_, int num)
@@ -70,6 +75,7 @@ namespace manipulator_control
         if (executed == true)
             executed = false;
         move_group_interface.setJointValueTarget(target_state);
+        joint_execute();    
     }
 
     void Manipulator::singleaddwrite(double delta_theta, int num)
@@ -80,7 +86,8 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
-        move_group_interface.setJointValueTarget(target_state);
+        move_group_interface.setJointValueTarget(target_state);    
+        joint_execute(); 
     }
 
     void Manipulator::CartesianPath(std::vector<geometry_msgs::Pose> waypoints)
@@ -99,11 +106,35 @@ namespace manipulator_control
 
     void Manipulator::move_execute()
     {
-        move_group_interface.setStartStateToCurrentState();
+        moveit_msgs::RobotTrajectory best_trajectory;
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-        bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-        ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
-        move_group_interface.execute(my_plan);
+        int shortest = 1000;
+        ROS_INFO_STREAM("Begin to plan");
+        double j4_delta, j5_delta, j6_delta;
+        j4_delta = j5_delta = j6_delta = 0.0;
+        while (1)
+        {
+            move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
+            bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            int tra_size = 0;
+            if (success)
+            {
+                tra_size = my_plan.trajectory_.joint_trajectory.points.size();
+                j4_delta = abs(my_plan.trajectory_.joint_trajectory.points[0].positions[3] - my_plan.trajectory_.joint_trajectory.points[tra_size - 1].positions[3]);
+                j5_delta = abs(my_plan.trajectory_.joint_trajectory.points[0].positions[4] - my_plan.trajectory_.joint_trajectory.points[tra_size - 1].positions[4]);
+                j6_delta = abs(my_plan.trajectory_.joint_trajectory.points[0].positions[5] - my_plan.trajectory_.joint_trajectory.points[tra_size - 1].positions[5]);
+                if (j4_delta > 2.60 || j5_delta > 2.60 || j6_delta > 2.60)
+                    continue;
+                else
+                {
+                    best_trajectory = my_plan.trajectory_;
+                    break;
+                }              
+            }  
+            ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory.points.size());          
+        }     
+        ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory);
+        move_group_interface.execute(best_trajectory);
     }
 
     void Manipulator::move_execute(moveit_msgs::RobotTrajectory &trajectory)
@@ -114,6 +145,41 @@ namespace manipulator_control
         move_group_interface.setStartStateToCurrentState();
         move_group_interface.execute(trajectory);
     }
+
+    void Manipulator::move_execute(std::string name)
+    {
+        moveit_msgs::RobotTrajectory best_trajectory;
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        int shortest = 1000;
+        ROS_INFO_STREAM("Begin to plan");
+        for (int i = 0; i < 10; i++)
+        {
+            move_group_interface.setNamedTarget(name);
+            bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            if (success)
+            {
+                if (shortest > my_plan.trajectory_.joint_trajectory.points.size())
+                {
+                    shortest = my_plan.trajectory_.joint_trajectory.points.size();
+                    best_trajectory = my_plan.trajectory_;
+                }
+            }  
+           
+        }
+        
+        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)");
+        move_group_interface.execute(best_trajectory);
+    }
+
+    void Manipulator::joint_execute()
+    {
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)" << success ? "" : "FAILED");
+        move_group_interface.execute(my_plan);
+    }
+
+    
 
     void Manipulator::grip_execute()
     {
@@ -142,18 +208,33 @@ namespace manipulator_control
 
     void Manipulator::goal(const std::string &name)
     {
-        move_group_interface.setNamedTarget(name);
+        move_execute(name);
     }
 
-    void Manipulator::suck(const bool &suck_it)
+    /*void Manipulator::suck(const bool &suck_it)
     {
-        sp_common::GpioData gpio_data;
-        gpio_data.gpio_name.push_back("sucker");
-        if (suck_it)
-            gpio_data.gpio_state.push_back(true);
-        else
-            gpio_data.gpio_state.push_back(false);
-        sucker_publisher_.publish(gpio_data);
-    };
+        for (int i = 0; i < gpio_size; i++ )
+        {
+            
+            if (gpio_data.gpio_name[i] == "sucker")
+            {
+                if (suck_it)
+                    gpio_data.gpio_state[i] = true;
+                else
+                    gpio_data.gpio_state[i] = false;
+
+            }
+           
+
+        }
+        
+        sucker_pub_.publish(gpio_data);
+    }
+
+    void Manipulator::sucker_callback(const sp_common::GpioData::ConstPtr &gpio_data_)
+    {
+        gpio_data = *gpio_data_;
+        gpio_size = gpio_data_->gpio_name.size();
+    }*/
 
 }

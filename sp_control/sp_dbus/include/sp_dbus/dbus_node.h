@@ -41,6 +41,7 @@
 #include <ros/ros.h>
 #include <sp_common/DbusData.h>
 #include <sp_common/SingleJointWrite.h>
+#include <sp_common/GpioData.h>
 
 #define chassis_x_coeff 2.0
 #define chassis_y_coeff 2.0
@@ -58,16 +59,21 @@ private:
   ros::Publisher dbus_pub_;
   ros::Publisher cmd_vel_pub_;
   ros::Publisher cmd_pos_pub_;
+  ros::Publisher gpio_pub_;
+  ros::Subscriber gpio_sub_;
   std::string serial_port_;
   sp_common::DbusData dbus_cmd_;
   geometry_msgs::Twist cmd_vel_;
   geometry_msgs::Vector3 cmd_pos_;
+  bool gripper_signal, sucker_signal, rob_signal;
   DBus dbus_{};
+  sp_common::GpioData gpio_data;
 
 public:
   DBusNode();
   ~DBusNode() = default;
   void run();
   bool is_update() { return dbus_.get_update(); }
+  void gpio_callback(const sp_common::GpioData::ConstPtr &gpio_data_);
 };
 #endif // SRC_RM_BRIDGE_INCLUDE_DBUS_NODE_H_

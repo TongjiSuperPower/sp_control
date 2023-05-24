@@ -1,8 +1,0 @@
-prefix=/home/adminpc/catkin_ws/src/build/devel
-
-Name: sp_dbus
-Description: Description of sp_dbus
-Version: 0.1.17
-Cflags: -I/home/adminpc/catkin_ws/src/sp_control/sp_dbus/include
-Libs: -L${prefix}/lib 
-Requires: roscpp sp_common

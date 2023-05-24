@@ -159,19 +159,19 @@ namespace sp_hw
             {
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 double cmd =
-                    limitAmplitude(act_coeff.pos2act * id2act_data.second.exe_pos, act_coeff.max_out);
+                    limitAmplitude(act_coeff.pos2act * id2act_data.second.exe_pos , act_coeff.max_out);
                 // ROS_INFO_STREAM(cmd);
 
                 int id = id2act_data.first;
                 if (id == 0x101)
                 {
-                    can_frame2_.data[0] = static_cast<uint8_t>(cmd);
-                    can_frame2_.data[1] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
+                    can_frame2_.data[0] = static_cast<int8_t>(cmd);
+                    can_frame2_.data[1] = static_cast<int8_t>(static_cast<int16_t>(cmd) >> 8u);
                 }
                 else if (id == 0x102)
                 {
-                    can_frame2_.data[2] = static_cast<uint8_t>(cmd);
-                    can_frame2_.data[3] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
+                    can_frame2_.data[2] = static_cast<int8_t>(cmd);
+                    can_frame2_.data[3] = static_cast<int8_t>(static_cast<int16_t>(cmd) >> 8u);
                 }
                 has_write_frame2 = true;
             }
@@ -250,16 +250,16 @@ namespace sp_hw
                     {
                         if (act_data.seq == 0)
                         {
-                            act_data.offset2 = (frame.data[7] << 8u) | frame.data[6];
+                            act_data.offset -= act_coeff.act2pos*static_cast<double>((frame.data[7] << 8u) | frame.data[6]);
                         }
-                        act_data.q_raw = ((frame.data[7] << 8u) | frame.data[6]) - act_data.offset2;
+                        act_data.q_raw = (frame.data[7] << 8u) | frame.data[6];
                         act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
 
                         int16_t mapped_current = (frame.data[3] << 8u) | frame.data[2];
                         act_data.stamp = can_frame_stamp.stamp;
 
                         // Basically, motor won't rotate more than 32678 between two time slide.
-                        if (act_data.seq != 0)
+                        if (act_data.seq > 3)
                         {
                             if (act_data.q_raw - act_data.q_last > 32768)
                                 act_data.q_circle--;
@@ -314,8 +314,8 @@ namespace sp_hw
                         act_data.seq++;
                         act_data.pos = act_coeff.act2pos * static_cast<double>(act_data.q_raw) + act_coeff.act2pos_offset +
                                        static_cast<double>(act_data.q_circle) * 25;
-                        if (frame.data[0] == 0x01)
-                            ROS_INFO_STREAM(frame.data[0] << "  " << act_data.pos << " " << act_coeff.act2pos_offset << " " << act_data.q_circle);
+                        //if (frame.data[0] == 0x01)
+                           // ROS_INFO_STREAM(frame.data[0] << "  " << act_data.pos << " " << act_coeff.act2pos_offset << " " << act_data.q_circle);
                         act_data.vel = act_coeff.act2vel * static_cast<double>(qd) + act_coeff.act2vel_offset;
                         act_data.effort = act_coeff.act2effort * static_cast<double>(eff) + act_coeff.act2effort_offset;
                         continue;

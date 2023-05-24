@@ -31,94 +31,87 @@ void remote_control_callback(const sp_common::DbusData::ConstPtr &data_, sp_comm
     *dbusdata_ = *data_;
 }
 
+void ore_pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, geometry_msgs::Pose *pose)
+{
+    *pose = *pose_;
+}
+
 // void remote_control_callback(const sp_common::RCData::ConstPtr& RCData_, const sp_control::RCData & RCData)
 //{
 //
 // }
-void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose target_pose)
+void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose pose)
 {
     geometry_msgs::Pose pose1;
     geometry_msgs::Pose pose2;
+    geometry_msgs::Pose pose3;
+    std::vector<geometry_msgs::Pose> waypoints;
     std::vector<double> stretch1;
     std::vector<double> stretch2;
-    pose1.position.x = 0.00;
-    pose1.position.y = 0.48;
-    pose1.position.z = 0.280;
-    pose1.orientation.w = 0.00;
-    pose1.orientation.x = -1.00;
+    // pose.position.x -= 0.08;
+    pose.position.y -= 0.11;
+    // pose.position.y -= 0.20;
+    // pose.position.z += 0.10;
+    //pose.position.x -= 0.02;
+    pose.orientation.w = -sqrt(2)/2;
+    pose.orientation.x = sqrt(2)/2;
+    pose.orientation.y = 0.0;
+    pose.orientation.z = 0.0;
+    ROS_INFO_STREAM(pose<<"    pose     ");
+    pose2 = pose;
+    pose2.position.y += 0.03;
+    /*pose1.position.x = 0.00;
+    pose1.position.y = 0.300;
+    pose1.position.z = 0.485;
+    pose1.orientation.w = -sqrt(2)/2;
+    pose1.orientation.x = sqrt(2)/2;
     pose1.orientation.y = 0.00;
     pose1.orientation.z = 0.00;
-    pose2.position.x = 0.044;
-    pose2.position.y = -0.100;
-    pose2.position.z = 0.433;
-    pose2.orientation.w = 0.00;
-    pose2.orientation.x = 0.00;
-    pose2.orientation.y = 1.00;
+    pose2.position.x = 0.00;
+    pose2.position.y = 0.335;
+    pose2.position.z = 0.485;
+    pose2.orientation.w = -sqrt(2)/2;
+    pose2.orientation.x = sqrt(2)/2;
+    pose2.orientation.y = 0.00;
     pose2.orientation.z = 0.00;
+    pose3.position.x = 0.044;
+    pose3.position.y = -0.100;
+    pose3.position.z = 0.433;
+    pose3.orientation.w = 0.00;
+    pose3.orientation.x = 0.00;
+    pose3.orientation.y = 1.00;
+    */pose3.orientation.z = 0.00;
+    //waypoints.push_back(pose1);
+    //waypoints.push_back(pose2);
+    waypoints.push_back(pose);
+    waypoints.push_back(pose2);
     stretch1.push_back(-0.075);
     stretch2.push_back(0.00);
-    manipulator_->read();
-    manipulator_->goal("home");
-    manipulator_->move_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->write(target_pose);
-    manipulator_->move_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->stretch(stretch1);
-    manipulator_->grip_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->stretch(stretch2);
-    manipulator_->grip_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->write(pose2);
-    manipulator_->move_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->stretch(stretch1);
-    manipulator_->grip_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->stretch(stretch2);
-    manipulator_->grip_execute();
-    sleep(0.3);
-    manipulator_->read();
-    manipulator_->goal("home");
-    manipulator_->move_execute();
+    //manipulator_->read();
+    //manipulator_->goal("left");
+    sleep(2.0);
+    //manipulator_->read();
+    //manipulator_->write(pose);
+ 
+   // manipulator_->suck(true);
+    //manipulator_->read();
+ 
+    //manipulator_->CartesianPath(waypoints);
+    sleep(2.0);
+    //manipulator_->read();
+    //manipulator_->singleaddwrite(-0.7,2);
+    //manipulator_->read();
+    //manipulator_->singleaddwrite(0.3,3);
+    //manipulator_->read();
+    //manipulator_->goal("left");
+    sleep(2);
+   // manipulator_->suck(false);
 }
+
 
 int main(int argc, char **argv)
 {
-ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
-ros::AsyncSpinner spinner(3);
-moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
-moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
-manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
-geometry_msgs::Pose pose1;
-// ros::Rate rate(10);
-spinner.start();
-ros::init(argc,argv,"calibrate");
-ros::NodeHandle nh;
-ros::Publisher pub = nh.advertise<geometry_msgs::Pose>("pose",10);
-// rate.sleep();
-while(ros::ok())
-{
-    pose1 = move_group_interface.getCurrentPose().pose;
-    //逻辑(一秒10次)
-    ros::Rate r(1);
-    pub.publish(pose1);
 
-}
-return 0;
-}
-
-// int main(int argc, char **argv)
-// {
-
-<<<<<<< HEAD
     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
     ros::AsyncSpinner spinner(3);
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
@@ -128,11 +121,7 @@ return 0;
     scene.init();
     std::string ore_id = "golden_ore";
     std::string sink_id = "exchange_sink";
-    geometry_msgs::Pose initial_pose;
-    initial_pose.orientation.w = 1.0;
-    initial_pose.position.x = 0.00;
-    initial_pose.position.y = 0.50;
-    initial_pose.position.z = 1.00;
+    geometry_msgs::Pose ore_pose;
     sp_common::DbusData dbusdata_;
     shapes::Mesh *ore = shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL");
     shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL");
@@ -141,19 +130,38 @@ return 0;
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
     ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &dbusdata_));
+    ros::Subscriber ore_pose_sub = nh.subscribe<geometry_msgs::Pose>("ore_detect_pose", 10, boost::bind(&ore_pose_callback, _1, &ore_pose));
     spinner.start();
     moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
     // scene.add(ore_.object, initial_pose);
     // scene.attach(ore_, grip_group_interface);
     //  scene.generate(sink_id, initial_pose, sink);
     ros::Rate loop_rate(0.2);
+    geometry_msgs::Pose pose4;
+    pose4.position.x=0.000;
+    pose4.position.y=0.300;
+    pose4.position.z=0.500;
+    pose4.orientation.w=sqrt(2)/2;
+    pose4.orientation.x=-sqrt(2)/2;
+    pose4.orientation.y=0;
+    pose4.orientation.z=0;
+
 
     if (manipulator_.init())
     {
+        manipulator_.read();
+        sleep(2);
+        
+       // manipulator_.write(pose4);
+        //manipulator_.move_execute();
+       
 
         while (ros::ok())
         {
-            manipulator_.read();
+            auto_take_silver_ore(&manipulator_, ore_pose);
+            //manipulator_.read();
+            //manipulator_.write(pose4);
+         
             if (dbusdata_.s_l == 3) // enter the fine turing modd
             {
                 int plus;
@@ -173,21 +181,33 @@ return 0;
                     manipulator_.singleaddwrite(sign * joint_eff, 2 + plus);
                 else if (dbusdata_.key_c)
                     manipulator_.singleaddwrite(sign * joint_eff, 3 + plus);
-                manipulator_.move_execute();
-            }
+              
+           
 
-            if (dbusdata_.key_f) // go home
-            {
-                ROS_INFO_STREAM("f");
-                manipulator_.goal("home");
-                manipulator_.move_execute();
-            }
-            else if (dbusdata_.key_r)
-            {
-                ROS_INFO_STREAM("G");
-                manipulator_.goal("grip");
-                manipulator_.move_execute();
-            }
+                if (dbusdata_.key_f) // go home
+                {
+                    manipulator_.goal("home");
+                
+                }
+                else if (dbusdata_.key_r)
+                {
+                    manipulator_.goal("left");
+                 
+                }
+                else if (dbusdata_.key_v)
+                {
+                    manipulator_.goal("forward");
+                 
+                }
+                if (dbusdata_.key_g) 
+                {
+                   // auto_take_silver_ore(&manipulator_);
+                } 
+                else if (dbusdata_.key_b) 
+                {
+                    //auto_exchange(&manipulator_);
+                } 
+             }
             //   }
 
             // else if () // go forward grip
@@ -218,70 +238,7 @@ return 0;
     }
     return 0;
 }
-=======
-//     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
-//     ros::AsyncSpinner spinner(3);
-//     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
-//     moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
-//     manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
-//     manipulator_control::Scene scene;
-//     scene.init();
-//     std::string ore_id = "golden_ore";
-//     std::string sink_id = "exchange_sink";
-//     geometry_msgs::Pose initial_pose;
-//     initial_pose.orientation.w = 1.0;
-//     initial_pose.position.x = 0.00;
-//     initial_pose.position.y = 0.50;
-//     initial_pose.position.z = 1.00;
-//     shapes::Mesh *ore = shapes::createMeshFromResource("package://sp_description/meshes/scene/gloden_ore.STL");
-//     shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL");
-//     ros::NodeHandle nh;
-//     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub", 10, boost::bind(&pose_callback, _1, &manipulator_));
-//     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
-//     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
-//     // ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &manipulator_));
-//     spinner.start();
-//     moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
-//     scene.add(ore_.object, initial_pose);
-//     scene.attach(ore_, grip_group_interface);
-//     // scene.generate(sink_id, initial_pose, sink);
-//     // moveit_visual_tools::MoveitVisualTool visual_tools("link7");
 
-//     if (manipulator_.init())
-//     {
-//         while (ros::ok())
-//         {
-//             // if () // go home
-//             manipulator_.goal("home");
-//             // else if () // go forward grip
-
-//             // else if () // go left grip205083
-
-//             // else if () // go
-
-//             // if ()
-//             // auto_take_silver_ore(*manipulator_, target_pose);
-//             // manipulator_.read();
-//             // manipulator_.goal("grip");
-//             // manipulator_.move_execute();
-//             manipulator_.suck(true);
-//             sleep(3);
-//             manipulator_.suck(false);
-//             sleep(3);
-
-//             // if (manipulator_.get_executed() == false)
-//             //{
-//             //     manipulator_.move_execute();
-//             //     manipulator_.set_executed(true);
-//             //}
-//             // sleep(5);
-
-//             ros::spinOnce();
-//         }
-//     }
-//     return 0;
-// }
->>>>>>> 9c12840e7e41716081df1f559ebfe78229ea9042
 
 /*
 int main(int argc, char **argv)
@@ -361,8 +318,8 @@ int main(int argc, char **argv)
  return 0;
 }
 */
-
-/*int main(int argc, char **argv)
+/*
+int main(int argc, char **argv)
 {
 
 ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
@@ -427,8 +384,7 @@ if (manipulator_.init())
  manipulator_.move_execute();
 }
 return 0;
-}
-*/
+}*/
 /*
 int main(int argc, char **argv)
 {

@@ -39,7 +39,7 @@ actuators:
 
   joint7_motor:
     bus: can0
-    id: 0x201
+    id: 0x207
     type: rm_2006
 
 gpios:

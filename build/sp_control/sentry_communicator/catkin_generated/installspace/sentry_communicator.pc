@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: sentry_communicator
-Description: Description of sentry_communicator
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

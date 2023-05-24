@@ -201,6 +201,7 @@ void DBus::getData(sp_common::DbusData *d_bus_data) const
 {
   if (is_success)
   {
+    
     d_bus_data->ch_r_x = static_cast<double>(d_bus_data_.ch1 / 660.0);
     d_bus_data->ch_r_y = static_cast<double>(d_bus_data_.ch0 / 660.0);
     d_bus_data->ch_l_x = static_cast<double>(d_bus_data_.ch2 / 660.0);
@@ -209,6 +210,7 @@ void DBus::getData(sp_common::DbusData *d_bus_data) const
     d_bus_data->m_y = static_cast<double>(d_bus_data_.y / 1600.0);
     d_bus_data->m_z = static_cast<double>(d_bus_data_.z / 1600.0);
     d_bus_data->wheel = static_cast<double>(d_bus_data_.wheel / 660.0);
+    ROS_INFO_STREAM(d_bus_data->ch_r_x);
 
     d_bus_data->s_l = d_bus_data_.s1;
     d_bus_data->s_r = d_bus_data_.s0;

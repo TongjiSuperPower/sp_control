@@ -1,8 +1,0 @@
-prefix=/home/adminpc/catkin_ws/src/build/devel
-
-Name: manipulator_control
-Description: Description of manipulator_control
-Version: 0.1.0
-Cflags: -I/home/adminpc/catkin_ws/src/sp_control/manipulator_control/include
-Libs: -L${prefix}/lib 
-Requires: 

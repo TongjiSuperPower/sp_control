@@ -1,0 +1,6 @@
+<launch>
+    <node name="controller_loader" pkg="controller_manager" type="controller_manager"
+          respawn="false" output="screen"
+          args="load
+          controllers/joint_state_controller"/>
+</launch>

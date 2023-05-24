@@ -56,9 +56,12 @@ DBusNode::DBusNode()
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
   cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   cmd_pos_pub_ = nh_.advertise<geometry_msgs::Vector3>("/cmd_pos", 1);
+  gpio_pub_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
+  gpio_sub_ = nh_.subscribe<sp_common::GpioData>("/controllers/gpio_controller/state", 10, boost::bind(&DBusNode::gpio_callback, this, _1));
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
   dbus_.init(serial_port_.data());
   cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
+  gripper_signal = sucker_signal = rob_signal = false;
 }
 
 void DBusNode::run()
@@ -71,6 +74,8 @@ void DBusNode::run()
   {
     dbus_.getData(&dbus_cmd_);
     dbus_pub_.publish(dbus_cmd_);
+    
+    
     if (dbus_cmd_.s_r == 1) // right paddle up,using remote control
     {
       cmd_vel_.linear.x = chassis_x_coeff * dbus_cmd_.ch_r_x;
@@ -120,7 +125,77 @@ void DBusNode::run()
       cmd_vel_.linear.y = 0;
       cmd_vel_.angular.z = 0;
     }
+
+    if (dbus_cmd_.s_l == 3)// left paddle middle, move manipulator
+    {
+      if (gripper_signal != dbus_cmd_.key_q)
+      {
+        if (dbus_cmd_.key_q == true)
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_q == true)
+            gripper_signal = true;
+        }
+        else
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_q == false)
+            gripper_signal = false;
+        }                   
+      }
+
+      if (sucker_signal != dbus_cmd_.key_w)
+      {
+        if (dbus_cmd_.key_w == true)
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_w == true)
+            sucker_signal = true;
+        }
+        else
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_w == false)
+            sucker_signal = false;
+        }                   
+      }
+
+      if (rob_signal != dbus_cmd_.key_e)
+      {
+        if (dbus_cmd_.key_e == true)
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_e == true)
+            rob_signal = true;
+        }
+        else
+        {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_e == false)
+            rob_signal = false;
+        }  
+      }
+
+
+      
+    }
+    gpio_data.gpio_state[0] = gpio_data.gpio_state[1] = gripper_signal;
+    gpio_data.gpio_state[2] = sucker_signal;
+    gpio_data.gpio_state[3] = rob_signal;
+    gpio_pub_.publish(gpio_data); 
     cmd_vel_pub_.publish(cmd_vel_);
     cmd_pos_pub_.publish(cmd_pos_);
+
   }
+}
+
+void DBusNode::gpio_callback(const sp_common::GpioData::ConstPtr &gpio_data_)
+{
+  gpio_data = *gpio_data_;
 }

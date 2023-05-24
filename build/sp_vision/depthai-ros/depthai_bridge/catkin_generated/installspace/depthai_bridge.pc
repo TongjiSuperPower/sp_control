@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: depthai_bridge
-Description: Description of depthai_bridge
-Version: 2.6.4
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -ldepthai_bridge
-Requires: depthai_ros_msgs camera_info_manager roscpp sensor_msgs std_msgs vision_msgs image_transport cv_bridge stereo_msgs

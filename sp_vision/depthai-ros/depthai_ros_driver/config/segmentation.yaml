@@ -1,4 +1,0 @@
-/oak:
-    camera_i_nn_type: rgb
-    nn_i_nn_config_path: depthai_ros_driver/segmentation
-

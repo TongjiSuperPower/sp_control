@@ -28,6 +28,10 @@ namespace manipulator_control
 
         void move_execute(moveit_msgs::RobotTrajectory &trajectory);
 
+        void move_execute(std::string goal);
+
+        void joint_execute();
+
         void grip_execute();
 
         void read();
@@ -50,7 +54,9 @@ namespace manipulator_control
 
         void goal(const std::string &name);
 
-        void suck(const bool &suck_it);
+        //void suck(const bool &suck_it);
+
+       // void sucker_callback(const sp_common::GpioData::ConstPtr &gpio_data_);
 
     private:
         moveit::planning_interface::MoveGroupInterface &move_group_interface;
@@ -63,7 +69,10 @@ namespace manipulator_control
         bool executed;
         ros::NodeHandle nh_;
         ros::Publisher pose_publisher_;
-        ros::Publisher sucker_publisher_;
+        //ros::Publisher sucker_pub_;
+       // ros::Subscriber sucker_sub_;
+       // sp_common::GpioData gpio_data;
+        //int gpio_size;
     };
 
 }

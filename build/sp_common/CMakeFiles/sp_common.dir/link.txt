@@ -1,1 +1,0 @@
-/usr/bin/g++ -fPIC -g -shared -Wl,-soname,libsp_common.so -o ../devel/lib/libsp_common.so CMakeFiles/sp_common.dir/src/filters/filters.cpp.o 
