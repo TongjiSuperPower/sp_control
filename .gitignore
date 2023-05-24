@@ -1,0 +1,6 @@
+
+*.swp
+.vscode/
+out/
+.vs
+
