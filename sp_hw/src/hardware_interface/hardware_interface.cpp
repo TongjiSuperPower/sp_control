@@ -46,13 +46,13 @@ namespace sp_hw
         {
             ROS_ERROR("hardware_interface : Error occurred while loading Transmission in urdf");
             return false;
-
-            registerInterface(&gpio_command_interface_);
-            registerInterface(&gpio_state_interface_);
-
-            actuator_state_pub_.reset(
-                new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
         }
+        registerInterface(&gpio_command_interface_);
+        registerInterface(&gpio_state_interface_);
+
+        actuator_state_pub_.reset(
+            new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
+        
 
         return true;
     }

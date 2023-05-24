@@ -15,9 +15,10 @@ namespace manipulator_control
         grip_model_group = grip_group_interface.getCurrentState()->getJointModelGroup(PLANNING_GROUP_GRIPPER);
         executed = true;
         move_group_interface.setPoseReferenceFrame("base_link");
-        move_group_interface.setGoalPositionTolerance(0.005);
-        move_group_interface.setGoalOrientationTolerance(0.005);
-        move_group_interface.setEndEffectorLink("vacuum_gripper");
+        move_group_interface.setGoalPositionTolerance(0.015);
+        move_group_interface.setGoalOrientationTolerance(0.015);
+        move_group_interface.setGoalJointTolerance(0.015);
+        move_group_interface.setEndEffectorLink("link6");
         grip_group_interface.setPoseReferenceFrame("base_link");
         grip_group_interface.setGoalPositionTolerance(0.01);
         grip_group_interface.setGoalOrientationTolerance(0.01);
@@ -32,7 +33,7 @@ namespace manipulator_control
         current_pose = move_group_interface.getCurrentPose("vacuum_gripper").pose;
         current_state = move_group_interface.getCurrentJointValues();
         current_distance = grip_group_interface.getCurrentJointValues();
-        ROS_INFO_STREAM(current_pose);
+        ROS_INFO_STREAM(current_pose<<"   calibrate   ");
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
         ROS_INFO_STREAM("joint7: " << current_distance[0]);
         pose_publisher_.publish(current_pose);
@@ -44,7 +45,7 @@ namespace manipulator_control
         EXECUTION_MODE = POSE;
         if (executed == true)
             executed = false;
-        move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
+        move_execute();
     }
 
     void Manipulator::write(const std::vector<double> &target_state_)
@@ -58,7 +59,9 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
-        move_group_interface.setJointValueTarget(target_state);
+        move_group_interface.setJointValueTarget(target_state);   
+        joint_execute();  
+        
     }
 
     void Manipulator::singlewrite(double target_state_, int num)
@@ -70,6 +73,7 @@ namespace manipulator_control
         if (executed == true)
             executed = false;
         move_group_interface.setJointValueTarget(target_state);
+        joint_execute();    
     }
 
     void Manipulator::singleaddwrite(double delta_theta, int num)
@@ -80,7 +84,8 @@ namespace manipulator_control
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
-        move_group_interface.setJointValueTarget(target_state);
+        move_group_interface.setJointValueTarget(target_state);    
+        joint_execute(); 
     }
 
     void Manipulator::CartesianPath(std::vector<geometry_msgs::Pose> waypoints)
@@ -99,11 +104,28 @@ namespace manipulator_control
 
     void Manipulator::move_execute()
     {
-        move_group_interface.setStartStateToCurrentState();
+        moveit_msgs::RobotTrajectory best_trajectory;
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-        bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-        ROS_INFO_NAMED("tutorial", "Visualizing plan 1 (pose goal) %s", success ? "" : "FAILED");
-        move_group_interface.execute(my_plan);
+        int shortest = 1000;
+        ROS_INFO_STREAM("Begin to plan");
+        for (int i = 0; i < 10; i++)
+        {
+            move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
+            bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            if (success)
+            {
+                if (shortest > my_plan.trajectory_.joint_trajectory.points.size())
+                {
+                    shortest = my_plan.trajectory_.joint_trajectory.points.size();
+                    best_trajectory = my_plan.trajectory_;
+                }
+            }  
+            ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory.points.size());
+            
+        }
+        
+        ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory);
+        move_group_interface.execute(best_trajectory);
     }
 
     void Manipulator::move_execute(moveit_msgs::RobotTrajectory &trajectory)
@@ -114,6 +136,41 @@ namespace manipulator_control
         move_group_interface.setStartStateToCurrentState();
         move_group_interface.execute(trajectory);
     }
+
+    void Manipulator::move_execute(std::string name)
+    {
+        moveit_msgs::RobotTrajectory best_trajectory;
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        int shortest = 1000;
+        ROS_INFO_STREAM("Begin to plan");
+        for (int i = 0; i < 10; i++)
+        {
+            move_group_interface.setNamedTarget(name);
+            bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+            if (success)
+            {
+                if (shortest > my_plan.trajectory_.joint_trajectory.points.size())
+                {
+                    shortest = my_plan.trajectory_.joint_trajectory.points.size();
+                    best_trajectory = my_plan.trajectory_;
+                }
+            }  
+           
+        }
+        
+        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)");
+        move_group_interface.execute(best_trajectory);
+    }
+
+    void Manipulator::joint_execute()
+    {
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)" << success ? "" : "FAILED");
+        move_group_interface.execute(my_plan);
+    }
+
+    
 
     void Manipulator::grip_execute()
     {
@@ -142,7 +199,7 @@ namespace manipulator_control
 
     void Manipulator::goal(const std::string &name)
     {
-        move_group_interface.setNamedTarget(name);
+        move_execute(name);
     }
 
     void Manipulator::suck(const bool &suck_it)

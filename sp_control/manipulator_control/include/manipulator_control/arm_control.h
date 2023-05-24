@@ -1,4 +1,9 @@
-#include <moveit/move_group_interface/move_group_interface.h>
+
+
+
+
+
+ #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_trajectory/robot_trajectory.h>
 #include <sp_common/GpioData.h>
 #define PLANNING_GROUP_MANIPULATOR "engineer_manipulator"
@@ -27,6 +32,10 @@ namespace manipulator_control
         void move_execute();
 
         void move_execute(moveit_msgs::RobotTrajectory &trajectory);
+
+        void move_execute(std::string goal);
+
+        void joint_execute();
 
         void grip_execute();
 
