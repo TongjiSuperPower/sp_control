@@ -83,7 +83,7 @@ thresh_high = (params['hue_high'], params['saturation_high'], params['value_high
 min_area_size = params['min_area_size']
 max_area_size = params['max_area_size']
 lower_black = np.array([0,0,0]) 
-upper_black= np.array([180, 255, 43])
+upper_black= np.array([180, 255, 120])
 Camera_intrinsic = {
 
     "mtx": np.array([[1025.35323576971, 0, 678.7266096913569],
@@ -93,8 +93,11 @@ Camera_intrinsic = {
 
 }
 
-R_camera2gimbal = np.float32([[0.41016693024568496, 0.8763608546753984, -0.2524970133000318], [-0.909749552097839, 0.41263930117435166, -0.04565697738707521], [0.06417820339190353, 0.24843602701489942, 0.9665198904784318]])
-t_camera2gimbal = np.float32([[-18.959828191075893], [1.5586220537514408], [-1.4427664518406154]])
+R_camera2gimbal = np.float32([[1, 0, -0], [-0, 1, 0], [0, -0, 1]])
+# R_camera2gimbal = np.float32([[0.9995126574971087, 0.030507826488515775, -0.006612112069085753], [-0.030487028187199994, 0.9995299636403152, 0.0032238017158466806], [0.006707355319379401, -0.0030206469732225122, 0.9999729431722053]])
+t_camera2gimbal = np.float32([[-0.0], [-0.166], [-0.166]])
+# t_camera2gimbal = np.float32([[-0.06471684338670468], [-0.1499257336343296], [-0.26959728856029563]])
+
 R_gripper2base = 0
 T_gripper2base = 0
 
@@ -205,16 +208,18 @@ def find_ore(color_image):
 
 def getpose(pose):
     global R_gripper2base,T_gripper2base
-    Gripperq=[pose.orientation.w, pose.orientation.x ,pose.orientation.y, pose.orientation.z]
-    Grippert=[pose.position.x,pose.position.y,pose.position.z]
+    Gripperq=[ pose.orientation.x ,pose.orientation.y, pose.orientation.z,pose.orientation.w]
+    Grippert=[[pose.position.x],[pose.position.y],[pose.position.z]]
+    # print(Gripperq)
+    # print(Grippert)
     Gripperq = np.array(Gripperq)
     Grippert = np.array(Grippert)
     Rm = R.from_quat(Gripperq)
     # R_gripper2base = Rm.as_matrix()
-    print("successfully")
+    # print("successfully")
     R_gripper2base = Rm.as_matrix()
-    print(R_gripper2base)
-    # T_gripper2base = Grippert
+
+    # print(R_gripper2base)
     T_gripper2base = Grippert
     sub.unregister() 
 
@@ -329,7 +334,7 @@ class ImageConverter:
                     if width != 0:
                         # 面积大小会随分辨率的改变而改变，注意在固定分辨率下进行调参
                         # if height < 200 and width < 200 and height/width < 5  and 1500 < area < 5000 :                   
-                        if  height/width < 2.5 and 2000 < area < 30000 :                   
+                        if  height/width < 2.5 and 500 < area < 20000 :                   
                             width_array.append(width)
                             height_array.append(height)
                             point_array.append(rect[0])
@@ -354,12 +359,6 @@ class ImageConverter:
                                 width_array_n.append(width_array[i])
                                 height_array_n.append(height_array[i])
                                 q.append(quad)
-                # for i in range(len(contours_new)):
-                #     # print(len(contours_new[i]))  
-                #     # 不知道为什么在方形轮廓点数为50+ ，可能要多边形逼近            
-                #     if 3 < len(contours_new[i]) <90:
-                #         contours_new_n.append(contours_new[i])
-                #         point_array_n.append(point_array[i]) 
                 quads = [] #array of quad including four peak points
                 hulls = []
                 
@@ -378,7 +377,8 @@ class ImageConverter:
                                 areahull = cv2.contourArea(hull)
                                 if areaqued / areahull > 0.8 and areahull >= areaqued:
                                     quads.append(quad)
-                                    
+                print(point_array_n)
+                # 注意！ 排序是优先按y从大到小排列，
                 if len(point_array_n)>0:
                     point_array_n.sort(key=lambda c: c[0], reverse=False)
                     if len(point_array_n) >= 3:
@@ -387,27 +387,47 @@ class ImageConverter:
                         else:
                             point_array_n = point_array_n[-3:]
 
-                        obj = np.array([[-50, 50, 0], [50, 50, 0], [50,-50 , 0],[-50, -50 ,0]
+                        obj = np.array([[50, -50, 0], [50, 50, 0], [-50,50 , 0],[-50, -50 ,0]
                         ],dtype=np.float64)  # 世界坐标
                         point_four = JudgeBeveling(point_array_n[0],point_array_n[1],point_array_n[2])
                         point_array_n.append(point_four)
+                        # print(point_array_n)
+                        origin = point_array[0] #一定是右下角那个
+                        def clockwiseangle_and_distance(point):
+                            refvec = [0,1]
+                            # Vector between point and the origin: v = p - o
+                            vector = [point[0]-origin[0], point[1]-origin[1]]
+                            # Length of vector: ||v||
+                            lenvector = math.hypot(vector[0], vector[1])
+                            # If length is zero there is no angle
+                            if lenvector == 0:
+                                return -math.pi, 0
+                            # Normalize vector: v/||v||
+                            normalized = [vector[0]/lenvector, vector[1]/lenvector]
+                            dotprod  = normalized[0]*refvec[0] + normalized[1]*refvec[1]     # x1*x2 + y1*y2
+                            diffprod = refvec[1]*normalized[0] - refvec[0]*normalized[1]     # x1*y2 - y1*x2
+                            angle = math.atan2(diffprod, dotprod)
+                            # Negative angles represent counter-clockwise angles so we need to subtract them 
+                            # from 2*pi (360 degrees)
+                            if angle < 0:
+                                return 2*math.pi+angle, lenvector
+                            # I return first the angle because that's the primary sorting criterium
+                            # but if two vectors have the same angle then the shorter distance should come first.
+                            return angle, lenvector        
+                        point_array_n = sorted(point_array_n, key=clockwiseangle_and_distance)
                     
                     elif len(point_array_n) == 2:
                             # points = point_array_n
-                        dis_points = round(math.sqrt((point_array_n[0][0]-point_array_n[1][0])**2+(point_array_n[0][1]+point_array_n[1][1])**2))
-                        if dis_points > 450:
-                            suc = False
-                        else:
-                            p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
-                            p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
-                            p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
-                            p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
-                            point_array_n = [p1,p2,p3,p4]
-                            # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
-                            # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
-                            # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
-                            obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
-                            ],dtype=np.float64)
+                        p1 = (point_array_n[0][0],point_array_n[0][1]+height_array_n[0]/2)
+                        p2 = (point_array_n[0][0],point_array_n[0][1]-height_array_n[0]/2)
+                        p3 = (point_array_n[1][0],point_array_n[1][1]+height_array_n[1]/2)
+                        p4 = (point_array_n[1][0],point_array_n[1][1]-height_array_n[1]/2)
+                        point_array_n = [p1,p2,p3,p4]
+                        # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
+                        # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
+                        # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
+                        obj = np.array([[50, 25, 0], [50, 75, 0], [-50, 75 , 0],[-50, 25 ,0]
+                        ],dtype=np.float64)
                     else:
                         suc = False
                     
@@ -416,40 +436,37 @@ class ImageConverter:
                     if suc:
                         center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
                         center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+                        if center_x < 10 :
+                            center_x = 10
+                        if center_y < 10:
+                            center_y = 10
                         roi = [center_x-10,center_y-10,center_x+10,center_y+10]
                         # get 3D zuobiao
                         spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
-                        cx = spatials['x']
-                        cy = spatials['y']
-                        cz = spatials['z']
-                        position = np.array([cx,cy,cz])
-                        position = np.dot(R_camera2gimbal,position) + t_camera2gimbal
+                        cx = spatials['x']*0.001
+                        cy = spatials['y']*0.001
+                        cz = spatials['z']*0.001
+                        position = np.array([[cx],[-cy],[cz]])
+                        # print(position)
+                        position = np.dot(R_camera2gimbal,position)
+                        # # print(position)
+                        position = position + t_camera2gimbal
                         position = np.dot(R_gripper2base,position) + T_gripper2base
+                        # print(T_gripper2base)
+                        cx = float(position[0])
+                        cy = float(position[1])
+                        cz = float(position[2])
                         point_array_n = np.int32(point_array_n)
                         pnts = np.array(point_array_n,dtype=np.float64) # 像素坐标
                         success,rvec, tvec = cv2.solvePnP(obj, pnts, Camera_intrinsic["mtx"], Camera_intrinsic["dist"],flags=cv2.SOLVEPNP_ITERATIVE)
                         rvec_matrix = cv2.Rodrigues(rvec)[0]
                         rvec_matrix = np.dot(R_gripper2base,R_camera2gimbal,rvec_matrix)
-                        proj_matrix = np.hstack((rvec_matrix, rvec))
-                        eulerAngles = -cv2.decomposeProjectionMatrix(proj_matrix)[6]  # 欧拉角
-                        pitch, yaw, roll = eulerAngles[0], eulerAngles[1], eulerAngles[2]
-                        rot_params = [roll, pitch, yaw]  # 欧拉角 数组
-                        Quaternion = EulerAndQuaternionTransform(rot_params)
-                        qw = Quaternion[0]
-                        qx = Quaternion[1]
-                        qy = Quaternion[2]
-                        qz = Quaternion[3]
-                    # else:
-                    #     cx = 0
-                    #     cy = 0
-                    #     cz = 0
-                    #     qw = 0
-                    #     qx = 0
-                    #     qy = 0
-                    #     qz = 0
-
-                # 把轮廓描绘出来，并绘制中心点
-                # cv2.drawContours(self.cv_image, [c], -1, (0, 0, 255), 2)
+                        r = R.from_matrix(rvec_matrix)
+                        Quaternion = r.as_quat()
+                        qx = Quaternion[0]
+                        qy = Quaternion[1]
+                        qz = Quaternion[2]
+                        qw = Quaternion[3]
                         cv2.drawContours(self.cv_image, contours_new_n, -1, (0, 0, 255), 2)
 
                         # cv2.circle(self.cv_image, (cX, cY), 1, (0, 0, 255), -1)
@@ -463,7 +480,8 @@ class ImageConverter:
                         objPose.orientation.x = qx 
                         objPose.orientation.y = qy 
                         objPose.orientation.z = qz 
-                        self.target_pub.publish(objPose)
+                        if not math.isnan(objPose.position.x):
+                            self.target_pub.publish(objPose)
                         print(objPose)
                 # else:
                 #     objPose = Pose()
