@@ -207,7 +207,7 @@ with device:
             contours_new = []
             point_array = []
             for contour in contours:
-                if  500 < cv2.contourArea(contour) < 5000 :
+                if  500 < cv2.contourArea(contour) < 8000 :
                     rect = cv2.minAreaRect(contour)
                     center = rect[0]
                     h, w = rect[1]

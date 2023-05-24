@@ -43,7 +43,22 @@ actuators:
     type: rm_2006
 
 gpios:
+  left gripper:
+    bus: can0
+    id: 0x101
+    type: out
+
+  right gripper:
+    bus: can0
+    id: 0x102
+    type: out
+
   sucker:
     bus: can0
     id: 0x103
+    type: out
+    
+  sustaining rob:
+    bus: can0
+    id: 0x104
     type: out

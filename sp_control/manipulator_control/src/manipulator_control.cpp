@@ -159,7 +159,7 @@ int main(int argc, char **argv)
         while (ros::ok())
         {
             auto_take_silver_ore(&manipulator_, ore_pose);
-            //manipulator_.read();
+            manipulator_.read();
             //manipulator_.write(pose4);
          
             if (dbusdata_.s_l == 3) // enter the fine turing modd

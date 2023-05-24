@@ -245,7 +245,7 @@ class ImageConverter:
         contours_new = []
         point_array = []
         for contour in contours:
-            if 500 < cv2.contourArea(contour) < 5000 :
+            if 500 < cv2.contourArea(contour) < 8000 :
                 rect = cv2.minAreaRect(contour)
                 center = rect[0]
                 h, w = rect[1]
@@ -273,6 +273,41 @@ class ImageConverter:
         # cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
         # cv2.imshow('a',frame)
         print(point_array)
+        if len(point_array) == 2:
+            center_x = round((point_array[0][0] + point_array[1][0]) / 2)
+            center_y = round((point_array[0][1] + point_array[1][1]) / 4)
+            if center_x < 10 :
+                center_x = 10
+            if center_y < 10:
+                center_y = 10
+            roi = [center_x-10,center_y-10,center_x+10,center_y+10]
+            # get 3D zuobiao
+            spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
+            cx = spatials['x']*0.001
+            cy = spatials['y']*0.001
+            cz = spatials['z']*0.001
+            print(spatials)
+            position = np.array([[cx],[-cy],[cz]])
+            position = np.dot(R_camera2gimbal,position)
+            position = position + t_camera2gimbal
+            position = np.dot(R_gripper2base,position) + T_gripper2base
+            # position = np.dot(R_gripper2base,(position - T_gripper2base)) 
+            # print(position)
+            cx = float(position[0])
+            cy = float(position[1])
+            cz = float(position[2])
+
+            objPose = Pose()
+            objPose.position.x = cx
+            objPose.position.y = cy
+            objPose.position.z = cz
+            objPose.orientation.w = -math.sqrt(2)/2 
+            objPose.orientation.x = math.sqrt(2)/2 
+            objPose.orientation.y = 0
+            objPose.orientation.z = 0
+            if not math.isnan(objPose.position.x):
+                self.target_pub.publish(objPose)
+
         if len(point_array) == 4:
             area_list = list(map(cv2.contourArea,quads))
             # print(area_list)
@@ -332,12 +367,17 @@ class ImageConverter:
     
             center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
             center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+            if center_x < 10 :
+                center_x = 10
+            if center_y < 10:
+                center_y = 10
             roi = [center_x-10,center_y-10,center_x+10,center_y+10]
             # get 3D zuobiao
             spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
             cx = spatials['x']*0.001
             cy = spatials['y']*0.001
             cz = spatials['z']*0.001
+            print(spatials)
             position = np.array([[cx],[-cy],[cz]])
             # print(position)
             position = np.dot(R_camera2gimbal,position)
