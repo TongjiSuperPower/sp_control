@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: sp_dbus
-Description: Description of sp_dbus
-Version: 0.1.17
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: roscpp sp_common

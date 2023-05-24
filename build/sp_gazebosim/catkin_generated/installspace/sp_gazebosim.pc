@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: sp_gazebosim
-Description: Description of sp_gazebosim
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: manipulator_control
-Description: Description of manipulator_control
-Version: 0.1.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: 

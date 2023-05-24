@@ -1,8 +1,0 @@
-prefix=/home/adminpc/catkin_ws/src/build/devel
-
-Name: gpio_controller
-Description: Description of gpio_controller
-Version: 0.1.7
-Cflags: -I/home/adminpc/catkin_ws/src/sp_control/gpio_controller/include
-Libs: -L${prefix}/lib -lgpio_controller
-Requires: roscpp sp_common pluginlib controller_interface realtime_tools

@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: gpio_controller
-Description: Description of gpio_controller
-Version: 0.1.7
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lgpio_controller
-Requires: roscpp sp_common pluginlib controller_interface realtime_tools
