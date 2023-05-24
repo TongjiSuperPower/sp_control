@@ -218,9 +218,6 @@ def getpose(pose):
     # R_gripper2base = Rm.as_matrix()
     # print("successfully")
     R_gripper2base = Rm.as_matrix()
-    # print(R_gripper2base)
-    # T_gripper2base = -np.dot(R_gripper2base.T,Grippert)
-    # R_gripper2base = np.linalg.inv(R_gripper2base)
 
     # print(R_gripper2base)
     T_gripper2base = Grippert
@@ -380,7 +377,8 @@ class ImageConverter:
                                 areahull = cv2.contourArea(hull)
                                 if areaqued / areahull > 0.8 and areahull >= areaqued:
                                     quads.append(quad)
-                                    
+                print(point_array_n)
+                # 注意！ 排序是优先按y从大到小排列，
                 if len(point_array_n)>0:
                     point_array_n.sort(key=lambda c: c[0], reverse=False)
                     if len(point_array_n) >= 3:
@@ -389,11 +387,34 @@ class ImageConverter:
                         else:
                             point_array_n = point_array_n[-3:]
 
-                        obj = np.array([[-50, 50, 0], [50, 50, 0], [50,-50 , 0],[-50, -50 ,0]
+                        obj = np.array([[50, -50, 0], [50, 50, 0], [-50,50 , 0],[-50, -50 ,0]
                         ],dtype=np.float64)  # 世界坐标
                         point_four = JudgeBeveling(point_array_n[0],point_array_n[1],point_array_n[2])
                         point_array_n.append(point_four)
-                        print(point_array_n)
+                        # print(point_array_n)
+                        origin = point_array[0] #一定是右下角那个
+                        def clockwiseangle_and_distance(point):
+                            refvec = [0,1]
+                            # Vector between point and the origin: v = p - o
+                            vector = [point[0]-origin[0], point[1]-origin[1]]
+                            # Length of vector: ||v||
+                            lenvector = math.hypot(vector[0], vector[1])
+                            # If length is zero there is no angle
+                            if lenvector == 0:
+                                return -math.pi, 0
+                            # Normalize vector: v/||v||
+                            normalized = [vector[0]/lenvector, vector[1]/lenvector]
+                            dotprod  = normalized[0]*refvec[0] + normalized[1]*refvec[1]     # x1*x2 + y1*y2
+                            diffprod = refvec[1]*normalized[0] - refvec[0]*normalized[1]     # x1*y2 - y1*x2
+                            angle = math.atan2(diffprod, dotprod)
+                            # Negative angles represent counter-clockwise angles so we need to subtract them 
+                            # from 2*pi (360 degrees)
+                            if angle < 0:
+                                return 2*math.pi+angle, lenvector
+                            # I return first the angle because that's the primary sorting criterium
+                            # but if two vectors have the same angle then the shorter distance should come first.
+                            return angle, lenvector        
+                        point_array_n = sorted(point_array_n, key=clockwiseangle_and_distance)
                     
                     elif len(point_array_n) == 2:
                             # points = point_array_n
@@ -405,7 +426,7 @@ class ImageConverter:
                         # cen_x = round((point_array_n[0][0] +point_array_n[1][0])/2)
                         # cen_y = round((point_array_n[0][1] +point_array_n[1][1])/2)
                         # point_array_n = rota_rect(cen_x,cen_y,90-angle_array[0],200,80)
-                        obj = np.array([[-50, 25, 0], [50, 25, 0], [50, 75 , 0],[-50, 75 ,0]
+                        obj = np.array([[50, 25, 0], [50, 75, 0], [-50, 75 , 0],[-50, 25 ,0]
                         ],dtype=np.float64)
                     else:
                         suc = False
@@ -415,6 +436,10 @@ class ImageConverter:
                     if suc:
                         center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
                         center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+                        if center_x < 10 :
+                            center_x = 10
+                        if center_y < 10:
+                            center_y = 10
                         roi = [center_x-10,center_y-10,center_x+10,center_y+10]
                         # get 3D zuobiao
                         spatials, centroid = hostSpatials.calc_spatials(self.cv_depth, roi)
@@ -422,7 +447,7 @@ class ImageConverter:
                         cy = spatials['y']*0.001
                         cz = spatials['z']*0.001
                         position = np.array([[cx],[-cy],[cz]])
-                        # # print(position)
+                        # print(position)
                         position = np.dot(R_camera2gimbal,position)
                         # # print(position)
                         position = position + t_camera2gimbal

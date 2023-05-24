@@ -14,7 +14,7 @@ namespace gpio_controller
     ROS_ASSERT(xml_rpc_value.getType() == XmlRpc::XmlRpcValue::TypeArray);
 
     // realtime publisher
-    gpio_state_pub_.reset(new realtime_tools::RealtimePublisher<sp_common::GpioData>(controller_nh, "gpio_states", 100));
+    gpio_state_pub_.reset(new realtime_tools::RealtimePublisher<sp_common::GpioData>(controller_nh, "state", 100));
 
     for (int i = 0; i < xml_rpc_value.size(); ++i)
     {
@@ -56,6 +56,7 @@ namespace gpio_controller
       }
       gpio_state_pub_->msg_.header.stamp = time;
       gpio_state_pub_->unlockAndPublish();
+      //ROS_WARN_STREAM("GPIO_PUBLISHER");
     }
   }
 

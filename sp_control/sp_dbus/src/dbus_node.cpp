@@ -62,6 +62,17 @@ DBusNode::DBusNode()
   dbus_.init(serial_port_.data());
   cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
   gripper_signal = sucker_signal = rob_signal = false;
+  gpio_data.gpio_name.push_back("left_gripper");
+  gpio_data.gpio_name.push_back("right_gripper");
+  gpio_data.gpio_name.push_back("sucker");
+  gpio_data.gpio_name.push_back("sustaining_rob");
+  for (int i = 0; i < 4; i++)
+  {
+    gpio_data.gpio_state.push_back(false);
+    gpio_data.gpio_type.push_back("out");
+
+  }
+  
 }
 
 void DBusNode::run()
@@ -109,12 +120,12 @@ void DBusNode::run()
         cmd_pos_.x = 1.57;
       else if (cmd_pos_.x < -1.57)
         cmd_pos_.x = -1.57;
-      if (cmd_pos_.y > 1.57)
-        cmd_pos_.y = 1.57;
-      else if (cmd_pos_.y < -1.57)
-        cmd_pos_.y = -1.57;
-      if (cmd_pos_.z > 0.220)
-        cmd_pos_.z = 0.220;
+      if (cmd_pos_.y > 0.86)
+        cmd_pos_.y = 0.86;
+      else if (cmd_pos_.y < -0.86)
+        cmd_pos_.y = -0.213;
+      if (cmd_pos_.z > 0.213)
+        cmd_pos_.z = 0.213;
       else if (cmd_pos_.z < 0)
         cmd_pos_.z = 0;
     }
@@ -125,11 +136,15 @@ void DBusNode::run()
       cmd_vel_.linear.y = 0;
       cmd_vel_.angular.z = 0;
     }
+   
 
     if (dbus_cmd_.s_l == 3)// left paddle middle, move manipulator
     {
+       
+      
       if (gripper_signal != dbus_cmd_.key_q)
       {
+        
         if (dbus_cmd_.key_q == true)
         {
           sleep(0.05);
@@ -145,6 +160,7 @@ void DBusNode::run()
             gripper_signal = false;
         }                   
       }
+      gripper_signal = dbus_cmd_.key_q;
 
       if (sucker_signal != dbus_cmd_.key_w)
       {
@@ -163,6 +179,7 @@ void DBusNode::run()
             sucker_signal = false;
         }                   
       }
+      sucker_signal = dbus_cmd_.key_w;
 
       if (rob_signal != dbus_cmd_.key_e)
       {
@@ -181,17 +198,20 @@ void DBusNode::run()
             rob_signal = false;
         }  
       }
+      rob_signal = dbus_cmd_.key_e;
 
-
-      
+ 
     }
+
     gpio_data.gpio_state[0] = gpio_data.gpio_state[1] = gripper_signal;
     gpio_data.gpio_state[2] = sucker_signal;
     gpio_data.gpio_state[3] = rob_signal;
-    gpio_pub_.publish(gpio_data); 
+
+    
+    gpio_pub_.publish(gpio_data);
     cmd_vel_pub_.publish(cmd_vel_);
     cmd_pos_pub_.publish(cmd_pos_);
-
+    ros::spinOnce();
   }
 }
 

@@ -13,22 +13,26 @@ actuators:
 gpios:
   left_gripper:
     bus: can1
-    id: 0x103
+    id: 0x101
     type: out
+    value: false
 
 
   right_gripper:
     bus: can1
-    id: 0x104
+    id: 0x102
     type: out
+    value: false
     
   sucker:
     bus: can1
-    id: 0x105
+    id: 0x103
     type: out
+    value: false
 
   sustaining rod:
     bus: can1
-    id: 0x106
+    id: 0x104
     type: out
+    value: false
 
