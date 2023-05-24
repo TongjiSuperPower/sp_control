@@ -1,4 +1,5 @@
-
+build/
+sp_vision
 *.swp
 .vscode/
 out/
