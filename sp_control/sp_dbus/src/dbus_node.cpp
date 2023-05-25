@@ -98,7 +98,7 @@ void DBusNode::run()
       else if (cmd_pos_.y < -1.57)
         cmd_pos_.y = -1.57;
     }
-    else if (dbus_cmd_.s_r == 3) // right paddle middle, using keyboard control
+    else if (dbus_cmd_.s_r == 3 && dbus_cmd_.s_l != 3) // right paddle middle, using keyboard control
     {
       if (dbus_cmd_.key_w) // chassis_forward
         cmd_vel_.linear.x = chassis_x_coeff;
@@ -138,7 +138,7 @@ void DBusNode::run()
     }
    
 
-    if (dbus_cmd_.s_l == 3)// left paddle middle, move manipulator
+    if (dbus_cmd_.s_l == 3 && dbus_cmd_.s_r == 2)// left paddle middle, move manipulator
     {
        
       

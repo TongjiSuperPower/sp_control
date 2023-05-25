@@ -108,7 +108,6 @@ namespace manipulator_control
     {
         moveit_msgs::RobotTrajectory best_trajectory;
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-        int shortest = 1000;
         ROS_INFO_STREAM("Begin to plan");
         double j4_delta, j5_delta, j6_delta;
         j4_delta = j5_delta = j6_delta = 0.0;
@@ -128,12 +127,13 @@ namespace manipulator_control
                 else
                 {
                     best_trajectory = my_plan.trajectory_;
+                    ROS_INFO_STREAM(j4_delta <<"  "<< j5_delta <<"    "<<j6_delta);
                     break;
                 }              
             }  
             ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory.points.size());          
         }     
-        ROS_INFO_STREAM(my_plan.trajectory_.joint_trajectory);
+        
         move_group_interface.execute(best_trajectory);
     }
 

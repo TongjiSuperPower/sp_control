@@ -36,12 +36,27 @@ void ore_pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, geometry_msgs
     *pose = *pose_;
 }
 
+bool pose_check(geometry_msgs::Pose pose)
+{
+    if (pose.position.y > 0 && pose.position.y < 0.7 && pose.position.z > 0 && pose.position.z < 0.8)
+        return true;
+    else
+        return false;
+}
+
 // void remote_control_callback(const sp_common::RCData::ConstPtr& RCData_, const sp_control::RCData & RCData)
 //{
 //
 // }
 void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose pose)
 {
+    if (!pose_check(pose))
+    {
+        ROS_WARN_STREAM("WRONG POSE");
+        return;
+
+    }
+        
     geometry_msgs::Pose pose1;
     geometry_msgs::Pose pose2;
     geometry_msgs::Pose pose3;
@@ -58,23 +73,23 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     pose.orientation.y = 0.0;
     pose.orientation.z = 0.0;
     ROS_INFO_STREAM(pose<<"    pose     ");
-    pose2 = pose;
-    pose2.position.y += 0.03;
-    /*pose1.position.x = 0.00;
+    //pose2 = pose;
+    //pose2.position.y += 0.03;
+    pose1.position.x = 0.00;
     pose1.position.y = 0.300;
-    pose1.position.z = 0.485;
+    pose1.position.z = 0.492;
     pose1.orientation.w = -sqrt(2)/2;
     pose1.orientation.x = sqrt(2)/2;
     pose1.orientation.y = 0.00;
     pose1.orientation.z = 0.00;
     pose2.position.x = 0.00;
-    pose2.position.y = 0.335;
-    pose2.position.z = 0.485;
+    pose2.position.y = 0.330;
+    pose2.position.z = 0.492;
     pose2.orientation.w = -sqrt(2)/2;
     pose2.orientation.x = sqrt(2)/2;
     pose2.orientation.y = 0.00;
     pose2.orientation.z = 0.00;
-    pose3.position.x = 0.044;
+    /*pose3.position.x = 0.044;
     pose3.position.y = -0.100;
     pose3.position.z = 0.433;
     pose3.orientation.w = 0.00;
@@ -83,31 +98,100 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     */pose3.orientation.z = 0.00;
     //waypoints.push_back(pose1);
     //waypoints.push_back(pose2);
-    waypoints.push_back(pose);
+    waypoints.push_back(pose1);
     waypoints.push_back(pose2);
     stretch1.push_back(-0.075);
     stretch2.push_back(0.00);
     //manipulator_->read();
-    //manipulator_->goal("left");
+    manipulator_->goal("left");
     sleep(2.0);
-    //manipulator_->read();
-    //manipulator_->write(pose);
+    manipulator_->read();
+    manipulator_->write(pose);
  
    // manipulator_->suck(true);
-    //manipulator_->read();
+    manipulator_->read();
  
-    //manipulator_->CartesianPath(waypoints);
+    manipulator_->CartesianPath(waypoints);
     sleep(2.0);
     //manipulator_->read();
-    //manipulator_->singleaddwrite(-0.7,2);
+    manipulator_->singleaddwrite(-0.7,2);
     //manipulator_->read();
     //manipulator_->singleaddwrite(0.3,3);
     //manipulator_->read();
-    //manipulator_->goal("left");
+    //manipulator_->goal("left_up");
     sleep(2);
    // manipulator_->suck(false);
 }
 
+void auto_adjust_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose pose)
+{
+    geometry_msgs::Pose pose1;
+    geometry_msgs::Pose pose2;
+    pose1.position.x = 0.00;
+    pose1.position.y = 0.450;
+    pose1.position.z = 0.200;
+    pose1.orientation.w = 0.00;
+    pose1.orientation.x = -1.00;
+    pose1.orientation.y = 0.00;
+    pose1.orientation.z = 0.00;
+    pose2.position.x = 0.00;
+    pose2.position.y = 0.450;
+    pose2.position.z = 0.400;
+    pose2.orientation.w = 0.00;
+    pose2.orientation.x = -1.00;
+    pose2.orientation.y = 0.00;
+    pose2.orientation.z = 0.00;
+    manipulator_->goal("left_up");
+    manipulator_->read();
+    manipulator_->write(pose1);
+    manipulator_->read();
+    sleep(2);
+    manipulator_->write(pose2);
+    manipulator_->read();
+    manipulator_->write(pose1);
+    manipulator_->read();
+    manipulator_->goal("left_up");
+    
+}
+
+void auto_exchange_silver_ore(manipulator_control::Manipulator *manipulator_, geometry_msgs::Pose pose)
+{
+    //if (!pose_check(pose))
+    //{
+    //    ROS_WARN_STREAM("WRONG POSE");
+    //    return;
+
+   // }
+    geometry_msgs::Pose pose1;
+    geometry_msgs::Pose pose2;
+    std::vector<geometry_msgs::Pose> waypoints;
+    pose1.position.x = 0.00;
+    pose1.position.y = 0.310;
+    pose1.position.z = 0.644;
+    pose1.orientation.w = -sqrt(2)/2;
+    pose1.orientation.x = sqrt(2)/2;
+    pose1.orientation.y = 0.00;
+    pose1.orientation.z = 0.00;
+    pose2.position.x = 0.00;
+    pose2.position.y = 0.380;
+    pose2.position.z = 0.644;
+    pose2.orientation.w = -sqrt(2)/2;
+    pose2.orientation.x = sqrt(2)/2;
+    pose2.orientation.y = 0.00;
+    pose2.orientation.z = 0.00;
+    waypoints.push_back(pose1);
+    waypoints.push_back(pose2);
+    manipulator_->goal("left_up");
+    manipulator_->read();
+    manipulator_->write(pose1);
+    manipulator_->read();
+     manipulator_->CartesianPath(waypoints);
+    sleep(2.0);
+     manipulator_->read();
+    manipulator_->goal("left_up");
+    
+}
+ 
 
 int main(int argc, char **argv)
 {
@@ -149,8 +233,9 @@ int main(int argc, char **argv)
 
     if (manipulator_.init())
     {
-        manipulator_.read();
+        //manipulator_.read();
         sleep(2);
+        auto_exchange_silver_ore(&manipulator_, ore_pose);
         
        // manipulator_.write(pose4);
         //manipulator_.move_execute();
@@ -158,29 +243,44 @@ int main(int argc, char **argv)
 
         while (ros::ok())
         {
-            auto_take_silver_ore(&manipulator_, ore_pose);
+            
             //manipulator_.read();
             //manipulator_.write(pose4);
          
-            if (dbusdata_.s_l == 3) // enter the fine turing modd
+            if (dbusdata_.s_l == 3 && dbusdata_.s_r == 2) // enter the fine turing modd
             {
-                int plus;
-                int sign;
-                if (dbusdata_.key_shift)
-                    plus = 0;
+                if (dbusdata_.key_shift)  
+                {
+                    if (dbusdata_.key_a)
+                        manipulator_.singleaddwrite(joint_eff_large, 1);
+                    else if (dbusdata_.key_z)
+                        manipulator_.singleaddwrite(joint_eff_large, 1);
+                    if (dbusdata_.key_s)
+                        manipulator_.singleaddwrite(joint_eff_large, 2);
+                    else if (dbusdata_.key_x)
+                        manipulator_.singleaddwrite(joint_eff_large, 2);
+                    if (dbusdata_.key_d)
+                        manipulator_.singleaddwrite(joint_eff_large, 3);
+                    else if (dbusdata_.key_c)
+                        manipulator_.singleaddwrite(joint_eff_large, 3);
+                } 
                 else
-                    plus = 3;
-                if (dbusdata_.key_ctrl)
-                    sign = -1;
-                else
-                    sign = 1;
+                {
+                    if (dbusdata_.key_a)
+                        manipulator_.singleaddwrite(joint_eff_small, 4);
+                    else if (dbusdata_.key_z)
+                        manipulator_.singleaddwrite(joint_eff_small, 4);
+                    if (dbusdata_.key_s)
+                        manipulator_.singleaddwrite(joint_eff_small, 5);
+                    else if (dbusdata_.key_x)
+                        manipulator_.singleaddwrite(joint_eff_small, 5);
+                    if (dbusdata_.key_d)
+                        manipulator_.singleaddwrite(joint_eff_small, 6);
+                    else if (dbusdata_.key_c)
+                        manipulator_.singleaddwrite(joint_eff_small, 6);
 
-                if (dbusdata_.key_z)
-                    manipulator_.singleaddwrite(sign * joint_eff, 1 + plus);
-                else if (dbusdata_.key_x)
-                    manipulator_.singleaddwrite(sign * joint_eff, 2 + plus);
-                else if (dbusdata_.key_c)
-                    manipulator_.singleaddwrite(sign * joint_eff, 3 + plus);
+                }             
+
               
            
 

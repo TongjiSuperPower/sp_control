@@ -5,7 +5,8 @@
 #define PLANNING_GROUP_GRIPPER "gripper"
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
-#define joint_eff 0.03
+#define joint_eff_large 0.05
+#define joint_eff_small 0.03
 
 namespace manipulator_control
 {
