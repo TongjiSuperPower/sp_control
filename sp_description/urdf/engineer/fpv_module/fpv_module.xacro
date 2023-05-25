@@ -97,10 +97,10 @@
     <child
       link="mast" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit
       lower="0"
-      upper="0.235"
+      upper="0.218"
       effort="50"
       velocity="0.8" />
   </joint>
