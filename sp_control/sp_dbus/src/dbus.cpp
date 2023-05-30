@@ -136,10 +136,10 @@ void DBus::read()
   }
   else
   {
-    // ROS_INFO_STREAM("ch0:" << d_bus_data_.ch0);
-    // ROS_INFO_STREAM("ch1:" << d_bus_data_.ch1);
-    // ROS_INFO_STREAM("ch2:" << d_bus_data_.ch2);
-    // ROS_INFO_STREAM("ch3:" << d_bus_data_.ch3);
+     //ROS_INFO_STREAM("ch0:" << d_bus_data_.ch0);
+     //ROS_INFO_STREAM("ch1:" << d_bus_data_.ch1);
+     //ROS_INFO_STREAM("ch2:" << d_bus_data_.ch2);
+     //ROS_INFO_STREAM("ch3:" << d_bus_data_.ch3);
     is_update_ = true;
   }
 }

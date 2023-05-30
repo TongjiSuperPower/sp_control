@@ -448,7 +448,7 @@
       lower="-0.075"
       upper="0"
       effort="20"
-      velocity="5" />
+      velocity="0.075" />
   </joint>
     <link name="vacuum_gripper"/>
     <joint

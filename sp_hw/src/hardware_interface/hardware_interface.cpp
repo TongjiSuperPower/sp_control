@@ -73,7 +73,6 @@ namespace sp_hw
                 }
                 if (act_data.second.is_halted)
                 {
-                    act_data.second.seq = 0;
                     act_data.second.vel = 0;
                     act_data.second.effort = 0;
                 }
@@ -119,10 +118,8 @@ namespace sp_hw
         if (!is_actuator_specified_)
             return;
 
-        /*if (actuator_state_pub_->trylock())
+        if (actuator_state_pub_->trylock())
          {
-             ROS_INFO_STREAM("J");
-
              sp_common::ActuatorState actuator_state;
              for (const auto &id2act_datas : bus_id2act_data_)
                  for (const auto &act_data : id2act_datas.second)
@@ -147,6 +144,6 @@ namespace sp_hw
              actuator_state_pub_->msg_ = actuator_state;
              actuator_state_pub_->unlockAndPublish();
              last_publish_time_ = time;
-         }*/
+         }
     }
 } // namespace sp_hw

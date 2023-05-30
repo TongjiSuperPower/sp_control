@@ -1,99 +1,99 @@
 bus:
-  - can0
-  - can1
-  #- can2
+  - can3
+  - can4
+  - can5
 loop_frequency: 800
 cycle_time_error_threshold: 1
 thread_priority: 30
 
 actuators:
   right_front_wheel_motor:
-    bus: can0
+    bus: can3
     id: 0x201
     type: rm_3508
 
   right_back_wheel_motor:
-    bus: can0
+    bus: can3
     id: 0x202
     type: rm_3508
 
   left_back_wheel_motor:
-    bus: can0
+    bus: can3
     id: 0x203
     type: rm_3508
 
   left_front_wheel_motor:
-    bus: can0
+    bus: can3
     id: 0x204
     type: rm_3508
 
   mast_joint_motor:
-    bus: can1
-    id: 0x206
+    bus: can4
+    id: 0x207
     type: rm_2006
 
   fpv_yaw_joint_motor:
-    bus: can1
+    bus: can5
     id: 0x101
     type: MG_995
 
   fpv_pitch_joint_motor:
-    bus: can1
+    bus: can5
     id: 0x102
     type: MG_995
 
-  #joint1_motor:
-  #  bus: can0
-  #  id: 0x001
-  #  type: DM_J4310
+  joint1_motor:
+    bus: can5
+    id: 0x001
+    type: DM_J4310
 
-  #joint2_motor:
-  #  bus: can1
-  #  id: 0x142
- #   type: MG_8016
+  joint2_motor:
+    bus: can4
+    id: 0x142
+    type: MG_8016
 
-  #joint3_motor:
-   # bus: can1
-  #  id: 0x141
-  #  type: MG_8016
+  joint3_motor:
+    bus: can4
+    id: 0x141
+    type: MG_8016
 
-  #joint4_motor:
-  #  bus: can0
-  #  id: 0x004
-  #  type: DM_J4310
+  joint4_motor:
+    bus: can5
+    id: 0x004
+    type: DM_J4310
 
-  #joint5_motor:
-  #  bus: can0
-  #  id: 0x005
-  #  type: DM_J4310
+  joint5_motor:
+    bus: can5
+    id: 0x005
+    type: DM_J4310
 
-  #joint6_motor:
-  #  bus: can0
-  #  id: 0x006
-  #  type: DM_J4310
+  joint6_motor:
+    bus: can5
+    id: 0x006
+    type: DM_J4310
 
-  #joint7_motor:
-  #  bus: can0
-  #  id: 0x207
-  #  type: rm_2006
+  joint7_motor:
+    bus: can5
+    id: 0x201
+    type: rm_2006
 
 gpios:
   left_gripper:
-    bus: can1
+    bus: can5
     id: 0x101
     type: out
 
   right_gripper:
-    bus: can1
+    bus: can5
     id: 0x102
     type: out
     
   sucker:
-    bus: can1
+    bus: can5
     id: 0x103
     type: out
 
   sustaining_rob:
-    bus: can1
+    bus: can5
     id: 0x104
     type: out

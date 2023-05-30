@@ -19,6 +19,7 @@ namespace sp_hw
     {
     public:
         CanBus(const std::string &bus_name, CanDataPtr data_ptr, int thread_priority);
+        ~CanBus();
 
         void read(ros::Time time);
         void write();

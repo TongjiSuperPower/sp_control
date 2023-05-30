@@ -39,7 +39,7 @@ namespace gimbal_controller
         // construct vector<joint> to control the acuators directly.
         joint_handles_.push_back(ctrl_yaw_.joint_);
         joint_handles_.push_back(ctrl_pitch_.joint_);
-        joint_handles_.push_back(ctrl_height_.joint_);
+        //joint_handles_.push_back(ctrl_height_.joint_);
 
         ROS_INFO("GIMBAL: INIT SUCCESS !");
 
@@ -68,15 +68,15 @@ namespace gimbal_controller
     {
         joint_handles_[0].setCommand(pos_cmd_.x);
         joint_handles_[1].setCommand(pos_cmd_.y);
-        joint_handles_[2].setCommand(pos_cmd_.z);
+        //joint_handles_[2].setCommand(pos_cmd_.z);
 
-        /*
-            ctrl_yaw_.commandCB(float(pos_cmd_.x));
-            ctrl_pitch_.commandCB(float(pos_cmd_.y));
-            ctrl_height_.commandCB(float(pos_cmd_.z));
-            ctrl_yaw_.update(time, period);
-            ctrl_pitch_.update(time, period);
-            ctrl_height_.update(time, period);*/
+        
+           //ctrl_yaw_.commandCB(float(pos_cmd_.x));
+            //ctrl_pitch_.commandCB(float(pos_cmd_.y));
+            ctrl_height_.setCommand(float(pos_cmd_.z));
+           // ctrl_yaw_.update(time, period);
+            //ctrl_pitch_.update(time, period);
+            ctrl_height_.update(time, period);
     }
     PLUGINLIB_EXPORT_CLASS(gimbal_controller::GimbalController, controller_interface::ControllerBase);
 } // namespace gimbal_controller

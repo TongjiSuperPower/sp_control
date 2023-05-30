@@ -8,8 +8,8 @@ controllers:
     joint: joint1
     pid:
       {
-        p: 250.0,
-        i: 10.0,
+        p: 7000.0,
+        i: 130.0,
         d: 0,
         i_clamp_max: 600,
         i_clamp_min: -600,

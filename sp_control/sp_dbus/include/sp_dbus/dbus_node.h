@@ -48,9 +48,9 @@
 #define chassis_z_coeff_kb 70
 #define chassis_z_coeff_rc 1.5
 #define gimbal_x_coeff 0.03
-#define gimbal_y_coeff_kb 4
+#define gimbal_y_coeff_kb 2
 #define gimbal_y_coeff_rc 0.07
-#define gimbal_z_coeff 2.5
+#define gimbal_z_coeff 0.002
 #define joint_coeff 0.05
 class DBusNode
 {
@@ -66,6 +66,7 @@ private:
   geometry_msgs::Twist cmd_vel_;
   geometry_msgs::Vector3 cmd_pos_;
   bool gripper_signal, sucker_signal, rob_signal;
+  bool last_q, last_w, last_e;
   DBus dbus_{};
   sp_common::GpioData gpio_data;
 

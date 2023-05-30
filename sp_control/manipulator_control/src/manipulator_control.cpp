@@ -54,9 +54,7 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     {
         ROS_WARN_STREAM("WRONG POSE");
         return;
-
-    }
-        
+    }        
     geometry_msgs::Pose pose1;
     geometry_msgs::Pose pose2;
     geometry_msgs::Pose pose3;
@@ -65,6 +63,7 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     std::vector<double> stretch2;
     // pose.position.x -= 0.08;
     pose.position.y -= 0.11;
+    pose.position.z += 0.05;
     // pose.position.y -= 0.20;
     // pose.position.z += 0.10;
     //pose.position.x -= 0.02;
@@ -73,9 +72,9 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     pose.orientation.y = 0.0;
     pose.orientation.z = 0.0;
     ROS_INFO_STREAM(pose<<"    pose     ");
-    //pose2 = pose;
-    //pose2.position.y += 0.03;
-    pose1.position.x = 0.00;
+    pose2 = pose;
+    pose2.position.y += 0.03;
+    /*pose1.position.x = 0.00;
     pose1.position.y = 0.300;
     pose1.position.z = 0.492;
     pose1.orientation.w = -sqrt(2)/2;
@@ -88,14 +87,14 @@ void auto_take_silver_ore(manipulator_control::Manipulator *manipulator_, geomet
     pose2.orientation.w = -sqrt(2)/2;
     pose2.orientation.x = sqrt(2)/2;
     pose2.orientation.y = 0.00;
-    pose2.orientation.z = 0.00;
+    *?pose2.orientation.z = 0.00;
     /*pose3.position.x = 0.044;
     pose3.position.y = -0.100;
     pose3.position.z = 0.433;
     pose3.orientation.w = 0.00;
     pose3.orientation.x = 0.00;
     pose3.orientation.y = 1.00;
-    */pose3.orientation.z = 0.00;
+    pose3.orientation.z = 0.00;*/
     //waypoints.push_back(pose1);
     //waypoints.push_back(pose2);
     waypoints.push_back(pose1);
@@ -166,7 +165,7 @@ void auto_exchange_silver_ore(manipulator_control::Manipulator *manipulator_, ge
     geometry_msgs::Pose pose2;
     std::vector<geometry_msgs::Pose> waypoints;
     pose1.position.x = 0.00;
-    pose1.position.y = 0.310;
+    pose1.position.y = 0.210;
     pose1.position.z = 0.644;
     pose1.orientation.w = -sqrt(2)/2;
     pose1.orientation.x = sqrt(2)/2;
@@ -223,8 +222,8 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(0.2);
     geometry_msgs::Pose pose4;
     pose4.position.x=0.000;
-    pose4.position.y=0.300;
-    pose4.position.z=0.500;
+    pose4.position.y=0.400;
+    pose4.position.z=0.660;
     pose4.orientation.w=sqrt(2)/2;
     pose4.orientation.x=-sqrt(2)/2;
     pose4.orientation.y=0;
@@ -233,80 +232,102 @@ int main(int argc, char **argv)
 
     if (manipulator_.init())
     {
-        //manipulator_.read();
-        sleep(2);
-        auto_exchange_silver_ore(&manipulator_, ore_pose);
+        //sleep(2);
+       // auto_take_silver_ore(&manipulator_, ore_pose);
+        //auto_adjust_silver_ore(&manipulator_, ore_pose);
         
-       // manipulator_.write(pose4);
+        //manipulator_.write(pose4);
         //manipulator_.move_execute();
+        
+        //manipulator_.write(pose4);
        
 
         while (ros::ok())
         {
+            manipulator_.read();
             
-            //manipulator_.read();
-            //manipulator_.write(pose4);
          
             if (dbusdata_.s_l == 3 && dbusdata_.s_r == 2) // enter the fine turing modd
             {
                 if (dbusdata_.key_shift)  
                 {
                     if (dbusdata_.key_a)
+                    {
+                        ROS_INFO_STREAM("JOINT1!!!  ");
                         manipulator_.singleaddwrite(joint_eff_large, 1);
+                    }
+                        
                     else if (dbusdata_.key_z)
-                        manipulator_.singleaddwrite(joint_eff_large, 1);
+                        manipulator_.singleaddwrite(-joint_eff_large, 1);
                     if (dbusdata_.key_s)
+                    {
+                        ROS_INFO_STREAM("JOINT2!!!  ");
                         manipulator_.singleaddwrite(joint_eff_large, 2);
+                    }
                     else if (dbusdata_.key_x)
-                        manipulator_.singleaddwrite(joint_eff_large, 2);
+                        manipulator_.singleaddwrite(-joint_eff_large, 2);
                     if (dbusdata_.key_d)
+                    {
+                        ROS_INFO_STREAM("JOINT3!!!  ");
                         manipulator_.singleaddwrite(joint_eff_large, 3);
+                    }
                     else if (dbusdata_.key_c)
-                        manipulator_.singleaddwrite(joint_eff_large, 3);
+                        manipulator_.singleaddwrite(-joint_eff_large, 3);
                 } 
                 else
                 {
                     if (dbusdata_.key_a)
+                    {
+                        ROS_INFO_STREAM("JOINT4!!!  ");
                         manipulator_.singleaddwrite(joint_eff_small, 4);
+                    }
                     else if (dbusdata_.key_z)
-                        manipulator_.singleaddwrite(joint_eff_small, 4);
+                        manipulator_.singleaddwrite(-joint_eff_small, 4);
                     if (dbusdata_.key_s)
+                    {    
+                        ROS_INFO_STREAM("JOINT5!!!  ");
                         manipulator_.singleaddwrite(joint_eff_small, 5);
+                    }
+                        
                     else if (dbusdata_.key_x)
-                        manipulator_.singleaddwrite(joint_eff_small, 5);
+                        manipulator_.singleaddwrite(-joint_eff_small, 5);
                     if (dbusdata_.key_d)
+                    {
+                        ROS_INFO_STREAM("JOINT6!!!  ");
                         manipulator_.singleaddwrite(joint_eff_small, 6);
+                    }
+                        
                     else if (dbusdata_.key_c)
-                        manipulator_.singleaddwrite(joint_eff_small, 6);
+                        manipulator_.singleaddwrite(-joint_eff_small, 6);
 
                 }             
 
-              
-           
 
-                if (dbusdata_.key_f) // go home
+                if (dbusdata_.key_r) // go home
                 {
-                    manipulator_.goal("home");
-                
+                   manipulator_.goal("home");    
                 }
-                else if (dbusdata_.key_r)
+                else if (dbusdata_.key_f)
                 {
-                    manipulator_.goal("left");
-                 
+                    manipulator_.goal("left_up");   
                 }
                 else if (dbusdata_.key_v)
                 {
-                    manipulator_.goal("forward");
-                 
+                    manipulator_.goal("forward");       
                 }
-                if (dbusdata_.key_g) 
+                 else if (dbusdata_.key_g)
                 {
-                   // auto_take_silver_ore(&manipulator_);
-                } 
-                else if (dbusdata_.key_b) 
-                {
+                    manipulator_.goal("exchange");       
+                }
+                
+               //if (dbusdata_.key_g) 
+               // {
+               //     auto_take_silver_ore(&manipulator_, ore_pose);
+               // } 
+                //else if (dbusdata_.key_b) 
+                //{
                     //auto_exchange(&manipulator_);
-                } 
+                //} 
              }
             //   }
 

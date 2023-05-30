@@ -37,7 +37,7 @@ namespace manipulator_control
         current_distance = grip_group_interface.getCurrentJointValues();
         ROS_INFO_STREAM(current_pose<<"   calibrate   ");
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
-        ROS_INFO_STREAM("joint7: " << current_distance[0]);
+        //ROS_INFO_STREAM("joint7: " << current_distance[0]);
         pose_publisher_.publish(current_pose);
     }
 
@@ -81,27 +81,47 @@ namespace manipulator_control
     void Manipulator::singleaddwrite(double delta_theta, int num)
     {
         read();
-        target_state = current_state;
-        target_state[num - 1] += delta_theta;
+        double value;
+        value = current_state[num - 1];
+        value += delta_theta;
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
-        move_group_interface.setJointValueTarget(target_state);    
+        move_group_interface.setJointValueTarget("joint" + std::to_string(num), value);
         joint_execute(); 
     }
 
     void Manipulator::CartesianPath(std::vector<geometry_msgs::Pose> waypoints)
     {
         moveit_msgs::RobotTrajectory trajectory;
+        moveit_msgs::RobotTrajectory best_trajectory;
         const double jump_threshold = 0.0;                                                                            // 跳跃阈值
-        const double eef_step = 0.01;                                                                                 // 终端步进值
-        double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory); // 规划路径 ，fraction返回1代表规划成功
-        ROS_INFO_NAMED("tutorial", "Visualizing plan 4 (Cartesian path) (%.2f%% achieved)", fraction * 100.0);
-        if (fraction == 1)
-        {
-            ROS_INFO_STREAM("SUCCEED TO CREATE A CARTESIAN PATH!");
-        }
-        move_execute(trajectory);
+        const double eef_step = 0.01; 
+        int tra_size;
+        double j4_delta, j5_delta, j6_delta;
+        j4_delta = j5_delta = j6_delta = 0.0;
+        while (1)
+        {                                                                               // 终端步进值
+            double fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory); // 规划路径 ，fraction返回1代表规划成功
+            ROS_INFO_NAMED("tutorial", "Visualizing plan 4 (Cartesian path) (%.2f%% achieved)", fraction * 100.0);
+            if (fraction >= 0.5)
+            {
+                ROS_INFO_STREAM("SUCCEED TO CREATE A CARTESIAN PATH!");
+                tra_size = trajectory.joint_trajectory.points.size();
+                j4_delta = abs(trajectory.joint_trajectory.points[0].positions[3] - trajectory.joint_trajectory.points[tra_size - 1].positions[3]);
+                j5_delta = abs(trajectory.joint_trajectory.points[0].positions[4] - trajectory.joint_trajectory.points[tra_size - 1].positions[4]);
+                j6_delta = abs(trajectory.joint_trajectory.points[0].positions[5] - trajectory.joint_trajectory.points[tra_size - 1].positions[5]);
+                if (j4_delta > 2.60 || j5_delta > 2.60 || j6_delta > 2.60)
+                    continue;
+                else
+                {
+                    best_trajectory = trajectory;
+                    ROS_INFO_STREAM(j4_delta <<"  "<< j5_delta <<"    "<<j6_delta);
+                    break;
+                }              
+        }  
+        } 
+        move_execute(best_trajectory);
     }
 
     void Manipulator::move_execute()

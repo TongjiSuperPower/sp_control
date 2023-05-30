@@ -1,5 +1,5 @@
 bus:
-  - can0
+  - can4
 loop_frequency: 650
 
 cycle_time_error_threshold: 1
@@ -7,6 +7,6 @@ thread_priority: 30
 
 actuators:
   right_front_wheel_motor:
-    bus: can0
+    bus: can4
     id: 0x207
     type: rm_2006
