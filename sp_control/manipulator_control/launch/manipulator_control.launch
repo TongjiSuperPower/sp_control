@@ -1,0 +1,3 @@
+<launch>
+  <node name="manipulator_control" pkg="manipulator_control" type="manipulator_control" respawn="false" output="screen"/>
+</launch>

@@ -1,0 +1,23 @@
+<launch>
+  <include
+    file="$(find sp_hw)/launch/load_hw.launch" > 
+  </include>
+  <include
+    file="$(find chassis_controller)/launch/chassis_controller_load.launch" > 
+  </include>
+   <include
+    file="$(find gimbal_controller)/launch/gimbal_controller_load.launch" > 
+  </include>
+   <include
+    file="$(find gpio_controller)/launch/gpio_controller.launch" > 
+  </include>
+   <include
+    file="$(find manipulator_control)/launch/manipulator_controller.launch" > 
+  </include>
+   <!--include
+    file="$(find depthai_examples)/launch/stereo_inertial_node.launch" > 
+  </include-->
+  <node name="sp_dbus" pkg="sp_dbus" type="sp_dbus" respawn="false" output="screen" args="sp_dbus"/>
+  <!--<node name="manipulator_control" pkg="manipulator_control" type="manipulator_control" 
+  respawn="false" output="screen" args="manipulator_control"/-->>
+</launch>
