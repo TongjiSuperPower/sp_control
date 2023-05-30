@@ -32,10 +32,10 @@ class save_image():
             name = '{}'.format(self.count)    
         else:
             name = '0000000000000'
-        
-        cv.imwrite('/home/rm/catkin_ws/src/Engineer_on_ROS/sp_vision/depthai_subcribe/scripts/image/{}.jpg'.format(name), image)
-        
-        print('image:  {}'.format(name))
+        if self.count % 20 == 0: 
+            cv.imwrite('/home/rm/catkin_ws/src/Engineer_on_ROS/sp_vision/depthai_subcribe/scripts/image/{}.jpg'.format(name), image)
+            
+            print('image:  {}'.format(name))
 
         self.count += 1
 

@@ -432,6 +432,7 @@ class ImageConverter:
                         suc = False
                     
                     global qw,qx,qy,qz,cx,cy,cz
+                    print(1)
                         
                     if suc:
                         center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
@@ -447,7 +448,7 @@ class ImageConverter:
                         cy = spatials['y']*0.001
                         cz = spatials['z']*0.001
                         position = np.array([[cx],[-cy],[cz]])
-                        # print(position)
+                        print(position)
                         position = np.dot(R_camera2gimbal,position)
                         # # print(position)
                         position = position + t_camera2gimbal
@@ -468,8 +469,6 @@ class ImageConverter:
                         qz = Quaternion[2]
                         qw = Quaternion[3]
                         cv2.drawContours(self.cv_image, contours_new_n, -1, (0, 0, 255), 2)
-
-                        # cv2.circle(self.cv_image, (cX, cY), 1, (0, 0, 255), -1)
                         
                         # 将目标位置通过话题发布
                         objPose = Pose()

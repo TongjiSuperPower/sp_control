@@ -1020,18 +1020,14 @@ E控制图传逆时针旋转。
 
 遥控器右拨杆下档进入停止模式，工程底盘锁定。
 
+# 远程桌面(无需局域网):
 
-
-# 环境设置
-
-## 远程桌面(无需局域网): 
-
-### 向日葵远程桌面控制软件:
+## 向日葵远程桌面控制软件:
 https://sunlogin.oray.com/download?categ=personal  
 在服务端ubuntu和用户端上分别安装对应的软件。
-### 使用时需要将ubuntu切换到xorg:
+## 使用时需要将ubuntu切换到xorg:
 https://service.oray.com/question/11969.html
-### 设置向日葵开机启动：
+## 设置向日葵开机启动：
 （1）将向日葵启动脚本添加到init.d中：  
 https://learnku.com/docs/ubuntustudy/linux-service-management-how-to-set-boot-script-in-ubuntu  
 
@@ -1043,34 +1039,3 @@ https://learnku.com/docs/ubuntustudy/linux-service-management-how-to-set-boot-sc
 
 **！** 开机后需要等1-2分钟才能连接上。  
 **！** 由于nuc在hdmi接口闲置时不会正确渲染图像，因此在使用远程桌面调试时需要将nuc的hdmi接口连接 hdmi诱骗器 或者 一根hdmi线。
-
-## USB2CAN设备名绑定
-
-当`USB2CAN`设备数量超过两个及以上时，往往会出现设备与名称不绑定的情况，如原使用的can0会在上电后变为can1，这会给我们的底层工作造成很大的困难。因此使用udev规则将设备绑定至固定名称。
-
-由于使用的`USB2CAN`设备都是同一家生产的，因此我们通过`ATTRS{serial}`来区分不同的设备。首先输入`lsusb` 来获知当前插入的设备挂载在何处，一般可获得形如`BUS 001 DEVICE 002`的序号名，然后将此信息填入以下命令行中：
-
-```
-udevadm info --attribute-walk --name=/dev/BUS/USB/001/002
-```
-
-如果一切正常运作，那么就可以看到设备的`ATTRS{serial}`，将其记下。重复以上步骤，直至记录下所有`USB2CAN`设备的`ATTRS{serial}`。然后新建udev规则：
-
-```
-sudo vim /etc/udev/rules.d/USB2CAN.rules
-```
-
-此新建的文件将包含我们的命名规则。将设备的`ATTRS{serial}`和所需的设备名称放在此文件中（无需更改其他值）。为要配置的每个设备在此文件中添加一行。建议将绑定的设备名称设置为 can3 及更高，这样做的话，后续插入未绑定名称的`USB2CAN`设备仍可以以`can0`或者`can1`的名称被使用。
-
-```
-SUBSYSTEM=="net", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="606f", ATTRS{serial}=="000C8005574D430A20333735", NAME="can5"
-SUBSYSTEM=="net", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="606f", ATTRS{serial}=="000D8005574D430A20333735", NAME="can6"
-SUBSYSTEM=="net", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="606f", ATTRS{serial}=="000E8005574D430A20333735", NAME="can7"
-```
-
-运行以下命令并拔下/重新插入`USB2CAN`设备，udev 规则就将生效。
-
-```
-sudo udevadm control --reload-rules && sudo systemctl restart systemd-udevd && sudo udevadm trigger
-```
-
