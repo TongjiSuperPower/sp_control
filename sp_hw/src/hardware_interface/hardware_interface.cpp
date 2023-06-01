@@ -53,7 +53,7 @@ namespace sp_hw
         actuator_state_pub_.reset(
             new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
         
-
+        halt_pub_ = nh_.advertise<std_msgs::Bool>("is_halted", 1000);
         return true;
     }
 
@@ -61,12 +61,24 @@ namespace sp_hw
     {
         for (auto &bus : can_buses_)
             bus->read(time);
+        bool h4, h5, h6;
+        h4 = h5 = h6 = false;
+
         for (auto &id2act_datas : bus_id2act_data_)
+        {
+        
             for (auto &act_data : id2act_datas.second)
             {
                 try
                 {
-                    act_data.second.is_halted = (time - act_data.second.stamp).toSec() > 0.1 || false;
+                    act_data.second.is_halted = ((time - act_data.second.stamp).toSec() > 1) || false;
+                    if (act_data.second.name == "joint4_motor")
+                        h4 = act_data.second.is_halted;
+                    if (act_data.second.name == "joint5_motor")
+                        h5 = act_data.second.is_halted;
+                    if (act_data.second.name == "joint6_motor")
+                        h6 = act_data.second.is_halted;
+                    
                 }
                 catch (std::runtime_error &ex)
                 {
@@ -77,6 +89,14 @@ namespace sp_hw
                     act_data.second.effort = 0;
                 }
             }
+        }
+        std_msgs::Bool is_halted;
+        if (h4 && h5 && h6)
+            is_halted.data = true;
+        else 
+            is_halted.data = false;
+        halt_pub_.publish(is_halted);
+        
 
         if (is_actuator_specified_)
             act_to_jnt_state_->propagate();
@@ -146,4 +166,6 @@ namespace sp_hw
              last_publish_time_ = time;
          }
     }
+
+   
 } // namespace sp_hw

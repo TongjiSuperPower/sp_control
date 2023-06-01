@@ -825,8 +825,6 @@ rostopic echo /joint_states
 
 ```cpp
 rosservice call /controller_manager/switch_controller "start_controllers: ['controllers/joint1_position_controller']
-stop_controllers: ['controllers/joint1_velocity_controller']
-strictness: 1
 start_asap: true
 timeout: 0.0"
     

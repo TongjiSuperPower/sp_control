@@ -61,7 +61,7 @@ DBusNode::DBusNode()
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
   dbus_.init(serial_port_.data());
   cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
-  gripper_signal = sucker_signal = rob_signal = last_q = last_w = last_e = false;
+  gripper_signal = sucker_signal = rob_signal = last_q = last_b = last_e = false;
   gpio_data.gpio_name.push_back("left_gripper");
   gpio_data.gpio_name.push_back("right_gripper");
   gpio_data.gpio_name.push_back("sucker");
@@ -134,6 +134,15 @@ void DBusNode::run()
         cmd_pos_.z = 0;
       else if (cmd_pos_.z < -0.235)
         cmd_pos_.z = -0.235;
+
+
+      if (!last_b  && dbus_cmd_.key_b)
+      {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_b)
+            sucker_signal = !sucker_signal;                    
+      }
     }
 
     else if (dbus_cmd_.s_r == 2) // right paddle down, stop chassis
@@ -154,13 +163,7 @@ void DBusNode::run()
         cmd_pos_.x = 0.0;
       
 
-      if (!last_w  && dbus_cmd_.key_w)
-      {
-          sleep(0.05);
-          dbus_.getData(&dbus_cmd_);
-          if (dbus_cmd_.key_w)
-            sucker_signal = !sucker_signal;                    
-      }
+   
      
 
 
@@ -170,7 +173,7 @@ void DBusNode::run()
     gpio_data.gpio_state[0] = gpio_data.gpio_state[1] = gripper_signal;
     gpio_data.gpio_state[2] = sucker_signal;
     gpio_data.gpio_state[3] = rob_signal;
-    last_w = dbus_cmd_.key_w;
+    last_b = dbus_cmd_.key_b;
 
 
     

@@ -66,7 +66,7 @@ private:
   geometry_msgs::Twist cmd_vel_;
   geometry_msgs::Vector3 cmd_pos_;
   bool gripper_signal, sucker_signal, rob_signal;
-  bool last_q, last_w, last_e;
+  bool last_q, last_b, last_e;
   DBus dbus_{};
   sp_common::GpioData gpio_data;
 

@@ -4,6 +4,8 @@
 #define PLANNING_GROUP_MANIPULATOR "engineer_manipulator"
 #define PLANNING_GROUP_GRIPPER "gripper"
 #include <moveit_visual_tools/moveit_visual_tools.h>
+#include <std_msgs/Bool.h>
+#include <sensor_msgs/JointState.h>
 
 #define joint_eff_large 0.05
 #define joint_eff_small 0.03
@@ -59,6 +61,11 @@ namespace manipulator_control
 
        // void sucker_callback(const sp_common::GpioData::ConstPtr &gpio_data_);
 
+        void halt_callback(const std_msgs::Bool::ConstPtr &halt_);
+
+        void state_callback(const sensor_msgs::JointState::ConstPtr &state_);
+           
+
     private:
         moveit::planning_interface::MoveGroupInterface &move_group_interface;
         moveit::planning_interface::MoveGroupInterface &grip_group_interface;
@@ -70,6 +77,12 @@ namespace manipulator_control
         bool executed;
         ros::NodeHandle nh_;
         ros::Publisher pose_publisher_;
+        ros::Publisher halt_publisher_;
+        ros::Subscriber halt_subscriber_;
+        ros::Subscriber state_subscriber_;
+        bool last_halt, halt;
+        sensor_msgs::JointState joint_state_rev;
+        std_msgs::Bool h;
         //ros::Publisher sucker_pub_;
        // ros::Subscriber sucker_sub_;
        // sp_common::GpioData gpio_data;

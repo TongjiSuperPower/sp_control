@@ -36,8 +36,8 @@ namespace chassis_controller
         // Setup odometry realtime publisher + odom message constant fields
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
 
-        ramp_x_ = new sp_common::RampFilter<double>(2.5, 0.001);
-        ramp_y_ = new sp_common::RampFilter<double>(2.5, 0.001);
+        ramp_x_ = new sp_common::RampFilter<double>(1.8, 0.001);
+        ramp_y_ = new sp_common::RampFilter<double>(1.8, 0.001);
         ramp_z_ = new sp_common::RampFilter<double>(5, 0.001);
         setOdomPubFields(root_nh, controller_nh);
 

@@ -36,6 +36,8 @@ namespace sp_hw
             ros::Duration(.5).sleep();
 
         ROS_INFO("Successfully connected to %s. ", bus_name.c_str());
+        get_pose = true;
+
         rm_can_frame0_.can_id = 0x200;
         rm_can_frame0_.can_dlc = 8;
         rm_can_frame1_.can_id = 0x1FF;
@@ -78,6 +80,7 @@ namespace sp_hw
                 socket_can_.write(&frame);
             }
         }
+        halt = true;
     }
 
     void CanBus::write()
@@ -86,6 +89,7 @@ namespace sp_hw
         std::fill(std::begin(rm_can_frame0_.data), std::end(rm_can_frame0_.data), 0);
         std::fill(std::begin(rm_can_frame1_.data), std::end(rm_can_frame1_.data), 0);
         std::fill(std::begin(can_frame2_.data), std::end(can_frame2_.data), 0);
+        
 
         for (auto &id2act_data : *data_ptr_.id2act_data_)
         {
@@ -117,6 +121,11 @@ namespace sp_hw
             }
             else if (id2act_data.second.type.find("DM") != std::string::npos)
             {
+
+                if (id2act_data.second.is_halted)
+                    continue;
+                if (!halt && !id2act_data.second.is_halted)
+                    continue;
                 can_frame frame{};
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 frame.can_id = id2act_data.first;
@@ -125,7 +134,15 @@ namespace sp_hw
                 uint16_t qd_des = (int)(act_coeff.vel2act * (id2act_data.second.cmd_vel - act_coeff.act2vel_offset));
                 uint16_t kp = 0;
                 uint16_t kd = 0;
-                uint16_t tau = (int)(act_coeff.effort2act * (id2act_data.second.exe_effort - act_coeff.act2effort_offset));
+                //if (get_pose)
+                //{
+                  //  uint16_t tau =(uint16_t)(act_coeff.effort2act * (0.0 - act_coeff.act2effort_offset));              
+               // }        
+                //else
+               // {
+                    double tau_before_limit = limitAmplitude<double>(id2act_data.second.exe_effort, 6);
+                    uint16_t tau =(uint16_t)(act_coeff.effort2act * (tau_before_limit - act_coeff.act2effort_offset));
+               // }
                 frame.data[0] = q_des >> 8;
                 frame.data[1] = q_des & 0xFF;
                 frame.data[2] = qd_des >> 8;
@@ -133,7 +150,7 @@ namespace sp_hw
                 frame.data[4] = kp & 0xFF;
                 frame.data[5] = kd >> 4;
                 frame.data[6] = ((kd & 0xF) << 4) | (tau >> 8);
-                frame.data[7] = tau & 0xFF;
+                frame.data[7] = tau & 0xFF; 
                 socket_can_.write(&frame);
             }
             else if (id2act_data.second.type.find("MG_8016") != std::string::npos)
@@ -198,6 +215,7 @@ namespace sp_hw
             socket_can_.write(&rm_can_frame1_);
         if (has_write_frame2)
             socket_can_.write(&can_frame2_);
+
     }
     /*! TODO :  seems that the processing of read_buffer_ will waste a lot of time
      *          because of the thread-switching and mutex_.
@@ -301,6 +319,8 @@ namespace sp_hw
                     {
 
                         act_data.q_raw = (frame.data[1] << 8) | frame.data[2];
+                        if (frame.data[0]==004)
+                            std::cout << act_data.q_raw << std::endl;
                         uint16_t qd = (frame.data[3] << 4) | (frame.data[4] >> 4);
                         uint16_t eff = ((frame.data[4] & 0xF) << 8) | frame.data[5];
                         // Multiple cycle
@@ -332,6 +352,11 @@ namespace sp_hw
         std::lock_guard<std::mutex> guard(mutex_);
         CanFrameStamp can_frame_stamp{.frame = frame, .stamp = ros::Time::now()};
         read_buffer_.push_back(can_frame_stamp);
+    }
+
+    void CanBus::halt_callback(const std_msgs::Bool::ConstPtr &halt_)
+    {
+        halt = halt_->data;
     }
 
     CanBus::~CanBus()

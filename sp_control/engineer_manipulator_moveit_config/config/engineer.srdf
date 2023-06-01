@@ -32,11 +32,11 @@
     </group_state>
     <group_state name="forward" group="engineer_manipulator">
         <joint name="joint1" value="0"/>
-        <joint name="joint2" value="-1.2645"/>
-        <joint name="joint3" value="-2.314"/>
-        <joint name="joint4" value="-0.3633"/>
+        <joint name="joint2" value="-1.4385"/>
+        <joint name="joint3" value="-2.36"/>
+        <joint name="joint4" value="0.0929"/>
         <joint name="joint5" value="0.0174"/>
-        <joint name="joint6" value="0.2595"/>
+        <joint name="joint6" value="-0.1301"/>
     </group_state>
     <group_state name="left" group="engineer_manipulator">
         <joint name="joint1" value="1.5644"/>
@@ -47,12 +47,12 @@
         <joint name="joint6" value="-1.6762"/>
     </group_state>
     <group_state name="left_up" group="engineer_manipulator">
-        <joint name="joint1" value="1.5042"/>
-        <joint name="joint2" value="-0.4874"/>
-        <joint name="joint3" value="-1.9594"/>
-        <joint name="joint4" value="2.0277"/>
-        <joint name="joint5" value="-0.1169"/>
-        <joint name="joint6" value="-2.0724"/>
+        <joint name="joint1" value="1.4482"/>
+        <joint name="joint2" value="-0.7635"/>
+        <joint name="joint3" value="-1.9902"/>
+        <joint name="joint4" value="1.9476"/>
+        <joint name="joint5" value="-0.3599"/>
+        <joint name="joint6" value="-1.9678"/>
     </group_state>
     <group_state name="exchange" group="engineer_manipulator">
         <joint name="joint1" value="1.5321"/>

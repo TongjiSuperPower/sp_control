@@ -25,7 +25,13 @@ namespace manipulator_control
         //sucker_pub_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
         //sucker_sub_ = nh_.subscribe<sp_common::GpioData>("/controllers/gpio_controller/state", 10, boost::bind(&Manipulator::sucker_callback, this, _1));
         pose_publisher_ = nh_.advertise<geometry_msgs::Pose>("calibrate", 1000);
+        halt_publisher_ = nh_.advertise<std_msgs::Bool>("halt", 1000);
+        halt_subscriber_ = nh_.subscribe<std_msgs::Bool>("is_halted", 10, boost::bind(&Manipulator::halt_callback, this, _1));
+        state_subscriber_ = nh_.subscribe<sensor_msgs::JointState>("joint_state", 10, boost::bind(&Manipulator::state_callback, this, _1));
+
         EXECUTION_MODE = POSE;
+        last_halt = halt = false;
+        h.data = true;
        // gpio_size = 4;
         return true;
     }
@@ -35,9 +41,24 @@ namespace manipulator_control
         current_pose = move_group_interface.getCurrentPose("vacuum_gripper").pose;
         current_state = move_group_interface.getCurrentJointValues();
         current_distance = grip_group_interface.getCurrentJointValues();
+        move_group_interface.setStartStateToCurrentState();
         ROS_INFO_STREAM(current_pose<<"   calibrate   ");
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] << " joint3: " << current_state[2] << " joint4: " << current_state[3] << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" << std::endl);
         //ROS_INFO_STREAM("joint7: " << current_distance[0]);
+   
+        
+        if (last_halt && !halt) 
+        { 
+            h.data = true;
+            halt_publisher_.publish(h);
+            write(current_state);             
+        }
+        
+          
+        last_halt = halt;
+
+      //  ROS_INFO_STREAM(  "joint6     "<<joint_state_rev.position[7]);
+ 
         pose_publisher_.publish(current_pose);
     }
 
@@ -86,8 +107,10 @@ namespace manipulator_control
         value += delta_theta;
         EXECUTION_MODE = STATE;
         if (executed == true)
-            executed = false;
+            executed = false; 
+        move_group_interface.setStartStateToCurrentState();
         move_group_interface.setJointValueTarget("joint" + std::to_string(num), value);
+        
         joint_execute(); 
     }
 
@@ -196,6 +219,7 @@ namespace manipulator_control
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
         bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)" << success ? "" : "FAILED");
+        ROS_INFO_STREAM(my_plan.trajectory_);
         move_group_interface.execute(my_plan);
     }
 
@@ -254,7 +278,21 @@ namespace manipulator_control
     void Manipulator::sucker_callback(const sp_common::GpioData::ConstPtr &gpio_data_)
     {
         gpio_data = *gpio_data_;
-        gpio_size = gpio_data_->gpio_name.size();
+        gpio_size = gppio_data = *gpio_data_;
+        gpio_size = gpio_data_->gpio_name.size();sio_data_->gpio_name.size();
     }*/
+
+    void Manipulator::halt_callback(const std_msgs::Bool::ConstPtr &halt_)
+    {
+        halt = halt_->data;
+        if (halt)
+            h.data = false;
+        halt_publisher_.publish(h);
+    }
+
+    void Manipulator::state_callback(const sensor_msgs::JointState::ConstPtr &state_)
+    {
+        joint_state_rev = *state_;
+    }
 
 }

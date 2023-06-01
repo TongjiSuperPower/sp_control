@@ -26,6 +26,8 @@
 #include "sp_common/ActuatorState.h"
 #include "sp_common/GpioData.h"
 
+#include "std_msgs/Bool.h"
+
 namespace sp_hw
 {
     class SpRobotHW : public hardware_interface::RobotHW
@@ -38,6 +40,8 @@ namespace sp_hw
         void write(const ros::Time &time, const ros::Duration &period);
 
         void publishActuatorState(const ros::Time &time);
+
+        void halt_callback(const std_msgs::Bool::ConstPtr &halt_);
 
     private:
         bool is_actuator_specified_, is_gpio_specified_ = false;
@@ -80,5 +84,11 @@ namespace sp_hw
         // ActuatorState Publisher
         ros::Time last_publish_time_;
         std::unique_ptr<realtime_tools::RealtimePublisher<sp_common::ActuatorState>> actuator_state_pub_;
+        ros::NodeHandle nh_;
+        ros::Publisher halt_pub_; 
+        ros::Subscriber halt_sub_; 
+
+        bool halt;
+
     };
 } // namespace : sp_hw
