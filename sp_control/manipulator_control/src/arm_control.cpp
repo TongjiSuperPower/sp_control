@@ -51,7 +51,7 @@ namespace manipulator_control
         { 
             h.data = true;
             halt_publisher_.publish(h);
-            write(current_state);             
+          //  write(current_state);             
         }
         
           

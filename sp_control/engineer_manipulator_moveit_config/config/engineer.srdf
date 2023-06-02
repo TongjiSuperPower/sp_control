@@ -34,9 +34,9 @@
         <joint name="joint1" value="0"/>
         <joint name="joint2" value="-1.4385"/>
         <joint name="joint3" value="-2.36"/>
-        <joint name="joint4" value="0.0929"/>
-        <joint name="joint5" value="0.0174"/>
-        <joint name="joint6" value="-0.1301"/>
+        <joint name="joint4" value="2.5454"/>
+        <joint name="joint5" value="-0.0124"/>
+        <joint name="joint6" value="-2.5454"/>
     </group_state>
     <group_state name="left" group="engineer_manipulator">
         <joint name="joint1" value="1.5644"/>

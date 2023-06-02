@@ -124,8 +124,8 @@ namespace sp_hw
 
                 if (id2act_data.second.is_halted)
                     continue;
-                if (!halt && !id2act_data.second.is_halted)
-                    continue;
+               // if (!halt && !id2act_data.second.is_halted)
+                 //   continue;
                 can_frame frame{};
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 frame.can_id = id2act_data.first;
