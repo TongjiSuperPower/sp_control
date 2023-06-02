@@ -222,8 +222,8 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(0.2);
     geometry_msgs::Pose pose4;
     pose4.position.x=0.000;
-    pose4.position.y=0.400;
-    pose4.position.z=0.660;
+    pose4.position.y=0.310;
+    pose4.position.z=0.498;
     pose4.orientation.w=sqrt(2)/2;
     pose4.orientation.x=-sqrt(2)/2;
     pose4.orientation.y=0;

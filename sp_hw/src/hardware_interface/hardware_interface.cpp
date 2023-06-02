@@ -66,7 +66,7 @@ namespace sp_hw
             {
                 try
                 {
-                    act_data.second.is_halted = (time - act_data.second.stamp).toSec() > 0.1 || false;
+                    act_data.second.is_halted = (time - act_data.second.stamp).toSec() > 1 || false;
                 }
                 catch (std::runtime_error &ex)
                 {

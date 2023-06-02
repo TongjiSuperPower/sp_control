@@ -12,10 +12,10 @@ arm:
       - joint5
       - joint6
     gains:
-      joint1: { p: 30.0, i: 1.0, d: 0.15, i_clamp: 4.0 }
-      joint2: { p: 450.0, i: 55.0, d: 7.0, i_clamp: 100.0 }
-      joint3: { p: 280.0, i: 228.0, d: 5.0, i_clamp: 50.0 }
-      joint4: { p: 18.0, i: 0.05, d: 0.15, i_clamp: 4.0 }
+      joint1: { p: 40.0, i: 1.0, d: 0.15, i_clamp: 4.0 }
+      joint2: { p: 460.0, i: 57.0, d: 7.0, i_clamp: 100.0 }
+      joint3: { p: 290.0, i: 28.0, d: 5.0, i_clamp: 50.0 }
+      joint4: { p: 22.0, i: 0.05, d: 0.15, i_clamp: 4.0 }
       joint5: { p: 65.0, i: 1.5, d: 0.1, i_clamp: 4.0 }
       joint6: { p: 6.0, i: 0.05, d: 0.1, i_clamp: 4.0 }
 

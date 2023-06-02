@@ -134,6 +134,15 @@ void DBusNode::run()
         cmd_pos_.z = 0;
       else if (cmd_pos_.z < -0.235)
         cmd_pos_.z = -0.235;
+
+
+      if (!last_w  && dbus_cmd_.key_b)
+      {
+          sleep(0.05);
+          dbus_.getData(&dbus_cmd_);
+          if (dbus_cmd_.key_b)
+            sucker_signal = !sucker_signal;                    
+      }
     }
 
     else if (dbus_cmd_.s_r == 2) // right paddle down, stop chassis
@@ -154,13 +163,6 @@ void DBusNode::run()
         cmd_pos_.x = 0.0;
       
 
-      if (!last_w  && dbus_cmd_.key_w)
-      {
-          sleep(0.05);
-          dbus_.getData(&dbus_cmd_);
-          if (dbus_cmd_.key_w)
-            sucker_signal = !sucker_signal;                    
-      }
      
 
 

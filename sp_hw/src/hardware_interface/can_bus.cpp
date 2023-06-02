@@ -117,6 +117,8 @@ namespace sp_hw
             }
             else if (id2act_data.second.type.find("DM") != std::string::npos)
             {
+                if (id2act_data.second.is_halted)
+                    continue;
                 can_frame frame{};
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 frame.can_id = id2act_data.first;
