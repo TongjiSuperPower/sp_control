@@ -101,7 +101,7 @@ namespace sp_hw
                 // TODO : (Lithesh) is the thread safe here while calcuating the cmd?
                 double cmd =
                     limitAmplitude(act_coeff.effort2act * id2act_data.second.exe_effort, act_coeff.max_out);
-                //ROS_INFO_STREAM(act_coeff.effort2act * id2act_data.second.exe_effort);
+                // ROS_INFO_STREAM(act_coeff.effort2act * id2act_data.second.exe_effort);
                 if (-1 < id && id < 4)
                 {
                     rm_can_frame0_.data[2 * id] = static_cast<uint8_t>(static_cast<int16_t>(cmd) >> 8u);
@@ -201,9 +201,10 @@ namespace sp_hw
         if (has_write_frame2)
             socket_can_.write(&can_frame2_);
     }
-    /*! TODO :  seems that the processing of read_buffer_ will waste a lot of time
-     *          because of the thread-switching and mutex_.
-     *          Maybe the chassis M3508 doesn't need multiencoder??
+    /**
+     * @brief 对read_buffer_中的数据进行处理
+     * @todo  从头至尾遍历read_buffer_会造成重复刷新
+     * @param time
      */
     void CanBus::read(ros::Time time)
     {
@@ -244,7 +245,7 @@ namespace sp_hw
 
                     act_data.vel = act_coeff.act2vel * static_cast<double>(act_data.qd_raw);
                     act_data.effort = act_coeff.act2effort * static_cast<double>(mapped_current);
-                    continue; // TODO : ??only process the newest can_frame?? Then why the read_buffer_??S
+                    continue;
                 }
                 else if (act_data.type.find("MG") != std::string::npos)
                 {
@@ -253,10 +254,9 @@ namespace sp_hw
                         if (act_data.seq == 0)
                         {
                             act_data.offset2 = (frame.data[7] << 8u) | frame.data[6];
-                            
                         }
-                        //ROS_INFO_STREAM(frame.can_id<<" OFFSET2 " << act_data.offset2);
-                        //ROS_INFO_STREAM(frame.can_id<<"  seq  "<<act_data.seq);
+                        // ROS_INFO_STREAM(frame.can_id<<" OFFSET2 " << act_data.offset2);
+                        // ROS_INFO_STREAM(frame.can_id<<"  seq  "<<act_data.seq);
                         act_data.q_raw = ((frame.data[7] << 8u) | frame.data[6]) - act_data.offset2;
                         act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
 
@@ -274,7 +274,7 @@ namespace sp_hw
 
                         act_data.q_last = act_data.q_raw;
                         act_data.seq++;
-                        
+
                         // convert raw data into  standard ActuatorState
                         act_data.pos = act_coeff.act2pos *
                                            static_cast<double>(act_data.q_raw + 65536 * act_data.q_circle) +
@@ -341,7 +341,7 @@ namespace sp_hw
         ROS_INFO_STREAM("ENTER ~");
         for (auto &id2act_data : *data_ptr_.id2act_data_)
         {
-             
+
             if (id2act_data.second.type.find("rm") != std::string::npos)
             {
                 can_frame frame0{}, frame1{};
@@ -388,9 +388,7 @@ namespace sp_hw
                 frame.data[7] = 0x00;
                 socket_can_.write(&frame);
             }
-
         }
-
     }
-    
+
 } // namespace sp_hw
