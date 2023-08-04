@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer">
+	<xacro:include filename="$(find sp_description)/urdf/engineer_manipulator/engineer_manipulator/engineer_manipulator.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer_manipulator/engineer_chassis/engineer_chassis.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer_manipulator/manipulator_transmission.xacro"/> 
+	<xacro:include filename="$(find sp_description)/urdf/engineer_manipulator/fpv_module/fpv_module.xacro"/>
+
+	<xacro:arg name="use_simulation" default="true"/>
+	<xacro:engineer_chassis roller_type="simple"/>
+	<xacro:fpv_module/>
+	<xacro:engineer_manipulator/>
+	
+
+	<joint name="joint_arm2body" type="fixed">
+		<axis xyz="0 0 1"/>
+		<origin xyz="0.022 0.166 0.228" rpy="0 0 -1.5708"/>
+		<parent link="base_link"/>
+		<child link="arm_base_link"/>
+	</joint>
+	<joint name="joint_mast2body" type="fixed">
+			<axis xyz="0 0 1"/>
+			<origin xyz="-0.2295 -0.0825 0.0177" rpy="0 0 1.5708"/>
+			<parent link="base_link"/>
+			<child link="fpv_base_link"/>
+	</joint>
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+		<plugin name="chassis_controller" filename="libchassis_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+		<plugin name="gimbal_controller" filename="libgimbal_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+	</gazebo>
+	
+</robot>
+

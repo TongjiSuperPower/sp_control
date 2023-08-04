@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="fpv_module"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="fpv_module">
+  <link
+    name="fpv_base_link">
+    <inertial>
+      <origin
+        xyz="-0.00792936871652137 0.000141142989662449 0.260766462339412"
+        rpy="0 0 0" />
+      <mass
+        value="0.317542464634811" />
+      <inertia
+        ixx="0.000965471374037066"
+        ixy="9.93131375188562E-08"
+        ixz="-4.59210283751836E-07"
+        iyy="0.000974644385413349"
+        iyz="-2.29555782023746E-07"
+        izz="3.90092448204564E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="mast">
+    <inertial>
+      <origin
+        xyz="-0.0584010828086417 -0.00159000441041939 0.273527091290577"
+        rpy="0 0 0" />
+      <mass
+        value="0.596769834435929" />
+      <inertia
+        ixx="0.00358416489838144"
+        ixy="8.93424511469642E-06"
+        ixz="-8.40259560018718E-08"
+        iyy="0.00396184957629145"
+        iyz="-5.81196895554224E-09"
+        izz="0.00062348701535612" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/mast.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.823529411764706 0.870588235294118 0.980392156862745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/mast.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="mast_joint"
+    type="prismatic">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="fpv_base_link" />
+    <child
+      link="mast" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.235"
+      upper="0"
+      effort="50"
+      velocity="0.4" />
+  </joint>
+  <link
+    name="fpv_yaw">
+    <inertial>
+      <origin
+        xyz="-0.0092103 0.044084 0.018323"
+        rpy="0 0 0" />
+      <mass
+        value="0.060612" />
+      <inertia
+        ixx="9.0201E-03"
+        ixy="1.0141E-04"
+        ixz="5.7277E-05"
+        iyy="1.4587E-02"
+        iyz="3.2725E-04"
+        izz="1.9433E-02" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.49804 0.49804 0.49804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fpv_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.0285 0.3853"
+      rpy="0 0 -1.5707963267949" />
+    <parent
+      link="mast" />
+    <child
+      link="fpv_yaw" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.80"
+      upper="1.50"
+      effort="1.3"
+      velocity="6" />
+  </joint>
+  <link
+    name="fpv_pitch">
+    <inertial>
+      <origin
+        xyz="-0.017448 -0.055509 -4.0539E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.79082" />
+      <inertia
+        ixx="0.00090446"
+        ixy="-1.0482E-03"
+        ixz="3.6509E-04"
+        iyy="0.0011756"
+        iyz="8.4354E-05"
+        izz="0.0009281" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/fpv_module/fpv_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fpv_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.000700000000000704 0.0275"
+      rpy="-1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="fpv_yaw" />
+    <child
+      link="fpv_pitch" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="1.3"
+      velocity="6" />
+  </joint>
+
+  <!--Transmission-->
+  <transmission name="trans_mast_joint">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="mast_joint_motor">
+      <mechanicalReduction>50</mechanicalReduction>
+    </actuator>
+    <joint name="mast_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="trans_fpv_yaw_joint">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="fpv_yaw_joint_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="fpv_yaw_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="trans_fpv_pitch_joint">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="fpv_pitch_joint_motor">
+	    <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="fpv_pitch_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <gazebo reference="fpv_pitch">
+    <material>Gazebo/Black</material>
+  </gazebo>
+        
+  </xacro:macro>
+</robot>

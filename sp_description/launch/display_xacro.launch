@@ -1,0 +1,26 @@
+<launch>
+  <arg
+    name="model" default="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer_manipulator/engineer.xacro'"/>
+  <arg
+    name="gui"
+    default="true" />
+  <param
+    name="robot_description"
+    command="$(arg model)"/>
+  <param
+    name="use_gui"
+    value="true" />
+  <node
+    name="joint_state_publisher_gui"
+    pkg="joint_state_publisher_gui"
+    type="joint_state_publisher_gui" />
+  <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+  <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find sp_description)/rviz/engineer.rviz" />
+</launch>

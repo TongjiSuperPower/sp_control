@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="底盘_urdf_new">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0446048538381466 -0.556756712627551 -0.0117687260089729"
+        rpy="0 0 0" />
+      <mass
+        value="6.20083642380724" />
+      <inertia
+        ixx="0.0395141108017508"
+        ixy="1.31813337902063E-06"
+        ixz="-7.48631907832327E-12"
+        iyy="0.0235971269440334"
+        iyz="-1.68677643216763E-06"
+        izz="0.0590024914600304" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1_fl">
+    <inertial>
+      <origin
+        xyz="3.92175187356458E-05 -8.51922908513963E-05 0.0143409714753091"
+        rpy="0 0 0" />
+      <mass
+        value="1.06818337058872" />
+      <inertia
+        ixx="0.00121881659153036"
+        ixy="-2.85301798042904E-07"
+        ixz="-1.80083728892025E-07"
+        iyy="0.00123376711394768"
+        iyz="2.77151753250079E-07"
+        izz="0.00229240877451679" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link1_fl.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link1_fl.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint1_fl"
+    type="continuous">
+    <origin
+      xyz="-0.24531 -0.3683 -0.05551"
+      rpy="1.5708 -0.088599 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1_fl" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="link2_fr">
+    <inertial>
+      <origin
+        xyz="-0.000321739044573666 0.000181326460219622 0.0581944648928505"
+        rpy="0 0 0" />
+      <mass
+        value="1.0627596368523" />
+      <inertia
+        ixx="0.00121863294945634"
+        ixy="-2.85301800297848E-07"
+        ixz="-1.80083730050277E-07"
+        iyy="0.00123358347187028"
+        iyz="2.77151755489096E-07"
+        izz="0.00229236507278443" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link2_fr.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link2_fr.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint2_fr"
+    type="continuous">
+    <origin
+      xyz="0.11159 -0.3683 -0.05551"
+      rpy="-1.5708 -0.81082 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="link2_fr" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="link3_bl">
+    <inertial>
+      <origin
+        xyz="0.000294450488833031 -4.71223213435179E-05 0.0582785149338645"
+        rpy="0 0 0" />
+      <mass
+        value="1.04736678792999" />
+      <inertia
+        ixx="0.00120983821591112"
+        ixy="-2.85301799886556E-07"
+        ixz="-1.80083729200309E-07"
+        iyy="0.00122478873832988"
+        iyz="2.7715175524762E-07"
+        izz="0.00227488739570549" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link3_bl.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link3_bl.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint3_bl"
+    type="revolute">
+    <origin
+      xyz="-0.20121 -0.7517 -0.05551"
+      rpy="1.5708 0.8753 -1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="link3_bl" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link4_br">
+    <inertial>
+      <origin
+        xyz="0.000148099880973085 -1.99874032540751E-05 0.0142222561204947"
+        rpy="0 0 0" />
+      <mass
+        value="1.07451413975121" />
+      <inertia
+        ixx="0.00121888652087647"
+        ixy="-2.85301798128292E-07"
+        ixz="-1.80083729176344E-07"
+        iyy="0.00123383704329707"
+        iyz="2.77151755510207E-07"
+        izz="0.00229242808212254" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link4_br.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://底盘_urdf_new/meshes/link4_br.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint4_br"
+    type="continuous">
+    <origin
+      xyz="0.15569 -0.75167 -0.055404"
+      rpy="1.5708 -0.089686 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="link4_br" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>

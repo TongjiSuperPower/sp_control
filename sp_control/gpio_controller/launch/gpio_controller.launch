@@ -1,5 +1,0 @@
-<launch>
-    <rosparam file="$(find gpio_controller)/config/gpio_controller.yaml" command="load"/>
-
-    <node name="gpio_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="controllers/gpio_controller"/>
-</launch>

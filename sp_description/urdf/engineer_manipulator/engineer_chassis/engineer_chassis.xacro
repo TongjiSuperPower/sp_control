@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="engineer_chassis"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find sp_description)/urdf/common/mecanum_wheel.xacro"/>
+
+  <xacro:property name="wheel_front" value="0.19727"/>
+  <xacro:property name="wheel_back" value="-0.19727"/>
+  <xacro:property name="wheel_left" value="0.22300"/>
+  <xacro:property name="wheel_right" value="-0.22300"/>
+  <xacro:property name="wheel_offset_z" value="0.000889"/>
+  <xacro:property name="wheel_joint_damping" value="1.0"/>
+  <xacro:property name="wheel_joint_friction" value="1.0"/>
+
+  <xacro:macro name="engineer_chassis" params="roller_type">
+<!--base link-->
+   <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0147695790883097 -0.0277071473448106 0.0578144581314767"
+        rpy="0 0 0" />
+      <mass
+        value="10.0515226503987" />
+      <inertia
+        ixx="0.0193511082538768"
+        ixy="-3.41760973575497E-05"
+        ixz="5.54217286706699E-06"
+        iyy="0.0356235596590244"
+        iyz="-8.92016001448171E-06"
+        izz="0.046454065978897" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_manipulator/engineer_chassis/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.6 0.6 0.150"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.228 0.0 0.118" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.144 0.3 0.14"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.205 0.0 0.10" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.19 0.3 0.09"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01 0.193 0.13" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.220 0.214 0.148"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0 0.22 0.09" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.6 0.16 0.07"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0 -0.24 0.13" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.5 0.12 0.28"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0 0.054 0.10" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.19 0.008 0.10" rpy="0 0 0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0 -0.172 0.10" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.19 0.01 0.10"/>
+      </geometry>
+    </collision>
+  </link>
+
+    <xacro:mecanum_wheel prefix="left_front" connected_to="base_link"
+                         wheel_x_offset="${wheel_front}" wheel_y_offset="${wheel_left}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="right_front" connected_to="base_link"
+                         wheel_x_offset="${wheel_front}" wheel_y_offset="${wheel_right}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="-1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="left_back" connected_to="base_link"
+                         wheel_x_offset="${wheel_back}" wheel_y_offset="${wheel_left}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="-1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="right_back" connected_to="base_link"
+                         wheel_x_offset="${wheel_back}" wheel_y_offset="${wheel_right}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="1" roller_type="${roller_type}"/>
+    <xacro:wheel_transmission prefix="left_front" mechanical_reduction="19.2032"/>
+    <xacro:wheel_transmission prefix="right_front" mechanical_reduction="-19.2032"/>
+    <xacro:wheel_transmission prefix="left_back" mechanical_reduction="19.2032"/>
+    <xacro:wheel_transmission prefix="right_back" mechanical_reduction="-19.2032"/>
+  </xacro:macro>
+ 
+`
+<!--grappler link-->
+  <xacro:macro name="grappler_link">
+    <link
+      name="right_grappler">
+      <inertial>
+        <origin
+          xyz="0.0374564878439833 0.0732785925903036 -0.297577411977033"
+          rpy="0 0 0" />
+        <mass
+          value="0.129309294396376" />
+        <inertia
+          ixx="6.06808244770477E-05"
+          ixy="-1.97645234733974E-05"
+          ixz="1.18673951219721E-14"
+          iyy="3.07267845186405E-05"
+          iyz="4.37782583454494E-14"
+          izz="7.04773538349368E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/engineer_chassis/right_grappler.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.333333333333333 0.333333333333333 0.333333333333333 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/engineer_chassis/right_grappler.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="right_grappler_joint"
+      type="revolute">
+      <origin
+        xyz="0.267500000855127 0.160000000737873 0.0513107382535401"
+        rpy="1.57079632425699 0 -3.14159265358979" />
+      <parent
+        link="base_link" />
+      <child
+        link="right_grappler" />
+      <axis
+        xyz="0 0 -1" />
+      <limit
+        lower="-3.14"
+        upper="0"
+        effort="2"
+        velocity="20" />
+    </joint>
+    <link
+      name="left_grappler">
+      <inertial>
+        <origin
+          xyz="0.0355943090184279 0.0738906876241342 0.254422588217454"
+          rpy="0 0 0" />
+        <mass
+          value="0.129309294388823" />
+        <inertia
+          ixx="6.16686076407714E-05"
+          ixy="-1.99057778006741E-05"
+          ixz="1.05904460765411E-14"
+          iyy="2.97390013550263E-05"
+          iyz="4.41092234057852E-14"
+          izz="7.04773538362682E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/engineer_chassis/left_grappler.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/engineer_chassis/left_grappler.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="left_grappler_joint"
+      type="revolute">
+      <origin
+        xyz="0.267563390312071 -0.116000000130697 0.0514999996038407"
+        rpy="1.57079632425699 0 3.14159265358979" />
+      <parent
+        link="base_link" />
+      <child
+        link="left_grappler" />
+      <axis
+        xyz="0 0 -1" />
+      <limit
+        lower="-3.14"
+        upper="0"
+        effort="2"
+        velocity="20" />
+    </joint>
+  </xacro:macro>
+</robot>
