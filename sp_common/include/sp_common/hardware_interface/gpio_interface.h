@@ -16,6 +16,7 @@ struct GpioData
   ros::Time stamp;
   GpioType type;
   bool value;
+  bool cmd;
 };
 
 class GpioStateHandle
@@ -38,45 +39,45 @@ public:
   }
   bool getValue() const
   {
-    assert(value_);
     return *value_;
+  }
+  void setValue(bool value)
+  {
+    *value_ = value;
   }
 
 private:
   std::string name_;
   GpioType type_;
   bool* value_ = { nullptr };
+  
 };
 
-class GpioCommandHandle
+class GpioCommandHandle: public GpioStateHandle
 {
 public:
   GpioCommandHandle() = default;
-  GpioCommandHandle(std::string name, GpioType type, bool* cmd) : name_(std::move(name)), type_(type), cmd_(cmd)
+
+  GpioCommandHandle(const GpioStateHandle& gs, bool* cmd) : GpioStateHandle(gs), cmd_(cmd)
   {
     if (!cmd)
-      throw hardware_interface::HardwareInterfaceException("Cannot create handle '" + name +
+      throw hardware_interface::HardwareInterfaceException("Cannot create handle '" + gs.getName() +
                                                            "'. command pointer is null.");
+
   }
-  std::string getName() const
+
+  void setCommand(bool cmd)
   {
-    return name_;
+    *cmd_ = cmd;
+    setValue(cmd);
   }
+
   bool getCommand() const
-  {
-    assert(cmd_);
+  {  
     return *cmd_;
   }
 
-  void setCommand(bool value)
-  {
-    assert(cmd_);
-    *cmd_ = value;
-  }
-
 private:
-  std::string name_;
-  GpioType type_;
   bool* cmd_ = { nullptr };
 };
 

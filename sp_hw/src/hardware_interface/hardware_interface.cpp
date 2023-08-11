@@ -16,6 +16,12 @@ namespace sp_hw
         else if (!parseActData(xml_rpc_value))
             return false;
 
+        if (!robot_hw_nh.getParam("gpios", xml_rpc_value))
+            ROS_WARN("No gpio specified");
+        else if (!parseGpioData(xml_rpc_value))
+            return false;
+
+
         if (!robot_hw_nh.getParam("bus", xml_rpc_value))
             ROS_WARN("No Bus Specified");
         else if (xml_rpc_value.getType() == XmlRpc::XmlRpcValue::TypeArray)
@@ -26,10 +32,7 @@ namespace sp_hw
                 ROS_WARN("Some Bus Communication has not been initialized \n");
         }
 
-        if (!robot_hw_nh.getParam("gpios", xml_rpc_value))
-            ROS_WARN("No gpio specified");
-        else if (!parseGpioData(xml_rpc_value))
-            return false;
+
         // TEST
         // actuator_state_pub_.reset(
         // new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
@@ -47,8 +50,10 @@ namespace sp_hw
             ROS_ERROR("hardware_interface : Error occurred while loading Transmission in urdf");
             return false;
         }
-        registerInterface(&gpio_command_interface_);
-        registerInterface(&gpio_state_interface_);
+
+      
+    
+       
 
         actuator_state_pub_.reset(
             new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
@@ -119,7 +124,7 @@ namespace sp_hw
             return;
 
         if (actuator_state_pub_->trylock())
-         {
+        {
              sp_common::ActuatorState actuator_state;
              for (const auto &id2act_datas : bus_id2act_data_)
                  for (const auto &act_data : id2act_datas.second)
@@ -144,6 +149,6 @@ namespace sp_hw
              actuator_state_pub_->msg_ = actuator_state;
              actuator_state_pub_->unlockAndPublish();
              last_publish_time_ = time;
-         }
+        }
     }
 } // namespace sp_hw

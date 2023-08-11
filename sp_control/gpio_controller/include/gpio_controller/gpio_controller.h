@@ -12,20 +12,23 @@
 
 namespace gpio_controller
 {
-  class GpioController : public controller_interface::MultiInterfaceController<sp_control::GpioStateInterface,
-                                                                           sp_control::GpioCommandInterface>
+  class GpioController : public controller_interface::Controller<sp_control::GpioCommandInterface>
   {
   public:
     GpioController() = default;
 
-    bool init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &nh) override;
+    bool init(sp_control::GpioCommandInterface *robot, ros::NodeHandle &nh);
 
     void update(const ros::Time &time, const ros::Duration &period) override;
 
-  private:
-    void setGpioCmd(const sp_common::GpioDataConstPtr &msg);
+    void setCommand(bool value);
 
-    sp_control::GpioStateHandle state_handle_;
+    bool getState();
+
+
+  private:
+    void setCommandCB(const sp_common::GpioDataConstPtr &msg);
+
     sp_control::GpioCommandHandle command_handle_;
 
     ros::Subscriber gpio_command_sub_;

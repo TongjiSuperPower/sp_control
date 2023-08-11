@@ -255,7 +255,6 @@ namespace sp_hw
                 else if (it->second["type"] == "in")
                     type = sp_control::INPUT;
                 int id = it->second["id"];
-
                 // Constructing the Actuator_Table
                 // Bus_ID  --->  Gpio ID  ---> GpioData(Struct)
                 if (bus_id2gpio_data_.find(bus) == bus_id2gpio_data_.end())
@@ -271,18 +270,21 @@ namespace sp_hw
                     bus_id2gpio_data_[bus].emplace(std::make_pair(id, sp_control::GpioData{
                                                                           .name = it->first,
                                                                           .stamp = ros::Time::now(),
-                                                                          .type = sp_control::OUTPUT,
+                                                                          .type = type,
                                                                           .value = false}));
                 }
+
                 sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
                                                               &bus_id2gpio_data_[bus][id].value);
                 gpio_state_interface_.registerHandle(gpio_state_handle);
                 if (type == sp_control::OUTPUT)
                 {
-                    sp_control::GpioCommandHandle gpio_command_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,
-                                                                      &bus_id2gpio_data_[bus][id].value);
+                    sp_control::GpioCommandHandle gpio_command_handle(gpio_state_handle, &bus_id2gpio_data_[bus][id].cmd);
                     gpio_command_interface_.registerHandle(gpio_command_handle);
                 }
+
+
+
             }
         }
         catch (XmlRpc::XmlRpcException &e)
@@ -293,6 +295,12 @@ namespace sp_hw
                              << "Check the Config Yaml.");
             return false;
         }
+
+        
+        registerInterface(&gpio_command_interface_);
+        registerInterface(&gpio_state_interface_);
+        
+ 
         device_tree<sp_control::GpioData>(bus_id2gpio_data_);
         is_gpio_specified_ = true; // now all the actuators have been parsed.
         return true;
@@ -377,7 +385,9 @@ namespace sp_hw
         // auto eff_jnt_iface = &(loader_data.joint_interfaces.effort_joint_interface)
         auto effort_jnt_iface = this->get<hardware_interface::EffortJointInterface>();
         auto position_jnt_iface = this->get<hardware_interface::PositionJointInterface>();
+
         std::vector<std::string> names;
+
 
         if (effort_jnt_iface)
         {
