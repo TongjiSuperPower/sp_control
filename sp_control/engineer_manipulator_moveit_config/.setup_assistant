@@ -1,11 +1,11 @@
 moveit_setup_assistant_config:
   URDF:
     package: sp_description
-    relative_path: urdf/engineer/engineer.xacro
+    relative_path: urdf/engineer_manipulator/engineer.xacro
     xacro_args: ""
   SRDF:
     relative_path: config/engineer.srdf
   CONFIG:
-    author_name: sakuragasakuyoru
+    author_name: Cherryblossomnight
     author_email: kclroku@outlook.com
-    generated_timestamp: 1685686922
+    generated_timestamp: 1695564304

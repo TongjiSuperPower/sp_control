@@ -35,7 +35,7 @@
                     izz="${mass / 12.0 * (width*width + width*width)}"/>
         </inertial>
     </link>
-    <joint name="joint1" type="prismatic">
+    <joint name="joint1" type="revolute">
         <axis xyz="0 1 0"/>
         <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 1.57 0"/>
              limit not work while type="continuous"
@@ -75,20 +75,11 @@
         </joint>
         <actuator name="right_front_wheel_motor">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
+            <mechanicalReduction>19.20</mechanicalReduction>
         </actuator>
     </transmission>
 
-    <transmission name="tran2">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="joint1">
-            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="left_front_wheel_motor">
-            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>-1</mechanicalReduction>
-        </actuator>
-    </transmission>
+
 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">

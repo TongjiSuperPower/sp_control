@@ -6,7 +6,7 @@
 		<arg name="world_name" value="$(find engineer_gazebo)/worlds/test.world"/>
 	</include>
 
- <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer/engineer.xacro'"/>
+ <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/enginee_manipulatorr/engineer.xacro'"/>
 
         <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model engineer -param robot_description"/>
 
