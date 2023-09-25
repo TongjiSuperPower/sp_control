@@ -34,7 +34,7 @@
         iyz="0.00051335"
         izz="0.075914" />
     </inertial>
-    <!-- <visual>
+    <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -47,8 +47,8 @@
         <color
           rgba="0.75294 0.75294 0.75294 1" />
       </material>
-    </visual> -->
-    <visual>
+    </visual>
+    <collision>
       <origin xyz="0 0 0.075" rpy="0 0 0" />
       <geometry>
         <box size="0.6 0.6 0.150"/>
@@ -58,15 +58,6 @@
         <color
           rgba="0.75294 0.75294 0.75294 1" />
       </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://sp_description/meshes/engineer_framed/engineer_chassis/base_link.STL" />
-      </geometry>
     </collision>
     
 
