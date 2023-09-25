@@ -100,7 +100,7 @@ void DBus::init(const char *serial)
   options.c_oflag = 0;                 // no remapping, no delays
   options.c_cflag |= (CLOCAL | CREAD); // ignore modem controls, enable reading
   ioctl(fd, TCSETS2, &options);
-
+  
   port_ = fd;
 }
 
@@ -125,7 +125,7 @@ void DBus::read()
         buff_[i] = buff_[i + 1];
       }
       buff_[17] = read_byte;
-      // ROS_INFO_STREAM("READ:" << buff_[17]);
+    
       count++;
     }
   }

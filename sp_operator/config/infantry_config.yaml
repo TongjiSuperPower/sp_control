@@ -1,0 +1,10 @@
+infantry:
+  chassis:
+    x_coeff: 2.0
+    y_coeff: 2.0
+    z_mk_coeff: 70
+    z_rc_coeff: 1.5
+    x_accel_set : 5
+    y_accel_set : 5
+    z_accel_set : 1.8
+    

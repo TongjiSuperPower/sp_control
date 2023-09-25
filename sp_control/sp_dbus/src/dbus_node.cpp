@@ -56,22 +56,12 @@ DBusNode::DBusNode()
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
   cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   cmd_pos_pub_ = nh_.advertise<geometry_msgs::Vector3>("/cmd_pos", 1);
-  gpio_pub_ = nh_.advertise<sp_common::GpioData>("/controllers/gpio_controller/command", 1000);
-  gpio_sub_ = nh_.subscribe<sp_common::GpioData>("/controllers/gpio_controller/state", 10, boost::bind(&DBusNode::gpio_callback, this, _1));
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
   dbus_.init(serial_port_.data());
   cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
   gripper_signal = sucker_signal = rob_signal = last_q = last_w = last_e = false;
-  gpio_data.gpio_name.push_back("left_gripper");
-  gpio_data.gpio_name.push_back("right_gripper");
-  gpio_data.gpio_name.push_back("sucker");
-  gpio_data.gpio_name.push_back("sustaining_rob");
-  for (int i = 0; i < 4; i++)
-  {
-    gpio_data.gpio_state.push_back(false);
-    gpio_data.gpio_type.push_back("out");
 
-  }
+
   
 }
 
@@ -161,29 +151,13 @@ void DBusNode::run()
         cmd_pos_.x += -gimbal_x_coeff;
       else if (dbus_cmd_.key_q && dbus_cmd_.key_e) 
         cmd_pos_.x = 0.0;
-      
-
-     
-
+                  
 
       cmd_pos_.y += -gimbal_y_coeff_kb * dbus_cmd_.m_y; 
     }
 
-    gpio_data.gpio_state[0] = gpio_data.gpio_state[1] = gripper_signal;
-    gpio_data.gpio_state[2] = sucker_signal;
-    gpio_data.gpio_state[3] = rob_signal;
-    last_w = dbus_cmd_.key_w;
 
 
-    
-    gpio_pub_.publish(gpio_data);
-    cmd_vel_pub_.publish(cmd_vel_);
-    cmd_pos_pub_.publish(cmd_pos_);
     ros::spinOnce();
   }
-}
-
-void DBusNode::gpio_callback(const sp_common::GpioData::ConstPtr &gpio_data_)
-{
-  gpio_data = *gpio_data_;
 }

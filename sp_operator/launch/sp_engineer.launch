@@ -1,0 +1,4 @@
+<launch>
+    <rosparam file="$(find sp_operator)/config/engineer_config.yaml" command="load"/>
+	<node name="sp_engineer" pkg="sp_operator" type="engineer" respawn="false" output="screen" />
+</launch>
