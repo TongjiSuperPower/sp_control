@@ -3,5 +3,4 @@
   <include file="$(find manipulator_control)/launch/arm_trajectory_controller.launch" />
   <include file="$(find engineer_manipulator_moveit_config)/launch/moveit_planning_execution.launch" />
 	<!-- include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch" / -->
-  <rosparam file="$(find chassis_controller)/config/$(arg robot_type).yaml" command="load"/>
 </launch>

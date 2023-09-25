@@ -46,15 +46,14 @@ bool pose_check(geometry_msgs::Pose pose)
 
 
 
-
 int main(int argc, char **argv)
 {
 
     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
     ros::AsyncSpinner spinner(3);
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
-    moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
-    manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
+    //moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
+    manipulator_control::Manipulator manipulator_(move_group_interface);
     manipulator_control::Scene scene;
     scene.init();
     std::string ore_id = "golden_ore";
@@ -71,35 +70,23 @@ int main(int argc, char **argv)
     ros::Subscriber ore_pose_sub = nh.subscribe<geometry_msgs::Pose>("ore_detect_pose", 10, boost::bind(&ore_pose_callback, _1, &ore_pose));
     spinner.start();
     moveit_msgs::AttachedCollisionObject ore_ = scene.generate_attach_collision_obj(ore_id, ore);
-    // scene.add(ore_.object, initial_pose);
-    // scene.attach(ore_, grip_group_interface);
-    //  scene.generate(sink_id, initial_pose, sink);
-    ros::Rate loop_rate(0.2);
-    geometry_msgs::Pose pose4;
-    pose4.position.x=0.000;
-    pose4.position.y=0.310;
-    pose4.position.z=0.498;
-    pose4.orientation.w=sqrt(2)/2;
-    pose4.orientation.x=-sqrt(2)/2;
-    pose4.orientation.y=0;
-    pose4.orientation.z=0;
-
-
+    geometry_msgs::Pose pose;
+    pose.position.x = 0.0;
+    pose.position.y = -0.2;
+    pose.position.z = 0.6;
+    pose.orientation.w = 0.0;
+    pose.orientation.x = 0.0;
+    pose.orientation.y = 1.0;
+    pose.orientation.z = 0.0;
     if (manipulator_.init())
     {
-        //sleep(2);
-       // auto_take_silver_ore(&manipulator_, ore_pose);
-        //auto_adjust_silver_ore(&manipulator_, ore_pose);
         
-        //manipulator_.write(pose4);
-        //manipulator_.move_execute();
-        
-        //manipulator_.write(pose4);
        
 
         while (ros::ok())
         {
             manipulator_.read();
+            manipulator_.write(pose);
             
          
             if (dbusdata_.s_l == 3 && dbusdata_.s_r == 2) // enter the fine turing modd
@@ -216,219 +203,6 @@ int main(int argc, char **argv)
 }
 
 
-/*
-int main(int argc, char **argv)
-{
-
- ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
- ros::AsyncSpinner spinner(3);
- moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
- moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
- manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
- geometry_msgs::Pose pose1;
- geometry_msgs::Pose pose2;
- geometry_msgs::Pose pose3;
- std::vector<geometry_msgs::Pose> waypoints;
-
- std::vector<double> stretch1;
- std::vector<double> stretch2;
- pose1.position.x = 0.00;
- pose1.position.y = 0.320;
- pose1.position.z = 0.580;
- pose1.orientation.w = sqrt(2) / 2;
- pose1.orientation.x = -sqrt(2) / 2;
- pose1.orientation.y = 0.00;
- pose1.orientation.z = 0.00;
- pose2.position.x = 0.00;
- pose2.position.y = 0.480;
- pose2.position.z = 0.580;
- pose2.orientation.w = sqrt(2) / 2;
- pose2.orientation.x = -sqrt(2) / 2;
- pose2.orientation.y = 0.00;
- pose2.orientation.z = 0.00;
- pose3.position.x = 0.00;
- pose3.position.y = 0.10;
- pose3.position.z = 0.62;
- pose3.orientation.w = sqrt(2) / 2;
- pose3.orientation.x = -sqrt(2) / 2;
- pose3.orientation.y = 0.00;
- pose3.orientation.z = 0.00;
- waypoints.push_back(pose1);
- waypoints.push_back(pose2);
- stretch1.push_back(-0.045);
- stretch2.push_back(-0.01);
- spinner.start();
- if (manipulator_.init())
- {
-
-     manipulator_.read();
-     manipulator_.goal("home");
-     manipulator_.move_execute();
-     sleep(0.5);
-     // manipulator_.suck(true);
-     // manipulator_.read();
-     // manipulator_.goal("grip");
-     // manipulator_.move_execute();
-     // sleep(0.7);
-     manipulator_.read();
-     manipulator_.write(pose1);
-     manipulator_.move_execute();
-     sleep(0.7);
-     manipulator_.read();
-     manipulator_.CartesianPath(waypoints);
-     sleep(0.7);
-     // manipulator_.stretch(stretch1);
-     // manipulator_.grip_execute();
-     //  sleep(0.3);
-     //  manipulator_.suck(false);
-     sleep(0.7);
-     // manipulator_.read();
-     // manipulator_.stretch(stretch2);
-     // manipulator_.grip_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.goal("home");
-     manipulator_.move_execute();
-     sleep(0.5);
- }
- return 0;
-}
-*/
-/*
-int main(int argc, char **argv)
-{
-
-ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
-ros::AsyncSpinner spinner(3);
-moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
-moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
-manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
-geometry_msgs::Pose pose1;
-geometry_msgs::Pose pose2;
-std::vector<double> stretch1;
-std::vector<double> stretch2;
-pose1.position.x = 0.00;
-pose1.position.y = 0.48;
-pose1.position.z = 0.280;
-pose1.orientation.w = 0.00;
-pose1.orientation.x = -1.00;
-pose1.orientation.y = 0.00;
-pose1.orientation.z = 0.00;
-pose2.position.x = 0.044;
-pose2.position.y = -0.100;
-pose2.position.z = 0.433;
-pose2.orientation.w = 0.00;
-pose2.orientation.x = 0.00;
-pose2.orientation.y = 1.00;
-pose2.orientation.z = 0.00;
-stretch1.push_back(-0.075);
-stretch2.push_back(0.00);
-ROS_WARN_STREAM(stretch1[0]);
-spinner.start();
-if (manipulator_.init())
-{
- manipulator_.read();
- manipulator_.goal("home");
- manipulator_.move_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.write(pose1);
- manipulator_.move_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.stretch(stretch1);
- manipulator_.grip_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.stretch(stretch2);
- manipulator_.grip_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.write(pose2);
- manipulator_.move_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.stretch(stretch1);
- manipulator_.grip_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.stretch(stretch2);
- manipulator_.grip_execute();
- sleep(0.3);
- manipulator_.read();
- manipulator_.goal("home");
- manipulator_.move_execute();
-}
-return 0;
-}*/
-/*
-int main(int argc, char **argv)
-{
-
- ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
- ros::AsyncSpinner spinner(3);
- moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
- moveit::planning_interface::MoveGroupInterface grip_group_interface(PLANNING_GROUP_GRIPPER);
- manipulator_control::Manipulator manipulator_(move_group_interface, grip_group_interface);
- geometry_msgs::Pose pose1;
- geometry_msgs::Pose pose2;
- std::vector<double> stretch1;
- std::vector<double> stretch2;
- pose1.position.x = 0.044;
- pose1.position.y = -0.060;
- pose1.position.z = 0.433;
- pose1.orientation.w = 0.00;
- pose1.orientation.x = 0.00;
- pose1.orientation.y = 1.00;
- pose1.orientation.z = 0.00;
- pose2.position.x = 0.00;
- pose2.position.y = 0.430;
- pose2.position.z = 0.634;
- pose2.orientation.w = sqrt(2)/2;
- pose2.orientation.x = -sqrt(2)/2;
- pose2.orientation.y = 0.00;
- pose2.orientation.z = 0.00;
- stretch1.push_back(-0.075);
- stretch2.push_back(0.00);
- ROS_WARN_STREAM(stretch1[0]);
- spinner.start();
- if (manipulator_.init())
- {
-     manipulator_.read();
-     manipulator_.goal("home");
-     manipulator_.move_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.write(pose2);
-     manipulator_.move_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.stretch(stretch1);
-     manipulator_.grip_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.stretch(stretch2);
-     manipulator_.grip_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.write(pose1);
-     manipulator_.move_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.stretch(stretch1);
-     manipulator_.grip_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.stretch(stretch2);
-     manipulator_.grip_execute();
-     sleep(0.3);
-     manipulator_.read();
-     manipulator_.goal("home");
-     manipulator_.move_execute();
- }
- return 0;
-}
-*/
 /*
 int main(int argc, char **argv)
 {

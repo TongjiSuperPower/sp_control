@@ -1,7 +1,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_trajectory/robot_trajectory.h>
 #include <sp_common/GpioData.h>
-#define PLANNING_GROUP_MANIPULATOR "engineer_manipulator"
+#define PLANNING_GROUP_MANIPULATOR "manipulator"
 #define PLANNING_GROUP_GRIPPER "gripper"
 #include <moveit_visual_tools/moveit_visual_tools.h>
 
@@ -20,8 +20,7 @@ namespace manipulator_control
     class Manipulator
     {
     public:
-        Manipulator(moveit::planning_interface::MoveGroupInterface &move_group_interface,
-                    moveit::planning_interface::MoveGroupInterface &grip_group_interface);
+        Manipulator(moveit::planning_interface::MoveGroupInterface &move_group_interface);
 
         bool init();
 
@@ -61,9 +60,9 @@ namespace manipulator_control
 
     private:
         moveit::planning_interface::MoveGroupInterface &move_group_interface;
-        moveit::planning_interface::MoveGroupInterface &grip_group_interface;
+        //moveit::planning_interface::MoveGroupInterface &grip_group_interface;
         const moveit::core::JointModelGroup *joint_model_group;
-        const moveit::core::JointModelGroup *grip_model_group;
+        //const moveit::core::JointModelGroup *grip_model_group;
         geometry_msgs::Pose current_pose, target_pose;
         std::vector<double> current_state, target_state, current_distance, target_distance;
         execution_mode EXECUTION_MODE;
