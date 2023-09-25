@@ -16,6 +16,7 @@
 #include <nav_msgs/Odometry.h>
 
 #include <sp_common/filters/filters.h>
+#include <sp_common/base_utilities.h>
 namespace gimbal_controller
 {
     struct Command
@@ -24,10 +25,11 @@ namespace gimbal_controller
         ros::Time stamp_;
     };
 
-    class GimbalController : public controller_interface::MultiInterfaceController<hardware_interface::PositionJointInterface, hardware_interface::EffortJointInterface>
+
+    class GimbalBase : public controller_interface::MultiInterfaceController<hardware_interface::PositionJointInterface, hardware_interface::EffortJointInterface>
     {
     public:
-        GimbalController() = default;
+        GimbalBase() = default;
         /** @brief Get and check params for covariances. Setup odometry realtime publisher + odom message constant fields.
          * init odom tf.
          *
@@ -52,18 +54,16 @@ namespace gimbal_controller
          * @param period The time passed since the last call to update.
          */
         void update(const ros::Time &time, const ros::Duration &period) override;
+        void starting(const ros::Time &time) {}
+        void stopping(const ros::Time &time) {}
 
     protected:
-        /** @brief Write current command from  geometry_msgs::Twist.
-         *
-         * @param msg This expresses velocity in free space broken into its linear and angular parts.
-         */
+        virtual void moveJoint(const ros::Time &time, const ros::Duration &period) = 0;
+
         void cmdPosCallback(const geometry_msgs::Vector3::ConstPtr &msg);
 
         double publish_rate_{}, timeout_{};
 
-        hardware_interface::PositionJointInterface *position_joint_interface_{};
-        hardware_interface::EffortJointInterface *effort_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
@@ -75,11 +75,8 @@ namespace gimbal_controller
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;
 
-    private:
-        void moveJoint(const ros::Time &time, const ros::Duration &period);
-
-        position_controllers::JointPositionController ctrl_yaw_, ctrl_pitch_;
-        effort_controllers::JointPositionController ctrl_height_;
+     
     };
 
 }
+

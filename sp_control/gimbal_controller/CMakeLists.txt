@@ -136,9 +136,13 @@ include_directories(
 )
 
 ## Declare a C++ library
- add_library(gimbal_controller src/gimbal_controller.cpp)
- target_link_libraries(gimbal_controller ${catkin_LIBRARIES})
 
+set(SRC_LIST 
+ src/gimbal_base.cpp
+ src/gimbal_position.cpp
+ )
+add_library(gimbal_controller ${SRC_LIST}) 
+target_link_libraries(gimbal_controller ${catkin_LIBRARIES})
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
