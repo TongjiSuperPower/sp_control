@@ -14,7 +14,7 @@ RampFilter<T>::RampFilter(T acc, T dt) : acc_(acc), dt_(dt), last_value_(0){};
 template <typename T>
 void RampFilter<T>::input(T input_value)
 {
-	last_value_ += minAbs<T>(input_value-last_value_, acc_ * dt_);
+	last_value_ += minAbs<T>(input_value - last_value_, acc_ * dt_);
 }
 
 template <typename T>
@@ -22,6 +22,28 @@ T RampFilter<T>::output()
 {
 	return last_value_;
 }
+
+template <typename T>
+void RampFilter<T>::setAcc(T acc)
+{
+	if (acc == 0)
+		acc_ = 5.0;
+	else
+		acc_ = acc;
+}
+
+template <typename T>
+void RampFilter<T>::clear()
+{
+  last_value_ = 0.;
+}
+
+template <typename T>
+void RampFilter<T>::clear(T last_value)
+{
+  last_value_ = last_value;
+}
+
 
 template class RampFilter<double>;
 template class RampFilter<float>;

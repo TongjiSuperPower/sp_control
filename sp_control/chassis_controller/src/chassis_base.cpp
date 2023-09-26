@@ -3,15 +3,6 @@
 
 namespace chassis_controller
 {
-    /*
-    template <typename T>
-    T getParam(ros::NodeHandle &pnh, const std::string &param_name, const T &default_val)
-    {
-        T param_val;
-        pnh.param<T>(param_name, param_val, default_val);
-        return param_val;
-    }
-*/
     bool ChassisBase::init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
     {
         ROS_INFO("CHASSIS : Initializing Started");
@@ -35,10 +26,11 @@ namespace chassis_controller
 
         // Setup odometry realtime publisher + odom message constant fields
         cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
+        cmd_chassis_sub_ = root_nh.subscribe<sp_common::ChassisCmd>("chassis_cmd", 1, &ChassisBase::cmdChassisCallback, this);
 
-        ramp_x_ = new sp_common::RampFilter<double>(1.8, 0.001);
-        ramp_y_ = new sp_common::RampFilter<double>(1.8, 0.001);
-        ramp_z_ = new sp_common::RampFilter<double>(5, 0.001);
+        ramp_x_ = new sp_common::RampFilter<double>(5, 0.001);
+        ramp_y_ = new sp_common::RampFilter<double>(5, 0.001);
+        ramp_z_ = new sp_common::RampFilter<double>(1.8, 0.001);
         setOdomPubFields(root_nh, controller_nh);
 
         return true;
@@ -46,7 +38,9 @@ namespace chassis_controller
 
     void ChassisBase::update(const ros::Time &time, const ros::Duration &period)
     {
+        sp_common::ChassisCmd cmd_chassis = cmd_rt_buffer_.readFromRT()->cmd_chassis_;
         geometry_msgs::Twist cmd_vel = cmd_rt_buffer_.readFromRT()->cmd_vel_;
+        
 
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
         {
@@ -54,25 +48,133 @@ namespace chassis_controller
             cmd_vel.linear.y = 0.;
             cmd_vel.angular.z = 0.;
         }
-        else
-        {
-        }
+        
 
+        ramp_x_->setAcc(cmd_chassis.accel.linear.x);
+        ramp_y_->setAcc(cmd_chassis.accel.linear.y);
         ramp_x_->input(cmd_vel.linear.x);
         ramp_y_->input(cmd_vel.linear.y);
-        ramp_z_->input(cmd_vel.angular.z);
         vel_cmd_.x = ramp_x_->output();
         vel_cmd_.y = ramp_y_->output();
+        ramp_z_->setAcc(cmd_chassis.accel.angular.z);
+        ramp_z_->input(cmd_vel.angular.z);
         vel_cmd_.z = ramp_z_->output();
+        
+        if (state_ != cmd_chassis.mode)
+        {
+            state_ = cmd_chassis.mode;
+            state_changed_ = true;
+            recovery();
+        }
+
+        switch (state_)
+        {
+            
+            case FOLLOW:
+            {
+                follow(time, period);
+                break;
+            }
+            case NOFOLLOW:
+            {
+                nofollow();
+                break;
+            }
+            case GYRO:
+            {
+                gyro();
+                break;
+            }
+        }        
 
         updateOdom(time, period);
         moveJoint(time, period);
     }
 
+    void ChassisBase::follow(const ros::Time &time, const ros::Duration &period)
+    {
+        if (state_changed_)
+        {
+            state_changed_ = false;
+            ROS_INFO_STREAM("[Chassis] Enter FOLLOW");
+
+            recovery();
+            pid_follow_.reset();
+        }
+
+        //tfVelToBase(command_source_frame_);
+        try
+        {
+            double roll{}, pitch{}, yaw{};
+            //quatToRPY(robot_state_handle_.lookupTransform("base_link", follow_source_frame_, ros::Time(0)).transform.rotation,
+             //       roll, pitch, yaw);
+            double follow_error = angles::shortest_angular_distance(yaw, 0);
+            pid_follow_.computeCommand(-follow_error, period);
+            vel_cmd_.z = pid_follow_.getCurrentCmd();
+        }
+        catch (tf2::TransformException& ex)
+        {
+            ROS_WARN_STREAM(ex.what());
+        }
+    }
+
+    void ChassisBase::nofollow()
+    {
+        if (state_changed_)
+        {
+            state_changed_ = false;
+            ROS_INFO("[Chassis] Enter NOFOLLOW");
+
+            recovery();
+        }
+    }
+
+    
+    void ChassisBase::gyro()
+    {
+        if (state_changed_)
+        {
+            state_changed_ = false;
+            ROS_INFO("[Chassis] Enter GYRO");
+
+            recovery();
+            pid_follow_.reset();
+        }
+        //tfVelToBase(command_source_frame_);
+    }
+
+
+
+    void ChassisBase::recovery()
+    {
+        ramp_x_->clear(vel_cmd_.x);
+        ramp_y_->clear(vel_cmd_.y);
+        ramp_z_->clear(vel_cmd_.z);
+    }
+
+    void ChassisBase::tfVelToBase(const std::string& from)
+    {
+        try
+        {
+            //tf2::doTransform(vel_cmd_, vel_cmd_, robot_state_handle_.lookupTransform("base_link", from, ros::Time(0)));
+        }
+        catch (tf2::TransformException& ex)
+        {
+            ROS_WARN("%s", ex.what());
+        }
+    }
+
+
     void ChassisBase::cmdVelCallback(const geometry_msgs::Twist::ConstPtr &msg)
     {
         cmd_struct_.cmd_vel_ = *msg;
         cmd_struct_.stamp_ = ros::Time::now();
+        cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
+    }
+
+    void ChassisBase::cmdChassisCallback(const sp_common::ChassisCmdConstPtr& cmd)
+    {
+        cmd_struct_.cmd_chassis_ = *cmd;
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
     }
 

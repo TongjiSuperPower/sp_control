@@ -10,6 +10,9 @@ public:
 	RampFilter(T acc, T dt);
 	void input(T input_value);
 	T output();
+	void setAcc(T acc);
+	void clear();
+	void clear(T last_value);
 private:
     T acc_;
 	T dt_;

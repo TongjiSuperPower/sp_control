@@ -77,12 +77,7 @@ namespace chassis_controller
         angle[1]=atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
         angle[2]=atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
         angle[3]=atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x + half_wheel_track_* vel_cmd_.z);
-        // for(int i=0;i<4;i++)
-        // {
-        //     if(angle[i]<-1.07)
-        //         angle[i]+=3.14;
 
-        // }
 
 
         // ctrl_rf_heading_.setCommand(atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z));

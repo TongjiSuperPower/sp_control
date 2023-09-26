@@ -8,11 +8,11 @@ controllers:
     joint: joint1
     pid:
       {
-        p: 7000.0,
-        i: 130.0,
-        d: 0,
-        i_clamp_max: 600,
-        i_clamp_min: -600,
+        p: 1,
+        i: 0,
+        d: 0.05,
+        i_clamp_max: 4,
+        i_clamp_min: 4,
         antiwindup: true,
       }
   joint1_velocity_controller:

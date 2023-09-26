@@ -8,6 +8,7 @@
 #include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <sp_common/ChassisCmd.h>
 
 #include <tf2_msgs/TFMessage.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -24,6 +25,7 @@ namespace chassis_controller
     struct Command
     {
         geometry_msgs::Twist cmd_vel_;
+        sp_common::ChassisCmd cmd_chassis_;
         ros::Time stamp_;
     };
 
@@ -60,13 +62,26 @@ namespace chassis_controller
 
     protected:
         virtual void moveJoint(const ros::Time &time, const ros::Duration &period) = 0;
+
         virtual geometry_msgs::Twist forwardKinematics() = 0;
+
+        void follow(const ros::Time &time, const ros::Duration &period);
+
+        void nofollow();
+
+        void gyro();
+
+        void recovery();
 
         /** @brief Write current command from  geometry_msgs::Twist.
          *
          *  @param msg This expresses velocity in free space broken into its linear and angular parts.
          */
+        void tfVelToBase(const std::string& from);
+
         void cmdVelCallback(const geometry_msgs::Twist::ConstPtr &msg);
+
+        void cmdChassisCallback(const sp_common::ChassisCmd::ConstPtr &cmd);
 
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
@@ -74,11 +89,22 @@ namespace chassis_controller
         ros::Time last_publish_time_;
         geometry_msgs::TransformStamped odom2base_{};
         geometry_msgs::Vector3 vel_cmd_{}; // x, y
+        control_toolbox::Pid pid_follow_;
 
         double wheel_base_{}, wheel_track_{}, wheel_radius_{}, publish_rate_{}, twist_angular_{},
             timeout_{}, effort_coeff_{}, velocity_coeff_{}, power_offset_{};
         ros::Subscriber cmd_chassis_sub_;
         ros::Subscriber cmd_vel_sub_;
+
+        enum
+        {
+            FOLLOW,
+            NOFOLLOW,
+            GYRO
+        };
+
+        int state_ = NOFOLLOW;
+        bool state_changed_ = false;
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;

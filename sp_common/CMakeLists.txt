@@ -22,6 +22,8 @@ add_message_files(
    ActuatorState.msg
    GpioData.msg
    SingleJointWrite.msg
+   DbusData.msg
+   ChassisCmd.msg
 
 #   Message2.msg
 )
@@ -44,6 +46,7 @@ add_message_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 ################################################
@@ -76,9 +79,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs geometry_msgs
   INCLUDE_DIRS include 
   LIBRARIES sp_common 
+  
 #  CATKIN_DEPENDS controller_interface roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
