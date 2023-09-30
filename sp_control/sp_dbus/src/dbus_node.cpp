@@ -54,8 +54,6 @@ int main(int argc, char **argv)
 DBusNode::DBusNode()
 {
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
-  cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-  cmd_pos_pub_ = nh_.advertise<geometry_msgs::Vector3>("/cmd_pos", 1);
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
   dbus_.init(serial_port_.data());
   cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;

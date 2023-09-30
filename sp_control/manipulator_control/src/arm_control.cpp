@@ -36,8 +36,8 @@ namespace manipulator_control
         ROS_INFO_STREAM(current_pose<<"   calibrate   ");
         ROS_INFO_STREAM("[ joint1: " << current_state[0] << " joint2: " << current_state[1] 
         << " joint3: " << current_state[2] << " joint4: " << current_state[3] 
-        << " joint5: " << current_state[4] << " joint6: " << current_state[5] << " ]" 
-        << " joint7: " << current_state[6]<< std::endl);
+        << " joint5: " << current_state[4] << " joint6: " << current_state[5]
+        << " joint7: " << current_state[6] << " ]" << std::endl);
         //ROS_INFO_STREAM("joint7: " << current_distance[0]);
         pose_publisher_.publish(current_pose);
     }
@@ -59,6 +59,7 @@ namespace manipulator_control
         //     return;
         // }
         target_state = target_state_;
+        ROS_INFO_STREAM("a");
         EXECUTION_MODE = STATE;
         if (executed == true)
             executed = false;
@@ -132,7 +133,7 @@ namespace manipulator_control
         ROS_INFO_STREAM("Begin to plan");
         // double j4_delta, j5_delta, j6_delta;
         // j4_delta = j5_delta = j6_delta = 0.0;
-        move_group_interface.setApproximateJointValueTarget(target_pose, "link6");
+        move_group_interface.setApproximateJointValueTarget(target_pose, "link7");
         bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         // while (1)
         // {
@@ -201,7 +202,7 @@ namespace manipulator_control
         moveit::planning_interface::MoveGroupInterface::Plan my_plan;
       
         bool success = (move_group_interface.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
-        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal)" << success ? "" : "FAILED");
+        ROS_INFO_STREAM("tutorial Visualizing plan 1 (pose goal) " << (success ? "SUCCEED" : "FAILED"));
         move_group_interface.execute(my_plan);
     }
 

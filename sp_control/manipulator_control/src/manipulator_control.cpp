@@ -3,10 +3,25 @@
 #include <std_msgs/Float64MultiArray.h>
 #include "sp_common/SingleJointWrite.h"
 #include "sp_common/DbusData.h"
+#include "sp_common/ManipulatorCmd.h"
 
 void pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, manipulator_control::Manipulator *manipulator)
 {
     manipulator->write(*pose_);
+}
+
+void mani_callback(const sp_common::ManipulatorCmd::ConstPtr &mani_cmd, manipulator_control::Manipulator *manipulator)
+{
+    std::vector<double> state;
+    state.push_back(mani_cmd->joint1_pos);
+    state.push_back(mani_cmd->joint2_pos);
+    state.push_back(mani_cmd->joint3_pos);
+    state.push_back(mani_cmd->joint4_pos);
+    state.push_back(mani_cmd->joint5_pos);
+    state.push_back(mani_cmd->joint6_pos);
+    state.push_back(mani_cmd->joint7_pos);
+    ROS_INFO_STREAM(*mani_cmd);
+    manipulator->write(state);
 }
 
 void state_callback(const std_msgs::Float64MultiArray::ConstPtr &state_, manipulator_control::Manipulator *manipulator)
@@ -49,6 +64,7 @@ bool pose_check(geometry_msgs::Pose pose)
 int main(int argc, char **argv)
 {
 
+
     ros::init(argc, argv, "trajectory_control", ros::init_options::AnonymousName);
     ros::AsyncSpinner spinner(3);
     moveit::planning_interface::MoveGroupInterface move_group_interface(PLANNING_GROUP_MANIPULATOR);
@@ -56,6 +72,7 @@ int main(int argc, char **argv)
     manipulator_control::Manipulator manipulator_(move_group_interface);
     manipulator_control::Scene scene;
     scene.init();
+    ros::Rate loop(10);
     std::string ore_id = "golden_ore";
     std::string sink_id = "exchange_sink";
     geometry_msgs::Pose ore_pose;
@@ -64,6 +81,7 @@ int main(int argc, char **argv)
     shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL");
     ros::NodeHandle nh;
     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub", 10, boost::bind(&pose_callback, _1, &manipulator_));
+    ros::Subscriber mani_sub = nh.subscribe<sp_common::ManipulatorCmd>("/manipulator_cmd", 10, boost::bind(&mani_callback, _1, &manipulator_));
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
     ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &dbusdata_));
@@ -74,133 +92,24 @@ int main(int argc, char **argv)
     pose.position.x = 0.0;
     pose.position.y = -0.2;
     pose.position.z = 0.6;
-    pose.orientation.w = 0.0;
     pose.orientation.x = 0.0;
     pose.orientation.y = 1.0;
     pose.orientation.z = 0.0;
+    pose.orientation.w = 0.0;
     if (manipulator_.init())
     {
-        
-       
-
         while (ros::ok())
         {
             manipulator_.read();
             manipulator_.write(pose);
+      
             
-         
-            if (dbusdata_.s_l == 3 && dbusdata_.s_r == 2) // enter the fine turing modd
-            {
-                if (dbusdata_.key_shift)  
-                {
-                    if (dbusdata_.key_a)
-                    {
-                        ROS_INFO_STREAM("JOINT1!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_large, 1);
-                    }
-                        
-                    else if (dbusdata_.key_z)
-                        manipulator_.singleaddwrite(-joint_eff_large, 1);
-                    if (dbusdata_.key_s)
-                    {
-                        ROS_INFO_STREAM("JOINT2!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_large, 2);
-                    }
-                    else if (dbusdata_.key_x)
-                        manipulator_.singleaddwrite(-joint_eff_large, 2);
-                    if (dbusdata_.key_d)
-                    {
-                        ROS_INFO_STREAM("JOINT3!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_large, 3);
-                    }
-                    else if (dbusdata_.key_c)
-                        manipulator_.singleaddwrite(-joint_eff_large, 3);
-                } 
-                else
-                {
-                    if (dbusdata_.key_a)
-                    {
-                        ROS_INFO_STREAM("JOINT4!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_small, 4);
-                    }
-                    else if (dbusdata_.key_z)
-                        manipulator_.singleaddwrite(-joint_eff_small, 4);
-                    if (dbusdata_.key_s)
-                    {    
-                        ROS_INFO_STREAM("JOINT5!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_small, 5);
-                    }
-                        
-                    else if (dbusdata_.key_x)
-                        manipulator_.singleaddwrite(-joint_eff_small, 5);
-                    if (dbusdata_.key_d)
-                    {
-                        ROS_INFO_STREAM("JOINT6!!!  ");
-                        manipulator_.singleaddwrite(joint_eff_small, 6);
-                    }
-                        
-                    else if (dbusdata_.key_c)
-                        manipulator_.singleaddwrite(-joint_eff_small, 6);
-
-                }             
-
-
-                if (dbusdata_.key_r) // go home
-                {
-                   manipulator_.goal("home");    
-                }
-                else if (dbusdata_.key_f)
-                {
-                    manipulator_.goal("left_up");   
-                }
-                else if (dbusdata_.key_v)
-                {
-                    manipulator_.goal("forward");       
-                }
-                 else if (dbusdata_.key_g)
-                {
-                    manipulator_.goal("exchange");       
-                }
-                
-               //if (dbusdata_.key_g) 
-               // {
-               //     auto_take_silver_ore(&manipulator_, ore_pose);
-               // } 
-                //else if (dbusdata_.key_b) 
-                //{
-                    //auto_exchange(&manipulator_);
-                //} 
-             }
-            //   }
-
-            // else if () // go forward grip
-
-            // else if () // go left grip205083
-
-            // else if () // go
-
-            // if ()
-            // auto_take_silver_ore(*manipulator_, target_pose);
-            // manipulator_.read();
-            // manipulator_.goal("grip");
-            // manipulator_.move_execute();
-            // manipulator_.suck(true);
-            // sleep(3);
-            // manipulator_.suck(false);
-            // sleep(3);
-
-            // if (manipulator_.get_executed() == false)
-            //{
-            //     manipulator_.move_execute();
-            //     manipulator_.set_executed(true);
-            //}
-            // loop_rate.sleep();
-
             ros::spinOnce();
         }
     }
     return 0;
 }
+
 
 
 /*

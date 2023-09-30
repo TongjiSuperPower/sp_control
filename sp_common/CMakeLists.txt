@@ -24,6 +24,7 @@ add_message_files(
    SingleJointWrite.msg
    DbusData.msg
    ChassisCmd.msg
+   ManipulatorCmd.msg
 
 #   Message2.msg
 )

@@ -49,9 +49,20 @@
       </material>
     </visual>
     <collision>
-      <origin xyz="0 0 0.075" rpy="0 0 0" />
+      <origin xyz="0 0 0.090" rpy="0 0 0" />
       <geometry>
-        <box size="0.6 0.6 0.150"/>
+        <box size="0.6 0.6 0.120"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0.2" rpy="0 0 0" />
+      <geometry>
+        <box size="0.2 0.55 0.14"/>
       </geometry>
       <material
         name="">

@@ -39,13 +39,26 @@
       </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0.27 0.25" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator_framed/arm_base_link.STL" />
+        <box size="0.40 0.04 0.42"/>
       </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0 -0.27 0.25" rpy="0 0 0" />
+      <geometry>
+        <box size="0.4 0.04 0.42"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
     </collision>
   </link>
   <link
@@ -79,13 +92,70 @@
       </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0.22 0.3" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator_framed/link1.STL" />
+        <box size="0.5 0.04 0.25"/>
       </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0 -0.22 0.3" rpy="0 0 0" />
+      <geometry>
+        <box size="0.5 0.04 0.25"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0 0.18 0.4" rpy="0 0 0" />
+      <geometry>
+        <box size="0.7 0.06 0.06"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0 -0.18 0.4" rpy="0 0 0" />
+      <geometry>
+        <box size="0.7 0.06 0.06"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="0.25 0 0.38" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.4 0.03"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </collision>
+    <collision>
+      <origin xyz="-0.25 0 0.38" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.4 0.03"/>
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
     </collision>
   </link>
   <joint
@@ -334,9 +404,9 @@
       xyz="0 0 1" />
     <limit
       lower="0"
-     upper="3.14"
-      effort="5"
-      velocity="5" />
+      upper="3.14"
+      effort="3"
+      velocity="15" />
   </joint>
   <link
     name="link6">
@@ -393,8 +463,8 @@
     <limit
      lower="-1.57"
       upper="1.57"
-      effort="5"
-      velocity="5" />
+      effort="3"
+      velocity="25" />
   </joint>
   <link
     name="link7">
@@ -451,8 +521,8 @@
     <limit
       lower="-3.14"
       upper="3.14"
-      effort="5"
-      velocity="5" />
+      effort="3"
+      velocity="25" />
   </joint>
    </xacro:macro>
 </robot>

@@ -59,6 +59,7 @@ namespace chassis_controller
         ramp_z_->setAcc(cmd_chassis.accel.angular.z);
         ramp_z_->input(cmd_vel.angular.z);
         vel_cmd_.z = ramp_z_->output();
+
         
         if (state_ != cmd_chassis.mode)
         {

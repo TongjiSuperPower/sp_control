@@ -9,6 +9,7 @@ namespace sp_operator
         Operator::init();
         ROS_INFO_STREAM("Engineer");
         controller_nh = ros::NodeHandle("engineer");
+        manipulator_cmd_pub_ = nh.advertise<sp_common::ManipulatorCmd>("/manipulator_cmd", 10);
 
         x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
         y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.0);
@@ -38,6 +39,9 @@ namespace sp_operator
         gimbal_set();
         cmd_pos_pub_.publish(cmd_pos_); 
         
+        manipulator_set();
+        manipulator_cmd_pub_.publish(manipulator_cmd_);
+
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
     }
@@ -45,33 +49,43 @@ namespace sp_operator
 
     void Engineer::chassis_set()
     {
-        if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
+        if (dbus_data_.s_l == 1) //chassis_control_mode
         {
-            cmd_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
-            cmd_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
-            cmd_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
-        }
-        else if (dbus_data_.s_r == 3) //Remote control mode
-        {
-            if (dbus_data_.key_w)
-                cmd_vel_.linear.x = x_coeff_;
-            else if (dbus_data_.key_s)
-                cmd_vel_.linear.x = -x_coeff_;
-            else 
+            if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
+            {
+                cmd_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
+                cmd_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
+                cmd_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
+            }
+            else if (dbus_data_.s_r == 3) //Remote control mode
+            {
+                if (dbus_data_.key_w)
+                    cmd_vel_.linear.x = x_coeff_;
+                else if (dbus_data_.key_s)
+                    cmd_vel_.linear.x = -x_coeff_;
+                else 
+                    cmd_vel_.linear.x = 0.0;
+                if (dbus_data_.key_a)
+                    cmd_vel_.linear.y = y_coeff_;
+                else if (dbus_data_.key_d)
+                    cmd_vel_.linear.y = -y_coeff_;
+                else 
+                    cmd_vel_.linear.y = 0.0;
+                cmd_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
+            }
+            else if (dbus_data_.s_r == 2) //Stop mode
+            {
                 cmd_vel_.linear.x = 0.0;
-            if (dbus_data_.key_a)
-                cmd_vel_.linear.y = y_coeff_;
-            else if (dbus_data_.key_d)
-                cmd_vel_.linear.y = -y_coeff_;
-            else 
                 cmd_vel_.linear.y = 0.0;
-            cmd_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
+                cmd_vel_.angular.z = 0.0;
+            }
         }
-        else if (dbus_data_.s_r == 2) //Stop mode
+        else
         {
             cmd_vel_.linear.x = 0.0;
             cmd_vel_.linear.y = 0.0;
             cmd_vel_.angular.z = 0.0;
+
         }
 
         if (dbus_data_.key_shift && !last_dbus_data_.key_shift) // Gyro
@@ -113,5 +127,66 @@ namespace sp_operator
         else if (cmd_pos_.y > pitch_high_limit_)
             cmd_pos_.y = pitch_high_limit_;
     }
+    
+    void Engineer::manipulator_set()
+    {
+        if (dbus_data_.s_l == 3) //Manipulator control mode
+        {
+            if (dbus_data_.s_r == 1) //Remote control mode
+            {
+                manipulator_cmd_.joint1_pos += 0.005 * dbus_data_.ch_l_x;
+                manipulator_cmd_.joint2_pos += 0.03 * dbus_data_.ch_r_x;
+                manipulator_cmd_.joint3_pos += 0.03 * dbus_data_.ch_l_y;
+                manipulator_cmd_.joint4_pos += 0.01 * dbus_data_.ch_r_y;
+            }
+            else if (dbus_data_.s_r == 3)
+            {
+                manipulator_cmd_.joint5_pos += 0.03 * dbus_data_.ch_l_y;
+                manipulator_cmd_.joint6_pos += 0.015 * dbus_data_.ch_l_x;
+                manipulator_cmd_.joint7_pos += 0.03 * dbus_data_.ch_r_y;
+            }       
+        }
+
+        if (manipulator_cmd_.joint1_pos > 0)
+            manipulator_cmd_.joint1_pos = 0;
+        else if (manipulator_cmd_.joint1_pos < -0.16)
+            manipulator_cmd_.joint1_pos = -0.16;
+
+        if (manipulator_cmd_.joint2_pos > 0.55)
+            manipulator_cmd_.joint2_pos = 0.55;
+        else if (manipulator_cmd_.joint2_pos < 0)
+            manipulator_cmd_.joint2_pos = 0;
+
+        if (manipulator_cmd_.joint3_pos > 0.4754)
+            manipulator_cmd_.joint3_pos = 0.4754;
+        else if (manipulator_cmd_.joint3_pos < 0)
+            manipulator_cmd_.joint3_pos = 0;
+
+        if (manipulator_cmd_.joint4_pos > 0.3)
+            manipulator_cmd_.joint4_pos = 0.3;
+        else if (manipulator_cmd_.joint4_pos < -0.3)
+            manipulator_cmd_.joint4_pos = -0.3;
+
+        if (manipulator_cmd_.joint5_pos > 3.14)
+            manipulator_cmd_.joint5_pos = 3.14;
+        else if (manipulator_cmd_.joint5_pos < 0)
+            manipulator_cmd_.joint5_pos = 0;
+
+        if (manipulator_cmd_.joint6_pos > 1.57)
+            manipulator_cmd_.joint6_pos = 1.57;
+        else if (manipulator_cmd_.joint6_pos < -1.57)
+            manipulator_cmd_.joint6_pos = -1.57;
+
+        if (manipulator_cmd_.joint7_pos > 3.14)
+            manipulator_cmd_.joint7_pos = 3.14;
+        else if (manipulator_cmd_.joint7_pos < -3.14)
+            manipulator_cmd_.joint7_pos = -3.14;
+
+
+    }
+    
+    
+
+
 
 }

@@ -1,4 +1,5 @@
 #include "sp_engineer/operator.h"
+#include "sp_common/ManipulatorCmd.h"
 
 namespace sp_operator
 {
@@ -17,7 +18,13 @@ namespace sp_operator
 
             void gimbal_set();
 
+            void manipulator_set();
+
             ros::NodeHandle controller_nh;
+
+            ros::Publisher manipulator_cmd_pub_;
+
+            sp_common::ManipulatorCmd manipulator_cmd_{};
 
             double x_coeff_, y_coeff_, z_rc_coeff_, z_mk_coeff_;
             double x_accel_set_, y_accel_set_, z_accel_set_;

@@ -1,6 +1,6 @@
 <launch>
   <arg
-    name="model" default="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer_manipulator/engineer.xacro'"/>
+    name="model" default="$(find xacro)/xacro --inorder '$(find sp_description)/urdf/engineer_framed/engineer.xacro'"/>
   <arg
     name="gui"
     default="true" />
