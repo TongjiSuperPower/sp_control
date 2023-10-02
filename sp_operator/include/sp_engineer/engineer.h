@@ -1,5 +1,7 @@
 #include "sp_engineer/operator.h"
 #include "sp_common/ManipulatorCmd.h"
+#include <geometry_msgs/TwistStamped.h>
+#include <control_msgs/JointJog.h>
 
 namespace sp_operator
 {
@@ -24,7 +26,15 @@ namespace sp_operator
 
             ros::Publisher manipulator_cmd_pub_;
 
+            ros::Publisher twist_cmd_pub_;
+
+            ros::Publisher joint_cmd_pub_;
+
             sp_common::ManipulatorCmd manipulator_cmd_{};
+
+            geometry_msgs::TwistStamped twist_cmd_{};
+
+            control_msgs::JointJog joint_cmd_{};
 
             double x_coeff_, y_coeff_, z_rc_coeff_, z_mk_coeff_;
             double x_accel_set_, y_accel_set_, z_accel_set_;

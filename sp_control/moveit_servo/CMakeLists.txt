@@ -120,11 +120,6 @@ target_link_libraries(servo_server
 ## An example of converting joystick commands ##
 ################################################
 
-add_executable(spacenav_to_twist
-  src/teleop_examples/spacenav_to_twist.cpp
-)
-add_dependencies(spacenav_to_twist ${catkin_EXPORTED_TARGETS})
-target_link_libraries(spacenav_to_twist ${catkin_LIBRARIES})
 
 ##################
 ## INSTALLATION ##
@@ -136,7 +131,6 @@ install(
     pose_tracking
     pose_tracking_example
     servo_server
-    spacenav_to_twist
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

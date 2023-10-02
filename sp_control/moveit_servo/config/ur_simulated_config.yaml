@@ -20,7 +20,7 @@ low_latency_mode: false  # Set this to true to publish as soon as an incoming Tw
 # What type of topic does your robot driver expect?
 # Currently supported are std_msgs/Float64MultiArray (for ros_control JointGroupVelocityController or JointGroupPositionController)
 # or trajectory_msgs/JointTrajectory (for Universal Robots and other non-ros_control robots)
-command_out_type: std_msgs/Float64MultiArray
+command_out_type: trajectory_msgs/JointTrajectory 
 
 # What to publish? Can save some bandwidth as most robots only require positions or velocities
 publish_joint_positions: true
@@ -29,11 +29,11 @@ publish_joint_accelerations: false
 
 ## MoveIt properties
 move_group_name:  manipulator  # Often 'manipulator' or 'arm'
-planning_frame: arm_base_link  # The MoveIt planning frame. Often 'base_link' or 'world'
+planning_frame: base_link  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
-ee_frame_name: link7  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: link7   # commands must be given in the frame of a robot link. Usually either the base or end effector
+ee_frame_name: vacuum_gripper  # The name of the end effector link, used to return the EE pose
+robot_link_command_frame: vacuum_gripper   # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout:  1  # Stop servoing if X seconds elapse without a new command
@@ -51,7 +51,7 @@ cartesian_command_in_topic: delta_twist_cmds  # Topic for incoming Cartesian twi
 joint_command_in_topic: delta_joint_cmds # Topic for incoming joint angle commands
 joint_topic: joint_states
 status_topic: status # Publish status to this topic
-command_out_topic: /manipulator_framed_controller/command # Publish outgoing commands here
+command_out_topic: arm/arm_joint_controller/command # Publish outgoing commands here
 
 ## Collision checking for the entire robot body
 check_collisions: true # Check collisions?

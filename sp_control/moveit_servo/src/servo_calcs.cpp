@@ -47,7 +47,6 @@
 
 static const std::string LOGNAME = "servo_calcs";
 constexpr size_t ROS_LOG_THROTTLE_PERIOD = 30;  // Seconds to throttle logs inside loops
-Eigen::ArrayXd delta_me,position_me;
 
 namespace moveit_servo
 {
@@ -364,10 +363,7 @@ void ServoCalcs::calculateSingleIteration()
       std::stringstream sss;
         std::copy(joint_trajectory->points[0].positions.begin(), joint_trajectory->points[0].positions.end(), std::ostream_iterator<double>(sss, ", "));
         std::string dataStrs = sss.str();
-        ROS_INFO_STREAM(dataStrs);
-        ROS_INFO_STREAM(joint_trajectory->points[0].positions[0]);
-        // ROS_INFO_STREAM(position_me);
-      ROS_INFO_STREAM("c");
+
 
   // Print a warning to the user if both are stale
   if (twist_command_is_stale_ && joint_command_is_stale_)
@@ -433,8 +429,7 @@ void ServoCalcs::calculateSingleIteration()
         std::stringstream ss;
         std::copy(joints->data.begin(), joints->data.end(), std::ostream_iterator<double>(ss, ", "));
         std::string dataStr = ss.str();
-        ROS_INFO_STREAM(dataStr);
-        ROS_INFO_STREAM("a");
+
         }
       else if (parameters_.publish_joint_velocities && !joint_trajectory->points.empty())
         joints->data = joint_trajectory->points[0].velocities;
@@ -550,16 +545,7 @@ bool ServoCalcs::cartesianServoCalcs(geometry_msgs::TwistStamped& cmd,
   Eigen::MatrixXd pseudo_inverse = svd.matrixV() * matrix_s.inverse() * svd.matrixU().transpose();
 
   delta_theta_ = pseudo_inverse * delta_x;
-  ROS_INFO_STREAM(delta_theta_);
   
-  delta_me = delta_theta_;
-  // delta_me[0] = 0.01;
-  // delta_me[1] = 0.0;
-  // delta_me[2] = 0.0;
-  // delta_me[3] = 0.0;
-  // delta_me[4] = 0.0;
-  // delta_me[5] = 0.0;
-  // delta_me[6] = 0.0;
 
   enforceVelLimits(delta_theta_);
 
@@ -567,11 +553,7 @@ bool ServoCalcs::cartesianServoCalcs(geometry_msgs::TwistStamped& cmd,
   applyVelocityScaling(delta_theta_, velocityScalingFactorForSingularity(delta_x, svd, pseudo_inverse));
 
   prev_joint_velocity_ = delta_theta_ / parameters_.publish_period;
-  // convertDeltasToOutgoingCmd(joint_trajectory);
-  // ROS_INFO_STREAM(joint_trajectory);
-  // ROS_INFO_STREAM("e");
 
-  // return true;
   return convertDeltasToOutgoingCmd(joint_trajectory);
 }
 
@@ -590,13 +572,16 @@ bool ServoCalcs::jointServoCalcs(const control_msgs::JointJog& cmd, trajectory_m
 
   // Apply user-defined scaling
   delta_theta_ = scaleJointCommand(cmd);
+ 
 
   enforceVelLimits(delta_theta_);
+  
 
   // If close to a collision, decelerate
-  applyVelocityScaling(delta_theta_, 1.0 /* scaling for singularities -- ignore for joint motions */);
+  //applyVelocityScaling(delta_theta_, 1.0 /* scaling for singularities -- ignore for joint motions */);
 
   prev_joint_velocity_ = delta_theta_ / parameters_.publish_period;
+
 
   return convertDeltasToOutgoingCmd(joint_trajectory);
 }
@@ -605,24 +590,24 @@ bool ServoCalcs::convertDeltasToOutgoingCmd(trajectory_msgs::JointTrajectory& jo
 {
   internal_joint_state_ = original_joint_state_;
   
-  // if (!addJointIncrements(internal_joint_state_, delta_theta_))
-  //   return false;
-  if (!addJointIncrements(internal_joint_state_, delta_me))
+
+  if (!addJointIncrements(internal_joint_state_, delta_theta_))
     return false;
-  // ROS_INFO_STREAM(internal_joint_state_);
+ 
+   
 
   lowPassFilterPositions(internal_joint_state_);
-  // ROS_INFO_STREAM(internal_joint_state_);
-
+  
 
   // Calculate joint velocities here so that positions are filtered and SRDF bounds still get checked
-  calculateJointVelocities(internal_joint_state_, delta_me);
-  // calculateJointVelocities(internal_joint_state_, delta_theta_);
-  // ROS_INFO_STREAM(internal_joint_state_);
+  calculateJointVelocities(internal_joint_state_, delta_theta_);
+  
+
+
 
   composeJointTrajMessage(internal_joint_state_, joint_trajectory);
-  ROS_INFO_STREAM(joint_trajectory);
-  ROS_INFO_STREAM("d");
+ 
+
 
 
 
@@ -631,8 +616,7 @@ bool ServoCalcs::convertDeltasToOutgoingCmd(trajectory_msgs::JointTrajectory& jo
     suddenHalt(joint_trajectory);
     status_ = StatusCode::JOINT_BOUND;
   }
-  ROS_INFO_STREAM(joint_trajectory);
-  ROS_INFO_STREAM("f");
+
 
   // done with calculations
   if (parameters_.use_gazebo)
@@ -699,7 +683,6 @@ void ServoCalcs::composeJointTrajMessage(const sensor_msgs::JointState& joint_st
   point.time_from_start = ros::Duration(parameters_.publish_period);
   if (parameters_.publish_joint_positions)
     point.positions = joint_state.position;
-    // ROS_INFO_STREAM(point);
 
   if (parameters_.publish_joint_velocities)
     point.velocities = joint_state.velocity;
@@ -712,10 +695,9 @@ void ServoCalcs::composeJointTrajMessage(const sensor_msgs::JointState& joint_st
     point.accelerations = acceleration;
   }
   joint_trajectory.points.push_back(point);
-  ROS_INFO_STREAM(joint_trajectory);
   // position_me = Eigen::Map<Eigen::ArrayXd>(
   // joint_trajectory.points[0].positions.data(), joint_trajectory.points[0].positions.size());
-  ROS_INFO_STREAM("b");
+
 
 }
 
@@ -869,12 +851,7 @@ bool ServoCalcs::enforcePositionLimits(sensor_msgs::JointState& joint_state)
                                          ros::this_node::getName() << " " << joint->getName()
                                                                    << " close to a "
                                                                       " position limit. Halting.");
-          ROS_INFO_STREAM("joint_angle") ;
-          ROS_INFO_STREAM(joint_angle) ;
-          ROS_INFO_STREAM(limits[0].min_position ) ;
-          ROS_INFO_STREAM(limits[0].min_position + parameters_.joint_limit_margin) ;
-          ROS_INFO_STREAM(limits[0].max_position ) ;
-          ROS_INFO_STREAM(limits[0].max_position - parameters_.joint_limit_margin) ;
+
 
 
           halting = true;
@@ -926,11 +903,18 @@ void ServoCalcs::suddenHalt(trajectory_msgs::JointTrajectory& joint_trajectory)
 // Parse the incoming joint msg for the joints of our MoveGroup
 void ServoCalcs::updateJoints()
 {
+  
   // Get the latest joint group positions
+  // double temp = internal_joint_state_.position[5];
+  //ROS_WARN_STREAM("--------------------------------------");
+  //ROS_WARN_STREAM("output.position: " << internal_joint_state_.position[5]);
+  
   current_state_ = planning_scene_monitor_->getStateMonitor()->getCurrentState();
-  current_state_->copyJointGroupPositions(joint_model_group_, internal_joint_state_.position);
+  //current_state_->copyJointGroupPositions(joint_model_group_, internal_joint_state_.position);
   current_state_->copyJointGroupVelocities(joint_model_group_, internal_joint_state_.velocity);
-
+  //ROS_WARN_STREAM("output.position " << internal_joint_state_.position[5]);
+  //ROS_WARN_STREAM("difference: " << internal_joint_state_.position[5] - temp);
+ 
   // Cache the original joints in case they need to be reset
   original_joint_state_ = internal_joint_state_;
 
@@ -1046,15 +1030,17 @@ Eigen::VectorXd ServoCalcs::scaleJointCommand(const control_msgs::JointJog& comm
 // Add the deltas to each joint
 bool ServoCalcs::addJointIncrements(sensor_msgs::JointState& output, const Eigen::VectorXd& increments) const
 {
-  // ROS_INFO_STREAM(output);
+  //ROS_WARN_STREAM("------------------------------");
+  //ROS_WARN_STREAM("output.position " << output.position[5]);
+  //double temp = output.position[5];
+
   for (std::size_t i = 0, size = static_cast<std::size_t>(increments.size()); i < size; ++i)
   {
     try
     { 
-    ROS_INFO_STREAM(output.position[i]);
-    ROS_INFO_STREAM(increments[i]);
+
       output.position[i] += increments[i];
-    ROS_INFO_STREAM(output.position[i]);
+      
     
     }
     catch (const std::out_of_range& e)
@@ -1065,7 +1051,11 @@ bool ServoCalcs::addJointIncrements(sensor_msgs::JointState& output, const Eigen
       return false;
     }
   }
-  // ROS_INFO_STREAM(output);
+ // ROS_WARN_STREAM("increments" << increments);
+  //ROS_WARN_STREAM("output.position " << output.position[5]);
+  //ROS_WARN_STREAM("difference: " << output.position[5] - temp);
+  
+
 
   return true;
 }

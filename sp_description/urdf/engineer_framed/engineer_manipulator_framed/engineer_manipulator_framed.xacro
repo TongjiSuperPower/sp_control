@@ -171,7 +171,7 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-0.16"
+      lower="-0.15"
       upper="0"
       effort="150"
       velocity="5" />
@@ -524,5 +524,19 @@
       effort="3"
       velocity="25" />
   </joint>
+  <link name="vacuum_gripper"/>
+    <joint
+      name="vacuum_gripper_joint"
+      type="fixed">
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <parent
+        link="link7" />
+      <child
+        link="vacuum_gripper" />
+      <axis
+        xyz="0 0 1" />
+    </joint>
    </xacro:macro>
 </robot>

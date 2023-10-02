@@ -255,8 +255,6 @@ namespace sp_hw
                         {
                             act_data.offset2 = (frame.data[7] << 8u) | frame.data[6];
                         }
-                        // ROS_INFO_STREAM(frame.can_id<<" OFFSET2 " << act_data.offset2);
-                        // ROS_INFO_STREAM(frame.can_id<<"  seq  "<<act_data.seq);
                         act_data.q_raw = ((frame.data[7] << 8u) | frame.data[6]) - act_data.offset2;
                         act_data.qd_raw = (frame.data[5] << 8u) | frame.data[4];
 
