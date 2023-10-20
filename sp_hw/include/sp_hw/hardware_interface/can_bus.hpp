@@ -7,6 +7,10 @@
 #include "sp_hw/hardware_interface/socketcan.h"
 #include "sp_hw/hardware_interface/data_types.hpp"
 
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Geometry>
+#include <geometry_msgs/Twist.h>
+
 namespace sp_hw
 {
     struct CanFrameStamp
@@ -35,8 +39,15 @@ namespace sp_hw
 
         can_frame rm_can_frame0_;
         can_frame rm_can_frame1_;
-        can_frame can_frame2_;
+        can_frame mix_can_frame2_;
 
         mutable std::mutex mutex_;
+        Eigen::Matrix3d last_matrix{};
+        Eigen::Matrix3d current_matrix{};
+        ros::Time last_time{};
+        ros::Time current_time{};
+        ros::NodeHandle nh;
+        ros::Publisher velocity_pub_;
+        geometry_msgs::Twist cmd_velocity{};
     };
 }
