@@ -22,6 +22,8 @@ namespace sp_operator
 
             void manipulator_set();
 
+            void velocity_callback(const geometry_msgs::Twist::ConstPtr &vel);
+
             ros::NodeHandle controller_nh;
 
             ros::Publisher manipulator_cmd_pub_;
@@ -47,6 +49,10 @@ namespace sp_operator
                 NOFOLLOW,
                 GYRO
             };
+
+            ros::Subscriber velocity_sub_;
+
+            geometry_msgs::Twist velocity_cmd_{};
 
             
     };

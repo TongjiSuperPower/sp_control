@@ -1,0 +1,10 @@
+<library path="lib/libgimbal_controller">
+	<class  name="manipulator_controller/ManipulatorController" 
+		    type="manipulator_controller::ManipulatorController"
+		    base_class_type="controller_interface::ControllerBase">
+		<description>
+			The Manipulator Controller for Engineer.
+		</description>
+	</class>
+</library>
+
