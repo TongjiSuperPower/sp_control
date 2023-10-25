@@ -1,7 +1,7 @@
 <launch>
-  <param
+  <param 
     name="robot_description"
-    command="$(find xacro)/xacro $(find sp_description)/urdf/engineer_framed/engineer.xacro" />
+    command="$(find xacro)/xacro $(find sp_description)/urdf/engineer_framed/engineer.xacro"/>
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" >
     <!--<arg name="world_name" value="$(find sp_gazebosim)/worlds/test.world"/>-->
@@ -15,7 +15,7 @@
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-urdf -model engineer -param robot_description"
+    args="-urdf -model rmrobot -param robot_description"
     output="screen" />
 
 </launch>

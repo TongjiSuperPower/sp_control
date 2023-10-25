@@ -84,6 +84,7 @@ namespace sp_hw
             }
         }
         velocity_pub_ = nh.advertise<geometry_msgs::Twist>("cmd_velocity", 10);
+        quat_pub_ = nh.advertise<geometry_msgs::Quaternion>("cmd_quat", 10);
 ;    }
     /**
      * @brief Sending actuators and gpios commands
@@ -267,7 +268,9 @@ namespace sp_hw
                     }
                     act_data.q_last = act_data.q_raw;
                     act_data.seq++;
-                    // convert raw data into standard ActuatorState
+                    // convert raw data into standard ActuatorState.
+                    // Multiple cycle.
+                    // The original pos is be set 0.
                     act_data.pos = act_coeff.act2pos *
                                    static_cast<double>(act_data.q_raw + 8192 * act_data.q_circle - act_data.offset);
 
@@ -302,6 +305,8 @@ namespace sp_hw
                         act_data.seq++;
 
                         // convert raw data into  standard ActuatorState
+                       
+
                         act_data.pos = act_coeff.act2pos *
                                            static_cast<double>(act_data.q_raw + 65536 * act_data.q_circle) +
                                        act_data.offset;
@@ -319,6 +324,7 @@ namespace sp_hw
                     }
                 }
             }
+            // DM motor 
             else if (frame.can_id == static_cast<unsigned int>(0x000))
             {
                 if (data_ptr_.id2act_data_->find(frame.data[0]) != data_ptr_.id2act_data_->end())
@@ -356,11 +362,16 @@ namespace sp_hw
             {
                 last_matrix = current_matrix;
                 last_time = current_time;
+
                 
                 double w = 0.0001*(int16_t)((frame.data[0] << 8) | frame.data[1]);
                 double x = 0.0001*(int16_t)((frame.data[2] << 8) | frame.data[3]);
                 double y = 0.0001*(int16_t)((frame.data[4] << 8) | frame.data[5]);
                 double z = 0.0001*(int16_t)((frame.data[6] << 8) | frame.data[7]);
+                cmd_quat_.w = w;
+                cmd_quat_.x = x;
+                cmd_quat_.y = y;
+                cmd_quat_.z = z;
                 Eigen::Quaterniond quat(w, x, y, z);
                 quat.normalized(); 
                 current_matrix = quat.toRotationMatrix();
@@ -377,6 +388,7 @@ namespace sp_hw
                 cmd_velocity.angular.x = wx;
                 cmd_velocity.angular.y = wy;
                 cmd_velocity.angular.z = wz;
+                quat_pub_.publish(cmd_quat_);
                 velocity_pub_.publish(cmd_velocity);
 
             }

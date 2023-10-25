@@ -10,6 +10,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
 #include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Quaternion.h>
 
 namespace sp_hw
 {
@@ -48,6 +49,8 @@ namespace sp_hw
         ros::Time current_time{};
         ros::NodeHandle nh;
         ros::Publisher velocity_pub_;
+        ros::Publisher quat_pub_;
         geometry_msgs::Twist cmd_velocity{};
+        geometry_msgs::Quaternion cmd_quat_{};
     };
 }

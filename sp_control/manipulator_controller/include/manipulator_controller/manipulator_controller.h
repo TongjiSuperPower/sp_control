@@ -63,6 +63,8 @@ namespace manipulator_controller
     protected:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
 
+        void initEulerAngle();
+
         void cmdManipulatorCallback(const sp_common::ManipulatorCmd::ConstPtr &msg);
 
         void cmdQuatCallback(const geometry_msgs::Quaternion::ConstPtr &msg);
@@ -75,10 +77,13 @@ namespace manipulator_controller
 
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
 
+        effort_controllers::JointPositionController ctrl_z_, ctrl_x1_, ctrl_x2_, ctrl_y_;
+
         effort_controllers::JointPositionController ctrl_pitch_, ctrl_yaw_, ctrl_roll_;
 
         ros::Time last_publish_time_;
         Eigen::Quaterniond quat_cmd_{};
+        Eigen::Vector3d euler_state_{}; 
         Eigen::Vector3d euler_cmd_{}; 
 
         //ros::Subscriber cmd_gimbal_sub_;

@@ -1,0 +1,27 @@
+manipulator:
+  manipulator_controller:
+    type: "manipulator_controller/ManipulatorController"
+    publish_rate: 100
+    timeout: 0.1
+
+    z:
+      joint: "joint1"
+      pid: { p: 2700.0, i: 400.0, d: 280.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    x1:
+      joint: "joint2"
+      pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    x2:
+      joint: "joint3"
+      pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    y:
+      joint: "joint4"
+      pid: { p: 380.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    pitch:
+      joint: "joint5"
+      pid: { p: 50.0, i: 5.0, d: 1.0, i_max: 10.0, i_min: -10.0, antiwindup: true, publish_state: true }
+    yaw:
+      joint: "joint6"
+      pid: { p: 70.0, i: 8.0, d: 6.0, i_max: 50.0, i_min: -50.0, antiwindup: true, publish_state: true }
+    roll:
+      joint: "joint7"
+      pid: { p: 100.0, i: 5.0, d: 7.0, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }

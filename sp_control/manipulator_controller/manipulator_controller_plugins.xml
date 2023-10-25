@@ -1,4 +1,4 @@
-<library path="lib/libgimbal_controller">
+<library path="lib/libmanipulator_controller">
 	<class  name="manipulator_controller/ManipulatorController" 
 		    type="manipulator_controller::ManipulatorController"
 		    base_class_type="controller_interface::ControllerBase">

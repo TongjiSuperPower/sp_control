@@ -337,7 +337,7 @@
     type="prismatic">
     <origin
       xyz="0.50967 -0.005112 0.034017"
-      rpy="0 -3.3987E-05 -0.01003" />
+      rpy="0 0 0" />
     <parent
       link="link3" />
     <child
@@ -395,7 +395,7 @@
     type="revolute">
     <origin
       xyz="0 -0.018 0.128"
-      rpy="1.5708 0 0" />
+      rpy="1.5708 -1.5708 0" />
     <parent
       link="link4" />
     <child
@@ -459,7 +459,7 @@
     <child
       link="link6" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit
      lower="-1.57"
       upper="1.57"
@@ -511,13 +511,13 @@
     type="revolute">
     <origin
       xyz="0 -0.17579 -0.07179"
-      rpy="1.5708 0 0" />
+      rpy="1.5708 3.1416 0" />
     <parent
       link="link6" />
     <child
       link="link7" />
     <axis
-      xyz="0 0 1" />
+      xyz="0 0 -1" />
     <limit
       lower="-3.14"
       upper="3.14"

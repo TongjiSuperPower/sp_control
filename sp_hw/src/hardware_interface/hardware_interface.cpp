@@ -33,10 +33,6 @@ namespace sp_hw
         }
 
 
-        // TEST
-        // actuator_state_pub_.reset(
-        // new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
-        // return true;
 
         // URDF and Transmission
         // Transmission : code reference <transmission_interface/transmission_interface_loader.h>

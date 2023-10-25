@@ -25,6 +25,9 @@ namespace sp_hw
     // Lithesh : I think ParseError is more terrible than ParameterMissing
     // ParseError usually means Misunderstanding of what to write in YAML
     // And i hate Misunderstanding.
+     /*
+     * @brief Plot all devices in Tree_Form.
+     */
     bool SpRobotHW::parseActCoeffs(XmlRpc::XmlRpcValue &act_coeffs)
     {
         // ROBUST : Ensure the type of XmlRpcValue is ValueStruct
@@ -271,7 +274,8 @@ namespace sp_hw
                                                                           .name = it->first,
                                                                           .stamp = ros::Time::now(),
                                                                           .type = type,
-                                                                          .value = false}));
+                                                                          .value = false,
+                                                                          .cmd = false}));
                 }
 
                 sp_control::GpioStateHandle gpio_state_handle(bus_id2gpio_data_[bus][id].name, bus_id2gpio_data_[bus][id].type,

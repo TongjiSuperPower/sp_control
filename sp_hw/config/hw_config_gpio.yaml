@@ -5,34 +5,22 @@ cycle_time_error_threshold: 1
 thread_priority: 30
 
 actuators:
-  joint7_motor:
-    bus: can1
-    id: 0x207
-    type: rm_2006
+  motor1:
+    bus: can0
+    id: 0x205
+    type: rm_3508
+
+  motor2:
+    bus: can0
+    id: 0x206
+    type: rm_3508
 
 gpios:
-  left_gripper:
-    bus: can1
+  joint1_gpio:
+    bus: can0
     id: 0x101
     type: out
     value: false
 
 
-  right_gripper:
-    bus: can1
-    id: 0x102
-    type: out
-    value: false
-    
-  sucker:
-    bus: can1
-    id: 0x103
-    type: out
-    value: false
-
-  sustaining rod:
-    bus: can1
-    id: 0x104
-    type: out
-    value: false
 

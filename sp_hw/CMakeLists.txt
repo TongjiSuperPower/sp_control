@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   sp_common
 )
 
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -135,7 +136,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-
+include_directories("/user/include/eigen3")
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/sp_hw.cpp
