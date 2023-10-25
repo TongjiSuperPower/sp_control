@@ -1,0 +1,9 @@
+<library path="lib/libsyn_controller">
+    <class name="syn_controller/SynController" 
+           type="syn_controller::SynController"
+           base_class_type="controller_interface::ControllerBase">
+        <description>
+            Syn controller for Engineer.
+        </description>
+    </class>
+</library>

@@ -1,0 +1,6 @@
+<launch>
+	<rosparam file="$(find syn_controller)/config/syn_controller.yaml" command="load"/>
+	
+	<node name="syn_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="syn/syn_controller"/>
+
+</launch>

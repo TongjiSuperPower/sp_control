@@ -1,0 +1,16 @@
+syn:
+  syn_controller:
+    type: "syn_controller/SynController"
+    publish_rate: 100
+    timeout: 0.1
+
+    has_feedforward : false
+    feedforward: 20.0
+
+    left_joint:
+      joint: "joint1"
+      pid: { p: 4.0, i: 0, d: 0.2, i_max: 4.0, i_min: 4.0, antiwindup: true, publish_state: true }
+    right_joint:
+      joint: "joint2"
+      pid: { p: 4.0, i: 0, d: 0.2, i_max: 4.0, i_min: 4.0, antiwindup: true, publish_state: true }
+    

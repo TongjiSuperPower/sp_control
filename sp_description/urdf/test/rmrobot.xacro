@@ -35,11 +35,11 @@
                     izz="${mass / 12.0 * (width*width + width*width)}"/>
         </inertial>
     </link>
-    <joint name="joint1" type="revolute">
+    <joint name="joint1" type="prismatic">
         <axis xyz="0 1 0"/>
         <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 1.57 0"/>
              limit not work while type="continuous"
-        <limit effort="5." velocity="50." lower="-1e9" upper="1e9"/>
+        <limit effort="5." velocity="1.0" lower="-1e9" upper="1e9"/>
         <dynamics damping="0.01" friction="0.02"/>
         <parent link="link1"/>
         <child link="link2"/>
@@ -68,16 +68,57 @@
         </inertial>
     </link>
 
+    <link name="test_link"/>
+    <joint name="joint2" type="revolute">
+        <axis xyz="0 1 0"/>
+        <origin xyz="0 0 0" rpy="0 1.57 0"/>
+        <limit effort="5." velocity="50." lower="-1e9" upper="1e9"/>
+        <dynamics damping="0.01" friction="0.02"/>
+        <parent link="link2"/>
+        <child link="test_link"/>
+    </joint>
+
     <transmission name="tran1">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="joint1">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
-        <actuator name="right_front_wheel_motor">
+        <actuator name="motor1">
             <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             <mechanicalReduction>19.20</mechanicalReduction>
         </actuator>
     </transmission>
+
+     <transmission name="tran2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint2">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor2">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>-19.20</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <!-- right_front_wheel_motor -->
+     <!-- <transmission name="differential_trans">
+        <type>transmission_interface/DifferentialTransmission</type>
+        <joint name="test_joint">
+            <role>joint1</role>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <joint name="joint1">
+            <role>joint2</role>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor1">
+            <role>actuator1</role>
+            <mechanicalReduction>19.20</mechanicalReduction>
+        </actuator>
+        <actuator name="motor2">
+            <role>actuator2</role>
+            <mechanicalReduction>-19.20</mechanicalReduction>
+        </actuator>
+     </transmission> -->
 
 
 
@@ -85,5 +126,9 @@
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
         </plugin>
+
+        <plugin name="adjustment_controller" filename="libadjustment_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
     </gazebo>
 </robot>
