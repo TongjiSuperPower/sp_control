@@ -20,7 +20,7 @@ namespace syn_controller
     effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
     if (!ctrl_left_.init(effort_joint_interface_, nh_left) || !ctrl_right_.init(effort_joint_interface_, nh_right) )
         return false;
-
+    pos_ = (ctrl_left_.joint_.getPosition() + ctrl_right_.joint_.getPosition()) / 2;
 
     ROS_INFO("SYN : Initializing Completed");
 
@@ -30,8 +30,6 @@ namespace syn_controller
 
   void SynController::update(const ros::Time &time, const ros::Duration &period)
   { 
-    ROS_INFO_STREAM("LEFT_POS: " << ctrl_left_.joint_.getPosition());
-    ROS_INFO_STREAM("RIGHT_POS: " << ctrl_right_.joint_.getPosition());
     pos_ = (ctrl_left_.joint_.getPosition() + ctrl_right_.joint_.getPosition()) / 2;
     //if (ctrl_left_.joint_.getPosition() - ctrl_right_.joint_.getPosition())
 
@@ -39,11 +37,11 @@ namespace syn_controller
     ctrl_right_.setCommand(cmd_);
     ctrl_left_.update(time, period);
     ctrl_right_.update(time, period);
-    // if (has_feedforward_)
-    // {
-    //   ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + feedforward_);
-    //   ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + feedforward_);
-    // }
+    if (has_feedforward_)
+    {
+      ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + feedforward_);
+      ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + feedforward_);
+    }
 
   }
 
@@ -54,7 +52,6 @@ namespace syn_controller
 
   void SynController::setCommand(double cmd)
   {
-    ROS_INFO_STREAM(cmd);
     cmd_ = cmd;
   }
 

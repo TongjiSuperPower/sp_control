@@ -18,7 +18,6 @@ find_package(catkin REQUIRED COMPONENTS
   realtime_tools
   control_toolbox
   effort_controllers
-  position_controllers
 
   tf2
   tf2_msgs
@@ -26,6 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
 
   sp_common
+  syn_controller
 )
 
 ## System dependencies are found with CMake's conventions
@@ -119,10 +119,11 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES manipulator_controller
-#  CATKIN_DEPENDS roscpp rospy
+#  LIBRARIES calibration_controller
+#  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
+
 
 ###########
 ## Build ##
@@ -130,14 +131,21 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-include_directories("/user/include/eigen3")
+## Declare a C++ library
+
+set(SRC_LIST 
+ src/manipulator_controller.cpp
+ )
+add_library(manipulator_controller ${SRC_LIST}) 
+target_link_libraries(manipulator_controller ${catkin_LIBRARIES})
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/manipulator_controller.cpp
+#   src/${PROJECT_NAME}/calibration_controller.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -148,7 +156,7 @@ include_directories("/user/include/eigen3")
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/manipulator_controller_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/calibration_controller_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -168,11 +176,7 @@ include_directories("/user/include/eigen3")
 #############
 ## Install ##
 #############
-set(SRC_LIST 
- src/manipulator_controller.cpp
- )
-add_library(manipulator_controller ${SRC_LIST}) 
-target_link_libraries(manipulator_controller ${catkin_LIBRARIES})
+
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
@@ -216,10 +220,10 @@ target_link_libraries(manipulator_controller ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_manipulator_controller.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_calibration_controller.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
-
+roslint_cpp()
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

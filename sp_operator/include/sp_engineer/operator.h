@@ -40,6 +40,13 @@ namespace sp_operator
 
             sp_common::ChassisCmd chassis_cmd_;
 
+            enum
+            {
+                FOLLOW,
+                NOFOLLOW,
+                GYRO
+            };
+
         
     };
 }

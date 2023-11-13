@@ -10,6 +10,7 @@
   <maintainer email="kclroku@outlook.com">Cherryblossomnight</maintainer>
 
 
+
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
@@ -48,7 +49,7 @@
   <!--   <test_depend>gtest</test_depend> -->
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
-  <buildtool_depend>catkin</buildtool_depend>
+    <buildtool_depend>catkin</buildtool_depend>
   <build_depend>controller_interface</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>roslint</build_depend>
@@ -65,11 +66,15 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
-  <depend>pluginlib</depend>
   <depend>hardware_interface</depend>
   <depend>realtime_tools</depend>
   <depend>control_toolbox</depend>
   <depend>effort_controllers</depend>
+  <depend>syn_controller</depend>
+  
+  <!-- For custom controllers -->
+  <build_depend>pluginlib</build_depend>
+  <exec_depend>pluginlib</exec_depend>
 
   <depend>tf2</depend>
   <depend>tf2_geometry_msgs</depend>
@@ -78,6 +83,7 @@
   <depend>geometry_msgs</depend>
 
   <depend>sp_common</depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

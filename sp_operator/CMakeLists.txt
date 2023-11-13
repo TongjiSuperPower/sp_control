@@ -129,7 +129,7 @@ set(SRC_LIST
       src/main.cpp
       src/operator.cpp
       src/engineer.cpp
-      src/infantry.cpp
+      # src/infantry.cpp
 
 )
 add_executable(engineer ${SRC_LIST})
@@ -137,7 +137,7 @@ add_executable(engineer ${SRC_LIST})
 target_link_libraries(engineer
     ${catkin_LIBRARIES}
 )
-## Add cmake target dependencies of the library
+# Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

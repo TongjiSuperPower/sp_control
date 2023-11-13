@@ -159,7 +159,7 @@
     </collision>
   </link>
   <joint
-    name="joint1"
+    name="joint1_left"
     type="prismatic">
     <origin
       xyz="0 0 0"
@@ -174,7 +174,7 @@
       lower="-0.15"
       upper="0"
       effort="150"
-      velocity="5" />
+      velocity="0.5" />
   </joint>
   <link
     name="link2">
@@ -217,7 +217,7 @@
     </collision>
   </link>
   <joint
-    name="joint2"
+    name="joint2_left"
     type="prismatic">
     <origin
       xyz="-0.7 0 0.3831"
@@ -232,7 +232,7 @@
       lower="0"
       upper="0.55"
       effort="20"
-      velocity="5" />
+      velocity="0.5" />
   </joint>
   <link
     name="link3">
@@ -275,7 +275,7 @@
     </collision>
   </link>
   <joint
-    name="joint3"
+    name="joint3_left"
     type="prismatic">
     <origin
       xyz="0.42794 0 0.072"
@@ -290,7 +290,7 @@
       lower="0"
       upper="0.4754"
       effort="20"
-      velocity="5" />
+      velocity="0.5" />
   </joint>
   <link
     name="link4">
@@ -348,7 +348,7 @@
       lower="-0.3"
       upper="0.3"
       effort="20"
-      velocity="5" />
+      velocity="0.5" />
   </joint>
   <link
     name="link5">
@@ -404,9 +404,9 @@
       xyz="0 0 1" />
     <limit
       lower="0"
-      upper="3.14"
+      upper="1.57"
       effort="3"
-      velocity="15" />
+      velocity="3.14" />
   </joint>
   <link
     name="link6">
@@ -464,7 +464,7 @@
      lower="-1.57"
       upper="1.57"
       effort="3"
-      velocity="25" />
+      velocity="3.14" />
   </joint>
   <link
     name="link7">
@@ -522,7 +522,7 @@
       lower="-3.14"
       upper="3.14"
       effort="3"
-      velocity="25" />
+      velocity="3.14" />
   </joint>
   <link name="vacuum_gripper"/>
     <joint
@@ -538,5 +538,108 @@
       <axis
         xyz="0 0 1" />
     </joint>
+  <link name="fake_link1">
+    <inertial>
+        <origin
+          xyz="1.0099E-06 -0.062072 0.050902"
+          rpy="0 0 0" />
+        <mass
+          value="0.16243" />
+        <inertia
+          ixx="0.00010545"
+          ixy="-3.0539E-08"
+          ixz="1.4953E-08"
+          iyy="5.3443E-05"
+          iyz="-3.1729E-08"
+          izz="0.00014942" />
+      </inertial>
+    </link>
+  <joint
+    name="joint1_right"
+    type="prismatic">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="arm_base_link" />
+    <child
+      link="fake_link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.15"
+      upper="0"
+      effort="150"
+      velocity="0.5" />
+  </joint>
+  <link name="fake_link2">
+    <inertial>
+      <origin
+        xyz="0.73763 -0.012605 0.069937"
+        rpy="0 0 0" />
+      <mass
+        value="3.3677" />
+      <inertia
+        ixx="0.00060317"
+        ixy="-1.317E-07"
+        ixz="-5.0363E-06"
+        iyy="0.059389"
+        iyz="2.5076E-07"
+        izz="0.059509" />
+    </inertial>
+  </link>
+   
+    <joint
+    name="joint2_right"
+    type="prismatic">
+    <origin
+      xyz="-0.7 0 0.3831"
+      rpy="0 0 0" />
+    <parent
+      link="fake_link1" />
+    <child
+      link="fake_link2" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0.55"
+      effort="20"
+      velocity="0.5" />
+  </joint>
+  <link name="fake_link3">
+   <inertial>
+    <origin
+      xyz="0.51091 -0.0045583 0.038639"
+      rpy="0 0 0" />
+    <mass
+      value="0.53167" />
+    <inertia
+      ixx="0.0064927"
+      ixy="-6.4359E-05"
+      ixz="6.2407E-09"
+      iyy="0.00010061"
+      iyz="1.8149E-08"
+      izz="0.0065666" />
+    </inertial>
+  </link>
+  <joint
+    name="joint3_right"
+    type="prismatic">
+    <origin
+      xyz="0.42794 0 0.072"
+      rpy="0 3.3989E-05 0.01003" />
+    <parent
+      link="fake_link2" />
+    <child
+      link="fake_link3" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0.4754"
+      effort="20"
+      velocity="0.5" />
+  </joint>
    </xacro:macro>
 </robot>

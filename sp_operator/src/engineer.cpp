@@ -10,8 +10,9 @@ namespace sp_operator
         ROS_INFO_STREAM("Engineer");
         controller_nh = ros::NodeHandle("engineer");
         manipulator_cmd_pub_ = nh.advertise<sp_common::ManipulatorCmd>("/manipulator_cmd", 10);
-        twist_cmd_pub_ = nh.advertise<geometry_msgs::TwistStamped>("/delta_twist_cmds",10);
+        //twist_cmd_pub_ = nh.advertise<geometry_msgs::TwistStamped>("/delta_twist_cmds",10);
         //joint_cmd_pub_ = nh.advertise<control_msgs::JointJog>("/delta_joint_cmds",10);
+        joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("cmd_joint",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
 
         x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
@@ -29,16 +30,16 @@ namespace sp_operator
         yaw_right_limit_ = sp_common::getParam(controller_nh, "gimbal/yaw_right_limit", 1.57);
         pitch_low_limit_ = sp_common::getParam(controller_nh, "gimbal/pitch_low_limit", -0.52);
         pitch_high_limit_ = sp_common::getParam(controller_nh, "gimbal/pitch_high_limit", 0.52);
-        joint_cmd_.joint_names.push_back("joint1");
-        joint_cmd_.joint_names.push_back("joint2");
-        joint_cmd_.joint_names.push_back("joint3");
-        joint_cmd_.joint_names.push_back("joint4");
-        joint_cmd_.joint_names.push_back("joint5");
-        joint_cmd_.joint_names.push_back("joint6");
-        joint_cmd_.joint_names.push_back("joint7");
-        for (int i = 0; i < 7; i++)
-            joint_cmd_.velocities.push_back(0.0);
-
+        // joint_cmd_.joint_names.push_back("joint1");
+        // joint_cmd_.joint_names.push_back("joint2");
+        // joint_cmd_.joint_names.push_back("joint3");
+        // joint_cmd_.joint_names.push_back("joint4");
+        // joint_cmd_.joint_names.push_back("joint5");
+        // joint_cmd_.joint_names.push_back("joint6");
+        // joint_cmd_.joint_names.push_back("joint7");
+        // for (int i = 0; i < 7; i++)
+        //     joint_cmd_.velocities.push_back(0.0);
+        joint_vel_cmd_.data = std::vector<double>(7, 0.0);
         return true;
     }
 
@@ -53,8 +54,9 @@ namespace sp_operator
         
         manipulator_set();
         manipulator_cmd_pub_.publish(manipulator_cmd_);
-        twist_cmd_pub_.publish(twist_cmd_);
+        //twist_cmd_pub_.publish(twist_cmd_);
         //joint_cmd_pub_.publish(joint_cmd_);
+        joint_cmd_pub_.publish(joint_vel_cmd_);
 
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
@@ -144,6 +146,23 @@ namespace sp_operator
     
     void Engineer::manipulator_set()
     {
+        if (dbus_data_.s_r == 3)
+        {
+            if (dbus_data_.key_c)  // Using a custom controller to control pose
+             {
+                manipulator_cmd_.control_mode = MAUL;
+             }
+
+             if (dbus_data_.key_v)  // Begin visual assisted automatic ore exchanging
+             {
+                manipulator_cmd_.control_mode = AUTO;
+                //manipulator_cmd_.vision_mode = EXCHANGE_ORE;
+                //manipulator_cmd_.is_started_vision_exchanging = true;
+             }
+             
+             
+        //     {
+        }
         // if (dbus_data_.s_l == 3) //Manipulator control mode
         // {
         //     if (dbus_data_.s_r == 1) //Remote control mode
@@ -196,7 +215,7 @@ namespace sp_operator
         // else if (manipulator_cmd_.joint7_pos < -3.14)
         //     manipulator_cmd_.joint7_pos = -3.14;
         twist_cmd_.header.stamp = ros::Time::now();
-        joint_cmd_.header.stamp = ros::Time::now();
+        //joint_cmd_.header.stamp = ros::Time::now();
         twist_cmd_.twist.linear.x = 0;
         twist_cmd_.twist.linear.y = 0;
         twist_cmd_.twist.linear.z = 0;
@@ -207,22 +226,31 @@ namespace sp_operator
 
         // if (dbus_data_.s_l == 3) //Manipulator control mode
         // {
-        //     if (dbus_data_.s_r == 1) //Remote control mode
-        //     {
+            if (dbus_data_.s_r == 1) //Remote control mode
+            {
                 // twist_cmd_.twist.linear.z = 0.3 * dbus_data_.ch_l_y;
                 // twist_cmd_.twist.linear.y = 0.5 * dbus_data_.ch_r_x;
                 // twist_cmd_.twist.linear.x = 0.2 * dbus_data_.ch_r_y;
+
                 // joint_cmd_.velocities[0] = 0.1 * dbus_data_.ch_l_x;
-                // joint_cmd_.velocities[1] = 0.3 * dbus_data_.ch_r_x;
-                // joint_cmd_.velocities[2] = 0.3 * dbus_data_.ch_l_y;
-                // joint_cmd_.velocities[3] = 0.3 * dbus_data_.ch_r_y;
-            // }
-            // else if (dbus_data_.s_r == 3)
-            // {
-            //     joint_cmd_.velocities[4] = 1.5 * dbus_data_.ch_r_y;
-            //     joint_cmd_.velocities[5] = 1.5 * dbus_data_.ch_l_y;
-            //     joint_cmd_.velocities[6] = -1.5 * dbus_data_.ch_r_y;
-            // }       
+                // joint_cmd_.velocities[1] = 0.5 * dbus_data_.ch_r_x;
+                // joint_cmd_.velocities[2] = 0.5 * dbus_data_.ch_l_y;
+                // joint_cmd_.velocities[3] = 0.5 * dbus_data_.ch_r_y;
+                joint_vel_cmd_.data[0] = 0.0003 * dbus_data_.ch_l_x;
+                joint_vel_cmd_.data[1] = 0.01 * dbus_data_.ch_l_y;
+                joint_vel_cmd_.data[2] = 0.0015 * dbus_data_.ch_r_x;
+                joint_vel_cmd_.data[3] = 0.001 * dbus_data_.ch_r_y;
+            }
+            else if (dbus_data_.s_r == 3)
+            {
+                // joint_cmd_.velocities[4] = 0.3 * dbus_data_.ch_r_y;
+                // joint_cmd_.velocities[5] = 0.3 * dbus_data_.ch_l_y;
+                // joint_cmd_.velocities[6] = 0.3 * dbus_data_.ch_r_x;
+
+                joint_vel_cmd_.data[4] = -0.005 * dbus_data_.ch_r_x;
+                joint_vel_cmd_.data[5] = -0.005 * dbus_data_.ch_l_x;
+                joint_vel_cmd_.data[6] = -0.005 * dbus_data_.ch_r_y;
+            }       
     }
     void Engineer::velocity_callback(const geometry_msgs::Twist::ConstPtr &vel)
     {

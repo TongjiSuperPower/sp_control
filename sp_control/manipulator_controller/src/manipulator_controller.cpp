@@ -23,8 +23,8 @@ namespace manipulator_controller
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
         // subsribe the topic "cmd_pos"
-        if (!ctrl_z_.init(effort_joint_interface_, nh_z) || !ctrl_x1_.init(effort_joint_interface_, nh_x1) 
-         || !ctrl_x2_.init(effort_joint_interface_, nh_x2) || !ctrl_y_.init(effort_joint_interface_, nh_y))
+        if (!ctrl_z_.init(robot_hw, controller_nh, nh_z) || !ctrl_x1_.init(robot_hw, controller_nh, nh_x1) 
+         || !ctrl_x2_.init(robot_hw, controller_nh, nh_x2) || !ctrl_y_.init(effort_joint_interface_, nh_y))
             return false;
        
         if (!ctrl_pitch_.init(effort_joint_interface_, nh_pitch) || !ctrl_yaw_.init(effort_joint_interface_, nh_yaw) || !ctrl_roll_.init(effort_joint_interface_, nh_roll))
@@ -34,52 +34,101 @@ namespace manipulator_controller
         
 
         cmd_quat_sub_ = root_nh.subscribe<geometry_msgs::Quaternion>("cmd_quat", 1, &ManipulatorController::cmdQuatCallback, this);
+        cmd_twist_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_twist", 1, &ManipulatorController::cmdTwistCallback, this);
+        cmd_joint_sub_ = root_nh.subscribe<std_msgs::Float64MultiArray>("cmd_joint", 1, &ManipulatorController::cmdJointCallback, this);
+        cmd_manipulator_sub_ = root_nh.subscribe<sp_common::ManipulatorCmd>("cmd_manipulator", 1, &ManipulatorController::cmdManipulatorCallback, this);
+        
+        twist_cmd_ = Eigen::VectorXd::Zero(6);
+
+        joint_cmd_ = joint_vel_cmd_ = std::vector<double>(7, 0);
+
         ROS_INFO("MANIPULATOR: INIT SUCCESS !");
-        initEulerAngle();
+        //initPosition();
+        initiated_ = false;
 
         return true;
-
     }
 
     void ManipulatorController::update(const ros::Time &time, const ros::Duration &period)
     {
         geometry_msgs::Quaternion cmd_quat = cmd_rt_buffer_.readFromRT()->cmd_quat_;
-        sp_common::ManipulatorCmd cmd_manipulator_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
-        quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	
-        quat_cmd_.normalized();
-        euler_cmd_ = quat_cmd_.matrix().eulerAngles(0,2,1);
+        geometry_msgs::Twist cmd_twist = cmd_rt_buffer_.readFromRT()->cmd_twist_;
+        std_msgs::Float64MultiArray cmd_joint = cmd_rt_buffer_.readFromRT()->cmd_joint_;
+        sp_common::ManipulatorCmd manipulator_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
 
-        if (mode_ != cmd_manipulator_.control_mode)
+        if (!cmd_joint.data.empty())
         {
-            mode_ = cmd_manipulator_.control_mode;
+            for (int i = 0; i < 7; i++)
+                joint_vel_cmd_[i] = cmd_joint.data[i];
+        }
+        if (!initiated_)
+        {
+            ctrl_z_.update(time, period);
+            ctrl_x1_.update(time, period);
+            ctrl_x2_.update(time, period); 
+            ctrl_y_.update(time, period);
+
+
+            ctrl_pitch_.update(time, period);
+            ctrl_yaw_.update(time, period);
+            ctrl_roll_.update(time, period); 
+
+            joint_cmd_[0] = ctrl_z_.getPosition();
+            joint_cmd_[1] = ctrl_x1_.getPosition();
+            joint_cmd_[2] = ctrl_x2_.getPosition();
+            joint_cmd_[3] = ctrl_y_.joint_.getPosition();
+            joint_cmd_[4] = ctrl_pitch_.joint_.getPosition();
+            joint_cmd_[5] = ctrl_yaw_.joint_.getPosition();
+            joint_cmd_[6] = ctrl_roll_.joint_.getPosition();
+            initiated_ = true;
+            ROS_INFO_STREAM("INIT");
+            ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
+        }
+        ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
+
+        //joint_cmd_[0] = cmd_joint.data.at(0);
+        quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	
+        twist_cmd_[0] = cmd_twist.linear.x;
+        twist_cmd_[1] = cmd_twist.linear.y;
+        twist_cmd_[2] = cmd_twist.linear.z;
+        twist_cmd_[3] = cmd_twist.angular.x;
+        twist_cmd_[4] = cmd_twist.angular.y;
+        twist_cmd_[5] = cmd_twist.angular.z;
+      
+
+        // Change mode
+        if (mode_ != manipulator_cmd_.control_mode)
+        {
+            mode_ = manipulator_cmd_.control_mode;
+            ROS_INFO_STREAM("Change mode" << mode_);
             mode_changed_ = true;
         }
 
-        if (process_ != cmd_manipulator_.control_process)
+        if (process_ != manipulator_cmd_.control_process)
         {
-            process_ = cmd_manipulator_.control_process;
+            process_ = manipulator_cmd_.control_process;
             process_changed_ = true;
         }
 
-        // switch (mode_)
-        // {
+        switch (mode_)
+        {
             
-        //     case AUTO:
-        //     {
-        //         autoMode(time, period);
-        //         break;
-        //     }
-        //     case MUAL:
-        //     {
-        //         mual(time, period);
-        //         break;
-        //     }
-        //     case JOINT:
-        //     {
-        //         joint(time, period);
-        //         break;
-        //     }
-        // }
+            case AUTO:
+            {
+                autoMode();       
+                break;
+            }
+            case MAUL:
+            {
+                maulMode();
+                break;
+            }
+            case JOINT:
+            {
+                jointMode();
+                break;
+            }
+        }
 
         // switch (process_)
         // {       
@@ -102,15 +151,29 @@ namespace manipulator_controller
     {
         // if (process_ == READY || process_ == MOVE || process_ == DONE)
         // {
-            ROS_INFO_STREAM(euler_cmd_);
-            ctrl_z_.setCommand(0.0);
-            ctrl_x1_.setCommand(0.0);
-            ctrl_x2_.setCommand(0.0);
-            ctrl_y_.setCommand(0.0);
 
-            ctrl_pitch_.setCommand(euler_cmd_[0]);
-            ctrl_yaw_.setCommand(euler_cmd_[1]);
-            ctrl_roll_.setCommand(euler_cmd_[2]);
+            for (int i = 0; i <  7; i++)
+                joint_cmd_[i] += joint_vel_cmd_[i];
+            jointPosConstraint();
+            ctrl_z_.setCommand(joint_cmd_[0]);
+            ctrl_x1_.setCommand(joint_cmd_[1]);
+            ctrl_x2_.setCommand(joint_cmd_[2]);
+            ctrl_y_.setCommand(joint_cmd_[3]);
+
+            ctrl_pitch_.setCommand(joint_cmd_[4]);
+            ctrl_yaw_.setCommand(joint_cmd_[5]);
+            ctrl_roll_.setCommand(joint_cmd_[6]);
+
+
+            // ctrl_z_.setCommand(xyz_cmd_[0]);
+            // ctrl_x1_.setCommand(xyz_cmd_[1]);
+            // ctrl_x2_.setCommand(xyz_cmd_[2]);
+            // ctrl_y_.setCommand(xyz_cmd_[3]);
+
+            // ctrl_pitch_.setCommand(rpy_cmd_[0]);
+            // ctrl_yaw_.setCommand(rpy_cmd_[1]);
+            // ctrl_roll_.setCommand(rpy_cmd_[2]);
+
 
             ctrl_z_.update(time, period);
             ctrl_x1_.update(time, period);
@@ -126,15 +189,121 @@ namespace manipulator_controller
         // }
     }
 
-    void ManipulatorController::initEulerAngle()
+    void ManipulatorController::autoMode()
     {
-        euler_state_[0] = ctrl_pitch_.joint_.getPosition();
-        euler_state_[1] = ctrl_yaw_.joint_.getPosition();
-        euler_state_[2] = ctrl_roll_.joint_.getPosition();
 
-        euler_cmd_ = euler_state_;
+        quat2Euler(); 
+        cartesian_cmd_[0] = 0.0;
+        cartesian_cmd_[1] = 0.4;
+        cartesian_cmd_[2] = 0.4;
+        cartesian_cmd_[3] = 0.3;
+
+
+        //if (manipulator_cmd_.is_start_vision_exchange)
+        {
+            // if (!z_completed_)
+            // {
+            //     xyz_cmd_[0] = 0.0;
+            //     //ROS_INFO_STREAM("Move Z");
+            //     if (abs(xyz_cmd_[0] - ctrl_z_.joint_.getPosition()) < 0.04)
+            //         z_completed_ = true;
+            // }
+            // if (z_completed_)
+            // {
+            //     xyz_cmd_[1] = cartesian_cmd_[1];
+            //     xyz_cmd_[2] = cartesian_cmd_[2];
+            //     //ROS_INFO_STREAM("Move X");
+            //     if (abs(xyz_cmd_[1] - ctrl_x1_.joint_.getPosition()) < 0.002 && abs(xyz_cmd_[2] - ctrl_x2_.joint_.getPosition()))
+            //         x_completed_ = true;             
+            // }
+            // if (x_completed_ && z_completed_)
+            // {
+            //     rpy_cmd_ = euler_cmd_;
+            //     //ROS_INFO_STREAM("Move RPY");
+            //     rpy_completed_ = true;
+
+            // }
+            // if (rpy_completed_ && x_completed_ && z_completed_)
+            // {
+            //     //ROS_INFO_STREAM("Done!");
+            //     //z_completed_ = x_completed_ = y_completed_ = x_completed_ = false;
+            // }
+        }
+
+    } 
+
+    void ManipulatorController::maulMode()
+    {
+        //euler_cmd_[0] += joints
+
+    }
+
+    void ManipulatorController::jointMode()
+    {
+        //euler_cmd_[0] = manipulator_cmd_.joint5;
+
+    }
+
+
+    void ManipulatorController::quat2Euler()
+    {
+        quat_cmd_.normalized();
+        Eigen::Matrix3d rot = quat_cmd_.matrix();
+        euler_cmd_[0] = std::atan2(-rot(1, 2), rot(1, 1));
+        euler_cmd_[1] = std::atan2(rot(1, 0), std::sqrt(rot(1, 1) * rot(1, 1) + rot(1, 2) * rot(1, 2)));
+        euler_cmd_[2] = std::atan2(-rot(2, 0), rot(0, 0));
+    }
+
+    void ManipulatorController::initPosition()
+    {
+        xyz_cmd_[0] = ctrl_z_.getPosition();
+        xyz_cmd_[1] = ctrl_x1_.getPosition();
+        xyz_cmd_[2] = ctrl_x2_.getPosition();
+        xyz_cmd_[3] = ctrl_y_.joint_.getPosition();
+        rpy_cmd_[0] = ctrl_pitch_.joint_.getPosition();
+        rpy_cmd_[1] = ctrl_yaw_.joint_.getPosition();
+        rpy_cmd_[2] = ctrl_roll_.joint_.getPosition();
+
         //ROS_INFO_STREAM(euler_cmd_);
 
+    }
+
+    void ManipulatorController::jointPosConstraint()
+    {
+        if (joint_cmd_[0] > 0.00)
+            joint_cmd_[0] = 0.00;
+        else if (joint_cmd_[0] < -0.15)
+            joint_cmd_[0] = -0.15;
+
+        if (joint_cmd_[1] > 0.50)
+            joint_cmd_[1] = 0.50;
+        else if (joint_cmd_[1] < 0.00)
+            joint_cmd_[1] = 0.00;
+
+        if (joint_cmd_[2] > 0.45)
+            joint_cmd_[2] = 0.45;
+        else if (joint_cmd_[2] < 0.00)
+            joint_cmd_[2] = 0.00;
+
+        if (joint_cmd_[3] > 0.15)
+            joint_cmd_[3] = 0.15;
+        else if (joint_cmd_[3] < -0.15)
+            joint_cmd_[3] = -0.15;
+
+        if (joint_cmd_[4] > 1.57)
+            joint_cmd_[4] = 1.57;
+        else if (joint_cmd_[4] < 0.00)
+            joint_cmd_[4] = 0.00;
+
+        if (joint_cmd_[5] > 1.57)
+            joint_cmd_[5] = 1.57;
+        else if (joint_cmd_[5] < -1.57)
+            joint_cmd_[5] = -1.57;
+
+        if (joint_cmd_[6] > 1.57)
+            joint_cmd_[6] = 1.57;
+        else if (joint_cmd_[6] < -1.57)
+            joint_cmd_[6] = -1.57;
     }
 
 
@@ -142,7 +311,18 @@ namespace manipulator_controller
     void ManipulatorController::cmdQuatCallback(const geometry_msgs::Quaternion::ConstPtr &msg)
     {
         cmd_struct_.cmd_quat_ = *msg;
-        cmd_struct_.stamp_ = ros::Time::now();
+        cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
+    }
+
+    void ManipulatorController::cmdTwistCallback(const geometry_msgs::Twist::ConstPtr &msg)
+    {
+        cmd_struct_.cmd_twist_ = *msg;
+        cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
+    }
+
+    void ManipulatorController::cmdJointCallback(const std_msgs::Float64MultiArray::ConstPtr &msg)
+    {
+        cmd_struct_.cmd_joint_ = *msg;
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
     }
 

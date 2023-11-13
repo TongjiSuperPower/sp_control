@@ -4,8 +4,11 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <effort_controllers/joint_position_controller.h>
+#include <syn_controller/syn_controller.h>
 
+#include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
+#include <std_msgs/Float64MultiArray.h>
 
 
 #include <tf2_msgs/TFMessage.h>
@@ -24,6 +27,8 @@ namespace manipulator_controller
     struct Command
     {
         geometry_msgs::Quaternion cmd_quat_;
+        geometry_msgs::Twist cmd_twist_;
+        std_msgs::Float64MultiArray cmd_joint_;
         sp_common::ManipulatorCmd cmd_manipulator_;
         ros::Time stamp_;
     };
@@ -63,11 +68,25 @@ namespace manipulator_controller
     protected:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
 
-        void initEulerAngle();
+        void maulMode();
 
-        void cmdManipulatorCallback(const sp_common::ManipulatorCmd::ConstPtr &msg);
+        void autoMode();
+
+        void jointMode();
+
+        void initPosition();
+
+        void quat2Euler();
+        
+        void jointPosConstraint();
 
         void cmdQuatCallback(const geometry_msgs::Quaternion::ConstPtr &msg);
+
+        void cmdTwistCallback(const geometry_msgs::Twist::ConstPtr &msg);
+
+        void cmdJointCallback(const std_msgs::Float64MultiArray::ConstPtr &msg);
+
+        void cmdManipulatorCallback(const sp_common::ManipulatorCmd::ConstPtr &msg);
 
         void stopProcess();
 
@@ -77,17 +96,33 @@ namespace manipulator_controller
 
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
 
-        effort_controllers::JointPositionController ctrl_z_, ctrl_x1_, ctrl_x2_, ctrl_y_;
+        syn_controller::SynController ctrl_z_, ctrl_x1_, ctrl_x2_;
+        effort_controllers::JointPositionController ctrl_y_;
 
         effort_controllers::JointPositionController ctrl_pitch_, ctrl_yaw_, ctrl_roll_;
 
         ros::Time last_publish_time_;
-        Eigen::Quaterniond quat_cmd_{};
-        Eigen::Vector3d euler_state_{}; 
-        Eigen::Vector3d euler_cmd_{}; 
 
-        //ros::Subscriber cmd_gimbal_sub_;
+        Eigen::Quaterniond quat_cmd_{};
+        Eigen::VectorXd twist_cmd_{};
+        std::vector<double> joint_cmd_{}, joint_vel_cmd_{};
+        sp_common::ManipulatorCmd manipulator_cmd_{};
+
+        Eigen::Vector4d cartesian_cmd_{};
+        Eigen::Vector3d euler_cmd_{};
+        Eigen::Vector4d xyz_cmd_{};
+        Eigen::Vector3d rpy_cmd_{};
+        // Subscribers
         ros::Subscriber cmd_quat_sub_;
+        ros::Subscriber cmd_twist_sub_;
+        ros::Subscriber cmd_joint_sub_;
+        ros::Subscriber cmd_manipulator_sub_;
+
+        bool z_completed_{};
+        bool x_completed_{};
+        bool y_completed_{};
+        bool rpy_completed_{};
+        bool initiated_{};
 
         enum
         {

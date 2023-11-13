@@ -4,8 +4,9 @@
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_manipulator_framed/engineer_manipulator_framed.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_chassis/engineer_chassis.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/manipulator_transmission.xacro"/> 
-
+	
     <xacro:engineer_manipulator_framed/>
+
     <xacro:engineer_chassis roller_type="simple"/>
 
    	<joint name="joint_arm2body" type="fixed">
@@ -14,6 +15,8 @@
 		<parent link="base_link"/>
 		<child link="arm_base_link"/>
 	</joint>
+
+
 	<!--在机器人模型的urdf/xacro文件中添加gazebo_ros_control插件-->
 	<gazebo>
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">

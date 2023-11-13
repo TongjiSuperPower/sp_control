@@ -4,96 +4,106 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="engineer_framed">
-    <transmission name="trans_joint1">
+    <transmission name="trans_joint1_left">
         <type>transmission_interface/SimpleTransmission</type>
-        <actuator name="joint1_motor">
-            <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <actuator name="joint1_left_motor">
+            <mechanicalReduction>723.71</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
-        <joint name="joint1">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <joint name="joint1_left">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
-    <transmission name="trans_joint2">
+    <transmission name="trans_joint1_right">
         <type>transmission_interface/SimpleTransmission</type>
-        <actuator name="joint2_motor">
-            <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <actuator name="joint1_right_motor">
+            <mechanicalReduction>-723.71</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
-        <joint name="joint2">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <joint name="joint1_right">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
-    <transmission name="trans_joint3">
+    <transmission name="trans_joint2_left">
         <type>transmission_interface/SimpleTransmission</type>
-        <actuator name="joint3_motor">
-            <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <actuator name="joint2_left_motor">
+            <mechanicalReduction>603.18</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
-        <joint name="joint3">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <joint name="joint2_left">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+    <transmission name="trans_joint2_right">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="joint2_right_motor">
+            <mechanicalReduction>-603.18</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="joint2_right">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+    <transmission name="trans_joint3_left">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="joint3_left_motor">
+            <mechanicalReduction>1206.37</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="joint3_left">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+    <transmission name="trans_joint3_right">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="joint3_right_motor">
+            <mechanicalReduction>-1206.37</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="joint3_right">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
     <transmission name="trans_joint4">
         <type>transmission_interface/SimpleTransmission</type>
         <actuator name="joint4_motor">
-            <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>400</mechanicalReduction>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
         <joint name="joint4">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
     <transmission name="trans_joint5">
         <type>transmission_interface/SimpleTransmission</type>
         <actuator name="joint5_motor">
             <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
         <joint name="joint5">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
     <transmission name="trans_joint6">
         <type>transmission_interface/SimpleTransmission</type>
         <actuator name="joint6_motor">
             <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
         <joint name="joint6">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
     <transmission name="trans_joint7">
         <type>transmission_interface/SimpleTransmission</type>
         <actuator name="joint7_motor">
             <mechanicalReduction>1</mechanicalReduction>
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </actuator>
         <joint name="joint7">
-            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         </joint>
     </transmission>
-    <!--<gazebo>
-        <plugin name="gazebo_ros_vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
-            <robotNamespace>/vacuum_gripper</robotNamespace>
-            <bodyName>vacuum_gripper</bodyName>
-            <topicName>grasping</topicName>
-            <maxForce>100</maxForce>
-            <maxDistance>0.05</maxDistance>
-            <minDistance>0.01</minDistance>
-        </plugin>
-    </gazebo>	
-    <gazebo reference="vacuum_gripper">
-        <mu1>50</mu1>
-        <mu2>50</mu2>
-　　　   <minDepth>0.003</minDepth>
-        <maxVel>0</maxVel>
-        <kp>10000000000000.0</kp>
-        <kd>1.0</kd>
-        <ki>2.0</ki>
-        <material>Gazebo/Grey</material>
-    </gazebo>-->
     <link name="arm_base_link">
         <inertial>
             <origin rpy="0 0 0" xyz="-0.02624 -0.018282 0.25067" />
@@ -110,10 +120,22 @@
             </material>
         </visual>
         <collision>
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0.27 0.25" />
             <geometry>
-                <mesh filename="package://sp_description/meshes/engineer_framed/engineer_manipulator_framed/arm_base_link.STL" />
+                <box size="0.40 0.04 0.42" />
             </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 -0.27 0.25" />
+            <geometry>
+                <box size="0.4 0.04 0.42" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
         </collision>
     </link>
     <link name="link1">
@@ -132,18 +154,66 @@
             </material>
         </visual>
         <collision>
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0.22 0.3" />
             <geometry>
-                <mesh filename="package://sp_description/meshes/engineer_framed/engineer_manipulator_framed/link1.STL" />
+                <box size="0.5 0.04 0.25" />
             </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 -0.22 0.3" />
+            <geometry>
+                <box size="0.5 0.04 0.25" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0.18 0.4" />
+            <geometry>
+                <box size="0.7 0.06 0.06" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 -0.18 0.4" />
+            <geometry>
+                <box size="0.7 0.06 0.06" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.25 0 0.38" />
+            <geometry>
+                <box size="0.03 0.4 0.03" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="-0.25 0 0.38" />
+            <geometry>
+                <box size="0.03 0.4 0.03" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
         </collision>
     </link>
-    <joint name="joint1" type="prismatic">
-        <origin rpy="0 0 0" xyz="0 0 -0.15" />
+    <joint name="joint1_left" type="prismatic">
+        <origin rpy="0 0 0" xyz="0 0 0" />
         <parent link="arm_base_link" />
         <child link="link1" />
         <axis xyz="0 0 1" />
-        <limit effort="20" lower="0" upper="0.15" velocity="5" />
+        <limit effort="150" lower="-0.15" upper="0" velocity="0.5" />
     </joint>
     <link name="link2">
         <inertial>
@@ -167,12 +237,12 @@
             </geometry>
         </collision>
     </link>
-    <joint name="joint2" type="prismatic">
+    <joint name="joint2_left" type="prismatic">
         <origin rpy="0 0 0" xyz="-0.7 0 0.3831" />
         <parent link="link1" />
         <child link="link2" />
         <axis xyz="-1 0 0" />
-        <limit effort="0" lower="0" upper="0.86634" velocity="0" />
+        <limit effort="20" lower="0" upper="0.55" velocity="0.5" />
     </joint>
     <link name="link3">
         <inertial>
@@ -196,12 +266,12 @@
             </geometry>
         </collision>
     </link>
-    <joint name="joint3" type="prismatic">
+    <joint name="joint3_left" type="prismatic">
         <origin rpy="0 3.3989E-05 0.01003" xyz="0.42794 0 0.072" />
         <parent link="link2" />
         <child link="link3" />
         <axis xyz="-1 0 0" />
-        <limit effort="0" lower="0" upper="0.4754" velocity="0" />
+        <limit effort="20" lower="0" upper="0.4754" velocity="0.5" />
     </joint>
     <link name="link4">
         <inertial>
@@ -226,11 +296,11 @@
         </collision>
     </link>
     <joint name="joint4" type="prismatic">
-        <origin rpy="0 -3.3987E-05 -0.01003" xyz="0.50967 -0.005112 0.034017" />
+        <origin rpy="0 0 0" xyz="0.50967 -0.005112 0.034017" />
         <parent link="link3" />
         <child link="link4" />
         <axis xyz="0 1 0" />
-        <limit effort="0" lower="-0.3" upper="0.3" velocity="0" />
+        <limit effort="20" lower="-0.3" upper="0.3" velocity="0.5" />
     </joint>
     <link name="link5">
         <inertial>
@@ -255,15 +325,15 @@
         </collision>
     </link>
     <joint name="joint5" type="revolute">
-        <origin rpy="1.5708 0 0" xyz="0 -0.018 0.128" />
+        <origin rpy="1.5708 -1.5708 0" xyz="0 -0.018 0.128" />
         <parent link="link4" />
         <child link="link5" />
         <axis xyz="0 0 1" />
-        <limit effort="0" lower="0" upper="3.14" velocity="0" />
+        <limit effort="3" lower="0" upper="1.57" velocity="3.14" />
     </joint>
     <link name="link6">
         <inertial>
-            <origin rpy="0 0 0" xyz="0.00062599 -0.14196 -0.013409" />
+            <origin rpy="0 0 0" xyz="0.0 -0.14196 -0.013409" />
             <mass value="0.69733" />
             <inertia ixx="0.00029313" ixy="1.0445E-08" ixz="1.6605E-08" iyy="0.00028267" iyz="-4.8697E-06" izz="0.00025509" />
         </inertial>
@@ -284,11 +354,11 @@
         </collision>
     </link>
     <joint name="joint6" type="revolute">
-        <origin rpy="1.5708 -1.5674 1.5708" xyz="0.07179 0 -0.028" />
+        <origin rpy="1.5708 -1.5708 1.5708" xyz="0.07179 0 -0.028" />
         <parent link="link5" />
         <child link="link6" />
-        <axis xyz="0 0 -1" />
-        <limit effort="0" lower="-1.57" upper="1.57" velocity="0" />
+        <axis xyz="0 0 1" />
+        <limit effort="3" lower="-1.57" upper="1.57" velocity="3.14" />
     </joint>
     <link name="link7">
         <inertial>
@@ -313,11 +383,60 @@
         </collision>
     </link>
     <joint name="joint7" type="revolute">
-        <origin rpy="1.5704 0 0.0033889" xyz="0.00059574 -0.17579 -0.07179" />
+        <origin rpy="1.5708 3.1416 0" xyz="0 -0.17579 -0.07179" />
         <parent link="link6" />
         <child link="link7" />
-        <axis xyz="0.033366 0 0.99944" />
-        <limit effort="20" lower="-3.14" upper="3.14" velocity="5" />
+        <axis xyz="0 0 -1" />
+        <limit effort="3" lower="-3.14" upper="3.14" velocity="3.14" />
+    </joint>
+    <link name="vacuum_gripper" />
+    <joint name="vacuum_gripper_joint" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <parent link="link7" />
+        <child link="vacuum_gripper" />
+        <axis xyz="0 0 1" />
+    </joint>
+    <link name="fake_link1">
+        <inertial>
+            <origin rpy="0 0 0" xyz="1.0099E-06 -0.062072 0.050902" />
+            <mass value="0.16243" />
+            <inertia ixx="0.00010545" ixy="-3.0539E-08" ixz="1.4953E-08" iyy="5.3443E-05" iyz="-3.1729E-08" izz="0.00014942" />
+        </inertial>
+    </link>
+    <joint name="joint1_right" type="prismatic">
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <parent link="arm_base_link" />
+        <child link="fake_link1" />
+        <axis xyz="0 0 1" />
+        <limit effort="150" lower="-0.15" upper="0" velocity="0.5" />
+    </joint>
+    <link name="fake_link2">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.73763 -0.012605 0.069937" />
+            <mass value="3.3677" />
+            <inertia ixx="0.00060317" ixy="-1.317E-07" ixz="-5.0363E-06" iyy="0.059389" iyz="2.5076E-07" izz="0.059509" />
+        </inertial>
+    </link>
+    <joint name="joint2_right" type="prismatic">
+        <origin rpy="0 0 0" xyz="-0.7 0 0.3831" />
+        <parent link="fake_link1" />
+        <child link="fake_link2" />
+        <axis xyz="-1 0 0" />
+        <limit effort="20" lower="0" upper="0.55" velocity="0.5" />
+    </joint>
+    <link name="fake_link3">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0.51091 -0.0045583 0.038639" />
+            <mass value="0.53167" />
+            <inertia ixx="0.0064927" ixy="-6.4359E-05" ixz="6.2407E-09" iyy="0.00010061" iyz="1.8149E-08" izz="0.0065666" />
+        </inertial>
+    </link>
+    <joint name="joint3_right" type="prismatic">
+        <origin rpy="0 3.3989E-05 0.01003" xyz="0.42794 0 0.072" />
+        <parent link="fake_link2" />
+        <child link="fake_link3" />
+        <axis xyz="-1 0 0" />
+        <limit effort="20" lower="0" upper="0.4754" velocity="0.5" />
     </joint>
     <link name="base_link">
         <inertial>
@@ -335,10 +454,22 @@
             </material>
         </visual>
         <collision>
-            <origin rpy="0 0 0" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0.090" />
             <geometry>
-                <mesh filename="package://sp_description/meshes/engineer_framed/engineer_chassis/base_link.STL" />
+                <box size="0.6 0.6 0.120" />
             </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
+        </collision>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.2" />
+            <geometry>
+                <box size="0.2 0.55 0.14" />
+            </geometry>
+            <material name="">
+                <color rgba="0.75294 0.75294 0.75294 1" />
+            </material>
         </collision>
     </link>
     <!--  link  -->

@@ -4,13 +4,13 @@ syn:
     publish_rate: 100
     timeout: 0.1
 
-    has_feedforward : false
-    feedforward: 20.0
+    has_feedforward : true
+    feedforward: -76.0
 
     left_joint:
       joint: "joint1"
-      pid: { p: 4.0, i: 0, d: 0.2, i_max: 4.0, i_min: 4.0, antiwindup: true, publish_state: true }
+      pid: { p: 1500.0, i: 30.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     right_joint:
       joint: "joint2"
-      pid: { p: 4.0, i: 0, d: 0.2, i_max: 4.0, i_min: 4.0, antiwindup: true, publish_state: true }
+      pid: { p: 1500.0, i: 30.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     

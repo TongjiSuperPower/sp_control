@@ -74,5 +74,43 @@ namespace sp_operator
         chassis_cmd_.stamp = ros::Time::now();
     }
 
+    void Infantry::shooter_set()
+    {
+        if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
+        {
+            if (dbus_data_.s_l == 1 && last_dbus_data_.s_l != 1)
+            {
+                if(shooter_cmd_.shoot_process == SHOOT_STOP)
+                {
+                    shooter_cmd_.fric_mode = FRIC_ON;
+                    shooter_cmd_.shoot_process = SHOOT_READY;	
+                                
+                }
+                else
+                {
+                    shooter_cmd_.fric_mode = FRIC_OFF;
+                    shooter_cmd_.shoot_process = SHOOT_STOP;
+                }
+            }
+            
+        }
+        else if (dbus_data_.s_r == 3) //Remote control mode
+        {
+            if ((dbus_data_.mouse_l && !last_dbus_data_.mouse_l) && frics.fric_state == FRIC_OFF)
+            {
+                shooter_cmd_.fric_mode = FRIC_ON;
+                shooter_cmd_.shoot_process = SHOOT_READY;
+                
+            }
+
+        }
+        else if (dbus_data_.s_r == 2) //Stop mode
+        {
+            cmd_vel_.linear.x = 0.0;
+            cmd_vel_.linear.y = 0.0;
+            cmd_vel_.angular.z = 0.0;
+        }
+    }
+
 
 }

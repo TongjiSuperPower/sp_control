@@ -13,10 +13,13 @@
         </transmission>
     </xacro:macro>
 
-   	<xacro:manipulator_transmission joint_name="joint1" mechanical_reduction="723.71"/>
-	<xacro:manipulator_transmission joint_name="joint2" mechanical_reduction="1206.37"/>
-	<xacro:manipulator_transmission joint_name="joint3" mechanical_reduction="1206.37"/>
-	<xacro:manipulator_transmission joint_name="joint4" mechanical_reduction="768"/>
+   	<xacro:manipulator_transmission joint_name="joint1_left" mechanical_reduction="723.71"/>
+    <xacro:manipulator_transmission joint_name="joint1_right" mechanical_reduction="-723.71"/>
+	<xacro:manipulator_transmission joint_name="joint2_left" mechanical_reduction="603.18"/>
+    <xacro:manipulator_transmission joint_name="joint2_right" mechanical_reduction="-603.18"/>
+	<xacro:manipulator_transmission joint_name="joint3_left" mechanical_reduction="1206.37"/>
+    <xacro:manipulator_transmission joint_name="joint3_right" mechanical_reduction="-1206.37"/>
+	<xacro:manipulator_transmission joint_name="joint4" mechanical_reduction="400"/>
 	<xacro:manipulator_transmission joint_name="joint5" mechanical_reduction="1"/>
     <xacro:manipulator_transmission joint_name="joint6" mechanical_reduction="1"/>
     <xacro:manipulator_transmission joint_name="joint7" mechanical_reduction="1"/>
