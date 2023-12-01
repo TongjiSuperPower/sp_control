@@ -82,9 +82,10 @@ namespace manipulator_controller
             joint_cmd_[6] = ctrl_roll_.joint_.getPosition();
             initiated_ = true;
             ROS_INFO_STREAM("INIT");
-            ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
+            // ROS_INFO_STREAM("joint_cmd_[5]:" << joint_cmd_[5]);
         }
-        ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
+        ROS_INFO_STREAM("joint_cmd_[4]:" << joint_cmd_[4]);
+        ROS_INFO_STREAM("ctrl_pitch_.joint_:" << ctrl_pitch_.joint_.getPosition());
 
         //joint_cmd_[0] = cmd_joint.data.at(0);
         quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	

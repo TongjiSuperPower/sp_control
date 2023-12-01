@@ -6,43 +6,43 @@ manipulator:
 
     z:
       has_feedforward : true
-      feedforward: -76.0
+      feedforward: 25
 
       left_joint:
         joint: "joint1_left"
-        pid: { p: 2600.0, i: 400.0, d: 280.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 2100.0, i: 200.0, d: 2.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       right_joint:
         joint: "joint1_right"
-        pid: { p: 2600.0, i: 400.0, d: 280.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 2100.0, i: 200.0, d: 2.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     x1:
-      has_feedforward : false
-      feedforward: 0.0
+      has_feedforward : true
+      feedforward: 16
 
       left_joint:
         joint: "joint2_left"
-        pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 400.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       right_joint:
         joint: "joint2_right"
-        pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 400.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     x2:
-      has_feedforward : false
-      feedforward: 0.0
+      has_feedforward : true
+      feedforward: 16
 
       left_joint:
         joint: "joint3_left"
-        pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 200.0, i: 6.0, d: 17.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       right_joint:
         joint: "joint3_right"
-        pid: { p: 520.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 200.0, i: 6.0, d: 17.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     y:
       joint: "joint4"
-      pid: { p: 260.0, i: 30.0, d: 65.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      pid: { p: 360.0, i: 15, d: 5, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     pitch:
       joint: "joint5"
-      pid: { p: 80.0, i: 5.0, d: 1.0, i_max: 10.0, i_min: -10.0, antiwindup: true, publish_state: true }
+      pid: { p: 110.0, i: 0.5, d: 0, i_max: 10.0, i_min: -10.0, antiwindup: true, publish_state: true }
     yaw:
       joint: "joint6"
-      pid: { p: 60.0, i: 8.0, d: 6.0, i_max: 50.0, i_min: -50.0, antiwindup: true, publish_state: true }
+      pid: { p: 70.0, i: 2, d: 0.1, i_max: 50.0, i_min: -50.0, antiwindup: true, publish_state: true }
     roll:
       joint: "joint7"
-      pid: { p: 50.0, i: 5.0, d: 8.0, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
+      pid: { p: 6.0, i: 0.15, d: 0.01, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }

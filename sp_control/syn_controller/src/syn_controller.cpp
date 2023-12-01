@@ -39,8 +39,16 @@ namespace syn_controller
     ctrl_right_.update(time, period);
     if (has_feedforward_)
     {
-      ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + feedforward_);
-      ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + feedforward_);
+      if ((ctrl_left_.joint_.getCommand() - ctrl_left_.joint_.getPosition())>0)
+      {
+        ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + feedforward_ - 75);
+        ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + feedforward_ - 75);
+        }
+      else if ((ctrl_left_.joint_.getCommand()- ctrl_left_.joint_.getPosition())<=0)
+      {
+        ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - feedforward_ - 75);
+        ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - feedforward_ - 75);
+      }
     }
 
   }

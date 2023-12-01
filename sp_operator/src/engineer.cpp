@@ -237,9 +237,9 @@ namespace sp_operator
                 // joint_cmd_.velocities[2] = 0.5 * dbus_data_.ch_l_y;
                 // joint_cmd_.velocities[3] = 0.5 * dbus_data_.ch_r_y;
                 joint_vel_cmd_.data[0] = 0.0003 * dbus_data_.ch_l_x;
-                joint_vel_cmd_.data[1] = 0.01 * dbus_data_.ch_l_y;
+                joint_vel_cmd_.data[1] = 0.002 * dbus_data_.ch_l_y;
                 joint_vel_cmd_.data[2] = 0.0015 * dbus_data_.ch_r_x;
-                joint_vel_cmd_.data[3] = 0.001 * dbus_data_.ch_r_y;
+                joint_vel_cmd_.data[3] = 0.0005 * dbus_data_.ch_r_y;
             }
             else if (dbus_data_.s_r == 3)
             {

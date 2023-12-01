@@ -22,22 +22,59 @@ def clamp(num, v0, v1):
     return max(v0, min(num, v1))
 
 class Contour:
-    def __init__(self,centerpoint,obj) -> None:
+    def __init__(self,centerpoint,obj,contour = 0) -> None:
         self.centerpoint = centerpoint
+        self.couter = contour
         self.obj = obj
 
-#qie ge huang se
-params = {'hue_low': 8, 'saturation_low': 110, 'value_low': 0,
-          'hue_high': 30, 'saturation_high': 255, 'value_high': 255,
-          'min_area_size': 5000, 'max_area_size': 400000}
-thresh_low = (params['hue_low'], params['saturation_low'], params['value_low'])
-thresh_high = (params['hue_high'], params['saturation_high'], params['value_high'])
-min_area_size = params['min_area_size']
-max_area_size = params['max_area_size']
-lower_silver = (120,50,100)
-upper_silver = (150,255,255)
-lower_black = np.array([0,0,0]) 
-upper_black= np.array([180, 255, 43])
+
+def find_parallel_quadrilateral(points):
+    points = np.array(points)
+    pointlist = []
+    # 计算点对之间的距离
+    distances = []
+    for i in range(len(points)):
+        for j in range(i+1, len(points)):
+            distance = np.linalg.norm(points[i] - points[j])
+            distances.append((i, j, distance))
+    # 根据距离进行排序
+    distances.sort(key=lambda x: x[2])
+    
+    # 寻找可以组成平行四边形的四个点
+    for i in range(len(distances)-3):
+        # 获取当前距离对的索引
+        index1, index2, distance1 = distances[i]
+        
+        for j in range(i+1, len(distances)-2):
+            # 获取下一个距离对的索引
+            index3, index4, distance2 = distances[j]
+            
+            if index1 != index3 and index2 != index3 and index1 != index4 and index2 != index4: 
+                # 检查是否满足平行四边形的几何关系
+                if 0.85 < distance1/distance2 < 1.2:
+                    # 获取四个点的坐标
+                    point1 = points[index1]
+                    point2 = points[index2]
+                    point3 = points[index3]
+                    point4 = points[index4]
+                    
+                    # 检查是否满足平行四边形的几何关系
+                    if 0.85 < np.linalg.norm(point1 - point3) / np.linalg.norm(point2 - point4) < 1.2:
+                        # 返回找到的四个点
+                        pointlist.append([point1, point2, point3, point4, distance1/np.linalg.norm(point1 - point3)])
+                        
+    if len(pointlist) == 0:
+    # 如果未找到满足条件的四个点，则返回None
+        return None
+    else:
+        min = 1 
+        a = 0
+        for i in range(len(pointlist)):
+            if min > abs(1 - pointlist[i][4]):
+                min = abs(1 - pointlist[i][4])
+                a = i
+        return pointlist[a][0:4]
+
 Camera_intrinsic = {
 
     "mtx": np.array([[1025.35323576971, 0, 678.7266096913569],
@@ -144,14 +181,6 @@ with device:
     frameRgb = None
     frameDisp = None
     framedepth = None
-
-    # Configure windows; trackbar adjusts blending ratio of rgb/depth
-    rgbWindowName = "rgb"
-    depthWindowName = "depth"
-    blendedWindowName = "rgb-depth"
-    cv2.namedWindow(rgbWindowName)
-    cv2.namedWindow(depthWindowName)
-    cv2.namedWindow(blendedWindowName)
     
     while True:
         latestPacket = {}
@@ -167,7 +196,7 @@ with device:
 
         if latestPacket["rgb"] is not None:
             frameRgb = latestPacket["rgb"].getCvFrame()
-            cv2.imshow(rgbWindowName, frameRgb)
+            # cv2.imshow(rgbWindowName, frameRgb)
         
 
         if latestPacket["disp"] is not None:
@@ -178,11 +207,11 @@ with device:
             # Optional, apply false colorization
             # if 1: frameDisp = cv2.applyColorMap(frameDisp, cv2.COLORMAP_HOT)
             frameDisp = np.ascontiguousarray(frameDisp)
-            cv2.imshow(depthWindowName, frameDisp)
+            # cv2.imshow(depthWindowName, frameDisp)
 
         if latestPacket["dep"] is not None:
             framedepth = latestPacket["dep"].getFrame()
-            cv2.imshow("depth",framedepth)
+            # cv2.imshow("depth",framedepth)
 
         # Blend when both received
         if frameRgb is not None and frameDisp is not None and framedepth is not None:
@@ -191,89 +220,79 @@ with device:
                 frameDisp = cv2.cvtColor(frameDisp, cv2.COLOR_GRAY2BGR)
 
             frame = frameRgb
-            # blue, _, red = cv2.split(frame)
-            # subtracted = cv2.subtract(red, blue)
             subtracted = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            # subtracted = cv2.subtract(blue, red)
-            # subtracted = cv2.subtract(red,blue)
-            _, threshed = cv2.threshold(subtracted, 120, 255, cv2.THRESH_BINARY)
-            kernal = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+            _, threshed = cv2.threshold(subtracted, 50, 255, cv2.THRESH_BINARY)
+            kernal = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
             cv2.erode(threshed, kernal, dst=threshed)
             cv2.dilate(threshed, kernal, dst=threshed)
-            cv2.imshow("hsv_image",threshed)
-            cv2.imshow('b',frame) 
+            cv2.imshow('b',threshed) 
             contours, _ = cv2.findContours(threshed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(frame,contours,-1,(0, 255, 255),thickness = 2)
+            # cv2.drawContours(frame,contours,-1,(0, 255, 255),thickness = 2)
             contours_new = []
             point_array = []
+            quads = [] #array of quad including four peak points{}
+            distance = []
+
             for contour in contours:
-                if  500 < cv2.contourArea(contour) < 8000 :
+                if  700 < cv2.contourArea(contour) < 7000 :
+                    
                     rect = cv2.minAreaRect(contour)
                     center = rect[0]
                     h, w = rect[1]
                     if h < w:
                         h, w = w, h
                     ratio = h / w
-                    if 0.25 < ratio < 5 :
-                       contours_new.append(contour)
-            # cv2.drawContours(frame,contours_new,-1,(0, 255, 255),thickness = 2)
-            print(len(contours_new))
-
-            quads = [] #array of quad including four peak points{}
-            hulls = []
-            for i in range(len(contours_new)):
-                rect = cv2.minAreaRect(contours_new[i])
-                center = rect[0]
-                hull = cv2.convexHull(contours_new[i])
-                # 阈值越小，越容易逼近
-                quad = cv2.approxPolyDP(hull, 3, True)# maximum_area_inscribed
-                # if 3 < len(quad) <6:
-                #     print(quad)
-                hulls.append(hull)
-                quads.append(quad)
-                point_array.append(center)
+                    if 0.2 < ratio < 5 :
+                        hull = cv2.convexHull(contour)
+                        # 阈值越小，越容易逼近
+                        quad = cv2.approxPolyDP(hull, 7, True)# maximum_area_inscribed
+                        if len(quad) >= 4:
+                            spatials, centroid = hostSpatials.calc_spatials(framedepth, [int(center[0]-10),int(center[1]-10),int(center[0]+10),int(center[1]+10)])
+                            if spatials['z'] < 1000:
+                                quads.append(quad)
+                                point_array.append(center)
+                                
             # obj = np.array([[-112.5, 112.5, 0], [112.5, 112.5, 0], [-112.5, -112.5 , 0],[112.5, -112.5 ,0]
             #                 ],dtype=np.float64)
             cv2.drawContours(frame,quads,-1,(0, 255, 0),thickness = 2)
+            cv2.imshow("a",frame)
+            
+            four_point = find_parallel_quadrilateral(point_array)
+            # print(four_point)
+            fourcontour = []
+            point_array = np.array(point_array)
             print(point_array)
-            if len(point_array) == 4:
-                area_list = list(map(cv2.contourArea,quads))
-                # print(area_list)
+            if four_point is not None:
+                for point in four_point:
+                    indices = np.where((point_array[:, 0] == point[0]) & (point_array[:, 1] == point[1]))
+                    print(int(indices[0]))
+                    fourcontour.append(quads[int(indices[0])])
+                    
+                area_list = list(map(cv2.contourArea,fourcontour))
                 id_min = area_list.index(min(area_list))
-                # print(id_min)
-                # print(point_array)
-                origin = point_array[id_min]
+                origin = four_point[id_min]
+                center_x = round((four_point[0][0] + four_point[1][0] + four_point[2][0] + four_point[3][0]) / 4)
+                center_y = round((four_point[0][1] + four_point[1][1] + four_point[2][1] + four_point[3][1]) / 4)
+                
                 def clockwiseangle_and_distance(point):
-                    refvec = [0,1]
-                    # Vector between point and the origin: v = p - o
-                    vector = [point[0]-origin[0], point[1]-origin[1]]
-                    # Length of vector: ||v||
-                    lenvector = math.hypot(vector[0], vector[1])
-                    # If length is zero there is no angle
-                    if lenvector == 0:
-                        return -math.pi, 0
-                    # Normalize vector: v/||v||
-                    normalized = [vector[0]/lenvector, vector[1]/lenvector]
-                    dotprod  = normalized[0]*refvec[0] + normalized[1]*refvec[1]     # x1*x2 + y1*y2
-                    diffprod = refvec[1]*normalized[0] - refvec[0]*normalized[1]     # x1*y2 - y1*x2
-                    angle = math.atan2(diffprod, dotprod)
-                    # Negative angles represent counter-clockwise angles so we need to subtract them 
-                    # from 2*pi (360 degrees)
-                    if angle < 0:
-                        return 2*math.pi+angle, lenvector
-                    # I return first the angle because that's the primary sorting criterium
-                    # but if two vectors have the same angle then the shorter distance should come first.
-                    return angle, lenvector        
-                point_array = sorted(point_array, key=clockwiseangle_and_distance)
-                # print(point_array)
+                    vect = [(point[0] - center_x),(point[1] - center_y)]
+                    angle_rad = np.arctan2(vect[1], vect[0])
+                    angle_deg = np.degrees(angle_rad)
+                    return angle_deg      
+                point_array = sorted(four_point,key=clockwiseangle_and_distance)
+                print(point_array)
+                # 查找目标点的索引
+                indices = np.where(np.all(point_array == np.array(origin), axis=1))[0]
+                # indices = np.where((point_array[:, 0] == origin[0]) & (point_array[:, 1] == origin[1]))
+                # print(indices)
+
+                point_array = np.roll(point_array,4 - int(indices))
+                print('a' , point_array)
                 point_rt = Contour(point_array[0],[112.5, 112.5, 0])
                 point_lt = Contour(point_array[1],[-112.5, 112.5, 0])
                 point_lb = Contour(point_array[2],[-112.5, -112.5, 0])
-                point_rb = Contour(point_array[3],[112.5, -112.5, 0])
-                    
+                point_rb = Contour(point_array[3],[112.5, -112.5, 0])                    
                 point_array = np.array(point_array,np.int32)
-                # print(np.argsort(point_array[:,1]))
-                # bbox = np.array(bbox,np.int32)
                 cv2.polylines(frame, [point_array], True, (0, 255, 0), 2) 
                 # cv2.polylines(frame, bbox, True, (255, 255, 0), 2)   
                 
@@ -293,8 +312,7 @@ with device:
                 qz = Quaternion[2]
                 qw = Quaternion[3]
         
-                center_x = round((point_array_n[0][0] + point_array_n[1][0] +point_array_n[2][0]+point_array_n[3][0]) / 4)
-                center_y = round((point_array_n[0][1] + point_array_n[1][1]+ point_array_n[2][1]+point_array_n[3][1]) / 4)
+
                 roi = [center_x-10,center_y-10,center_x+10,center_y+10]
                 # get 3D zuobiao
                 spatials, centroid = hostSpatials.calc_spatials(framedepth, roi)

@@ -10,19 +10,19 @@ void pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, manipulator_contr
     manipulator->write(*pose_);
 }
 
-void mani_callback(const sp_common::ManipulatorCmd::ConstPtr &mani_cmd, manipulator_control::Manipulator *manipulator)
-{
-    std::vector<double> state;
-    state.push_back(mani_cmd->joint1_pos);
-    state.push_back(mani_cmd->joint2_pos);
-    state.push_back(mani_cmd->joint3_pos);
-    state.push_back(mani_cmd->joint4_pos);
-    state.push_back(mani_cmd->joint5_pos);
-    state.push_back(mani_cmd->joint6_pos);
-    state.push_back(mani_cmd->joint7_pos);
-    ROS_INFO_STREAM(*mani_cmd);
-    manipulator->write(state);
-}
+// void mani_callback(const sp_common::ManipulatorCmd::ConstPtr &mani_cmd, manipulator_control::Manipulator *manipulator)
+// {
+//     std::vector<double> state;
+//     state.push_back(mani_cmd->joint1_pos);
+//     state.push_back(mani_cmd->joint2_pos);
+//     state.push_back(mani_cmd->joint3_pos);
+//     state.push_back(mani_cmd->joint4_pos);
+//     state.push_back(mani_cmd->joint5_pos);
+//     state.push_back(mani_cmd->joint6_pos);
+//     state.push_back(mani_cmd->joint7_pos);
+//     ROS_INFO_STREAM(*mani_cmd);
+//     manipulator->write(state);
+// }
 
 void state_callback(const std_msgs::Float64MultiArray::ConstPtr &state_, manipulator_control::Manipulator *manipulator)
 {
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     shapes::Mesh *sink = shapes::createMeshFromResource("package://sp_description/meshes/scene/exchange_sink.STL");
     ros::NodeHandle nh;
     ros::Subscriber pose_sub = nh.subscribe<geometry_msgs::Pose>("/moveit/pose_sub", 10, boost::bind(&pose_callback, _1, &manipulator_));
-    ros::Subscriber mani_sub = nh.subscribe<sp_common::ManipulatorCmd>("/manipulator_cmd", 10, boost::bind(&mani_callback, _1, &manipulator_));
+    // ros::Subscriber mani_sub = nh.subscribe<sp_common::ManipulatorCmd>("/manipulator_cmd", 10, boost::bind(&mani_callback, _1, &manipulator_));
     ros::Subscriber state_sub = nh.subscribe<std_msgs::Float64MultiArray>("/moveit/state_sub", 10, boost::bind(&state_callback, _1, &manipulator_));
     ros::Subscriber single_sub = nh.subscribe<sp_common::SingleJointWrite>("/moveit/single_state_sub", 10, boost::bind(&single_state_callback, _1, &manipulator_));
     ros::Subscriber remote_control_sub = nh.subscribe<sp_common::DbusData>("dbus_data", 10, boost::bind(&remote_control_callback, _1, &dbusdata_));

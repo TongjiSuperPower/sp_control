@@ -1,0 +1,14 @@
+<launch>
+    <rosparam file="$(find test_controller)/config/test_controller.yaml" command="load"/>
+    <!-- load the controllers -->
+    <!-- <node name="controller_loader" pkg="controller_manager" type="controller_manager"
+          respawn="false" output="screen"
+          args="load
+          controllers/joint_state_controller
+
+    "/> -->
+
+  <!-- Load the controllers -->
+    <node name="controller_loader" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="controllers/test_controller "/>
+</launch>

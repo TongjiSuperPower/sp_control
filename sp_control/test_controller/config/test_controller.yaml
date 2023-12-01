@@ -1,0 +1,28 @@
+controllers:
+  test_controller:
+    type: effort_controllers/JointPositionController
+
+    joint: joint4
+    pid: { p: 1400.0, i: 30, d: 9, i_max: 4.0, i_min: 4.0, antiwindup: true, publish_state: true }
+
+# controllers:
+#   test_controller:
+#     type: position_controllers/JointTrajectoryController
+#     joints:
+#         - joint1
+#         - joint2
+#         - joint3
+#         - joint4
+#         - joint5
+#         - joint6
+#         - joint7
+#     constraints:
+#         goal_time: 0.6
+#         stopped_velocity_tolerance: 0.05
+#         joint1: {trajectory: 0.1, goal: 0.1}
+#         joint2: {trajectory: 0.1, goal: 0.1}
+#         joint3: {trajectory: 0.1, goal: 0.1}
+#         joint4: {trajectory: 0.1, goal: 0.1}
+#         joint5: {trajectory: 0.1, goal: 0.1}
+#         joint6: {trajectory: 0.1, goal: 0.1}
+#         joint7: {trajectory: 0.1, goal: 0.1}
