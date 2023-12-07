@@ -1,0 +1,9 @@
+<library path="lib/libdifferential_controller">
+    <class name="differential_controller/DifferentialController" 
+           type="differential_controller::DifferentialController"
+           base_class_type="controller_interface::ControllerBase">
+        <description>
+            Differential controller for Engineer.
+        </description>
+    </class>
+</library>

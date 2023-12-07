@@ -31,6 +31,38 @@ namespace manipulator_controller
             return false;
         // construct vector<joint> to control the acuators directly.
 
+        y_has_friction_ = sp_common::getParam(controller_nh, "y/has_friction", false);
+        y_friction_ = sp_common::getParam(controller_nh, "y/friction", 0.0);
+
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/z", 0.1));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/x1", 0.5));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/x2", 0.5));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/y", 0.3));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/pitch", 1.57));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/yaw", 1.57));
+        vel_limit_.push_back(sp_common::getParam(controller_nh, "vel_limit/roll", 1.57));
+
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/z", 0.0));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/x1", 0.45));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/x2", 0.45));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/y", 0.15));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/pitch", 1.57));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/yaw", 1.57));
+        upper_pos_limit_.push_back(sp_common::getParam(controller_nh, "upper_pos_limit/roll", 1.57));
+
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/z", -0.15));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/x1", 0.00));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/x2", 0.00));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/y", -0.15));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/pitch", -1.57));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/yaw", -1.57));
+        lower_pos_limit_.push_back(sp_common::getParam(controller_nh, "lower_pos_limit/roll", -1.57));
+
+        structure_coeff_.l1_ = sp_common::getParam(controller_nh, "structure_coeff/l1", 0.6);
+        structure_coeff_.l2_ = sp_common::getParam(controller_nh, "structure_coeff/l2", 0.25);
+        structure_coeff_.l3_ = sp_common::getParam(controller_nh, "structure_coeff/l3", 0.1);
+        structure_coeff_.l4_ = sp_common::getParam(controller_nh, "structure_coeff/l4", 0.1);
+
         
 
         cmd_quat_sub_ = root_nh.subscribe<geometry_msgs::Quaternion>("cmd_quat", 1, &ManipulatorController::cmdQuatCallback, this);
@@ -38,63 +70,57 @@ namespace manipulator_controller
         cmd_joint_sub_ = root_nh.subscribe<std_msgs::Float64MultiArray>("cmd_joint", 1, &ManipulatorController::cmdJointCallback, this);
         cmd_manipulator_sub_ = root_nh.subscribe<sp_common::ManipulatorCmd>("cmd_manipulator", 1, &ManipulatorController::cmdManipulatorCallback, this);
         
-        twist_cmd_ = Eigen::VectorXd::Zero(6);
+        twist_cmd_ = Eigen::Matrix<double, 6, 1>::Zero();
 
-        joint_cmd_ = joint_vel_cmd_ = std::vector<double>(7, 0);
+        joint_cmd_ = joint_vel_cmd_= joint_pos_ = Eigen::Matrix<double, 7, 1>::Zero();
 
         ROS_INFO("MANIPULATOR: INIT SUCCESS !");
         //initPosition();
         initiated_ = false;
+        jacobian = Eigen::Matrix3d::Zero();
 
         return true;
     }
 
     void ManipulatorController::update(const ros::Time &time, const ros::Duration &period)
     {
+        if (!initiated_)
+        {
+            initPosition(time, period);
+            
+            initiated_ = true;
+            ROS_INFO_STREAM("INIT JOINT POSITION");
+        }
+        //ROS_INFO_STREAM("joint_cmd_[5]:" << joint_cmd_[5]);
+
+
         geometry_msgs::Quaternion cmd_quat = cmd_rt_buffer_.readFromRT()->cmd_quat_;
         geometry_msgs::Twist cmd_twist = cmd_rt_buffer_.readFromRT()->cmd_twist_;
         std_msgs::Float64MultiArray cmd_joint = cmd_rt_buffer_.readFromRT()->cmd_joint_;
         sp_common::ManipulatorCmd manipulator_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
 
+        quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	
+
+        //Update joint_vel_cmd_ message and twist_cmd_ message
         if (!cmd_joint.data.empty())
         {
             for (int i = 0; i < 7; i++)
                 joint_vel_cmd_[i] = cmd_joint.data[i];
         }
-        if (!initiated_)
+        else
         {
-            ctrl_z_.update(time, period);
-            ctrl_x1_.update(time, period);
-            ctrl_x2_.update(time, period); 
-            ctrl_y_.update(time, period);
-
-
-            ctrl_pitch_.update(time, period);
-            ctrl_yaw_.update(time, period);
-            ctrl_roll_.update(time, period); 
-
-            joint_cmd_[0] = ctrl_z_.getPosition();
-            joint_cmd_[1] = ctrl_x1_.getPosition();
-            joint_cmd_[2] = ctrl_x2_.getPosition();
-            joint_cmd_[3] = ctrl_y_.joint_.getPosition();
-            joint_cmd_[4] = ctrl_pitch_.joint_.getPosition();
-            joint_cmd_[5] = ctrl_yaw_.joint_.getPosition();
-            joint_cmd_[6] = ctrl_roll_.joint_.getPosition();
-            initiated_ = true;
-            ROS_INFO_STREAM("INIT");
-            // ROS_INFO_STREAM("joint_cmd_[5]:" << joint_cmd_[5]);
+            for (int i = 0; i < 7; i++)
+                joint_vel_cmd_[i] = 0.0;
         }
-        ROS_INFO_STREAM("joint_cmd_[4]:" << joint_cmd_[4]);
-        ROS_INFO_STREAM("ctrl_pitch_.joint_:" << ctrl_pitch_.joint_.getPosition());
 
-        //joint_cmd_[0] = cmd_joint.data.at(0);
-        quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	
-        twist_cmd_[0] = cmd_twist.linear.x;
-        twist_cmd_[1] = cmd_twist.linear.y;
-        twist_cmd_[2] = cmd_twist.linear.z;
-        twist_cmd_[3] = cmd_twist.angular.x;
-        twist_cmd_[4] = cmd_twist.angular.y;
-        twist_cmd_[5] = cmd_twist.angular.z;
+
+        
+        twist_cmd_[0] = cmd_twist.angular.x;
+        twist_cmd_[1] = cmd_twist.angular.y;
+        twist_cmd_[2] = cmd_twist.angular.z;
+        twist_cmd_[3] = cmd_twist.linear.x;
+        twist_cmd_[4] = cmd_twist.linear.y;
+        twist_cmd_[5] = cmd_twist.linear.z;
       
 
         // Change mode
@@ -111,25 +137,30 @@ namespace manipulator_controller
             process_changed_ = true;
         }
 
-        switch (mode_)
-        {
+        //Choose mode
+        //AUTO MODE: auto control, be used when camera is vaild.
+        //MAUL MODE: maul control by customer controller (twist_cmd)
+        //JOINT MODE: joint control by remote_controller (joint_vel_cmd)
+        //maulMode(); 
+        // switch (mode_)
+        // {
             
-            case AUTO:
-            {
-                autoMode();       
-                break;
-            }
-            case MAUL:
-            {
-                maulMode();
-                break;
-            }
-            case JOINT:
-            {
-                jointMode();
-                break;
-            }
-        }
+        //     case AUTO:
+        //     {
+        //         autoMode();       
+        //         break;
+        //     }
+        //     case MAUL:
+        //     {
+        //         maulMode();
+        //         break;
+        //     }
+        //     case JOINT:
+        //     {
+        //         jointMode();
+        //         break;
+        //     }
+        // }
 
         // switch (process_)
         // {       
@@ -150,48 +181,47 @@ namespace manipulator_controller
 
     void ManipulatorController::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        // if (process_ == READY || process_ == MOVE || process_ == DONE)
-        // {
+        ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
+        ROS_INFO_STREAM("joint_err_[0]:" << joint_cmd_[0] - ctrl_z_.getPosition());
+        for (int i = 0; i <  7; i++)
+            joint_cmd_[i] += joint_vel_cmd_[i];
+        jointPosConstraint();
 
-            for (int i = 0; i <  7; i++)
-                joint_cmd_[i] += joint_vel_cmd_[i];
-            jointPosConstraint();
-            ctrl_z_.setCommand(joint_cmd_[0]);
-            ctrl_x1_.setCommand(joint_cmd_[1]);
-            ctrl_x2_.setCommand(joint_cmd_[2]);
-            ctrl_y_.setCommand(joint_cmd_[3]);
+        ctrl_z_.setCommand(joint_cmd_[0]);
+        ctrl_x1_.setCommand(joint_cmd_[1]);
+        ctrl_x2_.setCommand(joint_cmd_[2]);
+        ctrl_y_.setCommand(joint_cmd_[3]);
 
-            ctrl_pitch_.setCommand(joint_cmd_[4]);
-            ctrl_yaw_.setCommand(joint_cmd_[5]);
-            ctrl_roll_.setCommand(joint_cmd_[6]);
+        ctrl_pitch_.setCommand(joint_cmd_[4]);
+        ctrl_yaw_.setCommand(joint_cmd_[5]);
+        ctrl_roll_.setCommand(joint_cmd_[6]);
 
+        ctrl_z_.update(time, period);
+        ctrl_x1_.update(time, period);
+        ctrl_x2_.update(time, period); 
+        ctrl_y_.update(time, period);
 
-            // ctrl_z_.setCommand(xyz_cmd_[0]);
-            // ctrl_x1_.setCommand(xyz_cmd_[1]);
-            // ctrl_x2_.setCommand(xyz_cmd_[2]);
-            // ctrl_y_.setCommand(xyz_cmd_[3]);
+        ctrl_pitch_.update(time, period);
+        ctrl_yaw_.update(time, period);
+        ctrl_roll_.update(time, period); 
 
-            // ctrl_pitch_.setCommand(rpy_cmd_[0]);
-            // ctrl_yaw_.setCommand(rpy_cmd_[1]);
-            // ctrl_roll_.setCommand(rpy_cmd_[2]);
+        if (y_has_friction_)
+        {
+            if ((joint_cmd_[3] - ctrl_y_.joint_.getPosition()) > 0.001)
+                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
+            else if ((joint_cmd_[3] - ctrl_y_.joint_.getPosition()) < -0.001)
+                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
+        }
 
-
-            ctrl_z_.update(time, period);
-            ctrl_x1_.update(time, period);
-            ctrl_x2_.update(time, period); 
-            ctrl_y_.update(time, period);
-
-
-            ctrl_pitch_.update(time, period);
-            ctrl_yaw_.update(time, period);
-            ctrl_roll_.update(time, period); 
-
-        //     process_ = MOVE;
-        // }
     }
 
     void ManipulatorController::autoMode()
     {
+        if (mode_changed_)
+        {
+            ROS_INFO_STREAM("Enter auto mode");
+            mode_changed_ = false;
+        }
 
         quat2Euler(); 
         cartesian_cmd_[0] = 0.0;
@@ -235,16 +265,24 @@ namespace manipulator_controller
 
     void ManipulatorController::maulMode()
     {
-        //euler_cmd_[0] += joints
-
+        if (mode_changed_)
+        {
+            ROS_INFO_STREAM("Enter maul mode");
+            mode_changed_ = false;
+        }
+        //getPosition();
+        updateJacobian();
+        calJointVel();
     }
 
     void ManipulatorController::jointMode()
     {
-        //euler_cmd_[0] = manipulator_cmd_.joint5;
-
+        if (mode_changed_)
+        {
+            ROS_INFO_STREAM("Enter joiot mode");
+            mode_changed_ = false;
+        }
     }
-
 
     void ManipulatorController::quat2Euler()
     {
@@ -255,56 +293,116 @@ namespace manipulator_controller
         euler_cmd_[2] = std::atan2(-rot(2, 0), rot(0, 0));
     }
 
-    void ManipulatorController::initPosition()
+    void ManipulatorController::initPosition(const ros::Time &time, const ros::Duration &period)
     {
-        xyz_cmd_[0] = ctrl_z_.getPosition();
-        xyz_cmd_[1] = ctrl_x1_.getPosition();
-        xyz_cmd_[2] = ctrl_x2_.getPosition();
-        xyz_cmd_[3] = ctrl_y_.joint_.getPosition();
-        rpy_cmd_[0] = ctrl_pitch_.joint_.getPosition();
-        rpy_cmd_[1] = ctrl_yaw_.joint_.getPosition();
-        rpy_cmd_[2] = ctrl_roll_.joint_.getPosition();
+        ctrl_z_.update(time, period);
+        ctrl_x1_.update(time, period);
+        ctrl_x2_.update(time, period); 
+        ctrl_y_.update(time, period);
 
-        //ROS_INFO_STREAM(euler_cmd_);
+        ctrl_pitch_.update(time, period);
+        ctrl_yaw_.update(time, period);
+        ctrl_roll_.update(time, period); 
 
+        joint_cmd_[0] = ctrl_z_.getPosition();
+        joint_cmd_[1] = ctrl_x1_.getPosition();
+        joint_cmd_[2] = ctrl_x2_.getPosition();
+        joint_cmd_[3] = ctrl_y_.joint_.getPosition();
+        joint_cmd_[4] = ctrl_pitch_.joint_.getPosition();
+        joint_cmd_[5] = ctrl_yaw_.joint_.getPosition();
+        joint_cmd_[6] = ctrl_roll_.joint_.getPosition();
+
+    }
+
+
+    void ManipulatorController::getPosition()
+    {   
+        joint_pos_[0] = ctrl_z_.getPosition();
+        joint_pos_[1] = ctrl_x1_.getPosition();
+        joint_pos_[2] = ctrl_x2_.getPosition();
+        joint_pos_[3] = ctrl_y_.joint_.getPosition();
+        joint_pos_[4] = ctrl_pitch_.joint_.getPosition();
+        joint_pos_[5] = ctrl_yaw_.joint_.getPosition();
+        joint_pos_[6] = ctrl_roll_.joint_.getPosition();
     }
 
     void ManipulatorController::jointPosConstraint()
     {
-        if (joint_cmd_[0] > 0.00)
-            joint_cmd_[0] = 0.00;
-        else if (joint_cmd_[0] < -0.15)
-            joint_cmd_[0] = -0.15;
+        for (int i = 0; i < 7; i++)
+        {
+            if (joint_cmd_[i] > upper_pos_limit_[i])
+                joint_cmd_[i] = upper_pos_limit_[i];
+            else if (joint_cmd_[i] < lower_pos_limit_[i])
+                joint_cmd_[i] = lower_pos_limit_[i];
+        }
+    }
 
-        if (joint_cmd_[1] > 0.50)
-            joint_cmd_[1] = 0.50;
-        else if (joint_cmd_[1] < 0.00)
-            joint_cmd_[1] = 0.00;
+    void ManipulatorController::calJointVel()
+    {
+        //Calculate Jacobian's (pseudo_)inverse.
+        // Eigen::JacobiSVD<Eigen::MatrixXd> svd =
+        // Eigen::JacobiSVD<Eigen::MatrixXd>(jacobian, Eigen::ComputeThinU | Eigen::ComputeThinV);
+        // Eigen::MatrixXd matrix_s = svd.singularValues().asDiagonal();
+        // Eigen::MatrixXd pseudo_inverse = svd.matrixV() * matrix_s.inverse() * svd.matrixU().transpose();
+        // Change joint_vel_cmd_ by using Jacobian
+        Eigen::Vector3d omega = Eigen::Vector3d::Zero();
+        Eigen::Vector3d vel = Eigen::Vector3d::Zero();
+        omega[0] = twist_cmd_[0];
+        omega[1] = twist_cmd_[1];
+        omega[2] = twist_cmd_[2];
+        vel = jacobian.inverse() * omega;
+        joint_vel_cmd_[4] = 0.4 * vel[0];
+        joint_vel_cmd_[5] = 0.4 * vel[1];
+        joint_vel_cmd_[6] = 0.4 * vel[2];
 
-        if (joint_cmd_[2] > 0.45)
-            joint_cmd_[2] = 0.45;
-        else if (joint_cmd_[2] < 0.00)
-            joint_cmd_[2] = 0.00;
+        joint_vel_cmd_[0] = twist_cmd_[5];
+        joint_vel_cmd_[1] = twist_cmd_[3] / 2;
+        joint_vel_cmd_[2] = twist_cmd_[3] / 2;
+        joint_vel_cmd_[3] = twist_cmd_[4];
+        // joint_vel_cmd_[4] = twist_cmd_[1];
+        // joint_vel_cmd_[5] = twist_cmd_[2];
+        // joint_vel_cmd_[6] = twist_cmd_[0];
+    }
 
-        if (joint_cmd_[3] > 0.15)
-            joint_cmd_[3] = 0.15;
-        else if (joint_cmd_[3] < -0.15)
-            joint_cmd_[3] = -0.15;
 
-        if (joint_cmd_[4] > 1.57)
-            joint_cmd_[4] = 1.57;
-        else if (joint_cmd_[4] < 0.00)
-            joint_cmd_[4] = 0.00;
+    void ManipulatorController::updateJacobian()
+    {
+        jacobian(0, 0) = sin(joint_pos_[5]);
+        jacobian(0, 1) = 0;
+        jacobian(0, 2) = 1;
 
-        if (joint_cmd_[5] > 1.57)
-            joint_cmd_[5] = 1.57;
-        else if (joint_cmd_[5] < -1.57)
-            joint_cmd_[5] = -1.57;
+        jacobian(1, 0) = cos(joint_pos_[5]) * cos(joint_pos_[6]);
+        jacobian(1, 1) = sin(joint_pos_[6]);
+        jacobian(1, 2) = 0;
 
-        if (joint_cmd_[6] > 1.57)
-            joint_cmd_[6] = 1.57;
-        else if (joint_cmd_[6] < -1.57)
-            joint_cmd_[6] = -1.57;
+        jacobian(2, 0) = -cos(joint_pos_[5]) * sin(joint_pos_[6]);
+        jacobian(2, 1) = cos(joint_pos_[6]);
+        jacobian(2, 2) = 0;
+        // jacobian(1, 4) = jacobian(3, 1) = jacobian(3, 2) = jacobian(4, 3) = jacobian(5, 0) = 1.0;
+
+        // jacobian(0, 5) = sin(joint_pos_[4]);
+        // jacobian(0, 6) = cos(joint_pos_[4]) * cos(joint_pos_[5]);
+        // jacobian(1, 6) = sin(joint_pos_[5]);
+        // jacobian(2, 5) = cos(joint_pos_[4]);
+        // jacobian(2, 6) = -sin(joint_pos_[4]) * cos(joint_pos_[5]);
+
+        // jacobian(3, 4) = -sin(joint_pos_[4]) * cos(joint_pos_[5]) * structure_coeff_.l3_ - (sin(joint_pos_[4]) * sin(joint_pos_[5]) * sin(joint_pos_[6]) + cos(joint_pos_[4]) * cos(joint_pos_[6]) ) * structure_coeff_.l4_;
+        // jacobian(5, 4) = -cos(joint_pos_[4]) * cos(joint_pos_[5]) * structure_coeff_.l3_ - (cos(joint_pos_[4]) * sin(joint_pos_[5]) * sin(joint_pos_[6]) + sin(joint_pos_[4]) * cos(joint_pos_[6]) ) * structure_coeff_.l4_;
+
+        // jacobian(3, 5) = -cos(joint_pos_[4]) * sin(joint_pos_[5]) * structure_coeff_.l3_  + cos(joint_pos_[4]) * cos(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
+        // jacobian(4, 5) = cos(joint_pos_[5]) * structure_coeff_.l3_  + sin(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
+        // jacobian(5, 5) = sin(joint_pos_[4]) * sin(joint_pos_[5]) * structure_coeff_.l3_  - sin(joint_pos_[4]) * cos(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
+        
+        // jacobian(3, 6) = (-sin(joint_pos_[4]) * sin(joint_pos_[6]) + cos(joint_pos_[4]) * sin(joint_pos_[5]) * cos(joint_pos_[6])) * structure_coeff_.l4_;
+        // jacobian(4, 6) = -cos(joint_pos_[5]) * cos(joint_pos_[6]) * structure_coeff_.l4_;
+        // jacobian(5, 6) = (-cos(joint_pos_[4]) * sin(joint_pos_[6]) - sin(joint_pos_[4]) * sin(joint_pos_[5]) * cos(joint_pos_[6])) * structure_coeff_.l4_;
+
+    }
+
+    void ManipulatorController::finalPush()
+    {
+
+
     }
 
 

@@ -33,6 +33,14 @@ namespace manipulator_controller
         ros::Time stamp_;
     };
 
+    struct Structure_coeff
+    {
+        double l1_;
+        double l2_;
+        double l3_;
+        double l4_;
+    };
+
 
     class ManipulatorController : public controller_interface::MultiInterfaceController<hardware_interface::EffortJointInterface>
     {
@@ -68,15 +76,23 @@ namespace manipulator_controller
     protected:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
 
+        void initPosition(const ros::Time &time, const ros::Duration &period);
+
         void maulMode();
 
         void autoMode();
 
         void jointMode();
 
-        void initPosition();
-
         void quat2Euler();
+
+        void calJointVel();
+
+        void getPosition();
+
+        void updateJacobian();
+
+        void finalPush();
         
         void jointPosConstraint();
 
@@ -103,15 +119,24 @@ namespace manipulator_controller
 
         ros::Time last_publish_time_;
 
+        std::vector<double> vel_limit_{};
+        std::vector<double> upper_pos_limit_{};
+        std::vector<double> lower_pos_limit_{};
+
+        Structure_coeff structure_coeff_{};
+
         Eigen::Quaterniond quat_cmd_{};
-        Eigen::VectorXd twist_cmd_{};
-        std::vector<double> joint_cmd_{}, joint_vel_cmd_{};
+
+        Eigen::Matrix<double, 6, 1> twist_cmd_{};
+        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{};
         sp_common::ManipulatorCmd manipulator_cmd_{};
 
         Eigen::Vector4d cartesian_cmd_{};
         Eigen::Vector3d euler_cmd_{};
         Eigen::Vector4d xyz_cmd_{};
         Eigen::Vector3d rpy_cmd_{};
+
+        Eigen::Matrix3d jacobian {};
         // Subscribers
         ros::Subscriber cmd_quat_sub_;
         ros::Subscriber cmd_twist_sub_;
@@ -144,6 +169,9 @@ namespace manipulator_controller
 
         int process_ = STOP;
         bool process_changed_ = false;
+
+        bool y_has_friction_{};
+        double y_friction_{};
 
 
 

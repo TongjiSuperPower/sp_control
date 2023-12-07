@@ -1,0 +1,16 @@
+controllers:
+  differential_controller:
+    type: "differential_controller/DifferentialController"
+    publish_rate: 100
+    timeout: 0.1
+
+    differential_reduction: 2
+
+
+    positive_joint:
+      joint: "joint1"
+      pid: { p: 1.3, i: 0.0, d: 0.06, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    negative_joint:
+      joint: "joint2"
+      pid: { p: 1.3, i: 0.0, d: 0.06, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+    
