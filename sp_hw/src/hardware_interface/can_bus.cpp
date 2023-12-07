@@ -378,9 +378,9 @@ namespace sp_hw
                 current_time = ros::Time::now();
                 ros::Duration duration = current_time - last_time;
                 double secs = duration.toSec();
-                Eigen::Matrix3d vel_matrix = (current_matrix - last_matrix)*current_matrix.inverse()/secs;
-                ROS_INFO_STREAM("last_matrix: \n" << last_matrix);
-                ROS_INFO_STREAM("current_matrix: \n" << current_matrix);
+                Eigen::Matrix3d vel_matrix = current_matrix.inverse()*(current_matrix - last_matrix) /secs;
+                //ROS_INFO_STREAM("last_matrix: \n" << last_matrix);
+                //ROS_INFO_STREAM("current_matrix: \n" << current_matrix);
                 ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
                 double wx = (vel_matrix(2, 1) -  vel_matrix(1, 2)) / 2;
                 double wy = (vel_matrix(0, 2) -  vel_matrix(2, 0)) / 2;

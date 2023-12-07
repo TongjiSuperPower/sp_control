@@ -4,13 +4,15 @@ syn:
     publish_rate: 100
     timeout: 0.1
 
-    has_feedforward : true
-    feedforward: -76.0
+    has_friction : true
+    friction: -76.0
+    has_gravity : true
+    gravity: -76.0
 
     left_joint:
-      joint: "joint1"
+      joint: "joint1_left"
       pid: { p: 1500.0, i: 30.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     right_joint:
-      joint: "joint2"
+      joint: "joint1_right"
       pid: { p: 1500.0, i: 30.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     

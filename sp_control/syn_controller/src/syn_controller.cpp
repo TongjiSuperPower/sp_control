@@ -14,8 +14,10 @@ namespace syn_controller
     ros::NodeHandle nh_right = ros::NodeHandle(controller_nh, "right_joint");
     syn_cmd_sub_ = nh.subscribe<std_msgs::Float64>("syn_cmd", 1, &SynController::setCommandCB, this);
 
-    has_feedforward_ = sp_common::getParam(controller_nh, "has_feedforward", false);
-    feedforward_ = sp_common::getParam(controller_nh, "feedforward", 0.0);
+    has_friction_ = sp_common::getParam(controller_nh, "has_friction", false);
+    friction_ = sp_common::getParam(controller_nh, "friction", 0.0);
+    has_gravity_ = sp_common::getParam(controller_nh, "has_gravity", false);
+    gravity_ = sp_common::getParam(controller_nh, "gravity", 0.0);
 
     effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
     if (!ctrl_left_.init(effort_joint_interface_, nh_left) || !ctrl_right_.init(effort_joint_interface_, nh_right) )
@@ -37,17 +39,33 @@ namespace syn_controller
     ctrl_right_.setCommand(cmd_);
     ctrl_left_.update(time, period);
     ctrl_right_.update(time, period);
-    if (has_feedforward_)
+    if (has_friction_)
     {
-      if ((ctrl_left_.joint_.getCommand() - ctrl_left_.joint_.getPosition())>0)
+      if (has_gravity_)
       {
-        ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + feedforward_ - 75);
-        ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + feedforward_ - 75);
+        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.002)
+        {
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_ - gravity_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_ - gravity_);
         }
-      else if ((ctrl_left_.joint_.getCommand()- ctrl_left_.joint_.getPosition())<=0)
+        else 
+        {
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_ - gravity_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_ - gravity_);
+        }
+      }
+      else
       {
-        ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - feedforward_ - 75);
-        ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - feedforward_ - 75);
+        if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
+        {
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_);
+        }
+        else 
+        {
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_);
+        }
       }
     }
 

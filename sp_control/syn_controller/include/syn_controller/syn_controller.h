@@ -47,7 +47,9 @@ namespace syn_controller
     double pos_{};
     double cmd_{};
 
-    bool has_feedforward_{};
-    double feedforward_{};
+    bool has_friction_{};
+    double friction_{};
+    bool has_gravity_{};
+    double gravity_{};
   };
 } // namespace syn_controller

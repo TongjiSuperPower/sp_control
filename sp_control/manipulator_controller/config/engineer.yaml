@@ -6,16 +6,16 @@ manipulator:
 
     z:
       has_friction: true
-      friction: 10.0
+      friction: 25.0
       has_gravity: true
-      gravity: 75.0
+      gravity: 60.0
 # 25 -75 2100 200 2
       left_joint:
         joint: "joint1_left"
-        pid: { p: 1500.0, i: 200.0, d: 2.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 1500.0, i: 5.0, d: 5.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       right_joint:
         joint: "joint1_right"
-        pid: { p: 1500.0, i: 200.0, d: 2.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+        pid: { p: 1500.0, i: 5.0, d: 5.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     x1:
       has_friction: true
       friction: 16.0
