@@ -1,16 +1,17 @@
 <library path="lib/libchassis_controller">
-	<class 	name="chassis_controller/RollerWheel"
-			type="chassis_controller::RollerWheel"
-			base_class_type="controller_interface::ControllerBase">
-		<description>
-		THE FIRST STEP OF OUR ENGINEER.
-		</description>
-	</class>
 	<class 	name="chassis_controller/SwerveWheel"
 			type="chassis_controller::SwerveWheel"
 			base_class_type="controller_interface::ControllerBase">
 		<description>
-		The chassis_controller for sentry.
+			The chassis_controller for sentry and swerve wheel infantry.
 		</description>
 	</class>
+	<class 	name="chassis_controller/RollerWheel"
+			type="chassis_controller::RollerWheel"
+			base_class_type="controller_interface::ControllerBase">
+		<description>
+			The chassis_controller for mecanum wheel infantry and engineer.
+		</description>
+	</class>
+	
 </library>

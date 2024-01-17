@@ -35,7 +35,6 @@ namespace chassis_controller
         ctrl_rf_.update(time, period);
         ctrl_lb_.update(time, period);
         ctrl_rb_.update(time, period);
-        ROS_INFO_STREAM(vel_cmd_);
     }
 
     geometry_msgs::Twist RollerWheel::forwardKinematics()

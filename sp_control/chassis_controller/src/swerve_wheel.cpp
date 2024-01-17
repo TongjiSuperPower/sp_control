@@ -7,31 +7,21 @@ namespace chassis_controller
     {
         ChassisBase::init(robot_hw, root_nh, controller_nh);
 
-        ros::NodeHandle nh_lf_driving = ros::NodeHandle(controller_nh, "left_front_driving");
-        ros::NodeHandle nh_rf_driving = ros::NodeHandle(controller_nh, "right_front_driving");
-        ros::NodeHandle nh_lb_driving = ros::NodeHandle(controller_nh, "left_back_driving");
-        ros::NodeHandle nh_rb_driving = ros::NodeHandle(controller_nh, "right_back_driving");
+        ros::NodeHandle nh_lf_driving = ros::NodeHandle(controller_nh, "driving_left_front");
+        ros::NodeHandle nh_rf_driving = ros::NodeHandle(controller_nh, "driving_right_front");
+        ros::NodeHandle nh_lb_driving = ros::NodeHandle(controller_nh, "driving_left_back");
+        ros::NodeHandle nh_rb_driving = ros::NodeHandle(controller_nh, "driving_right_back");
         if (!ctrl_lf_driving_.init(effort_joint_interface_, nh_lf_driving) || !ctrl_rf_driving_.init(effort_joint_interface_, nh_rf_driving) ||
             !ctrl_lb_driving_.init(effort_joint_interface_, nh_lb_driving) || !ctrl_rb_driving_.init(effort_joint_interface_, nh_rb_driving))
             return false;
 
-        ros::NodeHandle nh_lf_heading = ros::NodeHandle(controller_nh, "left_front_heading");
-        ros::NodeHandle nh_rf_heading = ros::NodeHandle(controller_nh, "right_front_heading");
-        ros::NodeHandle nh_lb_heading = ros::NodeHandle(controller_nh, "left_back_heading");
-        ros::NodeHandle nh_rb_heading = ros::NodeHandle(controller_nh, "right_back_heading");
+        ros::NodeHandle nh_lf_heading = ros::NodeHandle(controller_nh, "heading_left_front");
+        ros::NodeHandle nh_rf_heading = ros::NodeHandle(controller_nh, "heading_right_front");
+        ros::NodeHandle nh_lb_heading = ros::NodeHandle(controller_nh, "heading_left_back");
+        ros::NodeHandle nh_rb_heading = ros::NodeHandle(controller_nh, "heading_right_back");
         if (!ctrl_lf_heading_.init(effort_joint_interface_, nh_lf_heading) || !ctrl_rf_heading_.init(effort_joint_interface_, nh_rf_heading) ||
             !ctrl_lb_heading_.init(effort_joint_interface_, nh_lb_heading) || !ctrl_rb_heading_.init(effort_joint_interface_, nh_rb_heading))
             return false;
-
-        joint_handles_.push_back(ctrl_lf_driving_.joint_);
-        joint_handles_.push_back(ctrl_rf_driving_.joint_);
-        joint_handles_.push_back(ctrl_lb_driving_.joint_);
-        joint_handles_.push_back(ctrl_rb_driving_.joint_);
-
-        joint_handles_.push_back(ctrl_lf_heading_.joint_);
-        joint_handles_.push_back(ctrl_rf_heading_.joint_);
-        joint_handles_.push_back(ctrl_lb_heading_.joint_);
-        joint_handles_.push_back(ctrl_rb_heading_.joint_);
 
 
         ROS_INFO("SWERVE CHASSIS : Initializing Completed");
@@ -73,10 +63,10 @@ namespace chassis_controller
 
         //解算轮角度，atan2(y, x) = atan (y/x)
         float angle[4];
-        angle[0]=atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x + half_wheel_track_* vel_cmd_.z);
-        angle[1]=atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
-        angle[2]=atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
-        angle[3]=atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x + half_wheel_track_* vel_cmd_.z);
+        angle[0] = atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x + half_wheel_track_* vel_cmd_.z);
+        angle[1] = atan2(vel_cmd_.y + half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
+        angle[2] = atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x - half_wheel_track_* vel_cmd_.z);
+        angle[3] = atan2(vel_cmd_.y - half_wheel_base_ * vel_cmd_.z, vel_cmd_.x + half_wheel_track_* vel_cmd_.z);
 
 
 

@@ -65,11 +65,11 @@ namespace chassis_controller
 
         virtual geometry_msgs::Twist forwardKinematics() = 0;
 
-        void follow(const ros::Time &time, const ros::Duration &period);
+        void follow(const ros::Time &time, const ros::Duration &period, const geometry_msgs::Twist &cmd_vel);
 
-        void nofollow();
+        void nofollow(const geometry_msgs::Twist &cmd_vel);
 
-        void gyro();
+        void gyro(const geometry_msgs::Twist &cmd_vel);
 
         void recovery();
 
@@ -83,18 +83,21 @@ namespace chassis_controller
 
         void cmdChassisCallback(const sp_common::ChassisCmd::ConstPtr &cmd);
 
+        void msgYawCallback(const std_msgs::Float64::ConstPtr &msg);
+
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
         geometry_msgs::TransformStamped odom2base_{};
-        geometry_msgs::Vector3 vel_cmd_{}; // x, y
-        control_toolbox::Pid pid_follow_;
+        geometry_msgs::Vector3 vel_cmd_{}; // x, y, z
+        control_toolbox::Pid follow_pid_;
 
         double wheel_base_{}, wheel_track_{}, wheel_radius_{}, publish_rate_{}, twist_angular_{},
             timeout_{}, effort_coeff_{}, velocity_coeff_{}, power_offset_{};
         ros::Subscriber cmd_chassis_sub_;
         ros::Subscriber cmd_vel_sub_;
+        ros::Subscriber msg_yaw_sub_;
 
         enum
         {
@@ -105,6 +108,8 @@ namespace chassis_controller
 
         int state_ = NOFOLLOW;
         bool state_changed_ = false;
+
+        double yaw_pos_{};
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;

@@ -22,11 +22,14 @@ namespace chassis_controller
         wheel_base_ = sp_common::getParam(controller_nh, "wheel_base", 0.320);
         twist_angular_ = sp_common::getParam(controller_nh, "twist_angular", M_PI / 6);
 
+        if (follow_pid_.init(ros::NodeHandle(controller_nh, "yaw_follow/pid")));
+
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
         // Setup odometry realtime publisher + odom message constant fields
-        cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_vel", 1, &ChassisBase::cmdVelCallback, this);
+        cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Twist>("cmd_chassis_vel", 1, &ChassisBase::cmdVelCallback, this);
         cmd_chassis_sub_ = root_nh.subscribe<sp_common::ChassisCmd>("chassis_cmd", 1, &ChassisBase::cmdChassisCallback, this);
+        msg_yaw_sub_ = root_nh.subscribe<std_msgs::Float64>("yaw_angle", 1, &ChassisBase::msgYawCallback, this);
 
         ramp_x_ = new sp_common::RampFilter<double>(5, 0.001);
         ramp_y_ = new sp_common::RampFilter<double>(5, 0.001);
@@ -52,13 +55,8 @@ namespace chassis_controller
 
         ramp_x_->setAcc(cmd_chassis.accel.linear.x);
         ramp_y_->setAcc(cmd_chassis.accel.linear.y);
-        ramp_x_->input(cmd_vel.linear.x);
-        ramp_y_->input(cmd_vel.linear.y);
-        vel_cmd_.x = ramp_x_->output();
-        vel_cmd_.y = ramp_y_->output();
         ramp_z_->setAcc(cmd_chassis.accel.angular.z);
-        ramp_z_->input(cmd_vel.angular.z);
-        vel_cmd_.z = ramp_z_->output();
+        
 
         
         if (state_ != cmd_chassis.mode)
@@ -73,26 +71,27 @@ namespace chassis_controller
             
             case FOLLOW:
             {
-                follow(time, period);
+                follow(time, period, cmd_vel);
                 break;
             }
             case NOFOLLOW:
             {
-                nofollow();
+                nofollow(cmd_vel);
                 break;
             }
             case GYRO:
             {
-                gyro();
+                gyro(cmd_vel);
                 break;
             }
         }        
 
         updateOdom(time, period);
         moveJoint(time, period);
+       
     }
 
-    void ChassisBase::follow(const ros::Time &time, const ros::Duration &period)
+    void ChassisBase::follow(const ros::Time &time, const ros::Duration &period, const geometry_msgs::Twist &cmd_vel)
     {
         if (state_changed_)
         {
@@ -100,26 +99,28 @@ namespace chassis_controller
             ROS_INFO_STREAM("[Chassis] Enter FOLLOW");
 
             recovery();
-            pid_follow_.reset();
+            follow_pid_.reset();
         }
+        double vel_x, vel_y, vel_z;
+        vel_x = vel_y = vel_z = 0.0;
+        vel_x = cos(yaw_pos_) * cmd_vel.linear.x + sin(yaw_pos_) * cmd_vel.linear.y;
+        vel_y = -sin(yaw_pos_) * cmd_vel.linear.x + cos(yaw_pos_) * cmd_vel.linear.y;
+        
 
-        //tfVelToBase(command_source_frame_);
-        try
-        {
-            double roll{}, pitch{}, yaw{};
-            //quatToRPY(robot_state_handle_.lookupTransform("base_link", follow_source_frame_, ros::Time(0)).transform.rotation,
-             //       roll, pitch, yaw);
-            double follow_error = angles::shortest_angular_distance(yaw, 0);
-            pid_follow_.computeCommand(-follow_error, period);
-            vel_cmd_.z = pid_follow_.getCurrentCmd();
-        }
-        catch (tf2::TransformException& ex)
-        {
-            ROS_WARN_STREAM(ex.what());
-        }
+
+        double follow_error = angles::shortest_angular_distance(yaw_pos_, 0);
+        follow_pid_.computeCommand(follow_error, period);
+        vel_z = follow_pid_.getCurrentCmd();
+        ramp_x_->input(vel_x);
+        ramp_y_->input(vel_y);
+        ramp_z_->input(vel_z);
+        vel_cmd_.x = ramp_x_->output(); 
+        vel_cmd_.y = ramp_y_->output(); 
+        vel_cmd_.z = ramp_z_->output(); 
+        vel_cmd_.z = vel_z;
     }
 
-    void ChassisBase::nofollow()
+    void ChassisBase::nofollow(const geometry_msgs::Twist &cmd_vel)
     {
         if (state_changed_)
         {
@@ -128,10 +129,18 @@ namespace chassis_controller
 
             recovery();
         }
+        ramp_x_->input(cmd_vel.linear.x);
+        ramp_y_->input(cmd_vel.linear.y);
+        ramp_z_->input(cmd_vel.angular.z);
+        vel_cmd_.x = ramp_x_->output(); 
+        vel_cmd_.y = ramp_y_->output(); 
+        vel_cmd_.z = ramp_z_->output(); 
+        ROS_INFO_STREAM(vel_cmd_);
+    
     }
 
     
-    void ChassisBase::gyro()
+    void ChassisBase::gyro(const geometry_msgs::Twist &cmd_vel)
     {
         if (state_changed_)
         {
@@ -139,9 +148,22 @@ namespace chassis_controller
             ROS_INFO("[Chassis] Enter GYRO");
 
             recovery();
-            pid_follow_.reset();
+            follow_pid_.reset();
         }
-        //tfVelToBase(command_source_frame_);
+        double vel_x, vel_y, vel_z;
+        vel_x = vel_y = vel_z = 0.0;
+        vel_x = cos(yaw_pos_) * cmd_vel.linear.x + sin(yaw_pos_) * cmd_vel.linear.y;
+        vel_y = -sin(yaw_pos_) * cmd_vel.linear.x + cos(yaw_pos_) * cmd_vel.linear.y;
+
+        vel_z = cmd_vel.angular.z;
+
+        ramp_x_->input(vel_x);
+        ramp_x_->input(vel_y);
+        ramp_z_->input(vel_z);
+        vel_cmd_.x = ramp_x_->output(); 
+        vel_cmd_.y = ramp_y_->output(); 
+        vel_cmd_.z = ramp_z_->output(); 
+
     }
 
 
@@ -177,6 +199,11 @@ namespace chassis_controller
     {
         cmd_struct_.cmd_chassis_ = *cmd;
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
+    }
+
+    void ChassisBase::msgYawCallback(const std_msgs::Float64::ConstPtr &msg)
+    {
+        yaw_pos_ = msg->data;
     }
 
     void ChassisBase::setOdomPubFields(ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)

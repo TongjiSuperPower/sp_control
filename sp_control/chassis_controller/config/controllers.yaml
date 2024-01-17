@@ -8,14 +8,31 @@ controllers:
     joint: joint1
     pid:
       {
-        p: 1,
-        i: 0,
-        d: 0.05,
-        i_clamp_max: 4,
-        i_clamp_min: 4,
+        p: 2650.0,
+        i: 158.0,
+        d: 72.0,
+        i_clamp_max: 2000.0,
+        i_clamp_min: 2000.0,
         antiwindup: true,
       }
   joint1_velocity_controller:
     type: effort_controllers/JointVelocityController
     joint: joint1
-    pid: { p: 2.0, i: 0, d: 0.05, i_max: 5.0, i_min: -5.0, antiwindup: true }
+    pid: { p: 0.8, i: 0, d: 0.0015, i_max: 5.0, i_min: -5.0, antiwindup: true }
+
+  # joint2_position_controller:
+  #   type: effort_controllers/JointPositionController
+  #   joint: test_joint
+  #   pid:
+  #     {
+  #       p: 0.7,
+  #       i: 0.05,
+  #       d: 0.06,
+  #       i_clamp_max: 4,
+  #       i_clamp_min: 4,
+  #       antiwindup: true,
+  #     }
+  # joint2_velocity_controller:
+  #   type: effort_controllers/JointVelocityController
+  #   joint: test_joint
+  #   pid: { p: 0.8, i: 0, d: 0.0015, i_max: 5.0, i_min: -5.0, antiwindup: true }
