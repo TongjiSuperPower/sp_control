@@ -1,13 +1,14 @@
 #pragma once
 
 #include <gimbal_controller/gimbal_base.h>
+#include <std_msgs/Bool.h>
 namespace gimbal_controller
 {
     
-    class GimbalPosition : public GimbalBase
+    class GimbalEngineer : public GimbalBase
     {
     public:
-        GimbalPosition() = default;
+        GimbalEngineer() = default;
         /** @brief Get and check params for covariances. Setup odometry realtime publisher + odom message constant fields.
          * init odom tf.
          *
@@ -22,6 +23,7 @@ namespace gimbal_controller
         bool init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh) override;
 
         void update(const ros::Time &time, const ros::Duration &period);
+
     protected:
         /** @brief Write current command from  geometry_msgs::Twist.
          *
@@ -29,6 +31,7 @@ namespace gimbal_controller
          */
 
         hardware_interface::PositionJointInterface *position_joint_interface_{};
+        hardware_interface::EffortJointInterface *effort_joint_interface_{};
 
     private:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
@@ -37,7 +40,19 @@ namespace gimbal_controller
 
         void initCmd(const ros::Time &time, const ros::Duration &period);
 
-        position_controllers::JointPositionController ctrl_yaw_, ctrl_pitch_;
+        void GimbalCaliCallback(const std_msgs::Bool::ConstPtr &msg);
+
+        effort_controllers::JointPositionController ctrl_yaw_;
+
+        position_controllers::JointPositionController ctrl_pitch_;
+
+        ros::Subscriber gimbal_cali_sub_;
+
+        double yaw_cmd_{};
+
+        bool init_pos_{}, init_cmd_{};
+
+        bool initiated_{};
     };
 
 }

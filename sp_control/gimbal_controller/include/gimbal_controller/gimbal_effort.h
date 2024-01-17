@@ -1,6 +1,10 @@
 #pragma once
 
 #include <gimbal_controller/gimbal_base.h>
+#include <control_toolbox/pid.h>
+#include <sensor_msgs/Imu.h>
+#include <tf/transform_listener.h>
+#include <angles/angles.h>
 namespace gimbal_controller
 {
     
@@ -21,6 +25,8 @@ namespace gimbal_controller
          */
         bool init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh) override;
 
+        void update(const ros::Time &time, const ros::Duration &period);
+
     protected:
         /** @brief Write current command from  geometry_msgs::Twist.
          *
@@ -32,7 +38,33 @@ namespace gimbal_controller
     private:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
 
+        void cmdIMUCallback(const sensor_msgs::Imu::ConstPtr &msg);
+
+        void initCmd(const ros::Time &time, const ros::Duration &period);
+
+        void pubAngle();
+
+        void getPosition(const ros::Time &time, const ros::Duration &period);
+
+        void getAngle();
+
+        double posLimit(double pos);
+
+        void pubYawAngle();
+
         effort_controllers::JointPositionController ctrl_yaw_, ctrl_pitch_;
+
+        ros::Publisher angle_pub_;
+
+        ros::Subscriber imu_sub_;
+        
+        control_toolbox::Pid yaw_pid_, pitch_pid_;
+
+        geometry_msgs::Quaternion quat_msg_{};
+
+        double yaw_cmd_{}, pitch_cmd_{};
+
+
     };
 
 }

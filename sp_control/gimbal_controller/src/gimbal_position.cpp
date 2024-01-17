@@ -34,8 +34,8 @@ namespace gimbal_controller
 
     void GimbalPosition::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        ctrl_yaw_.joint_.setCommand(pos_cmd_.z);
-        ctrl_pitch_.joint_.setCommand(pos_cmd_.y);
+        // ctrl_yaw_.joint_.setCommand(pos_cmd_.z);
+        // ctrl_pitch_.joint_.setCommand(pos_cmd_.y);
     }
     PLUGINLIB_EXPORT_CLASS(gimbal_controller::GimbalPosition, controller_interface::ControllerBase);
 } // namespace gimbal_controller

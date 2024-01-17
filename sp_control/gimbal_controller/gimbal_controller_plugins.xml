@@ -13,5 +13,12 @@
 			The Gimbal Controller for Hero/Infentry/Sentry
 		</description>
 	</class>
+	<class 	name="gimbal_controller/GimbalEngineer"
+			type="gimbal_controller::GimbalEngineer"
+			base_class_type="controller_interface::ControllerBase">
+		<description>
+			The Gimbal Controller for Engineer
+		</description>
+	</class>
 </library>
 

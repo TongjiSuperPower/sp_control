@@ -7,8 +7,8 @@
 #include <effort_controllers/joint_position_controller.h>
 
 #include <geometry_msgs/TwistStamped.h>
-#include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <geometry_msgs/Vector3.h>
 
 #include <tf2_msgs/TFMessage.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -21,7 +21,7 @@ namespace gimbal_controller
 {
     struct Command
     {
-        geometry_msgs::Vector3 cmd_pos_;
+        geometry_msgs::Vector3 cmd_gimbal_vel_;
         ros::Time stamp_;
     };
 
@@ -53,24 +53,28 @@ namespace gimbal_controller
          * @param time The current time.
          * @param period The time passed since the last call to update.
          */
-        void update(const ros::Time &time, const ros::Duration &period) override;
+        virtual void update(const ros::Time &time, const ros::Duration &period) = 0;
         void starting(const ros::Time &time) {}
         void stopping(const ros::Time &time) {}
 
     protected:
-        virtual void moveJoint(const ros::Time &time, const ros::Duration &period) = 0;
 
-        void cmdPosCallback(const geometry_msgs::Vector3::ConstPtr &msg);
+        void cmdVelCallback(const geometry_msgs::Vector3::ConstPtr &msg);
 
         double publish_rate_{}, timeout_{};
 
         std::vector<hardware_interface::JointHandle> joint_handles_{};
 
         ros::Time last_publish_time_;
-        geometry_msgs::Vector3 pos_cmd_{}; // x, y
+        geometry_msgs::Vector3 cmd_vel_{};
 
         ros::Subscriber cmd_gimbal_sub_;
-        ros::Subscriber cmd_pos_sub_;
+        ros::Subscriber cmd_vel_sub_;
+        ros::Publisher cmd_vel_pub_;
+
+        double yaw_pos_{}, pitch_pos_{};
+
+    
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;

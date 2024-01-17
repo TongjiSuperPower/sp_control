@@ -138,8 +138,10 @@ include_directories(
 ## Declare a C++ library
 
 set(SRC_LIST 
- src/gimbal_base.cpp
- src/gimbal_position.cpp
+  src/gimbal_base.cpp
+#  src/gimbal_position.cpp
+#  src/gimbal_effort.cpp
+  src/gimbal_engineer.cpp
  )
 add_library(gimbal_controller ${SRC_LIST}) 
 target_link_libraries(gimbal_controller ${catkin_LIBRARIES})

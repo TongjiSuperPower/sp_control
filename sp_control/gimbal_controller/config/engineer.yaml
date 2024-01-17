@@ -1,14 +1,14 @@
 gimbal:
   gimbal_controller:
-    type: "gimbal_controller/GimbalPosition"
+    type: "gimbal_controller/GimbalEngineer"
     publish_rate: 100
     timeout: 0.1
 
     yaw:
-      joint: "fpv_yaw_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      joint: "gimbal_yaw_joint"
+      pid: { p: 10.0, i: 0, d: 0.5, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
     pitch:
-      joint: "fpv_pitch_joint"
-      pid: { p: 0.8, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      joint: "gimbal_pitch_joint"
+      pid: { p: 1.0, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
     
    

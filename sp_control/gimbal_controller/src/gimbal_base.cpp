@@ -13,25 +13,15 @@ namespace gimbal_controller
             return false;
         }
         
-        cmd_pos_sub_ = root_nh.subscribe<geometry_msgs::Vector3>("cmd_pos", 1, &GimbalBase::cmdPosCallback, this);
+        cmd_vel_sub_ = root_nh.subscribe<geometry_msgs::Vector3>("cmd_gimbal_vel", 1, &GimbalBase::cmdVelCallback, this);
         return true;
 
     }
 
-    void GimbalBase::update(const ros::Time &time, const ros::Duration &period)
+
+    void GimbalBase::cmdVelCallback(const geometry_msgs::Vector3::ConstPtr &msg)
     {
-        geometry_msgs::Vector3 cmd_pos = cmd_rt_buffer_.readFromRT()->cmd_pos_;
-
-        pos_cmd_.x = cmd_pos.x;
-        pos_cmd_.y = cmd_pos.y;
-        pos_cmd_.z = cmd_pos.z;
-
-        moveJoint(time, period);
-    }
-
-    void GimbalBase::cmdPosCallback(const geometry_msgs::Vector3::ConstPtr &msg)
-    {
-        cmd_struct_.cmd_pos_ = *msg;
+        cmd_struct_.cmd_gimbal_vel_ = *msg;
         cmd_struct_.stamp_ = ros::Time::now();
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
     }

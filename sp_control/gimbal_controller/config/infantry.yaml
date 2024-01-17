@@ -1,0 +1,14 @@
+gimbal:
+  gimbal_controller:
+    type: "gimbal_controller/GimbalEffort"
+    publish_rate: 100
+    timeout: 0.1
+
+    yaw:
+      joint: "yaw_joint"
+      pid: { p: 15.0, i: 0.0, d: 0.8, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    pitch:
+      joint: "pitch_joint"
+      pid: { p: 16.0, i: 2.8, d: 0.7, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    
+   
