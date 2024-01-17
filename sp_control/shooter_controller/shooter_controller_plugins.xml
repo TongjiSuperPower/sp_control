@@ -1,0 +1,10 @@
+<library path="lib/libshooter_controller">
+	<class  name="shooter_controller/ShooterController" 
+		    type="shooter_controller::ShooterController"
+		    base_class_type="controller_interface::ControllerBase">
+		<description>
+			The Shooter Controller for Standard.
+		</description>
+	</class>
+</library>
+

@@ -1,0 +1,6 @@
+<launch>
+	<rosparam file="$(find shooter_controller)/config/infantry.yaml" command="load"/>
+	
+	<node name="shooter_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="shooter/shooter_controller"/>
+
+</launch>

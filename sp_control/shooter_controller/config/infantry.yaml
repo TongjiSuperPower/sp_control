@@ -1,0 +1,18 @@
+shooter:
+  shooter_controller:
+    type: "shooter_controller/ShooterController"
+    publish_rate: 100
+    timeout: 0.1
+    fric_speed: 700
+    push_per_rotation: 7
+    continuous_speed: 0.016
+
+    friction_left:
+      joint: "fric_left_joint"
+      pid: { p: 0.009, i: 0, d: 0.00, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    friction_right:
+      joint: "fric_right_joint"
+      pid: { p: 0.009, i: 0, d: 0.00, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    trigger:
+      joint: "trigger_joint"
+      pid: { p: 0.8, i: 0.0, d: 0.035, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
