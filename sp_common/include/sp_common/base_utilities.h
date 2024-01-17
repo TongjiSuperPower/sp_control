@@ -1,3 +1,5 @@
+#ifndef _BASE_UTILITIES_H
+#define _BASE_UTILITIES_H
 #include <ros/ros.h>
 
 namespace sp_common
@@ -10,3 +12,4 @@ namespace sp_common
         return param_val;
     }
 }
+#endif

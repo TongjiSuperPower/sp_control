@@ -26,17 +26,17 @@ namespace sp_operator
 
             ros::Publisher chassis_cmd_pub_;
 
-            ros::Publisher cmd_vel_pub_;
+            ros::Publisher cmd_chassis_vel_pub_;
 
-            ros::Publisher cmd_pos_pub_;
+            ros::Publisher cmd_gimbal_vel_pub_;
 
             ros::Subscriber dbus_sub_;
 
             sp_common::DbusData dbus_data_, last_dbus_data_;
 
-            geometry_msgs::Twist cmd_vel_{}; 
+            geometry_msgs::Twist cmd_chassis_vel_{}; 
 
-            geometry_msgs::Vector3 cmd_pos_{};
+            geometry_msgs::Vector3 cmd_gimbal_vel_{};
 
             sp_common::ChassisCmd chassis_cmd_;
 

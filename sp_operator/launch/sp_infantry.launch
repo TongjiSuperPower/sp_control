@@ -1,0 +1,6 @@
+<launch>
+    <rosparam file="$(find sp_operator)/config/infantry_config.yaml" command="load"/>
+	<node name="sp_infantry" pkg="sp_operator" type="infantry" respawn="false" output="screen" />
+    <!-- <include file="$(find chassis_controller)/launch/infantry.launch" > 
+    <include file="$(find gimbal_controller)/launch/gimbal_controller_load.launch" >  -->
+</launch>

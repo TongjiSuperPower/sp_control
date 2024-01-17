@@ -27,7 +27,7 @@ template <typename T>
 void RampFilter<T>::setAcc(T acc)
 {
 	if (acc == 0)
-		acc_ = 5.0;
+		acc_ = 12.0;
 	else
 		acc_ = acc;
 }

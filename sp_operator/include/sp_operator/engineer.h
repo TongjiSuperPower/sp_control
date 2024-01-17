@@ -1,6 +1,7 @@
-#include "sp_engineer/operator.h"
+#include "sp_operator/operator.h"
 #include "sp_common/ManipulatorCmd.h"
-#include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Bool.h>
 #include <control_msgs/JointJog.h>
 #include <std_msgs/Float64MultiArray.h>
 
@@ -33,9 +34,11 @@ namespace sp_operator
 
             ros::Publisher joint_cmd_pub_;
 
+            ros::Publisher gimbal_calibration_pub_;
+
             sp_common::ManipulatorCmd manipulator_cmd_{};
 
-            geometry_msgs::TwistStamped twist_cmd_{};
+            geometry_msgs::Twist twist_cmd_{};
 
             std_msgs::Float64MultiArray joint_vel_cmd_{};
 
@@ -46,7 +49,6 @@ namespace sp_operator
             double yaw_coeff_, pitch_mk_coeff_, pitch_rc_coeff_;
             double yaw_left_limit_, yaw_right_limit_, pitch_low_limit_, pitch_high_limit_;
             
- 
 
             enum
             {
@@ -55,9 +57,20 @@ namespace sp_operator
                 JOINT
             };
 
+            enum
+            {  
+                HOME,
+                GROUND,
+                PLACE,
+                LEFT90
+
+            };
+
             ros::Subscriber velocity_sub_;
 
             geometry_msgs::Twist velocity_cmd_{};
+
+            std_msgs::Bool gimbal_cali_cmd_{};
 
             
     };

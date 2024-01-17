@@ -1,4 +1,4 @@
-#include "sp_engineer/infantry.h"
+#include "sp_operator/infantry.h"
 
 
 namespace sp_operator
@@ -11,13 +11,19 @@ namespace sp_operator
 
         controller_nh = ros::NodeHandle("infantry");
 
-        x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
-        y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.0);
-        z_mk_coeff_ = sp_common::getParam(controller_nh, "chassis/z_mk_coeff", 70);
-        z_rc_coeff_ = sp_common::getParam(controller_nh, "chassis/z_rc_coeff", 1.5);
-        x_accel_set_ = sp_common::getParam(controller_nh, "chassis/x_accel_set", 5);
-        y_accel_set_ = sp_common::getParam(controller_nh, "chassis/y_accel_set", 5);
-        z_accel_set_ = sp_common::getParam(controller_nh, "chassis/z_accel_set", 1.8);
+        x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.5);
+        y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.5);
+        gyro_vel_ = sp_common::getParam(controller_nh, "chassis/gyro_vel", 4);
+        x_accel_set_ = sp_common::getParam(controller_nh, "chassis/x_accel_set", 7);
+        y_accel_set_ = sp_common::getParam(controller_nh, "chassis/y_accel_set", 7);
+        z_accel_set_ = sp_common::getParam(controller_nh, "chassis/z_accel_set", 8);
+
+        yaw_mk_coeff_ = sp_common::getParam(controller_nh, "gimbal/yaw_mk_coeff", 0.2);
+        yaw_rc_coeff_ = sp_common::getParam(controller_nh, "gimbal/yaw_rc_coeff", 0.005);
+        pitch_mk_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_mk_coeff", 0.2);
+        pitch_rc_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_rc_coeff", 0.005);
+
+        shooter_cmd_pub_ = nh.advertise<sp_common::ShooterCmd>("/cmd_shooter", 10);
 
         return true;
     }
@@ -25,8 +31,15 @@ namespace sp_operator
     void Infantry::run()
     {
         chassis_set();
-        cmd_vel_pub_.publish(cmd_vel_); 
+        cmd_chassis_vel_pub_.publish(cmd_chassis_vel_); 
         chassis_cmd_pub_.publish(chassis_cmd_);
+        
+        gimbal_set();
+        cmd_gimbal_vel_pub_.publish(cmd_gimbal_vel_); 
+
+        shooter_set();
+        shooter_cmd_pub_.publish(shooter_cmd_);
+
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
     }
@@ -36,37 +49,36 @@ namespace sp_operator
     {
         if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
-            cmd_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
-            cmd_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
-            cmd_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
+            cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
+            cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;       
         }
         else if (dbus_data_.s_r == 3) //Remote control mode
         {
             if (dbus_data_.key_w)
-                cmd_vel_.linear.x = x_coeff_;
+                cmd_chassis_vel_.linear.x = x_coeff_;
             else if (dbus_data_.key_s)
-                cmd_vel_.linear.x = -x_coeff_;
+                cmd_chassis_vel_.linear.x = -x_coeff_;
             else 
-                cmd_vel_.linear.x = 0.0;
+                cmd_chassis_vel_.linear.x = 0.0;
             if (dbus_data_.key_a)
-                cmd_vel_.linear.y = -y_coeff_;
+                cmd_chassis_vel_.linear.y = y_coeff_;
             else if (dbus_data_.key_d)
-                cmd_vel_.linear.y = y_coeff_;
+                cmd_chassis_vel_.linear.y = -y_coeff_;
             else 
-                cmd_vel_.linear.y = 0.0;
-            cmd_vel_.angular.z = z_mk_coeff_ * dbus_data_.m_x;
+                cmd_chassis_vel_.linear.y = 0.0;
+            cmd_chassis_vel_.angular.z = gyro_vel_;
         }
         else if (dbus_data_.s_r == 2) //Stop mode
         {
-            cmd_vel_.linear.x = 0.0;
-            cmd_vel_.linear.y = 0.0;
-            cmd_vel_.angular.z = 0.0;
+            cmd_chassis_vel_.linear.x = 0.0;
+            cmd_chassis_vel_.linear.y = 0.0;
+            cmd_chassis_vel_.angular.z = 0.0;
         }
 
-        if (dbus_data_.key_shift && !last_dbus_data_.key_shift) // Gyro
+        if (dbus_data_.key_shift) // Gyro
             chassis_cmd_.mode = GYRO;
         else 
-            chassis_cmd_.mode = NOFOLLOW;
+            chassis_cmd_.mode = FOLLOW;
 
         chassis_cmd_.accel.linear.x = x_accel_set_;
         chassis_cmd_.accel.linear.y = y_accel_set_;
@@ -74,17 +86,30 @@ namespace sp_operator
         chassis_cmd_.stamp = ros::Time::now();
     }
 
+    void Infantry::gimbal_set()
+    {
+        if (dbus_data_.s_r == 1) //Remote control mode
+        {
+            cmd_gimbal_vel_.y = -pitch_rc_coeff_ * dbus_data_.ch_l_y;
+            cmd_gimbal_vel_.z = -yaw_rc_coeff_ * dbus_data_.ch_l_x;
+        }
+        else if (dbus_data_.s_r == 3) //Mouse & Keyboard mode
+        {
+            cmd_gimbal_vel_.y = pitch_mk_coeff_ * dbus_data_.m_y;
+            cmd_gimbal_vel_.z = -yaw_mk_coeff_ * dbus_data_.m_x;
+        }
+    }
+
+
     void Infantry::shooter_set()
     {
         if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
-            if (dbus_data_.s_l == 1 && last_dbus_data_.s_l != 1)
+            if (dbus_data_.s_l == 1 && last_dbus_data_.s_l != 1)  // Open/Close fric wheels
             {
-                if(shooter_cmd_.shoot_process == SHOOT_STOP)
+                if(shooter_cmd_.fric_mode == FRIC_OFF)
                 {
-                    shooter_cmd_.fric_mode = FRIC_ON;
-                    shooter_cmd_.shoot_process = SHOOT_READY;	
-                                
+                    shooter_cmd_.fric_mode = FRIC_ON;                           
                 }
                 else
                 {
@@ -92,23 +117,50 @@ namespace sp_operator
                     shooter_cmd_.shoot_process = SHOOT_STOP;
                 }
             }
+
+            if (dbus_data_.s_l == 3 && shooter_cmd_.fric_mode == FRIC_ON)
+                shooter_cmd_.shoot_process = SHOOT_READY;
+
+            if (dbus_data_.s_l == 2 && last_dbus_data_.s_l != 2 &&  shooter_cmd_.fric_mode == FRIC_ON) // Begin/End shoot behavior
+            {
+                if (shooter_cmd_.shoot_process == SHOOT_READY)
+                {
+                    shooter_cmd_.shoot_process = SHOOT_SINGLE;                             
+                }
+            }
+            else if (dbus_data_.s_l == 2 && shooter_cmd_.fric_mode == FRIC_ON) // Begin/End shoot behavior
+            {
+                if (shooter_cmd_.shoot_process == SHOOT_SINGLE)
+                {
+                    sleep(1.5);
+                    if (dbus_data_.s_l == 2)
+                        shooter_cmd_.shoot_process = SHOOT_CONTINUOUS;                             
+                }
+            }
             
         }
         else if (dbus_data_.s_r == 3) //Remote control mode
         {
-            if ((dbus_data_.mouse_l && !last_dbus_data_.mouse_l) && frics.fric_state == FRIC_OFF)
+            if (dbus_data_.p_l && !last_dbus_data_.p_l)
             {
-                shooter_cmd_.fric_mode = FRIC_ON;
-                shooter_cmd_.shoot_process = SHOOT_READY;
+                if(shooter_cmd_.fric_mode == FRIC_OFF)
+                {
+                    shooter_cmd_.fric_mode = FRIC_ON;                             
+                }
+                else
+                {
+                    shooter_cmd_.fric_mode = FRIC_OFF;
+                    shooter_cmd_.shoot_process = SHOOT_STOP;
+                }
                 
             }
 
         }
         else if (dbus_data_.s_r == 2) //Stop mode
         {
-            cmd_vel_.linear.x = 0.0;
-            cmd_vel_.linear.y = 0.0;
-            cmd_vel_.angular.z = 0.0;
+            shooter_cmd_.fric_mode = FRIC_OFF;
+            shooter_cmd_.shoot_process = SHOOT_STOP;
+
         }
     }
 

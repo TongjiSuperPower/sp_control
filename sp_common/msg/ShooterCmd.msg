@@ -3,9 +3,8 @@ uint8 FRIC_ON = 1
 
 uint8 SHOOT_STOP = 0
 uint8 SHOOT_READY = 1
-uint8 SHOOT_SEMI = 2
-uint8 SHOOT_AUTO = 3
-uint8 SHOOT_DOWN = 4
+uint8 SHOOT_SINGLE = 2
+uint8 SHOOT_CONTINUOUS = 3
 
 uint8 SEMI_MODE = 0
 uint8 AUTO_MODE = 1

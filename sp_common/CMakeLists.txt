@@ -26,6 +26,7 @@ add_message_files(
    ChassisCmd.msg
    ManipulatorCmd.msg
    JointMsgs.msg
+   ShooterCmd.msg
 
 #   Message2.msg
 )
