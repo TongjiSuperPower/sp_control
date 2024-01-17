@@ -2,6 +2,7 @@
 
 namespace sp_hw
 {
+
     // TODO : (Lithesh) Maybe we should use ErrorCode and create log file
     bool SpRobotHW::init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh)
     {
@@ -47,13 +48,12 @@ namespace sp_hw
             return false;
         }
 
-      
     
-       
 
         actuator_state_pub_.reset(
             new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
-        
+
+     
 
         return true;
     }
@@ -147,4 +147,6 @@ namespace sp_hw
              last_publish_time_ = time;
         }
     }
+
+    
 } // namespace sp_hw

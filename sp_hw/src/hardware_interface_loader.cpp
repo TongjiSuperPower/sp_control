@@ -24,7 +24,7 @@ namespace sp_hw
             ROS_ERROR_STREAM(error_message);
             throw std::runtime_error(error_message);
         }
-
+    
         // Initialise the hardware interface:
         // 1. retrieve configuration from rosparam
         // 2. initialise the hardware and interface it with ros_control
@@ -56,6 +56,7 @@ namespace sp_hw
 
     void SpRobotHWLoader::update()
     {
+        
         const auto current_time = clock::now();
         // Compute desired duration rounded to clock decimation
         const duration<double> desired_duration(1.0 / loop_hz_);
@@ -89,6 +90,7 @@ namespace sp_hw
         const auto sleep_till = current_time + duration_cast<clock::duration>(desired_duration);
         std::this_thread::sleep_until(sleep_till);
     }
+
 
     SpRobotHWLoader::~SpRobotHWLoader()
     {

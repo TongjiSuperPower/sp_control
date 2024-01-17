@@ -7,13 +7,14 @@ thread_priority: 30
 actuators:
   motor1:
     bus: can0
-    id: 0x205
-    type: rm_3508
+    id: 0x202
+    type: rm_2006
 
   motor2:
     bus: can0
-    id: 0x206
-    type: rm_3508
+    id: 0x204
+    type: rm_2006
+
 
 gpios:
   joint1_gpio:

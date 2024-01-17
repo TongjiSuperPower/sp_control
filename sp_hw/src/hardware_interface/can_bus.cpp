@@ -1,6 +1,8 @@
 #include "sp_hw/hardware_interface/can_bus.hpp"
 #include "tf/tf.h"
 
+
+
 namespace sp_hw
 {
     /*!
@@ -33,6 +35,12 @@ namespace sp_hw
      /*!
      * @brief   init the frames[0x200,0x1FF] that will be sent to RM motor, and enable the DM motor.
      */
+    bool exit_singal = false;
+
+    void exit_handler(int signum)
+    {
+        exit_singal = true;
+    }
 
     CanBus::CanBus(const std::string &bus_name, CanDataPtr data_ptr, int thread_priority = 0)
         : bus_name_(bus_name), data_ptr_(data_ptr)
@@ -85,6 +93,11 @@ namespace sp_hw
         }
         velocity_pub_ = nh.advertise<geometry_msgs::Twist>("cmd_velocity", 10);
         quat_pub_ = nh.advertise<geometry_msgs::Quaternion>("cmd_quat", 10);
+
+        signal(SIGINT, exit_handler);
+        
+        
+       
 ;    }
     /**
      * @brief Sending actuators and gpios commands
@@ -92,6 +105,11 @@ namespace sp_hw
      */
     void CanBus::write()
     {
+        if (exit_singal)
+        {
+            exitFn();
+        }
+
         // Fill all the frames to be sent with all 0
         bool has_write_frame0 = false, has_write_frame1 = false, has_write_frame2 = false;
         std::fill(std::begin(rm_can_frame0_.data), std::end(rm_can_frame0_.data), 0);
@@ -237,7 +255,6 @@ namespace sp_hw
      */
     void CanBus::read(ros::Time time)
     {
-
         std::lock_guard<std::mutex> guard(mutex_);
         for (const CanFrameStamp &can_frame_stamp : read_buffer_)
         {
@@ -395,25 +412,9 @@ namespace sp_hw
         }
         read_buffer_.clear();
     }
-    /**
-     * @brief Callback function called after receive can frame.
-     * @param time
-     */
-    void CanBus::frameCallback(const can_frame &frame)
-    {
-        std::lock_guard<std::mutex> guard(mutex_);
-        CanFrameStamp can_frame_stamp{.frame = frame, .stamp = ros::Time::now()};
-        read_buffer_.push_back(can_frame_stamp);
-    }
-    /**
-     * @brief Destructor.
-     * @todo seems useless
-     * @param time
-     */
 
-    CanBus::~CanBus()
+    void CanBus::exitFn()
     {
-        ROS_INFO_STREAM("ENTER ~");
         for (auto &id2act_data : *data_ptr_.id2act_data_)
         {
 
@@ -429,6 +430,8 @@ namespace sp_hw
                     frame0.data[i] = 0x00;
                     frame1.data[i] = 0x00;
                 }
+                socket_can_.write(&frame0);
+                socket_can_.write(&frame1);
             }
             else if (id2act_data.second.type.find("DM") != std::string::npos)
             {
@@ -464,6 +467,28 @@ namespace sp_hw
                 socket_can_.write(&frame);
             }
         }
+        ROS_INFO_STREAM("Canbus Exit");
+        exit(0);
+    }
+    /**
+     * @brief Callback function called after receive can frame.
+     * @param time
+     */
+    void CanBus::frameCallback(const can_frame &frame)
+    {
+        std::lock_guard<std::mutex> guard(mutex_);
+        CanFrameStamp can_frame_stamp{.frame = frame, .stamp = ros::Time::now()};
+        read_buffer_.push_back(can_frame_stamp);
+    }
+    /**
+     * @brief Destructor.
+     * @todo seems useless
+     * @param time
+     */
+
+    CanBus::~CanBus()
+    {
+        
     }
 
 } // namespace sp_hw

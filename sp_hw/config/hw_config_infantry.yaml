@@ -1,56 +1,59 @@
 bus:
   - can0
+
 loop_frequency: 800
 cycle_time_error_threshold: 1
 thread_priority: 30
 
 actuators:
-  joint1_left_motor:
+  right_front_wheel_motor:
     bus: can0
-    id: 0x201
+    id: 0x211
     type: rm_3508
 
-  joint1_right_motor:
+  right_back_wheel_motor:
     bus: can0
-    id: 0x202
-    type: rm_3508
-  
-  joint2_left_motor:
-    bus: can0
-    id: 0x203
+    id: 0x212
     type: rm_3508
 
-  joint2_right_motor:
+  left_back_wheel_motor:
     bus: can0
-    id: 0x204
+    id: 0x213
     type: rm_3508
 
-  joint3_left_motor:
+  left_front_wheel_motor:
+    bus: can0
+    id: 0x214
+    type: rm_3508
+
+  yaw_joint_motor:
     bus: can0
     id: 0x205
     type: rm_3508
 
-  joint3_right_motor:
+  pitch_joint_motor:
     bus: can0
     id: 0x206
     type: rm_3508
 
-  joint4_motor:
+  trigger_joint_motor:
     bus: can0
     id: 0x207
+    type: rm_2006
+
+  fric_left_joint_motor:
+    bus: can0
+    id: 0x201
     type: rm_3508
 
-  joint5_motor:
+  fric_right_joint_motor:
     bus: can0
-    id: 0x005
-    type: DM_J4310
+    id: 0x202
+    type: rm_3508
   
-  joint6_motor:
+gpios:
+  cover:
     bus: can0
-    id: 0x006
-    type: DM_J4310
+    id: 0x101
+    type: out
 
-  joint7_motor:
-    bus: can0
-    id: 0x007
-    type: DM_J4310

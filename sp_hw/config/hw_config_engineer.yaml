@@ -6,6 +6,63 @@ cycle_time_error_threshold: 1
 thread_priority: 30
 
 actuators:
+  right_front_wheel_motor:
+    bus: can3
+    id: 0x201
+    type: rm_3508
+
+  right_back_wheel_motor:
+    bus: can3
+    id: 0x202
+    type: rm_3508
+
+  left_back_wheel_motor:
+    bus: can3
+    id: 0x203
+    type: rm_3508
+
+  left_front_wheel_motor:
+    bus: can3
+    id: 0x204
+    type: rm_3508
+
+  z_joint_left_motor:
+    bus: can0
+    id: 0x201
+    type: rm_3508
+  z_joint_right_motor:
+    bus: can0
+    id: 0x202
+    type: rm_3508
+  x_joint_left_motor:
+    bus: can0
+    id: 0x203
+    type: rm_3508
+  x_joint_right_motor:
+    bus: can0
+    id: 0x204
+    type: rm_3508
+  y_joint_motor:
+    bus: can0
+    id: 0x205
+    type: rm_3508
+  yaw_joint_motor:
+    bus: can0
+    id: 0x004
+    type: DM_J4310
+  roll1_joint_motor:
+    bus: can0
+    id: 0x005
+    type: DM_J4310
+  pitch_joint_motor:
+    bus: can0
+    id: 0x206
+    type: rm_2006
+  roll2_joint_motor:
+    bus: can0
+    id: 0x207
+    type: rm_2006
+
   # right_front_wheel_motor:
   #   bus: can3
   #   id: 0x201
@@ -26,20 +83,20 @@ actuators:
   #   id: 0x204
   #   type: rm_3508
 
-  mast_joint_motor:
-    bus: can0
-    id: 0x207
-    type: rm_2006
+  # mast_joint_motor:
+  #   bus: can0
+  #   id: 0x207
+  #   type: rm_2006
 
-  fpv_yaw_joint_motor:
-    bus: can0
-    id: 0x101
-    type: MG_995
+  # fpv_yaw_joint_motor:
+  #   bus: can0
+  #   id: 0x101
+  #   type: MG_995
 
-  fpv_pitch_joint_motor:
-    bus: can0
-    id: 0x102
-    type: MG_995
+  # fpv_pitch_joint_motor:
+  #   bus: can0
+  #   id: 0x102
+  #   type: MG_995
 
   # joint1_motor:
   #   bus: can5
@@ -77,22 +134,8 @@ actuators:
   #   type: rm_2006
 
 gpios:
-  left_gripper:
+  gpio1:
     bus: can0
     id: 0x101
     type: out
 
-  # right_gripper:
-  #   bus: can5
-  #   id: 0x102
-  #   type: out
-    
-  # sucker:
-  #   bus: can5
-  #   id: 0x103
-  #   type: out
-
-  # sustaining_rob:
-  #   bus: can5
-  #   id: 0x104
-  #   type: out

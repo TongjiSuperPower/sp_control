@@ -12,6 +12,9 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
 namespace sp_hw
 {
     struct CanFrameStamp
@@ -33,6 +36,7 @@ namespace sp_hw
 
     private:
         void frameCallback(const can_frame &frame);
+        void exitFn();
         can::SocketCAN socket_can_;
         CanDataPtr data_ptr_;
         // a simple FIFO to store can_data

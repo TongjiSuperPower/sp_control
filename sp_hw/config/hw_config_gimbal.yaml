@@ -8,7 +8,7 @@ thread_priority: 30
 actuators:
   mast_joint_motor:
     bus: can4
-    id: 0x207
+    id: 0x20Z
     type: rm_2006
 
   fpv_yaw_joint_motor:
