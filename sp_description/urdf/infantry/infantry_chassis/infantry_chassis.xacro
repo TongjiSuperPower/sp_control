@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="infantry_chassis"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find sp_description)/urdf/common/mecanum_wheel.xacro"/>
+
+  <xacro:property name="wheel_front" value="0.166755"/>
+  <xacro:property name="wheel_back" value="-0.166755"/>
+  <xacro:property name="wheel_left" value="0.18050"/>
+  <xacro:property name="wheel_right" value="-0.18050"/>
+  <xacro:property name="wheel_offset_z" value="-0.01497"/>
+  <xacro:property name="wheel_joint_damping" value="1.0"/>
+  <xacro:property name="wheel_joint_friction" value="1.0"/>
+
+  <xacro:macro name="infantry_chassis" params="roller_type">
+<!--base link-->
+   <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00255039819839739 -0.00137057852168827 0.0280836657520201"
+        rpy="0 0 0" />
+      <mass
+        value="7.82780889164036" />
+      <inertia
+        ixx="0.0106263497363082"
+        ixy="-3.90003246533537E-08"
+        ixz="8.34775837497374E-06"
+        iyy="0.0179610608417177"
+        iyz="1.19123474356135E-06"
+        izz="0.0234672539806657" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/infantry/infantry_chassis/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/infantry/infantry_chassis/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+    <xacro:mecanum_wheel prefix="left_front" connected_to="base_link"
+                         wheel_x_offset="${wheel_front}" wheel_y_offset="${wheel_left}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="right_front" connected_to="base_link"
+                         wheel_x_offset="${wheel_front}" wheel_y_offset="${wheel_right}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="-1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="left_back" connected_to="base_link"
+                         wheel_x_offset="${wheel_back}" wheel_y_offset="${wheel_left}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="-1" roller_type="${roller_type}"/>
+    <xacro:mecanum_wheel prefix="right_back" connected_to="base_link"
+                         wheel_x_offset="${wheel_back}" wheel_y_offset="${wheel_right}"
+                         wheel_z_offset="${wheel_offset_z}"
+                         reflect="1" roller_type="${roller_type}"/>
+    <xacro:wheel_transmission prefix="left_front" mechanical_reduction="1"/>
+    <xacro:wheel_transmission prefix="right_front" mechanical_reduction="-1"/>
+    <xacro:wheel_transmission prefix="left_back" mechanical_reduction="1"/>
+    <xacro:wheel_transmission prefix="right_back" mechanical_reduction="-1"/>
+  </xacro:macro>
+</robot>

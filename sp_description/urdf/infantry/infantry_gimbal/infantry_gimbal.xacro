@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="infantry_gimbal">
+  <xacro:macro name="infantry_gimbal">
+    <link
+      name="gimbal_link">
+      <inertial>
+        <origin
+          xyz="1.3811603471095E-05 -3.57533174163427E-05 0.072268949798196"
+          rpy="0 0 0" />
+        <mass
+          value="0.714390465129365" />
+        <inertia
+          ixx="0.000620903137578661"
+          ixy="-1.78387898206983E-05"
+          ixz="6.32234556180892E-08"
+          iyy="0.000730958412534641"
+          iyz="-4.80645021336632E-07"
+          izz="0.00130520638805881" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/gimbal_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/gimbal_link.STL" />
+        </geometry>
+      </collision>
+    </link> 
+    <link
+      name="yaw_link">
+      <inertial>
+        <origin
+          xyz="-0.0425885016028659 -0.013439929134402 0.119574007060367"
+          rpy="0 0 0" />
+        <mass
+          value="1.5387708291933" />
+        <inertia
+          ixx="0.00206237596232115"
+          ixy="5.82488905550264E-06"
+          ixz="-3.01684020553294E-05"
+          iyy="0.00211694407039234"
+          iyz="-1.00025804284983E-07"
+          izz="0.00233811099776013" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/yaw_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/yaw_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="yaw_joint"
+      type="revolute">
+      <origin
+        xyz="-0.0030597 -0.0001431 0.09849"
+        rpy="0 0 0.046736" />
+      <parent
+        link="gimbal_link" />
+      <child
+        link="yaw_link" />
+      <axis
+        xyz="0 0 -1" />
+      <limit
+        lower="-1e9"
+        upper="1e9"
+        effort="20"
+        velocity="5" />
+    </joint>
+    <link
+      name="trigger_link">
+      <inertial>
+        <origin
+          xyz="7.32138827341799E-09 1.31238912237652E-08 -0.0139037028086156"
+          rpy="0 0 0" />
+        <mass
+          value="0.0316676180502216" />
+        <inertia
+          ixx="1.13944269768454E-05"
+          ixy="6.03528631320475E-14"
+          ixz="1.39934156156474E-13"
+          iyy="1.13944242997108E-05"
+          iyz="-4.53750034712174E-13"
+          izz="1.88536265369476E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/trigger_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.113725490196078 0.113725490196078 0.113725490196078 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/trigger_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="trigger_joint"
+      type="revolute">
+      <origin
+        xyz="-0.11144 0 0.155"
+        rpy="0 0 0" />
+      <parent
+        link="yaw_link" />
+      <child
+        link="trigger_link" />
+      <axis
+        xyz="0 0 1" />
+      <limit
+        lower="-1e9"
+        upper="1e9"
+        effort="1"
+        velocity="100" />
+    </joint>
+    <link
+      name="pitch_link">
+      <inertial>
+        <origin
+          xyz="0.070229730069518 -0.00227403715196589 0.0197221374572423"
+          rpy="0 0 0" />
+        <mass
+          value="1.05832771010138" />
+        <inertia
+          ixx="0.000451072518922566"
+          ixy="-1.49930289773914E-06"
+          ixz="-1.541870713884E-05"
+          iyy="0.000816649060824859"
+          iyz="1.93477030023223E-07"
+          izz="0.00100051035066232" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/pitch_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/pitch_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="pitch_joint"
+      type="revolute">
+      <origin
+        xyz="0.002563 0 0.2"
+        rpy="0 0.0023148 0" />
+      <parent
+        link="yaw_link" />
+      <child
+        link="pitch_link" />
+      <axis
+        xyz="0 -1 0" />
+      <limit
+        lower="-0.4"
+        upper="0.4"
+        effort="5"
+        velocity="6.28" />
+    </joint>
+    <link
+      name="fric_left_link">
+      <inertial>
+        <origin
+          xyz="6.93889390390723E-18 5.55111512312578E-17 0.000959356926441224"
+          rpy="0 0 0" />
+        <mass
+          value="0.0341344094909023" />
+        <inertia
+          ixx="1.19600050099662E-05"
+          ixy="3.22326958884645E-08"
+          ixz="-2.60561892954204E-21"
+          iyy="1.18133290973548E-05"
+          iyz="2.45445167259797E-20"
+          izz="2.12027099995667E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/fric_left_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/fric_left_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="fric_left_joint"
+      type="revolute">
+      <origin
+        xyz="0.0715 0.0365 0.0001"
+        rpy="0 0 0" />
+      <parent
+        link="pitch_link" />
+      <child
+        link="fric_left_link" />
+      <axis
+        xyz="0 0 -1" />
+      <limit
+        lower="-1e9"
+        upper="1e9"
+        effort="0.5"
+        velocity="600" />
+    </joint>
+    <link
+      name="fric_right_link">
+      <inertial>
+        <origin
+          xyz="3.81639164714898E-17 4.16333634234434E-17 0.000959356926441113"
+          rpy="0 0 0" />
+        <mass
+          value="0.0341344094909023" />
+        <inertia
+          ixx="1.18133290973548E-05"
+          ixy="-3.22326958884518E-08"
+          ixz="1.72516788554059E-20"
+          iyy="1.19600050099662E-05"
+          iyz="1.47072712911928E-21"
+          izz="2.12027099995667E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/fric_right_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="1 1 1 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/infantry/infantry_gimbal/fric_right_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint
+      name="fric_right_joint"
+      type="revolute">
+      <origin
+        xyz="0.0715 -0.0365 0.0001"
+        rpy="0 0 0" />
+      <parent
+        link="pitch_link" />
+      <child
+        link="fric_right_link" />
+      <axis
+        xyz="0 0 -1" />
+      <limit
+        lower="-1e9"
+        upper="1e9"
+        effort="0.5"
+        velocity="600" />
+    </joint>
+  </xacro:macro>
+</robot>

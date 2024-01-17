@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer_manipulator">
+    <xacro:macro name="gimbal_transmission" params="yaw_reduction pitch_reduction 
+    trigger_reduction fric_reduction">
+        <transmission name="trans_yaw_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="yaw_joint_motor">
+                <mechanicalReduction>${yaw_reduction}</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="yaw_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+
+        <transmission name="trans_pitch_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="pitch_joint_motor">
+                <mechanicalReduction>${pitch_reduction}</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="pitch_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+
+        <transmission name="trans_trigger_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="trigger_joint_motor">
+                <mechanicalReduction>${trigger_reduction}</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="trigger_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+
+        <transmission name="trans_fric_left_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="fric_left_joint_motor">
+                <mechanicalReduction>${fric_reduction}</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="fric_left_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+
+        <transmission name="trans_fric_right_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="fric_right_joint_motor">
+                <mechanicalReduction>${fric_reduction}</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="fric_right_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+        </transmission>
+    </xacro:macro>
+
+
+
+	
+   
+</robot>
