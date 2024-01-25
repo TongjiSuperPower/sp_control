@@ -8,31 +8,31 @@
 
   <xacro:include filename="$(find sp_description)/urdf/common/mecanum_wheel.xacro"/>
 
-  <xacro:property name="wheel_front" value="0.19185"/>
-  <xacro:property name="wheel_back" value="-0.19152"/>
-  <xacro:property name="wheel_left" value="0.221"/>
-  <xacro:property name="wheel_right" value="-0.221"/>
+  <xacro:property name="wheel_front" value="0.19463"/>
+  <xacro:property name="wheel_back" value="-0.19463"/>
+  <xacro:property name="wheel_left" value="0.227 "/>
+  <xacro:property name="wheel_right" value="-0.227 "/>
   <xacro:property name="wheel_offset_z" value="0.077"/>
   <xacro:property name="wheel_joint_damping" value="1.0"/>
   <xacro:property name="wheel_joint_friction" value="1.0"/>
-  
+
   <xacro:macro name="engineer_chassis" params="roller_type">
 
-   <link
+  <link
     name="base_link">
     <inertial>
       <origin
-        xyz="0.047614 -0.013852 0.13893"
+        xyz="0.0234504860983126 0.00205520120472003 0.106854712514192"
         rpy="0 0 0" />
       <mass
-        value="12.232" />
+        value="10.2607853738169" />
       <inertia
-        ixx="0.039383"
-        ixy="2.7131E-05"
-        ixz="0.00010315"
-        iyy="0.048017"
-        iyz="0.00051335"
-        izz="0.075914" />
+        ixx="0.0251253323940971"
+        ixy="0.00026008044804615"
+        ixz="2.48842772985471E-05"
+        iyy="0.0390351483919132"
+        iyz="-6.80934351257943E-05"
+        izz="0.0558214144240648" />
     </inertial>
     <visual>
       <origin
@@ -45,34 +45,20 @@
       <material
         name="">
         <color
-          rgba="0.75294 0.75294 0.75294 1" />
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
     <collision>
-      <origin xyz="0 0 0.090" rpy="0 0 0" />
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
       <geometry>
-        <box size="0.6 0.6 0.120"/>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_chassis/base_link.STL" />
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.75294 0.75294 0.75294 1" />
-      </material>
     </collision>
-    <collision>
-      <origin xyz="0 0 0.2" rpy="0 0 0" />
-      <geometry>
-        <box size="0.2 0.55 0.14"/>
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.75294 0.75294 0.75294 1" />
-      </material>
-    </collision>
-    
-
   </link>
+
     <xacro:mecanum_wheel prefix="left_front" connected_to="base_link"
                          wheel_x_offset="${wheel_front}" wheel_y_offset="${wheel_left}"
                          wheel_z_offset="${wheel_offset_z}"
@@ -89,10 +75,10 @@
                          wheel_x_offset="${wheel_back}" wheel_y_offset="${wheel_right}"
                          wheel_z_offset="${wheel_offset_z}"
                          reflect="1" roller_type="${roller_type}"/>
-    <!-- <xacro:wheel_transmission prefix="left_front" mechanical_reduction="19.2032"/>
+    <xacro:wheel_transmission prefix="left_front" mechanical_reduction="19.2032"/>
     <xacro:wheel_transmission prefix="right_front" mechanical_reduction="-19.2032"/>
     <xacro:wheel_transmission prefix="left_back" mechanical_reduction="19.2032"/>
-    <xacro:wheel_transmission prefix="right_back" mechanical_reduction="-19.2032"/> -->
+    <xacro:wheel_transmission prefix="right_back" mechanical_reduction="-19.2032"/>
 
   </xacro:macro>
 

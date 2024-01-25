@@ -60,7 +60,7 @@ manipulator:
       pid: { p: 6.0, i: 0.0, d: 0.005, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
 
     vel_limit:
-      {z: 0.1, x1: 0.5, x2: 0.5, y: 0.3, pitch: 1.57, yaw: 1.57, roll: 1.57}
+      {z: 0.00005, x1: 0.0002, x2: 0.0002, y: 0.0001, pitch: 0.0005, yaw: 0.0005, roll: 0.0005}
     upper_pos_limit:
       {z: 0.0, x1: 0.45, x2: 0.45, y: 0.15, pitch: 1.57, yaw: 1.57, roll: 1.57}
     lower_pos_limit:

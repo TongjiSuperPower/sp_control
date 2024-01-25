@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="sentry_gimbal"   xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="sentry_gimbal">
+    <link
+      name="yaw_link">
+      <inertial>
+        <origin
+          xyz="-0.0297189846737023 0.0306277119771997 0.15517250716792"
+          rpy="0 0 0" />
+        <mass
+          value="4.47556835051149" />
+        <inertia
+          ixx="0.0114045976693997"
+          ixy="-1.77303394355185E-05"
+          ixz="0.000210898162131933"
+          iyy="0.0100198248629364"
+          iyz="-1.55714247876524E-06"
+          izz="0.0140882406694329" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/yaw_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/yaw_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint
+      name="yaw_joint" type="revolute">
+      <origin xyz="0 0 0.081" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="yaw_link" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1e9" upper="1e9" effort="10" velocity="70" />
+    </joint>
+
+    <link
+      name="pitch_link">
+      <inertial>
+        <origin
+          xyz="0.0636983717298516 -0.0536021170514228 0.0278206209890751"
+          rpy="0 0 0" />
+        <mass
+          value="0.792372058279168" />
+        <inertia
+          ixx="0.000664535673801091"
+          ixy="4.62476804335301E-07"
+          ixz="1.36028186071488E-05"
+          iyy="0.00149259274595659"
+          iyz="-3.38492271350782E-07"
+          izz="0.00115988290025129" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/pitch_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/pitch_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="pitch_joint" type="revolute">
+      <origin xyz="0.01 0.054 0.2766" rpy="0 0 0" />
+      <parent link="yaw_link" />
+      <child link="pitch_link" />
+      <axis xyz="0 -1 0" />
+      <limit lower="-1" upper="1" effort="1"  velocity="1" />
+    </joint>
+
+    <link
+      name="left_trigger_link">
+      <inertial>
+        <origin
+          xyz="0.000131868259327483 -2.92919655804566E-05 -0.0122980342088675"
+          rpy="0 0 0" />
+        <mass
+          value="0.0483543155713259" />
+        <inertia
+          ixx="1.49278589230398E-05"
+          ixy="-2.4786328749254E-08"
+          ixz="-5.35155234169596E-08"
+          iyy="1.48219091708572E-05"
+          iyz="1.18884825047915E-08"
+          izz="2.53514166910452E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/left_trigger_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.113725490196078 0.113725490196078 0.113725490196078 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/left_trigger_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link
+      name="right_trigger_link">
+      <inertial>
+        <origin
+          xyz="0.000135070327744749 9.86910548915476E-07 -0.0122980327420787"
+          rpy="0 0 0" />
+        <mass
+          value="0.0483543104594858" />
+        <inertia
+          ixx="1.49333647576202E-05"
+          ixy="8.41450253409526E-10"
+          ixz="-5.48188051098506E-08"
+          iyy="1.48164032567288E-05"
+          iyz="-4.06373355968659E-10"
+          izz="2.53514162493935E-05" />
+      </inertial>
+      <visual>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/right_trigger_link.STL" />
+        </geometry>
+        <material
+          name="">
+          <color
+            rgba="0.113725490196078 0.113725490196078 0.113725490196078 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin
+          xyz="0 0 0"
+          rpy="0 0 0" />
+        <geometry>
+          <mesh
+            filename="package://sp_description/meshes/sentry/sentry_gimbal/right_trigger_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="left_trigger_joint" type="revolute">
+      <origin xyz="-0.1085 0.054456 0.18175" rpy="0 0 0" />
+      <parent link="yaw_link" />
+      <child link="left_trigger_link" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1e9" upper="1e9" effort="10" velocity="70" />
+    </joint>
+
+    <joint name="right_trigger_joint" type="revolute">
+      <origin xyz="-0.1085 -0.054456 0.18175" rpy="0 0 0" />
+      <parent link="yaw_link" />
+      <child link="right_trigger_link" />
+      <axis xyz="0 0 -1" />
+      <limit lower="-1e9" upper="1e9" effort="10" velocity="70" />
+    </joint>
+
+    <!-- <link name="left_upper_fric_link"/>
+    <link name="left_lower_fric_link"/>
+    <link name="right_upper_fric_link"/>
+    <link name="right_lower_fric_link"/> -->
+
+    <gazebo reference="yaw_link">
+      <material>Gazebo/LightGrey</material>
+      <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+
+    <gazebo reference="pitch_link">
+      <material>Gazebo/Grey</material>
+      <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+  
+  </xacro:macro>
+</robot>

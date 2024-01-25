@@ -5,6 +5,7 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <effort_controllers/joint_position_controller.h>
 #include <syn_controller/syn_controller.h>
+#include <differential_controller/differential_controller.h>
 
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
@@ -108,14 +109,21 @@ namespace manipulator_controller
 
         void readyProcess();
 
+        bool simulate_{};
+
         double publish_rate_{}, timeout_{};
 
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
 
-        syn_controller::SynController ctrl_z_, ctrl_x1_, ctrl_x2_;
+        syn_controller::SynController ctrl_z_, ctrl_x_;
+
         effort_controllers::JointPositionController ctrl_y_;
 
-        effort_controllers::JointPositionController ctrl_pitch_, ctrl_yaw_, ctrl_roll_;
+        effort_controllers::JointPositionController ctrl_yaw_, ctrl_roll1_;
+
+        effort_controllers::JointPositionController ctrl_pitch_, ctrl_roll2_;
+
+        differential_controller::DifferentialController ctrl_diff_;
 
         ros::Time last_publish_time_;
 
@@ -128,7 +136,7 @@ namespace manipulator_controller
         Eigen::Quaterniond quat_cmd_{};
 
         Eigen::Matrix<double, 6, 1> twist_cmd_{};
-        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{};
+        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{};
         sp_common::ManipulatorCmd manipulator_cmd_{};
 
         Eigen::Vector4d cartesian_cmd_{};
@@ -151,8 +159,8 @@ namespace manipulator_controller
 
         enum
         {
-            AUTO,
             MAUL,
+            AUTO,
             JOINT
         };
 
@@ -164,6 +172,14 @@ namespace manipulator_controller
             DONE
         };
 
+        enum
+        {  
+            HOME,
+            GROUND,
+            PLACE,
+            LEFT90
+        };
+
         int mode_ = MAUL;
         bool mode_changed_ = false;
 
@@ -172,6 +188,10 @@ namespace manipulator_controller
 
         bool y_has_friction_{};
         double y_friction_{};
+
+        bool last_final_push_{}, final_push_{};
+
+        int orientation_ = HOME;
 
 
 

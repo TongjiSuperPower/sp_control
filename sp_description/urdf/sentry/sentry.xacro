@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="sentry" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find sp_description)/urdf/sentry/sentry_chassis/sentry_chassis.xacro" />
+  <xacro:include filename="$(find sp_description)/urdf/sentry/sentry_gimbal/sentry_gimbal.xacro" />
+  <xacro:include filename="$(find sp_description)/urdf/sentry/gimbal_transmission.xacro" />
+  <xacro:include filename="$(find sp_description)/urdf/sentry/sentry_sensor/sentry_imu.xacro" />
+  <!-- <xacro:include filename="$(find sentry_kinematics_sim)/xacro/sentry_camera.xacro" />
+  
+  <xacro:include filename="$(find sentry_kinematics_sim)/xacro/livox_sim.xacro"/> -->
+
+  <xacro:sentry_chassis/>
+  <xacro:sentry_gimbal/>
+  <xacro:gimbal_transmission 
+      yaw_reduction="1"
+      pitch_reduction="1"
+      trigger_reduction="1"
+      fric_reduction="1"/>
+  
+  <xacro:sentry_IMU/>
+
+
+
+  <!--controller -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+    <plugin name="chassis_controller" filename="libchassis_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin>
+  </gazebo>
+</robot>
+    
+
+
+
+
+
+
+
+ 
+
+

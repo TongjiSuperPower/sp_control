@@ -1,5 +1,6 @@
 #include "sp_operator/operator.h"
 #include "sp_common/ShooterCmd.h"
+#include <std_msgs/Bool.h>
 
 namespace sp_operator
 {
@@ -26,9 +27,17 @@ namespace sp_operator
             double x_accel_set_, y_accel_set_, z_accel_set_;
             double yaw_mk_coeff_, yaw_rc_coeff_, pitch_mk_coeff_, pitch_rc_coeff_;
 
+            bool truned_;
+            ros::Time trun_time_;
+
             ros::Publisher shooter_cmd_pub_;
+            ros::Publisher cover_cmd_pub_;
 
             sp_common::ShooterCmd shooter_cmd_;
+
+            std_msgs::Bool cmd_cover_;
+
+         
 
             enum
             {
@@ -43,6 +52,13 @@ namespace sp_operator
                 SHOOT_SINGLE,
                 SHOOT_CONTINUOUS,
             };
+
+            enum
+            {
+                CONTINUOUS_MODE,
+                SINGLE_MODE
+            };
+
 
             
     };

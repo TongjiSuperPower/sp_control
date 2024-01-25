@@ -1,5 +1,5 @@
 <launch>
-	<rosparam file="$(find manipulator_controller)/config/engineer.yaml" command="load"/>
+	<rosparam file="$(find manipulator_controller)/config/engineer2.yaml" command="load"/>
 	
 	<node name="manipulator_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="manipulator/manipulator_controller"/>
 

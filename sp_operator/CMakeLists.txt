@@ -125,29 +125,29 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/sp_engineer.cpp
 # )
-# set(SRC_LIST1
-#       src/main.cpp
-#       src/operator.cpp
-#       src/engineer.cpp
-#       # src/infantry.cpp
-
-# )
-# add_executable(engineer ${SRC_LIST1})
-
-# target_link_libraries(engineer
-#     ${catkin_LIBRARIES}
-# )
-set(SRC_LIST2
+set(SRC_LIST1
       src/main.cpp
       src/operator.cpp
-      src/infantry.cpp
+      src/engineer.cpp
+      # src/infantry.cpp
 
 )
-add_executable(infantry ${SRC_LIST2})
+add_executable(engineer ${SRC_LIST1})
 
-target_link_libraries(infantry
+target_link_libraries(engineer
     ${catkin_LIBRARIES}
 )
+# set(SRC_LIST2
+#       src/main.cpp
+#       src/operator.cpp
+#       src/infantry.cpp
+
+# )
+# add_executable(infantry ${SRC_LIST2})
+
+# target_link_libraries(infantry
+#     ${catkin_LIBRARIES}
+# )
 # Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure

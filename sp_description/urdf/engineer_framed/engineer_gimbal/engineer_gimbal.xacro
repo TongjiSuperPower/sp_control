@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="engineer_gimbal"
+  xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="engineer_gimbal">
+  <link
+    name="gimbal_base_link">
+    <inertial>
+      <origin
+        xyz="-1.12908710631077E-07 -1.08246744900953E-15 -0.0162671624357159"
+        rpy="0 0 0" />
+      <mass
+        value="0.610999637175978" />
+      <inertia
+        ixx="0.000317677830134983"
+        ixy="1.42301535138722E-19"
+        ixz="-1.42342563297105E-18"
+        iyy="0.000318051535203486"
+        iyz="-5.89800247156514E-12"
+        izz="0.000631486398185133" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <link
+    name="gimbal_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.000275883000418781 0.00303718453903173 0.00695911721591985"
+        rpy="0 0 0" />
+      <mass
+        value="0.634023347843846" />
+      <inertia
+        ixx="0.000478255945676634"
+        ixy="8.70740965479088E-08"
+        ixz="8.65227912991133E-07"
+        iyy="0.000178287979063384"
+        iyz="-4.09833206018991E-12"
+        izz="0.000589333988900666" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.862745098039216 0.549019607843137 0.545098039215686 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gimbal_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="gimbal_base_link" />
+    <child
+      link="gimbal_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="5"
+      velocity="5" />
+  </joint>
+  <link
+    name="gimbal_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.000193954701694282 0.000657582149237501 -0.00741378343524052"
+        rpy="0 0 0" />
+      <mass
+        value="0.471013497472643" />
+      <inertia
+        ixx="0.000146568832180018"
+        ixy="3.65059511257578E-07"
+        ixz="-1.04785242313007E-06"
+        iyy="0.000333119638319556"
+        iyz="8.40472225285841E-08"
+        izz="0.00045427848586417" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.890196078431372 0.890196078431372 0.913725490196078 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_gimbal/gimbal_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gimbal_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="-0.01 -0.0017 0.037"
+      rpy="0 0 0" />
+    <parent
+      link="gimbal_yaw_link" />
+    <child
+      link="gimbal_pitch_link" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-0.35"
+      upper="0.35"
+      effort="5"
+      velocity="5" />
+  </joint>
+
+  <transmission name="trans_gimbal_yaw_joint" >
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="gimbal_yaw_joint_motor">
+                <mechanicalReduction>-4.833</mechanicalReduction>
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </actuator>
+			<joint name="gimbal_yaw_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+  </transmission>
+   <transmission name="trans_gimbal_pitch_joint" >
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="gimbal_pitch_joint_motor">
+            <mechanicalReduction>1</mechanicalReduction>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          </actuator>
+			<joint name="gimbal_pitch_joint">
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			</joint>
+  </transmission>
+
+  </xacro:macro>
+</robot>

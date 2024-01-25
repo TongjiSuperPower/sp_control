@@ -24,6 +24,9 @@ namespace sp_operator
         pitch_rc_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_rc_coeff", 0.005);
 
         shooter_cmd_pub_ = nh.advertise<sp_common::ShooterCmd>("/cmd_shooter", 10);
+        cover_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_cover", 1);
+
+        trun_time_ = ros::Time::now();
 
         return true;
     }
@@ -36,6 +39,7 @@ namespace sp_operator
         
         gimbal_set();
         cmd_gimbal_vel_pub_.publish(cmd_gimbal_vel_); 
+        cover_cmd_pub_.publish(cmd_cover_);
 
         shooter_set();
         shooter_cmd_pub_.publish(shooter_cmd_);
@@ -97,6 +101,30 @@ namespace sp_operator
         {
             cmd_gimbal_vel_.y = pitch_mk_coeff_ * dbus_data_.m_y;
             cmd_gimbal_vel_.z = -yaw_mk_coeff_ * dbus_data_.m_x;
+
+            cmd_cover_.data = dbus_data_.key_ctrl;
+
+            ros::Duration trun_duration = ros::Time::now() - trun_time_;
+            if (trun_duration.toSec() > 1)
+                truned_ = false;
+            if (dbus_data_.key_x) // Trun back
+            {
+                cmd_gimbal_vel_.z = -M_PI;
+                truned_ = true;
+                trun_time_ = ros::Time::now();
+            }
+            else if (dbus_data_.key_q)
+            {
+                cmd_gimbal_vel_.z = M_PI / 2;
+                truned_ = true;
+                trun_time_ = ros::Time::now();
+            }
+             else if (dbus_data_.key_e)
+            {
+                cmd_gimbal_vel_.z = -M_PI / 2;
+                truned_ = true;
+                trun_time_ = ros::Time::now();
+            }
         }
     }
 
@@ -125,7 +153,8 @@ namespace sp_operator
             {
                 if (shooter_cmd_.shoot_process == SHOOT_READY)
                 {
-                    shooter_cmd_.shoot_process = SHOOT_SINGLE;                             
+                    shooter_cmd_.shoot_process = SHOOT_SINGLE; 
+                    shooter_cmd_.shoot_mode = SINGLE_MODE;                            
                 }
             }
             else if (dbus_data_.s_l == 2 && shooter_cmd_.fric_mode == FRIC_ON) // Begin/End shoot behavior
@@ -134,25 +163,42 @@ namespace sp_operator
                 {
                     sleep(1.5);
                     if (dbus_data_.s_l == 2)
-                        shooter_cmd_.shoot_process = SHOOT_CONTINUOUS;                             
+                    {
+                        shooter_cmd_.shoot_process = SHOOT_CONTINUOUS;    
+                        shooter_cmd_.shoot_mode = CONTINUOUS_MODE;  
+                    }                         
                 }
             }
             
         }
         else if (dbus_data_.s_r == 3) //Remote control mode
         {
-            if (dbus_data_.p_l && !last_dbus_data_.p_l)
+            if (dbus_data_.p_l)
             {
+                if (dbus_data_.key_z && !last_dbus_data_.key_z)
+                {
+                    if (shooter_cmd_.shoot_mode == CONTINUOUS_MODE)
+                        shooter_cmd_.shoot_mode = SINGLE_MODE; 
+                    else if (shooter_cmd_.shoot_mode == SINGLE_MODE)
+                        shooter_cmd_.shoot_mode = CONTINUOUS_MODE;
+
+                }
+
                 if(shooter_cmd_.fric_mode == FRIC_OFF)
                 {
-                    shooter_cmd_.fric_mode = FRIC_ON;                             
+                    shooter_cmd_.fric_mode = FRIC_ON;
+                    shooter_cmd_.shoot_process = SHOOT_READY;                          
                 }
-                else
-                {
-                    shooter_cmd_.fric_mode = FRIC_OFF;
-                    shooter_cmd_.shoot_process = SHOOT_STOP;
-                }
-                
+
+                if (shooter_cmd_.shoot_mode = CONTINUOUS_MODE)
+                    shooter_cmd_.shoot_process = SHOOT_CONTINUOUS;
+                else if (shooter_cmd_.shoot_mode = SINGLE_MODE)
+                    shooter_cmd_.shoot_process = SHOOT_SINGLE;           
+   
+            }
+            else
+            {
+                shooter_cmd_.shoot_process = SHOOT_READY;  
             }
 
         }

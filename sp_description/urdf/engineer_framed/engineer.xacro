@@ -1,20 +1,30 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="engineer_framed">
 
-	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_manipulator_framed/engineer_manipulator_framed.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_manipulator/engineer_manipulator.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_chassis/engineer_chassis.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_gimbal/engineer_gimbal.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/manipulator_transmission.xacro"/> 
 	
-    <xacro:engineer_manipulator_framed/>
 
     <xacro:engineer_chassis roller_type="simple"/>
+	<xacro:engineer_manipulator/>
+	<!-- <xacro:engineer_gimbal/> -->
 
-   	<joint name="joint_arm2body" type="fixed">
-		<axis xyz="0 0 1"/>
-		<origin xyz="-0.006 -0 0.12028" rpy="0 0 -1.57"/>
-		<parent link="base_link"/>
-		<child link="arm_base_link"/>
-	</joint>
+   	<joint name="z_base_joint" type="fixed">
+		<origin xyz="-5.6436E-05 0 0.13569" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="z_base_link" />
+		<axis xyz="0 0 0" />
+  	</joint>
+
+	<!-- <joint name="gimbal_base_joint" type="fixed">
+		<origin
+		xyz="0.018 0.0825 0.029" rpy="0 0 0" />
+		<parent link="y_link" />
+		<child link="gimbal_base_link" />
+		<axis xyz="0 0 0" />
+  	</joint> -->
 
 
 	<!--在机器人模型的urdf/xacro文件中添加gazebo_ros_control插件-->
@@ -25,6 +35,9 @@
 		<plugin name="chassis_controller" filename="libchassis_controller.so">
 			<robotNamespace>/</robotNamespace>
 		</plugin>
+		<!-- <plugin name="gimbal_controller" filename="libgimbal_controller.so">
+			<robotNamespace>/</robotNamespace>
+		</plugin> -->
 	</gazebo>
 
 </robot>

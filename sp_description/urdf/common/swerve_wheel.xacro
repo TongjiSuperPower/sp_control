@@ -1,0 +1,143 @@
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="swerve_wheel">
+
+    <xacro:macro name="swerve_wheel"
+                 params="heading_name driving_name wheel_x_offset wheel_y_offset wheel_z_offset">
+      <link
+        name="${heading_name}_link">
+        <inertial>
+          <origin
+            xyz="0.000327088899147732 0.00203413083857223 -0.0346740035294639"
+            rpy="0 0 0" />
+          <mass
+            value="0.70269597713817" />
+          <inertia
+            ixx="0.000344054568245934"
+            ixy="1.44356624989042E-05"
+            ixz="4.30992500251002E-07"
+            iyy="0.000434102546909307"
+            iyz="3.89337584122031E-07"
+            izz="0.000452885587921925" />
+          </inertial>
+        <visual>
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+          <geometry>
+            <mesh
+            filename="package://sp_description/meshes/common/swerve_wheel/Heading_Link.STL" />
+          </geometry>
+          <material
+            name="">
+            <color
+            rgba="0.203921568627451 0.203921568627451 0.203921568627451 1" />
+          </material>
+        </visual>
+        <collision>
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+          <geometry>
+            <mesh
+            filename="package://sp_description/meshes/common/swerve_wheel/Heading_Link.STL" />
+          </geometry>
+        </collision>
+      </link>
+
+      <joint
+        name="${heading_name}_joint"
+        type="revolute">
+          <origin
+            xyz="${wheel_x_offset}  ${wheel_y_offset} ${wheel_z_offset}"
+            rpy="0 0 0" />
+          <parent
+            link="base_link" />
+          <child
+            link="${heading_name}_link" />
+          <axis
+            xyz="0 0 1" />
+          <limit 
+            lower="-1e9" upper="1e9" effort="10" velocity="70" />
+      </joint>
+
+      <link
+        name="${driving_name}_link">
+        <inertial>
+          <origin
+            xyz="-0.00614745666963601 -0.0410307142735137 -7.63278329429795E-17"
+            rpy="0 0 0" />
+          <mass
+            value="0.2729799494341" />
+          <inertia
+            ixx="0.000310662933362954"
+            ixy="4.06306257516411E-05"
+            ixz="1.84256237395161E-19"
+            iyy="0.000575761324526438"
+            iyz="5.90527327364396E-19"
+            izz="0.000304575420247696" />
+        </inertial>
+        <visual>
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+          <geometry>
+            <mesh
+            filename="package://sp_description/meshes/common/swerve_wheel/Driving_Link.STL" />
+          </geometry>
+          <material
+            name="">
+            <color
+            rgba="0.498039215686275 0.498039215686275 0.498039215686275 1" />
+          </material>
+        </visual>
+        <collision>
+          <origin
+            xyz="0 0 0"
+            rpy="0 0 0" />
+          <geometry>
+            <mesh
+            filename="package://sp_description/meshes/common/swerve_wheel/Driving_Link.STL" />
+          </geometry>
+        </collision>
+      </link>
+      <joint
+        name="${driving_name}_joint"
+        type="revolute">
+          <origin
+            xyz="0.0062232 0.041536 -0.0993"
+            rpy="0 0 0" />
+          <parent
+            link="${heading_name}_link" />
+          <child
+            link="${driving_name}_link" />
+          <axis
+            xyz="-0.14817 -0.98896 0"/>
+          <limit lower="-1e9" upper="1e9" effort="10" velocity="70" />
+      </joint>
+
+    </xacro:macro>
+
+    <xacro:macro name="swerve_transmission" params="heading_name driving_name heading_reduction driving_reduction">
+        <transmission name="${heading_name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${heading_name}_motor">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>${heading_reduction}</mechanicalReduction>
+            </actuator>
+            <joint name="${heading_name}_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+        <transmission name="${driving_name}_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <actuator name="${driving_name}_motor">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>${driving_reduction}</mechanicalReduction>
+            </actuator>
+            <joint name="${driving_name}_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+        </transmission>
+    </xacro:macro>
+
+</robot>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="sentry_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<link
+    name="Camera_Link">
+    <inertial>
+      <origin
+        xyz="-0.0274889033376683 0.000150005325815505 -0.00772423316738879"
+        rpy="0 0 0" />
+      <mass
+        value="0.0367240036538109" />
+      <inertia
+        ixx="5.21531598669864E-06"
+        ixy="4.31203587568392E-09"
+        ixz="3.05359921710556E-07"
+        iyy="3.05455837376716E-06"
+        iyz="-1.0060479635813E-08"
+        izz="3.95383253794392E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sentry_kinematics_sim/meshes/Camera_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.294117647058824 0.294117647058824 0.294117647058824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sentry_kinematics_sim/meshes/Camera_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+
+
+</robot>

@@ -3,7 +3,8 @@
     <param name="robot_description"
            command="$(find xacro)/xacro $(find sp_description)/urdf/test/rmrobot.xacro"/>
     <rosparam file="$(find sp_hw)/config/actuator_coefficient.yaml" command="load" ns="sp_hw"/>
-    <rosparam file="$(find sp_hw)/config/hw_config_gpio.yaml" command="load" ns="sp_hw"/>
+    <rosparam file="$(find sp_hw)/config/hw_config_gpio.yaml" command="load" ns="sp_hw"/>'
+    <param name="simulate" value="false" />
     <node name="sp_hw" pkg="sp_hw" type="sp_hw" respawn="false" clear_params="true" output="screen"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 </launch>

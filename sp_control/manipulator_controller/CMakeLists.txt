@@ -26,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 
   sp_common
   syn_controller
+  differential_controller
 )
 
 ## System dependencies are found with CMake's conventions
