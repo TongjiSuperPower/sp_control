@@ -159,7 +159,7 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="0"
+      lower="-0.246"
       upper="0.246"
       effort="40"
       velocity="5" />
@@ -549,7 +549,7 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="0"
+      lower="-0.246"
       upper="0.246"
       effort="40"
       velocity="5" />

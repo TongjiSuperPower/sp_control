@@ -1,0 +1,6 @@
+<launch>
+	<rosparam file="$(find rotate_ore_controller)/config/ore.yaml" command="load"/>
+	
+	<node name="rotate_ore_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="rotate_ore_controller"/>
+
+</launch>

@@ -4,6 +4,8 @@
 #include <std_msgs/Bool.h>
 #include <control_msgs/JointJog.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Float64.h>。
+#include <std_msgs/Int8.h>。
 
 namespace sp_operator
 {
@@ -29,6 +31,7 @@ namespace sp_operator
             ros::NodeHandle controller_nh;
 
             ros::Publisher manipulator_cmd_pub_;
+            ros::Publisher ore_cmd_pub_;
 
             ros::Publisher twist_cmd_pub_;
 
@@ -41,6 +44,7 @@ namespace sp_operator
             geometry_msgs::Twist twist_cmd_{};
 
             std_msgs::Float64MultiArray joint_vel_cmd_{};
+            std_msgs::Int8 ore_cmd_;
 
             //control_msgs::JointJog joint_cmd_{};
 
@@ -67,6 +71,7 @@ namespace sp_operator
             };
 
             ros::Subscriber velocity_sub_;
+
 
             geometry_msgs::Twist velocity_cmd_{};
 

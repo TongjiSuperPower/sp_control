@@ -1,6 +1,6 @@
 syn:
-  syn_controller:
-    type: "syn_controller/SynController"
+  syn_vel_controller:
+    type: "syn_vel_controller/SynVelController"
     publish_rate: 100
     timeout: 0.1
 

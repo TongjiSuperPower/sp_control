@@ -1,0 +1,10 @@
+<library path="lib/librotate_ore_controller">
+	<class  name="rotate_ore_controller/RotateOreController" 
+		    type="rotate_ore_controller::RotateOreController"
+		    base_class_type="controller_interface::ControllerBase">
+		<description>
+			The rotate ore Controller for Engineer.
+		</description>
+	</class>
+</library>
+

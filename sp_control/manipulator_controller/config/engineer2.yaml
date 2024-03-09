@@ -17,24 +17,24 @@ manipulator:
         joint: "z_joint_right"
         pid: { p: 1200.0, i: 10.0, d: 50.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     x:
-      has_friction: false
-      friction: 16.0
+      has_friction: true
+      friction: 25.0
       has_gravity: false
       gravity: 0.0
 
       left_joint:
         joint: "x_joint_left"
-        pid: { p: 400.0, i: 30.0, d: 65.0, i_max: 200.0, i_min: -200.0, antiwindup: true, publish_state: true }
+        pid: { p: 450.0, i: 0.0, d: 50.0, i_max: 200.0, i_min: -200.0, antiwindup: true, publish_state: true }
       right_joint:
         joint: "x_joint_right"
-        pid: { p: 400.0, i: 30.0, d: 65.0, i_max: 200.0, i_min: -200.0, antiwindup: true, publish_state: true }
+        pid: { p: 450.0, i: 0.0, d: 50.0, i_max: 200.0, i_min: -200.0, antiwindup: true, publish_state: true }
 
     y:
-      has_friction: false
-      friction: 7.0
+      has_friction: true
+      friction: 3.0
 
       joint: "y_joint"
-      pid: { p: 300.0, i: 4.0, d: 10.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      pid: { p: 400.0, i: 1.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     
     yaw:
       joint: "yaw_joint"
@@ -42,7 +42,7 @@ manipulator:
 
     roll1:
       joint: "roll1_joint"
-      pid: { p: 6.0, i: 0.0, d: 0.005, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
+      pid: { p: 13.0, i: 0.01, d: 0.06, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
 
     pitch:
       joint: "pitch_joint"
@@ -70,9 +70,9 @@ manipulator:
     vel_limit:
       {z: 0.0002, x: 0.0002, y: 0.0001, yaw: 0.00314, roll1: 0.00314, pitch: 0.00314, roll2: 0.00314}
     upper_pos_limit:
-      {z: 0.755, x: 0.265, y: 0.25, yaw: 3.14, roll1: 6.28, pitch: 1.57, roll2: 6.28}
+      {z: 0.800, x: 0.265, y: 0.25, yaw: 3.14, roll1: 6.28, pitch: 1.57, roll2: 6.28}
     lower_pos_limit:
-      {z: 0.0, x: 0.0, y: -0.25, yaw: -3.14, roll: -6.28, pitch: -1.57, roll2: -6.28}
+      {z: 0.0, x: -0.265, y: -0.25, yaw: -3.14, roll: -6.28, pitch: -1.57, roll2: -6.28}
     structure_coeff:
       {l1: 0.60, l2: 0.25, l3: 0.10, l4: 0.20}
     

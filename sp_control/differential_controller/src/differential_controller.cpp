@@ -38,8 +38,8 @@ namespace differential_controller
     pitch_pos_ = (ctrl_positive_.joint_.getPosition() + ctrl_negative_.joint_.getPosition()) / 2;
     roll_pos_ = (ctrl_positive_.joint_.getPosition() - ctrl_negative_.joint_.getPosition()) / (2 * differential_reduction_);
     //if (ctrl_left_.joint_.getPosition() - ctrl_right_.joint_.getPosition())
-    ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
-    ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
+    // ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
+    // ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
     std_msgs::Float64 pitch_pos;
     pitch_pos.data = pitch_pos_;
     pitch_pos_pub_.publish(pitch_pos);

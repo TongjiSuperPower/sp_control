@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="engineer_rotating_ore"
+  xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="engineer_rotating_ore">
+  
+  <link
+    name="ore_link">
+    <inertial>
+      <origin
+        xyz="-0.0502503997952509 0.00270734420696059 0.158256772820509"
+        rpy="0 0 0" />
+      <mass
+        value="6.17465462282344" />
+      <inertia
+        ixx="0.0492802144410084"
+        ixy="1.5051986903972E-07"
+        ixz="0.000188405207234761"
+        iyy="0.060278709466721"
+        iyz="-8.44201370846196E-06"
+        izz="0.0135632849138947" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator/z_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator/z_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ore_left"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <child
+      link="ore_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="11"
+      effort="10"
+      velocity="1" />
+  </joint>
+
+    <joint
+    name="ore_right"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="z_base_link" />
+    <child
+      link="fake_z_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="11"
+      effort="10"
+      velocity="1" />
+  </joint>
+  
+</xacro:macro>
+</robot>

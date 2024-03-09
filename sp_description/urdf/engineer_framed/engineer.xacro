@@ -4,6 +4,7 @@
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_manipulator/engineer_manipulator.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_chassis/engineer_chassis.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_gimbal/engineer_gimbal.xacro"/>
+	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/engineer_rotating_ore/engineer_rotating_ore.xacro"/>
 	<xacro:include filename="$(find sp_description)/urdf/engineer_framed/manipulator_transmission.xacro"/> 
 	
 

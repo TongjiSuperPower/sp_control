@@ -14,8 +14,8 @@ int main(int argc, char **argv)
     // infantry.init();
     while(ros::ok())
     {
-        // infantry.run(      engineer.run(););
-  
+        // infantry.run();
+        engineer.run();
         loop.sleep();
     }
     return 0;

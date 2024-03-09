@@ -167,7 +167,7 @@ namespace manipulator_controller
         //AUTO MODE: auto control, be used when camera is vaild.
         //MAUL MODE: maul control by customer controller (twist_cmd)
         //JOINT MODE: joint control by remote_controller (joint_vel_cmd)
-        //maulMode(); 
+        // maulMode(); 
         getPosition();
         switch (mode_)
         {
@@ -210,8 +210,8 @@ namespace manipulator_controller
 
     void ManipulatorController::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        //ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
-        // ROS_INFO_STREAM("joint_err_[0]:" << joint_cmd_[0] - ctrl_z_.getPosition());
+        ROS_INFO_STREAM("joint_cmd_[1]:" << joint_cmd_[1]);
+        ROS_INFO_STREAM("joint_pos_[1]:" << ctrl_x_.getPosition());
         if (mode_ != AUTO)
         {
             for (int i = 0; i <  7; i++)

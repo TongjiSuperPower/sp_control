@@ -13,6 +13,7 @@ namespace sp_operator
         twist_cmd_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_twist",10);
         //joint_cmd_pub_ = nh.advertise<control_msgs::JointJog>("/delta_joint_cmds",10);
         joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("/cmd_joint",10);
+        ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",10);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
 
@@ -55,6 +56,7 @@ namespace sp_operator
         twist_cmd_pub_.publish(twist_cmd_);
         //joint_cmd_pub_.publish(joint_cmd_);
         joint_cmd_pub_.publish(joint_vel_cmd_);
+        ore_cmd_pub_.publish(ore_cmd_);
 
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
@@ -190,7 +192,31 @@ namespace sp_operator
                 joint_vel_cmd_.data[4] = 0.005 * dbus_data_.ch_l_x;
                 joint_vel_cmd_.data[5] = -0.005 * dbus_data_.ch_r_x;
                 joint_vel_cmd_.data[6] = -0.005 * dbus_data_.ch_r_y;
-            }       
+            }  
+            else if (dbus_data_.s_r == 2)   
+            {
+                // ore_cmd_.data = -1.57 * dbus_data_.ch_l_y;
+                // if (dbus_data_.key_w)
+                //     ore_cmd_.data = 1;
+                // else if (dbus_data_.key_s)
+                //     ore_cmd_.data = 2;
+                // else if (dbus_data_.key_a)
+                //     ore_cmd_.data = 3;
+                // else if (dbus_data_.key_d)
+                //     ore_cmd_.data = 4;
+                if(dbus_data_.ch_l_y < 0)
+                    ore_cmd_.data = 1;               
+                if(dbus_data_.ch_l_y > 0)
+                    ore_cmd_.data = 2;
+                if(dbus_data_.ch_l_x < 0)
+                    ore_cmd_.data = 3;
+                if(dbus_data_.ch_l_x > 0)
+                    ore_cmd_.data = 4;
+                if(dbus_data_.ch_r_y > 0)
+                    ore_cmd_.data = 0;
+                
+               
+            }    
         }
 
         if (dbus_data_.key_g) // Push(or pull) forward along the direction of the end effector

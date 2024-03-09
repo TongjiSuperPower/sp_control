@@ -48,7 +48,7 @@ namespace syn_controller
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_ - gravity_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_ - gravity_);
         }
-        else 
+        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
         {
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_ - gravity_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_ - gravity_);
@@ -56,12 +56,12 @@ namespace syn_controller
       }
       else
       {
-        if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
+        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.002)
         {
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_);
         }
-        else 
+        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
         {
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_);
