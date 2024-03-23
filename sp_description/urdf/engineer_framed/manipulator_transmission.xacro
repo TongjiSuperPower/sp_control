@@ -20,8 +20,8 @@
 	<xacro:manipulator_transmission joint_name="y_joint" mechanical_reduction="274.285"/>
 <xacro:manipulator_transmission joint_name="yaw_joint" mechanical_reduction="1"/>
 	<xacro:manipulator_transmission joint_name="roll1_joint" mechanical_reduction="1"/>
-    <xacro:manipulator_transmission joint_name="pitch_joint" mechanical_reduction="1"/>
-    <xacro:manipulator_transmission joint_name="roll2_joint" mechanical_reduction="-1"/>
+    <xacro:manipulator_transmission joint_name="pitch_joint" mechanical_reduction="1.5"/>
+    <xacro:manipulator_transmission joint_name="roll2_joint" mechanical_reduction="-1.5"/>
    	<xacro:manipulator_transmission joint_name="ore_left" mechanical_reduction="-1"/>
    	<xacro:manipulator_transmission joint_name="ore_right" mechanical_reduction="1"/>
 

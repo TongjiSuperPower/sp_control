@@ -1,5 +1,6 @@
 bus:
   - can0
+  - can1
 loop_frequency: 800
 cycle_time_error_threshold: 1
 thread_priority: 30
@@ -42,15 +43,15 @@ actuators:
     id: 0x204
     type: rm_3508
   y_joint_motor:
-    bus: can0
+    bus: can1
     id: 0x205
     type: rm_3508
   yaw_joint_motor:
-    bus: can0
+    bus: can1
     id: 0x004
     type: DM_J4310
   roll1_joint_motor:
-    bus: can0
+    bus: can1
     id: 0x005
     type: DM_J4310
   pitch_joint_motor:
@@ -62,11 +63,11 @@ actuators:
     id: 0x207
     type: rm_2006
   ore_left_motor:
-    bus: can0
+    bus: can2
     id: 0x206
     type: rm_2006
   ore_right_motor:
-    bus: can0
+    bus: can2
     id: 0x207
     type: rm_2006
   

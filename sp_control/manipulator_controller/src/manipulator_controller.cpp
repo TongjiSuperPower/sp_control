@@ -90,7 +90,7 @@ namespace manipulator_controller
         structure_coeff_.l3_ = sp_common::getParam(controller_nh, "structure_coeff/l3", 0.1);
         structure_coeff_.l4_ = sp_common::getParam(controller_nh, "structure_coeff/l4", 0.1);
 
-        
+        prev_time = ros::Time::now();
 
         cmd_quat_sub_ = root_nh.subscribe<geometry_msgs::Quaternion>("/cmd_quat", 1, &ManipulatorController::cmdQuatCallback, this);
         cmd_twist_sub_ = root_nh.subscribe<geometry_msgs::Twist>("/cmd_twist", 1, &ManipulatorController::cmdTwistCallback, this);
@@ -98,6 +98,7 @@ namespace manipulator_controller
         cmd_manipulator_sub_ = root_nh.subscribe<sp_common::ManipulatorCmd>("/cmd_manipulator", 1, &ManipulatorController::cmdManipulatorCallback, this);
         
         twist_cmd_ = Eigen::Matrix<double, 6, 1>::Zero();
+        last_twist_cmd_ = Eigen::Matrix<double, 6, 1>::Zero();
 
         joint_cmd_ = joint_vel_cmd_= joint_pos_ = joint_pos_cmd_ = Eigen::Matrix<double, 7, 1>::Zero();
 
@@ -131,7 +132,8 @@ namespace manipulator_controller
         if (!cmd_joint.data.empty())
         {
             for (int i = 0; i < 7; i++)
-                joint_vel_cmd_[i] = cmd_joint.data[i];
+               {joint_vel_cmd_[i] = cmd_joint.data[i];
+                vel_cmd_[i] = cmd_joint.data[i];}
         }
         else
         {
@@ -210,13 +212,14 @@ namespace manipulator_controller
 
     void ManipulatorController::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        ROS_INFO_STREAM("joint_cmd_[1]:" << joint_cmd_[1]);
-        ROS_INFO_STREAM("joint_pos_[1]:" << ctrl_x_.getPosition());
+        
+        // ROS_INFO_STREAM("joint_pos_[1]:" << ctrl_x_.getPosition());
         if (mode_ != AUTO)
         {
             for (int i = 0; i <  7; i++)
                 joint_cmd_[i] += joint_vel_cmd_[i];
         }
+
         jointPosConstraint();
 
 
@@ -314,7 +317,7 @@ namespace manipulator_controller
 
 
         //if (manipulator_cmd_.is_start_vision_exchange)
-        {
+        // {
             // if (!z_completed_)
             // {
             //     xyz_cmd_[0] = 0.0;
@@ -342,7 +345,7 @@ namespace manipulator_controller
             //     //ROS_INFO_STREAM("Done!");
             //     //z_completed_ = x_completed_ = y_completed_ = x_completed_ = false;
             // }
-        }
+        // }
 
     } 
 
@@ -355,6 +358,7 @@ namespace manipulator_controller
         }
  
         updateJacobian();
+        VelChangeConstraint();
         calJointVel();
     }
 
@@ -442,8 +446,27 @@ namespace manipulator_controller
             else if (joint_cmd_[i] < lower_pos_limit_[i])
                 joint_cmd_[i] = lower_pos_limit_[i];
         }
+        ROS_INFO_STREAM("joint_cmd_:" << joint_cmd_);
+
     }
 
+    void ManipulatorController::VelChangeConstraint()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            // if(twist_cmd_[i] < 0.15 | twist_cmd_[i] > 1)
+            //     twist_cmd_[i] = 0;
+            if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > 0.0006)
+            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+            {
+                twist_cmd_[i] = last_twist_cmd_[i] + (twist_cmd_[i] - last_twist_cmd_[i])/2;
+            }
+            // ROS_INFO_STREAM(twist_cmd_);
+            // twist_cmd_[i] = twist_cmd_[i] * 1.2 ;
+        }
+
+        last_twist_cmd_ = twist_cmd_;
+    }
     void ManipulatorController::calJointVel()
     {
         //Calculate Jacobian's (pseudo_)inverse.
@@ -465,13 +488,16 @@ namespace manipulator_controller
         // joint_vel_cmd_[5] = 0.4 * vel[1];
         // joint_vel_cmd_[6] = 0.4 * vel[2];
         // ROS_INFO_STREAM(vel);
-        joint_vel_cmd_[6] = -0.6 * twist_cmd_[0];
-        joint_vel_cmd_[5] = 0.6 * twist_cmd_[1];
-        joint_vel_cmd_[3] = 0.6 * twist_cmd_[2];
+        joint_vel_cmd_[6] = 0.001*twist_cmd_[0];
+        joint_vel_cmd_[5] = 0.001*twist_cmd_[1];
+        joint_vel_cmd_[3] =  0.001*twist_cmd_[2];
+        // joint_vel_cmd_[3] = 0.6 * twist_cmd_[2];
 
-        joint_vel_cmd_[0] = twist_cmd_[5];
-        joint_vel_cmd_[1] = twist_cmd_[3];
-        joint_vel_cmd_[2] = twist_cmd_[4];
+        joint_vel_cmd_[0] = 0.001*twist_cmd_[5];
+        joint_vel_cmd_[1] = 0.001*twist_cmd_[3];
+        joint_vel_cmd_[2] = 0.001*twist_cmd_[4];
+        for (int i = 0; i <  3; i++)
+        joint_vel_cmd_[i] += vel_cmd_[i];
         // joint_vel_cmd_[4] = twist_cmd_[1];
         // joint_vel_cmd_[5] = twist_cmd_[2];
         // joint_vel_cmd_[6] = twist_cmd_[0];
@@ -548,6 +574,9 @@ namespace manipulator_controller
 
     void ManipulatorController::cmdTwistCallback(const geometry_msgs::Twist::ConstPtr &msg)
     {
+        // ros::Time current_time = ros::Time::now();
+        // dt = (current_time - prev_time).toSec();
+        // prev_time = current_time;
         cmd_struct_.cmd_twist_ = *msg;
         cmd_rt_buffer_.writeFromNonRT(cmd_struct_);
     }

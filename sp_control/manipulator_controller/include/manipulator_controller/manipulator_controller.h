@@ -93,6 +93,8 @@ namespace manipulator_controller
         void getPosition();
 
         void updateJacobian();
+        
+        void VelChangeConstraint();
 
         void finalPush();
         
@@ -137,7 +139,8 @@ namespace manipulator_controller
         Eigen::Quaterniond quat_cmd_{};
 
         Eigen::Matrix<double, 6, 1> twist_cmd_{};
-        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{};
+        Eigen::Matrix<double, 6, 1> last_twist_cmd_{};
+        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{},vel_cmd_{};
         sp_common::ManipulatorCmd manipulator_cmd_{};
 
         Eigen::Vector4d cartesian_cmd_{};
@@ -193,6 +196,8 @@ namespace manipulator_controller
         bool last_final_push_{}, final_push_{};
 
         int orientation_ = HOME;
+        ros::Time prev_time;
+        double dt;
 
 
 

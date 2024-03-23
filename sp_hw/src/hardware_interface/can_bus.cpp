@@ -398,7 +398,7 @@ namespace sp_hw
                 Eigen::Matrix3d vel_matrix = current_matrix.inverse()*(current_matrix - last_matrix) /secs;
                 //ROS_INFO_STREAM("last_matrix: \n" << last_matrix);
                 //ROS_INFO_STREAM("current_matrix: \n" << current_matrix);
-                ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
+                // ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
                 double wx = (vel_matrix(2, 1) -  vel_matrix(1, 2)) / 2;
                 double wy = (vel_matrix(0, 2) -  vel_matrix(2, 0)) / 2;
                 double wz = (vel_matrix(1, 0) -  vel_matrix(0, 1)) / 2;
