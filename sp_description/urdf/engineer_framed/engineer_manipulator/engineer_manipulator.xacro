@@ -391,8 +391,8 @@
     <axis
       xyz="0 1 0" />
     <limit
-      lower="-1e9"
-      upper="1e9"
+      lower="-3.14"
+      upper="3.14"
       effort="2"
       velocity="5" />
   </joint>
@@ -447,10 +447,10 @@
     <child
       link="roll2_link" />
     <axis
-      xyz="-1 0 0" />
+      xyz="1 0 0" />
     <limit
-      lower="-1e9"
-      upper="1e9"
+      lower="-6.28"
+      upper="6.28"
       effort="2"
       velocity="5" />
   </joint>

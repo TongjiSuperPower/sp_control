@@ -141,6 +141,7 @@ include_directories(
 
 set(SRC_LIST 
  src/manipulator_controller.cpp
+ src/spline.cpp
  )
 add_library(manipulator_controller ${SRC_LIST}) 
 target_link_libraries(manipulator_controller ${catkin_LIBRARIES})

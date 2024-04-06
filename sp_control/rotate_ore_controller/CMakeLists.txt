@@ -25,7 +25,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
 
   sp_common
-  syn_vel_controller
 )
 
 ## System dependencies are found with CMake's conventions

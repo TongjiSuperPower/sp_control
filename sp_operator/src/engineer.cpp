@@ -54,7 +54,7 @@ namespace sp_operator
         manipulator_set();
         manipulator_cmd_pub_.publish(manipulator_cmd_);
         twist_cmd_pub_.publish(twist_cmd_);
-        //joint_cmd_pub_.publish(joint_cmd_);
+
         joint_cmd_pub_.publish(joint_vel_cmd_);
         ore_cmd_pub_.publish(ore_cmd_);
 
@@ -152,25 +152,25 @@ namespace sp_operator
 
             twist_cmd_.linear.y = 0;
             twist_cmd_.linear.z = 0;
-            twist_cmd_.angular.x = 0.002 * velocity_cmd_.angular.x;
-            twist_cmd_.angular.y = 0.002 * velocity_cmd_.angular.y;
-            twist_cmd_.angular.z = 0.002 * velocity_cmd_.angular.z;
+            twist_cmd_.angular.x = 0.003 * velocity_cmd_.angular.x;
+            twist_cmd_.angular.y = 0.003 * velocity_cmd_.angular.y;
+            twist_cmd_.angular.z = 0.003 * velocity_cmd_.angular.z;
           
-            // twist_cmd_.angular.x = 0.002 * dbus_data_.ch_r_y;
-            // twist_cmd_.angular.y = 0.002 * dbus_data_.ch_r_x;
-            // twist_cmd_.angular.z = 0.002 * dbus_data_.ch_l_x;
+            // twist_cmd_.angular.x = 0.001 * dbus_data_.ch_r_y;
+            // twist_cmd_.angular.y = 0.001 * dbus_data_.ch_r_x;
+            // twist_cmd_.angular.z = 0.001 * dbus_data_.ch_l_x;
         }
         else if (dbus_data_.s_l == 3)
         {
             manipulator_cmd_.control_mode = AUTO;
             if (dbus_data_.s_r == 1)
-                manipulator_cmd_.orientation = HOME;
+                manipulator_cmd_.destination = HOME;
             else if (dbus_data_.s_r == 3)
-                manipulator_cmd_.orientation = GROUND;
+                manipulator_cmd_.destination = GROUND;
             else if (dbus_data_.s_r == 2)
-                manipulator_cmd_.orientation = PLACE;
+                manipulator_cmd_.destination = PLACE;
         }
-         else if (dbus_data_.s_l == 2)
+        else if (dbus_data_.s_l == 2)
         {
             manipulator_cmd_.control_mode = JOINT;
             if (dbus_data_.s_r == 1) //Remote control mode
@@ -191,7 +191,7 @@ namespace sp_operator
                 joint_vel_cmd_.data[3] = -0.005 * dbus_data_.ch_l_y;
                 joint_vel_cmd_.data[4] = 0.005 * dbus_data_.ch_l_x;
                 joint_vel_cmd_.data[5] = -0.005 * dbus_data_.ch_r_x;
-                joint_vel_cmd_.data[6] = -0.005 * dbus_data_.ch_r_y;
+                joint_vel_cmd_.data[6] = 0.005 * dbus_data_.ch_r_y;
             }  
             else if (dbus_data_.s_r == 2)   
             {

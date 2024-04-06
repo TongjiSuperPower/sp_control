@@ -10,7 +10,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
 #include <geometry_msgs/Twist.h>
-#include <geometry_msgs/Quaternion.h>
+#include <sensor_msgs/Imu.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,11 +32,11 @@ namespace sp_hw
         void read(ros::Time time);
         void write();
         void write(can_frame *can_frame);
+        void exitFn();
         const std::string bus_name_;
 
     private:
-        void frameCallback(const can_frame &frame);
-        void exitFn();
+        void frameCallback(const can_frame &frame);  
         can::SocketCAN socket_can_;
         CanDataPtr data_ptr_;
         // a simple FIFO to store can_data
@@ -53,8 +53,8 @@ namespace sp_hw
         ros::Time current_time{};
         ros::NodeHandle nh;
         ros::Publisher velocity_pub_;
-        ros::Publisher quat_pub_;
+        ros::Publisher imu_pub_;
         geometry_msgs::Twist cmd_velocity{};
-        geometry_msgs::Quaternion cmd_quat_{};
+        sensor_msgs::Imu cmd_imu_{};
     };
 }

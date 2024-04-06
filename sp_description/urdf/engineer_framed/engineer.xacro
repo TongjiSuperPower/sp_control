@@ -10,6 +10,7 @@
 
     <xacro:engineer_chassis roller_type="simple"/>
 	<xacro:engineer_manipulator/>
+	<xacro:engineer_rotating_ore/>
 	<!-- <xacro:engineer_gimbal/> -->
 
    	<joint name="z_base_joint" type="fixed">
@@ -18,6 +19,7 @@
 		<child link="z_base_link" />
 		<axis xyz="0 0 0" />
   	</joint>
+
 
 	<!-- <joint name="gimbal_base_joint" type="fixed">
 		<origin

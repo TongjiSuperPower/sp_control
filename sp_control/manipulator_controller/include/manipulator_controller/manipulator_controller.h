@@ -1,15 +1,16 @@
 #pragma once
+#include <unordered_map>
 
 #include <controller_interface/multi_interface_controller.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <effort_controllers/joint_position_controller.h>
 #include <syn_controller/syn_controller.h>
-
 #include <differential_controller/differential_controller.h>
 
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
+#include <std_msgs/Bool.h>
 #include <std_msgs/Float64MultiArray.h>
 
 
@@ -24,24 +25,28 @@
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
+
+#include "manipulator_controller/spline.h"
 namespace manipulator_controller
 {
     struct Command
     {
         geometry_msgs::Quaternion cmd_quat_;
         geometry_msgs::Twist cmd_twist_;
-        std_msgs::Float64MultiArray cmd_joint_;
+        std_msgs::Float64MultiArray cmd_joint_vel_;
         sp_common::ManipulatorCmd cmd_manipulator_;
         ros::Time stamp_;
     };
 
-    struct Structure_coeff
-    {
-        double l1_;
-        double l2_;
-        double l3_;
-        double l4_;
-    };
+    
+
+    // struct Structure_coeff
+    // {
+    //     double l1_;
+    //     double l2_;
+    //     double l3_;
+    //     double l4_;
+    // };
 
 
     class ManipulatorController : public controller_interface::MultiInterfaceController<hardware_interface::EffortJointInterface>
@@ -80,6 +85,8 @@ namespace manipulator_controller
 
         void initPosition(const ros::Time &time, const ros::Duration &period);
 
+        void caliMode();
+
         void maulMode();
 
         void autoMode();
@@ -93,18 +100,24 @@ namespace manipulator_controller
         void getPosition();
 
         void updateJacobian();
-        
-        void VelChangeConstraint();
 
         void finalPush();
         
         void jointPosConstraint();
 
+        void msgCaliZCallback(const std_msgs::Bool::ConstPtr &msg);
+
+        void msgCaliXCallback(const std_msgs::Bool::ConstPtr &msg);
+
+        void msgCaliYCallback(const std_msgs::Bool::ConstPtr &msg);
+
+        void msgCaliPitchCallback(const std_msgs::Bool::ConstPtr &msg);
+
         void cmdQuatCallback(const geometry_msgs::Quaternion::ConstPtr &msg);
 
         void cmdTwistCallback(const geometry_msgs::Twist::ConstPtr &msg);
 
-        void cmdJointCallback(const std_msgs::Float64MultiArray::ConstPtr &msg);
+        void cmdJointVelCallback(const std_msgs::Float64MultiArray::ConstPtr &msg);
 
         void cmdManipulatorCallback(const sp_common::ManipulatorCmd::ConstPtr &msg);
 
@@ -133,14 +146,15 @@ namespace manipulator_controller
         std::vector<double> vel_limit_{};
         std::vector<double> upper_pos_limit_{};
         std::vector<double> lower_pos_limit_{};
+        std::unordered_map<std::string, std::vector<double>> joint_destination_;
 
-        Structure_coeff structure_coeff_{};
+        // Structure_coeff structure_coeff_{};
 
         Eigen::Quaterniond quat_cmd_{};
 
         Eigen::Matrix<double, 6, 1> twist_cmd_{};
-        Eigen::Matrix<double, 6, 1> last_twist_cmd_{};
-        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{},vel_cmd_{};
+        Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{};
+        Eigen::Matrix<double, 7, 4> coeff_{};
         sp_common::ManipulatorCmd manipulator_cmd_{};
 
         Eigen::Vector4d cartesian_cmd_{};
@@ -148,24 +162,36 @@ namespace manipulator_controller
         Eigen::Vector4d xyz_cmd_{};
         Eigen::Vector3d rpy_cmd_{};
 
-        Eigen::Matrix3d jacobian {};
+        Eigen::Matrix<double, 3, 4> jacobian {};
         // Subscribers
         ros::Subscriber cmd_quat_sub_;
         ros::Subscriber cmd_twist_sub_;
-        ros::Subscriber cmd_joint_sub_;
+        ros::Subscriber cmd_joint_vel_sub_;
         ros::Subscriber cmd_manipulator_sub_;
 
-        bool z_completed_{};
-        bool x_completed_{};
-        bool y_completed_{};
-        bool rpy_completed_{};
+        ros::Publisher cali_pub_;
+        
+        ros::Subscriber msg_joint_z_cali_sub_;
+        ros::Subscriber msg_joint_x_cali_sub_;
+        ros::Subscriber msg_joint_y_cali_sub_;
+        ros::Subscriber msg_joint_pitch_cali_sub_;
+
         bool initiated_{};
+
+        bool z_calibrated_{};
+        bool x_calibrated_{};
+        bool y_calibrated_{};
+        bool pitch_calibrated_{}; 
+        bool calibrated_{};
+
+
 
         enum
         {
             MAUL,
             AUTO,
-            JOINT
+            JOINT,
+            CALI
         };
 
         enum
@@ -177,12 +203,15 @@ namespace manipulator_controller
         };
 
         enum
-        {  
+        { 
+            NONE, 
             HOME,
             GROUND,
-            PLACE,
-            LEFT90
+            SLIVER,
+            GOLD
         };
+
+
 
         int mode_ = MAUL;
         bool mode_changed_ = false;
@@ -196,8 +225,14 @@ namespace manipulator_controller
         bool last_final_push_{}, final_push_{};
 
         int orientation_ = HOME;
-        ros::Time prev_time;
-        double dt;
+
+        bool planed_;
+
+        int destination_ = NONE;
+
+        Spline spline_;
+
+        ros::Time begin_time_, now_time_;
 
 
 

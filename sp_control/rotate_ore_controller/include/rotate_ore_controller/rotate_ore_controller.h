@@ -4,7 +4,6 @@
 #include <hardware_interface/joint_command_interface.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <effort_controllers/joint_velocity_controller.h>
-#include "syn_vel_controller/syn_vel_controller.h"
 
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
@@ -69,22 +68,7 @@ namespace rotate_ore_controller
     protected:
         void moveJoint(const ros::Time &time, const ros::Duration &period);
 
-        // void initPosition(const ros::Time &time, const ros::Duration &period);
-        void initVelocity(const ros::Time &time, const ros::Duration &period);
-
-        void getVelocity();
-
-        void jointVelConstraint();
-
         void cmdOreCallback(const std_msgs::Int8::ConstPtr &msg);
-
-        void stopProcess();
-
-        void readyProcess();
-
-        bool simulate_{};
-
-        double publish_rate_{}, timeout_{};
 
         hardware_interface::EffortJointInterface *effort_joint_interface_{};
 
@@ -92,53 +76,11 @@ namespace rotate_ore_controller
         effort_controllers::JointVelocityController ctrl_left_;
         effort_controllers::JointVelocityController ctrl_right_; 
 
-        ros::Time last_publish_time_;
-
         float vel_;
         int ore_cmd_;
 
         // Subscribers
         ros::Subscriber cmd_ore_sub_;
-
-
-
-        enum
-        {
-            MAUL,
-            AUTO,
-            JOINT
-        };
-
-        enum
-        {
-            STOP,
-            READY,
-            MOVE,
-            DONE
-        };
-
-        enum
-        {  
-            HOME,
-            GROUND,
-            PLACE,
-            LEFT90
-        };
-
-        int mode_ = MAUL;
-        bool mode_changed_ = false;
-
-        int process_ = STOP;
-        bool process_changed_ = false;
-
-        bool y_has_friction_{};
-        double y_friction_{};
-
-        bool last_final_push_{}, final_push_{};
-
-        int orientation_ = HOME;
-
-
 
         Command cmd_struct_;
         realtime_tools::RealtimeBuffer<Command> cmd_rt_buffer_;

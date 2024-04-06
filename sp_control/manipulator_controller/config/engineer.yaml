@@ -67,4 +67,5 @@ manipulator:
       {z: -0.15, x1: 0.0, x2: 0.0, y: -0.15, pitch: -1.57, yaw: -1.57, roll: -1.57}
     structure_coeff:
       {l1: 0.60, l2: 0.25, l3: 0.10, l4: 0.20}
+   
     

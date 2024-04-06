@@ -4,10 +4,10 @@ rotate_ore_controller:
   timeout: 0.1
 
   ore_left:
-      joint: "ore_left"
+      joint: "ore_left_joint"
       pid: { p: 0.3, i: 0.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
   ore_right:
-      joint: "ore_right"
+      joint: "ore_right_joint"
       pid: { p: 0.3, i: 0.0, d: 0.0, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
   
   vel: 3.14

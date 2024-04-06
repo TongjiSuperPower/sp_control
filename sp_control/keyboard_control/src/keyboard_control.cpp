@@ -65,19 +65,14 @@ class KeyboradControl
 
 
     ros::NodeHandle nh_;
-    double x_, y_, z_, x_scale_, y_scale_, z_scale_;
-    double height_, pitch_, yaw_, height_scale_, pitch_scale_, yaw_scale_;
-    ros::Publisher twist_pub_;
-    ros::Publisher gimbal_pub_;
+    ros::Publisher dbus_data_pub_;
+    sp_common::DbusData dbus_data_;
 
 };
 
     KeyboradControl::KeyboradControl():
-    x_(0), y_(0), z_(0), x_scale_(2.0), y_scale_(2.0), z_scale_(2.0),
-    height_(0), pitch_(0), yaw_(0)
     {
-        twist_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-        gimbal_pub_ = nh_.advertise<geometry_msgs::Vector3>("cmd_pos", 1);
+        dbus_data_pub_ = nh_.advertise<sp_common::DbusData>("/dbus_data", 1);
     }
 
 
@@ -116,6 +111,7 @@ void KeyboradControl::keyLoop()
     puts("---------------------------");
     puts("Use arrow keys to move engineer. '`' to quit.");
 
+ 
 
     for(;;)
     {
@@ -129,74 +125,166 @@ void KeyboradControl::keyLoop()
             perror("read():");
             return;
         }
+        puts(c);
+        dbus_data_.ch_l_x = 0.0;
+        dbus_data_.ch_l_y = 0.0;
+        dbus_data_.ch_r_x = 0.0;
+        dbus_data_.ch_r_y = 0.0;
+        dbus_data_.m_x = 0.0;
+        dbus_data_.m_y = 0.0;
+        dbus_data_.m_z = 0.0;
+        dbus_data_.p_l = false;
+        dbus_data_.p_r = false;
+        dbus_data_.key_q = false;
+        dbus_data_.key_w = false;
+        dbus_data_.key_e = false;
+        dbus_data_.key_r = false;
+        dbus_data_.key_a = false;
+        dbus_data_.key_s = false;
+        dbus_data_.key_d = false;
+        dbus_data_.key_f = false;
+        dbus_data_.key_g = false;
+        dbus_data_.key_z = false;
+        dbus_data_.key_x = false;
+        dbus_data_.key_c = false;
+        dbus_data_.key_v = false;
+        dbus_data_.key_b = false;
+        dbus_data_.key_shift = false;
+        dbus_data_.key_ctrl = false;
 
-        x_ = y_= z_ = 0;
 
         switch(c)
         {
             case 'A':
             case 'a':
-                y_ = 1.0;
+                dbus_data_.ch_r_y = 1.0;
+                dbus_data_.key_a = true;
                 dirty = true;
                 break;
             case 'D':
             case 'd':
-                ROS_INFO_STREAM("RIGHT");
-                y_ = -1.0;
+                dbus_data_.ch_r_y = -1.0;
+                dbus_data_.key_d = true;
                 dirty = true;
                 break;
             case 'W':
             case 'w':
-                ROS_INFO_STREAM("UP");
-                x_ = 1.0;
+                dbus_data_.ch_r_x = 1.0;
+                dbus_data_.key_w = true;
                 dirty = true;
                 break;
             case 'S':
             case 's':
-                ROS_INFO_STREAM("DOWN");
-                x_ = -1.0;
+                dbus_data_.ch_r_x = -1.0;
+                dbus_data_.key_s = true;
                 dirty = true;
                 break;
             case 'Q':
             case 'q':
-                ROS_INFO_STREAM("COUNTERCLOCKWISE");
-                z_ = 1.0;
+                dbus_data_.key_q = true;
                 dirty = true;
                 break;
             case 'E':
             case 'e':
-                ROS_INFO_STREAM("CLOCKWISE");
-                z_ = -1.0;
+                dbus_data_.key_e = true;
                 dirty = true;
                 break;
-            case '5':
-                ROS_INFO_STREAM("PITCH UP");
-                pitch_ += 0.05;
+            case 'R':
+            case 'r':
+                dbus_data_.key_r = true;
                 dirty = true;
                 break;
-            case '2':
-                ROS_INFO_STREAM("PITCH DOWN");
-                pitch_ -= 0.05;
+            case 'F':
+            case 'f':
+                dbus_data_.key_f = true;
                 dirty = true;
                 break;
-            case '1':
-                ROS_INFO_STREAM("YAW UP");
-                yaw_ += 0.05;
+            case 'G':
+            case 'g':
+                dbus_data_.key_g = true;
+                dirty = true;
+                break;
+            case 'Z':
+            case 'z':
+                dbus_data_.key_z = true;
+                dirty = true;
+                break;
+            case 'X':
+            case 'x':
+                dbus_data_.key_x = true;
+                dirty = true;
+                break;
+            case 'C':
+            case 'c':
+                dbus_data_.key_c = true;
+                dirty = true;
+                break;
+            case 'V':
+            case 'v':
+                dbus_data_.key_v = true;
+                dirty = true;
+                break;
+            case 'B':
+            case 'b':
+                dbus_data_.key_b = true;
+                dirty = true;
+                break;
+            case 'B':
+            case 'b':
+                dbus_data_.key_b = true;
+                dirty = true;
+                break;
+            case 'I':
+            case 'i':
+                dbus_data_.m_y = 1.0;
+                dirty = true;
+                break;
+            case 'K':
+            case 'k':
+                dbus_data_.m_y = -1.0;
+                dirty = true;
+                break;
+            case 'J':
+            case 'j':
+                dbus_data_.m_x = 1.0;
+                dirty = true;
+                break;
+            case 'L':
+            case 'l':
+                dbus_data_.m_x = -1.0;
+                dirty = true;
+            case 'U':
+            case 'u':
+                dbus_data_.p_l = true;
+                dirty = true;
+                break;
+            case 'O':
+            case 'o':
+                dbus_data_.p_r = true;
                 dirty = true;
                 break;
             case '3':
-                ROS_INFO_STREAM("YAW DOWN");
-                yaw_ -= 0.05;
-                dirty = true;
-                break;
-            case '4':
-                ROS_INFO_STREAM("HEIGHT UP");
-                height_ += 0.005;
+                dbus_data_.s_r = 2;
                 dirty = true;
                 break;
             case '6':
-                ROS_INFO_STREAM("HEIGHT DOWN");
-                height_ -= 0.005;
+                dbus_data_.s_r = 3;
+                dirty = true;
+                break;
+            case '9':
+                dbus_data_.s_r = 1;
+                dirty = true;
+                break;
+            case '1':
+                dbus_data_.s_l = 2;
+                dirty = true;
+                break;
+            case '4':
+                dbus_data_.s_l = 3;
+                dirty = true;
+                break;
+            case '7':
+                dbus_data_.s_l = 1;
                 dirty = true;
                 break;
             case '`':
@@ -205,18 +293,10 @@ void KeyboradControl::keyLoop()
         }
 
 
-        geometry_msgs::Twist twist;
-        twist.linear.x = x_scale_*x_;
-        twist.linear.y = y_scale_*y_;
-        twist.angular.z = z_scale_*z_;
-        geometry_msgs::Vector3 pos;
-        pos.x = yaw_;
-        pos.y = pitch_;
-        pos.z = height_;
+
         if(dirty == true)
         {
-            twist_pub_.publish(twist);  
-            gimbal_pub_.publish(pos);  
+            dbus_data_pub_.publish(dbus_data_);  
             dirty = false;
         }
     }

@@ -13,7 +13,7 @@
     args="0 0 0 0 0 0 base_link base_footprint 40" />
   <param
     name="simulate"
-    value="false" />
+    value="true" />
   <node
     name="spawn_model"
     pkg="gazebo_ros"

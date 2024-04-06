@@ -3,6 +3,13 @@
 namespace sp_hw
 {
 
+    bool exit_singal = false;
+
+    void exit_handler(int signum)
+    {
+        exit_singal = true;
+    }
+
     // TODO : (Lithesh) Maybe we should use ErrorCode and create log file
     bool SpRobotHW::init(ros::NodeHandle &root_nh, ros::NodeHandle &robot_hw_nh)
     {
@@ -53,7 +60,7 @@ namespace sp_hw
         actuator_state_pub_.reset(
             new realtime_tools::RealtimePublisher<sp_common::ActuatorState>(root_nh, "/actuator_states", 100));
 
-     
+        signal(SIGINT, exit_handler);
 
         return true;
     }
@@ -63,22 +70,24 @@ namespace sp_hw
         for (auto &bus : can_buses_)
             bus->read(time);
         for (auto &id2act_datas : bus_id2act_data_)
+        {
             for (auto &act_data : id2act_datas.second)
             {
+                act_data.second.last_halted = act_data.second.halted;
                 try
                 {
-                    act_data.second.is_halted = (time - act_data.second.stamp).toSec() > 1 || false;
+                    act_data.second.halted = (time - act_data.second.stamp).toSec() > 0.5 || false;
                 }
                 catch (std::runtime_error &ex)
                 {
                 }
-                if (act_data.second.is_halted)
+                if (act_data.second.halted)
                 {
                     act_data.second.vel = 0;
                     act_data.second.effort = 0;
                 }
             }
-
+        }
         if (is_actuator_specified_)
             act_to_jnt_state_->propagate();
         //  Set all cmd to zero to avoid crazy soft limit oscillation when not controller loaded
@@ -104,7 +113,20 @@ namespace sp_hw
                 }
         }
         for (auto &bus : can_buses_)
+        {
+            if (exit_singal)
+            {
+                bus->exitFn();
+                if (&bus == &can_buses_.back())
+                {
+                    exit(0);
+                }
+                continue;
+            }
+            
             bus->write();
+            
+        }
 
         publishActuatorState(time);
     }

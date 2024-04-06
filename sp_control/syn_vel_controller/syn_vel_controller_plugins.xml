@@ -1,9 +1,0 @@
-<library path="lib/libsyn_vel_controller">
-    <class name="syn_vel_controller/SynVelController" 
-           type="syn_vel_controller::SynVelController"
-           base_class_type="controller_interface::ControllerBase">
-        <description>
-            Syn Vel controller for Engineer ore.
-        </description>
-    </class>
-</library>

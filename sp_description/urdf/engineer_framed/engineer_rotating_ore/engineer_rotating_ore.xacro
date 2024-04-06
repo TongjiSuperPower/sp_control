@@ -7,82 +7,59 @@
   xmlns:xacro="http://wiki.ros.org/xacro">
 
   <xacro:macro name="engineer_rotating_ore">
-  
-  <link
-    name="ore_link">
-    <inertial>
-      <origin
-        xyz="-0.0502503997952509 0.00270734420696059 0.158256772820509"
-        rpy="0 0 0" />
-      <mass
-        value="6.17465462282344" />
-      <inertia
-        ixx="0.0492802144410084"
-        ixy="1.5051986903972E-07"
-        ixz="0.000188405207234761"
-        iyy="0.060278709466721"
-        iyz="-8.44201370846196E-06"
-        izz="0.0135632849138947" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator/z_link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://sp_description/meshes/engineer_framed/engineer_manipulator/z_link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="ore_left"
-    type="revolute">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <child
-      link="ore_link" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="0"
-      upper="11"
-      effort="10"
-      velocity="1" />
-  </joint>
+    <link name="ore_left_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.013"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
 
-    <joint
-    name="ore_right"
-    type="revolute">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="z_base_link" />
-    <child
-      link="fake_z_link" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="0"
-      upper="11"
-      effort="10"
-      velocity="1" />
-  </joint>
+    <link name="ore_right_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.013"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
+    
+    <joint name="ore_left_joint" type="revolute">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="z_base_link" />
+      <child link="ore_left_link" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="11" effort="10" velocity="1" />
+    </joint>
+
+    <joint name="ore_right_joint" type="revolute">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="z_base_link" />
+      <child link="ore_right_link" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="11" effort="10" velocity="1" />
+    </joint>
+
+    <transmission name="trans_ore_left_joint" >
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="ore_left_joint_motor">
+        <mechanicalReduction>-1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator>
+			<joint name="ore_left_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+    </transmission>
+
+    <transmission name="trans_ore_right_joint" >
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="ore_right_joint_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </actuator>
+			<joint name="ore_right_joint">
+				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+			</joint>
+    </transmission>
   
-</xacro:macro>
+  </xacro:macro>
 </robot>

@@ -70,7 +70,6 @@
   <depend>realtime_tools</depend>
   <depend>control_toolbox</depend>
   <depend>effort_controllers</depend>
-  <depend>syn_vel_controller</depend>
   
   <!-- For custom controllers -->
   <build_depend>pluginlib</build_depend>

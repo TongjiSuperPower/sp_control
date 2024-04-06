@@ -35,12 +35,7 @@ namespace sp_hw
      /*!
      * @brief   init the frames[0x200,0x1FF] that will be sent to RM motor, and enable the DM motor.
      */
-    bool exit_singal = false;
 
-    void exit_handler(int signum)
-    {
-        exit_singal = true;
-    }
 
     CanBus::CanBus(const std::string &bus_name, CanDataPtr data_ptr, int thread_priority = 0)
         : bus_name_(bus_name), data_ptr_(data_ptr)
@@ -92,29 +87,25 @@ namespace sp_hw
             }
         }
         velocity_pub_ = nh.advertise<geometry_msgs::Twist>("cmd_velocity", 10);
-        quat_pub_ = nh.advertise<geometry_msgs::Quaternion>("cmd_quat", 10);
-
-        signal(SIGINT, exit_handler);
-        
-        
+        imu_pub_ = nh.advertise<sensor_msgs::Imu>("imu_msg", 10);
+           
        
-;    }
+   }
     /**
      * @brief Sending actuators and gpios commands
      * @param time
      */
     void CanBus::write()
     {
-        if (exit_singal)
-        {
-            exitFn();
-        }
+
 
         // Fill all the frames to be sent with all 0
         bool has_write_frame0 = false, has_write_frame1 = false, has_write_frame2 = false;
         std::fill(std::begin(rm_can_frame0_.data), std::end(rm_can_frame0_.data), 0);
         std::fill(std::begin(rm_can_frame1_.data), std::end(rm_can_frame1_.data), 0);
         std::fill(std::begin(mix_can_frame2_.data), std::end(mix_can_frame2_.data), 0);
+
+
 
         //Traverse all the mounted motors
         for (auto &id2act_data : *data_ptr_.id2act_data_)
@@ -123,7 +114,7 @@ namespace sp_hw
             if (id2act_data.second.type.find("rm") != std::string::npos)
             {
                 // Block sending data when the motor's receive data is missing. 
-                if (id2act_data.second.is_halted)
+                if (id2act_data.second.halted)
                     continue;
                 // Acquire the motor coefficient
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
@@ -150,36 +141,58 @@ namespace sp_hw
             else if (id2act_data.second.type.find("DM") != std::string::npos)
             {
                 // Block sending data when the motor's receive data is missing.
-                if (id2act_data.second.is_halted)
+                if (id2act_data.second.halted)
                     continue;
-                can_frame frame{};
-                // Acquire the motor coefficient
-                const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
-                frame.can_id = id2act_data.first;
-                frame.can_dlc = 8;
-                // Acquire the pos, vel and effort cmd calculated by the upper layer controllers.
-                // Actually only the effort value is used. 
-                uint16_t q_des = (int)(act_coeff.pos2act * (id2act_data.second.cmd_pos - act_coeff.act2pos_offset));
-                uint16_t qd_des = (int)(act_coeff.vel2act * (id2act_data.second.cmd_vel - act_coeff.act2vel_offset));
-                uint16_t kp = 0;
-                uint16_t kd = 0;
-                uint16_t tau = (int)(act_coeff.effort2act * (id2act_data.second.exe_effort - act_coeff.act2effort_offset));
-                // MIT sending protocol.
-                frame.data[0] = q_des >> 8;
-                frame.data[1] = q_des & 0xFF;
-                frame.data[2] = qd_des >> 8;
-                frame.data[3] = ((qd_des & 0xF) << 4) | (kp >> 8);
-                frame.data[4] = kp & 0xFF;
-                frame.data[5] = kd >> 4;
-                frame.data[6] = ((kd & 0xF) << 4) | (tau >> 8);
-                frame.data[7] = tau & 0xFF;
-                socket_can_.write(&frame);
+                else
+                {  
+                    // 
+                    if (id2act_data.second.last_halted) 
+                    {
+                        can_frame frame{};
+                        frame.can_id = id2act_data.first;
+                        frame.can_dlc = 8;
+                        frame.data[0] = 0xFF;
+                        frame.data[1] = 0xFF;
+                        frame.data[2] = 0xFF;
+                        frame.data[3] = 0xFF;
+                        frame.data[4] = 0xFF;
+                        frame.data[5] = 0xFF;
+                        frame.data[6] = 0xFF;
+                        frame.data[7] = 0xFC;
+                        socket_can_.write(&frame);
+                    }
+                    else
+                    {
+                        can_frame frame{};
+                        // Acquire the motor coefficient
+                        const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
+                        frame.can_id = id2act_data.first;
+                        frame.can_dlc = 8;
+                        // Acquire the pos, vel and effort cmd calculated by the upper layer controllers.
+                        // Actually only the effort value is used. 
+                        uint16_t q_des = (int)(act_coeff.pos2act * (id2act_data.second.cmd_pos - act_coeff.act2pos_offset));
+                        uint16_t qd_des = (int)(act_coeff.vel2act * (id2act_data.second.cmd_vel - act_coeff.act2vel_offset));
+                        uint16_t kp = 0;
+                        uint16_t kd = 0;
+                        uint16_t tau = (int)(act_coeff.effort2act * (id2act_data.second.exe_effort - act_coeff.act2effort_offset));
+                        // MIT sending protocol.
+                        frame.data[0] = q_des >> 8;
+                        frame.data[1] = q_des & 0xFF;
+                        frame.data[2] = qd_des >> 8;
+                        frame.data[3] = ((qd_des & 0xF) << 4) | (kp >> 8);
+                        frame.data[4] = kp & 0xFF;
+                        frame.data[5] = kd >> 4;
+                        frame.data[6] = ((kd & 0xF) << 4) | (tau >> 8);
+                        frame.data[7] = tau & 0xFF;
+                        socket_can_.write(&frame);
+                    }
+                }
             }
              // MG motors : custom protocol, very strange.
             else if (id2act_data.second.type.find("MG_8016") != std::string::npos)
             {
                 // Block sending data when the motor's receive data is missing.
-                if (id2act_data.second.is_halted)
+                if (id2act_data.second.halted)
                     continue;
                 can_frame frame{};
                 // Acquire the motor coefficient
@@ -379,16 +392,17 @@ namespace sp_hw
             {
                 last_matrix = current_matrix;
                 last_time = current_time;
+                geometry_msgs::Quaternion cmd_quat;
 
                 
                 double w = 0.0001*(int16_t)((frame.data[0] << 8) | frame.data[1]);
                 double x = 0.0001*(int16_t)((frame.data[2] << 8) | frame.data[3]);
                 double y = 0.0001*(int16_t)((frame.data[4] << 8) | frame.data[5]);
                 double z = 0.0001*(int16_t)((frame.data[6] << 8) | frame.data[7]);
-                cmd_quat_.w = w;
-                cmd_quat_.x = x;
-                cmd_quat_.y = y;
-                cmd_quat_.z = z;
+                cmd_quat.w = w;
+                cmd_quat.x = x;
+                cmd_quat.y = y;
+                cmd_quat.z = z;
                 Eigen::Quaterniond quat(w, x, y, z);
                 quat.normalized(); 
                 current_matrix = quat.toRotationMatrix();
@@ -398,14 +412,16 @@ namespace sp_hw
                 Eigen::Matrix3d vel_matrix = current_matrix.inverse()*(current_matrix - last_matrix) /secs;
                 //ROS_INFO_STREAM("last_matrix: \n" << last_matrix);
                 //ROS_INFO_STREAM("current_matrix: \n" << current_matrix);
-                // ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
+                ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
                 double wx = (vel_matrix(2, 1) -  vel_matrix(1, 2)) / 2;
                 double wy = (vel_matrix(0, 2) -  vel_matrix(2, 0)) / 2;
                 double wz = (vel_matrix(1, 0) -  vel_matrix(0, 1)) / 2;
                 cmd_velocity.angular.x = wx;
                 cmd_velocity.angular.y = wy;
                 cmd_velocity.angular.z = wz;
-                quat_pub_.publish(cmd_quat_);
+                sensor_msgs::Imu cmd_imu;
+                cmd_imu.orientation = cmd_quat;
+                imu_pub_.publish(cmd_imu);
                 velocity_pub_.publish(cmd_velocity);
 
             }
@@ -467,8 +483,7 @@ namespace sp_hw
                 socket_can_.write(&frame);
             }
         }
-        ROS_INFO_STREAM("Canbus Exit");
-        exit(0);
+        ROS_INFO_STREAM("Canbus Exit");  
     }
     /**
      * @brief Callback function called after receive can frame.

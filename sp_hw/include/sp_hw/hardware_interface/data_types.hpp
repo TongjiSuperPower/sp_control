@@ -29,7 +29,8 @@ namespace sp_hw
         double cmd_pos, cmd_vel, cmd_effort, exe_pos, exe_effort;
         double offset, offset2;
 
-        bool is_halted = false;
+        bool halted = false;
+        bool last_halted = false;
     };
 
     // only used in can_bus and store the pointers

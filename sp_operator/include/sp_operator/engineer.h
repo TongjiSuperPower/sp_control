@@ -4,8 +4,8 @@
 #include <std_msgs/Bool.h>
 #include <control_msgs/JointJog.h>
 #include <std_msgs/Float64MultiArray.h>
-#include <std_msgs/Float64.h>。
-#include <std_msgs/Int8.h>。
+#include <std_msgs/Float64.h>
+#include <std_msgs/Int8.h>
 
 namespace sp_operator
 {
