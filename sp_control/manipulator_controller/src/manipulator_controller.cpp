@@ -189,7 +189,7 @@ namespace manipulator_controller
             
             case AUTO:
             {
-                //autoMode();       
+                autoMode();       
                 break;
             }
             case MAUL:
@@ -330,12 +330,9 @@ namespace manipulator_controller
         //         destination_ == NONE;
         //     }
         // }
-        ROS_INFO_STREAM("PLANED: " << planed_);
-
 
         if (!planed_ && destination_ != NONE)
-        {
-            
+        {     
             std::string name;
             if (destination_ == HOME)
                 name = "home";
@@ -345,35 +342,36 @@ namespace manipulator_controller
                 name = "sliver";
             else if (destination_ == GOLD)
                 name = "gold";
+            // else if (destintion_ == PLACE)
+            //     name = "place";
             ROS_INFO_STREAM("Destination: "<< name);
             Eigen::Matrix<double, 7, 1> vel;
-
-  
-            joint_pos_cmd_[0] = joint_destination_[name][0];
-            joint_pos_cmd_[1] = joint_destination_[name][1];
-            joint_pos_cmd_[2] = joint_destination_[name][2];
-            joint_pos_cmd_[3] = joint_destination_[name][3];
-            joint_pos_cmd_[4] = joint_destination_[name][4];
-            joint_pos_cmd_[5] = joint_destination_[name][5];
-            joint_pos_cmd_[6] = joint_destination_[name][6];
-
-            vel[0] = 0.1;
-            vel[1] = 0.1;
-            vel[2] = 0.1;
+            vel[0] = 0.2;
+            vel[1] = 0.2;
+            vel[2] = 0.2;
             vel[3] = 3.14;
             vel[4] = 3.14;
             vel[5] = 3.14;
             vel[6] = 3.14;
 
-            begin_time_ = ros::Time::now();
+            for (int i = 0; i < 7; i++)
+            {
+                joint_pos_cmd_[i] = joint_destination_[name][i];
+                spline_.init(joint_pos_[i], joint_pos_cmd_[i], vel[i]);
+                Eigen::Vector4d coeff;
+                spline_.computeCoeff(coeff);
+                coeff_(i, 0) = coeff[0];
+                coeff_(i, 1) = coeff[1];
+                coeff_(i, 2) = coeff[2];
+                coeff_(i, 3) = coeff[3];
+            }
 
-            spline_.init(joint_pos_, joint_pos_cmd_, vel);
-            spline_.computeCoeff(coeff_);
+            begin_time_ = ros::Time::now();
+       
             // ROS_INFO_STREAM(std::endl<< coeff_);
             // ROS_INFO_STREAM(std::endl << joint_pos_);
             // ROS_INFO_STREAM(std::endl << joint_pos_cmd_);
             planed_ = true;
-
         }
 
         if (planed_)
@@ -383,11 +381,22 @@ namespace manipulator_controller
             duration = now_time_ - begin_time_;
             double sec = duration.toSec();
             bool reached = true;
-            ROS_INFO_STREAM(sec);
-            ROS_INFO_STREAM(std::endl<<joint_pos_cmd_[0]);
-            ROS_INFO_STREAM(std::endl<<joint_cmd_[0]);
-            ROS_INFO_STREAM(std::endl<<joint_pos_[0]);
-            ROS_INFO_STREAM(std::endl<< coeff_);
+            // ROS_INFO_STREAM("z_joint");
+            // ROS_INFO_STREAM(joint_pos_cmd_[0]);
+            // ROS_INFO_STREAM(joint_cmd_[0]);
+            // ROS_INFO_STREAM(joint_pos_[0]);
+            // ROS_INFO_STREAM("----------------------");
+            // ROS_INFO_STREAM("x_joint");
+            // ROS_INFO_STREAM(joint_pos_cmd_[1]);
+            // ROS_INFO_STREAM(joint_cmd_[1]);
+            // ROS_INFO_STREAM(joint_pos_[1]);
+            // ROS_INFO_STREAM("----------------------");
+            // ROS_INFO_STREAM("y_joint");
+            // ROS_INFO_STREAM(joint_pos_cmd_[2]);
+            // ROS_INFO_STREAM(joint_cmd_[2]);
+            // ROS_INFO_STREAM(joint_pos_[2]);
+            // ROS_INFO_STREAM("----------------------");
+            //ROS_INFO_STREAM(std::endl<< coeff_);
 
             for (int i = 0; i < 7; i++)
             { 
@@ -395,7 +404,7 @@ namespace manipulator_controller
                 {
                     joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
                 }
-                if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > 0.01 )
+                if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > 0.01)
                 {
                     reached = false;
                 }
@@ -599,13 +608,13 @@ namespace manipulator_controller
         omega[2] = twist_cmd_[2];
         vel = pseudo_inverse * omega;
         // ROS_INFO_STREAM(omega);
-        ROS_INFO_STREAM(std::endl<<pseudo_inverse);
+        //ROS_INFO_STREAM(std::endl<<pseudo_inverse);
         // ROS_INFO_STREAM(vel);
         joint_vel_cmd_[3] = vel[0];
         joint_vel_cmd_[4] = vel[1];
         joint_vel_cmd_[5] = vel[2];
         joint_vel_cmd_[6] = vel[3];
-        ROS_INFO_STREAM(vel);
+        //ROS_INFO_STREAM(vel);
         // joint_vel_cmd_[6] = -0.6 * twist_cmd_[0];
         // joint_vel_cmd_[5] = 0.6 * twist_cmd_[1];
         // joint_vel_cmd_[3] = 0.6 * twist_cmd_[2];

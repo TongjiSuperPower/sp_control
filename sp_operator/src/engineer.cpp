@@ -12,7 +12,7 @@ namespace sp_operator
         manipulator_cmd_pub_ = nh.advertise<sp_common::ManipulatorCmd>("/cmd_manipulator", 10);
         twist_cmd_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_twist",10);
         //joint_cmd_pub_ = nh.advertise<control_msgs::JointJog>("/delta_joint_cmds",10);
-        joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("/cmd_joint",10);
+        joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("/cmd_joint_vel",10);
         ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",10);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
@@ -163,12 +163,16 @@ namespace sp_operator
         else if (dbus_data_.s_l == 3)
         {
             manipulator_cmd_.control_mode = AUTO;
-            if (dbus_data_.s_r == 1)
+            if (dbus_data_.key_v)
                 manipulator_cmd_.destination = HOME;
-            else if (dbus_data_.s_r == 3)
+            else if (dbus_data_.key_b)
                 manipulator_cmd_.destination = GROUND;
-            else if (dbus_data_.s_r == 2)
-                manipulator_cmd_.destination = PLACE;
+            else if (dbus_data_.key_z)
+                manipulator_cmd_.destination = SLIVER;
+            else if (dbus_data_.key_x)
+                manipulator_cmd_.destination = GOLD;
+            else 
+                manipulator_cmd_.destination = NONE;
         }
         else if (dbus_data_.s_l == 2)
         {

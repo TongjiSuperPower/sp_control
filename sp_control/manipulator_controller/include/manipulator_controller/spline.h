@@ -7,17 +7,17 @@ namespace manipulator_controller
     class Spline
     {
         public:
-            void init(Eigen::Matrix<double, 7, 1> start, Eigen::Matrix<double, 7, 1> end, Eigen::Matrix<double, 7, 1> vel);
+            void init(double start, double end, double vel);
 
-            void computeCoeff(Eigen::Matrix<double, 7, 4> &coeff);
+            void computeCoeff(Eigen::Vector4d &coeff);
 
         private:
 
-            Eigen::Matrix<double, 7, 1> start_points_{};
-            Eigen::Matrix<double, 7, 1> end_points_{};
-            Eigen::Matrix<double, 7, 1> vels_{};
+            double start_point_{};
+            double end_point_{};
+            double vel_{};
             int num_;
-            std::vector<double> rough_time_;
+            double rough_time_{};
 
 
     };

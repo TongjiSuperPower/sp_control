@@ -63,10 +63,11 @@ namespace sp_operator
 
             enum
             {  
+                NONE,
                 HOME,
                 GROUND,
-                PLACE,
-                LEFT90
+                SLIVER,
+                GOLD
 
             };
 
