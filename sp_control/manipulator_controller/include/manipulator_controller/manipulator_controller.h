@@ -22,6 +22,7 @@
 #include <sp_common/filters/filters.h>
 #include <sp_common/base_utilities.h>
 #include <sp_common/ManipulatorCmd.h>
+#include <sp_common/CustomerControllerCmd.h>
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
@@ -35,6 +36,7 @@ namespace manipulator_controller
         geometry_msgs::Twist cmd_twist_;
         std_msgs::Float64MultiArray cmd_joint_vel_;
         sp_common::ManipulatorCmd cmd_manipulator_;
+        sp_common::CustomerControllerCmd cmd_cc_;
         ros::Time stamp_;
     };
 
@@ -121,6 +123,8 @@ namespace manipulator_controller
 
         void cmdManipulatorCallback(const sp_common::ManipulatorCmd::ConstPtr &msg);
 
+        void cmdCustomerControllerCallback(const sp_common::CustomerControllerCmd::ConstPtr &msg);
+
         void stopProcess();
 
         void readyProcess();
@@ -156,6 +160,7 @@ namespace manipulator_controller
         Eigen::Matrix<double, 7, 1> joint_cmd_{}, joint_vel_cmd_{}, joint_pos_{}, joint_pos_cmd_{};
         Eigen::Matrix<double, 7, 4> coeff_{};
         sp_common::ManipulatorCmd manipulator_cmd_{};
+        sp_common::CustomerControllerCmd cc_cmd_{};
 
         Eigen::Vector4d cartesian_cmd_{};
         Eigen::Vector3d euler_cmd_{};
@@ -168,6 +173,7 @@ namespace manipulator_controller
         ros::Subscriber cmd_twist_sub_;
         ros::Subscriber cmd_joint_vel_sub_;
         ros::Subscriber cmd_manipulator_sub_;
+        ros::Subscriber cmd_cc_sub_;
 
         ros::Publisher cali_pub_;
         
@@ -194,7 +200,7 @@ namespace manipulator_controller
             CALI
         };
 
-        enum
+        enum 
         {
             STOP,
             READY,
@@ -208,7 +214,8 @@ namespace manipulator_controller
             HOME,
             GROUND,
             SLIVER,
-            GOLD
+            GOLD,
+            VISION
         };
 
 

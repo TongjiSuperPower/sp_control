@@ -13,6 +13,7 @@ uint8 HOME = 1
 uint8 GROUND = 2
 uint8 SLIVER = 3
 uint8 GOLD = 4
+uint8 VISION = 5
 
 uint8 TAKE_ORE = 0
 uint8 EXCHANGE_ORE = 1
@@ -23,4 +24,3 @@ uint8 vision_mode
 uint8 destination
 
 bool final_push
-bool begin_auto_exchange

@@ -44,7 +44,6 @@ int main(int argc, char **argv)
   ros::Rate loop_rate(60);
   while (ros::ok())
   {
-
     dbus_node.run();
     loop_rate.sleep();
   }
@@ -55,107 +54,16 @@ DBusNode::DBusNode()
 {
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
   nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
-  dbus_.init(serial_port_.data());
-  cmd_pos_.x = cmd_pos_.y = cmd_pos_.z = 0.0;
-  gripper_signal = sucker_signal = rob_signal = last_q = last_w = last_e = false;
-
-
-  
+  dbus_.init(serial_port_.data());  
 }
 
 void DBusNode::run()
 {
-  cmd_vel_.linear.x = 0.00;
-  cmd_vel_.linear.y = 0.00;
-  cmd_vel_.angular.z = 0.00;
   dbus_.read();
   if (dbus_.get_update())
   {
     dbus_.getData(&dbus_cmd_);
     dbus_pub_.publish(dbus_cmd_);
-    
-    
-    if (dbus_cmd_.s_r == 1) // right paddle up,using remote control
-    {
-      cmd_vel_.linear.x = chassis_x_coeff * dbus_cmd_.ch_r_x;
-      cmd_vel_.linear.y = -chassis_y_coeff * dbus_cmd_.ch_r_y;
-      cmd_vel_.angular.z = -chassis_z_coeff_rc * dbus_cmd_.ch_l_x;
-      cmd_pos_.y += gimbal_y_coeff_rc * dbus_cmd_.ch_l_y;
-      if (cmd_pos_.y > 1.57)
-        cmd_pos_.y = 1.57;
-      else if (cmd_pos_.y < -1.57)
-        cmd_pos_.y = -1.57;
-    }
-    else if (dbus_cmd_.s_r == 3) // right paddle middle, using keyboard control
-    {
-      if (dbus_cmd_.key_w) // chassis_forward
-        cmd_vel_.linear.x = chassis_x_coeff;
-      else if (dbus_cmd_.key_s) // chassis_back
-        cmd_vel_.linear.x = -chassis_x_coeff;
-      if (dbus_cmd_.key_a) // chassis_left
-        cmd_vel_.linear.y = chassis_y_coeff;
-      else if (dbus_cmd_.key_d) // chassis_right
-        cmd_vel_.linear.y = -chassis_y_coeff;
-      if (dbus_cmd_.key_q && !dbus_cmd_.key_e) // gimbal_counterclockwise
-        cmd_pos_.x += gimbal_x_coeff;
-      else if (dbus_cmd_.key_e && !dbus_cmd_.key_q ) // gimbal_clockwise
-        cmd_pos_.x += -gimbal_x_coeff;
-      else if (dbus_cmd_.key_q && dbus_cmd_.key_e) 
-        cmd_pos_.x = 0.0;
-      if (dbus_cmd_.key_r)
-        cmd_pos_.z -= gimbal_z_coeff; 
-      else if (dbus_cmd_.key_f)
-        cmd_pos_.z -= -gimbal_z_coeff;
-
-      cmd_vel_.angular.z = -chassis_z_coeff_kb * dbus_cmd_.m_x; // chassis_trun
-      cmd_pos_.y += -gimbal_y_coeff_kb * dbus_cmd_.m_y;         // gimbal_pitch
-                  // gimbal_height
-      if (cmd_pos_.x > 1.50)
-        cmd_pos_.x = 1.50;
-      else if (cmd_pos_.x < -1.80)
-        cmd_pos_.x = -1.80;
-      if (cmd_pos_.y > 1.57)
-        cmd_pos_.y = 1.57;
-      else if (cmd_pos_.y < -1.57)
-        cmd_pos_.y = -1.57;
-      if (cmd_pos_.z > 0)
-        cmd_pos_.z = 0;
-      else if (cmd_pos_.z < -0.235)
-        cmd_pos_.z = -0.235;
-
-
-      if (!last_w  && dbus_cmd_.key_b)
-      {
-          sleep(0.05);
-          dbus_.getData(&dbus_cmd_);
-          if (dbus_cmd_.key_b)
-            sucker_signal = !sucker_signal;                    
-      }
-    }
-
-    else if (dbus_cmd_.s_r == 2) // right paddle down, stop chassis
-    {
-      cmd_vel_.linear.x = 0;
-      cmd_vel_.linear.y = 0;
-      cmd_vel_.angular.z = 0;
-    }
-   
-
-    if (dbus_cmd_.s_l == 3 && dbus_cmd_.s_r == 2)// left paddle middle, move manipulator
-    {
-      if (dbus_cmd_.key_q && !dbus_cmd_.key_e) // gimbal_counterclockwise
-        cmd_pos_.x += gimbal_x_coeff;
-      else if (dbus_cmd_.key_e && !dbus_cmd_.key_q ) // gimbal_clockwise
-        cmd_pos_.x += -gimbal_x_coeff;
-      else if (dbus_cmd_.key_q && dbus_cmd_.key_e) 
-        cmd_pos_.x = 0.0;
-                  
-
-      cmd_pos_.y += -gimbal_y_coeff_kb * dbus_cmd_.m_y; 
-    }
-
-
-
     ros::spinOnce();
   }
 }

@@ -31,7 +31,12 @@ namespace sp_operator
             ros::NodeHandle controller_nh;
 
             ros::Publisher manipulator_cmd_pub_;
+
             ros::Publisher ore_cmd_pub_;
+
+            ros::Publisher pump_cmd_pub_;
+
+            ros::Publisher rob_cmd_pub_;
 
             ros::Publisher twist_cmd_pub_;
 
@@ -43,8 +48,12 @@ namespace sp_operator
 
             geometry_msgs::Twist twist_cmd_{};
 
+            //cmds for publish
+
             std_msgs::Float64MultiArray joint_vel_cmd_{};
             std_msgs::Int8 ore_cmd_;
+            std_msgs::Bool pump_cmd_;
+            std_msgs::Bool rob_cmd_;
 
             //control_msgs::JointJog joint_cmd_{};
 
@@ -67,7 +76,8 @@ namespace sp_operator
                 HOME,
                 GROUND,
                 SLIVER,
-                GOLD
+                GOLD,
+                VISION
 
             };
 

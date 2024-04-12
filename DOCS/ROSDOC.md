@@ -1045,7 +1045,7 @@ https://learnku.com/docs/ubuntustudy/linux-service-management-how-to-set-boot-sc
 由于使用的`USB2CAN`设备都是同一家生产的，因此我们通过`ATTRS{serial}`来区分不同的设备。首先输入`lsusb` 来获知当前插入的设备挂载在何处，一般可获得形如`BUS 001 DEVICE 002`的序号名，然后将此信息填入以下命令行中：
 
 ```
-udevadm info --attribute-walk --name=/dev/BUS/USB/001/002
+udevadm info --attribute-walk --name=/dev/bus/usb/001/002
 ```
 
 如果一切正常运作，那么就可以看到设备的`ATTRS{serial}`，将其记下。重复以上步骤，直至记录下所有`USB2CAN`设备的`ATTRS{serial}`。然后新建udev规则：

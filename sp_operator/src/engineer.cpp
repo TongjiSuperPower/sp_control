@@ -11,9 +11,10 @@ namespace sp_operator
         controller_nh = ros::NodeHandle("engineer");
         manipulator_cmd_pub_ = nh.advertise<sp_common::ManipulatorCmd>("/cmd_manipulator", 10);
         twist_cmd_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_twist",10);
-        //joint_cmd_pub_ = nh.advertise<control_msgs::JointJog>("/delta_joint_cmds",10);
         joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("/cmd_joint_vel",10);
-        ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",10);
+        ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",1);
+        pump_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_pump",10);
+        rob_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rob",1);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
 
@@ -65,36 +66,34 @@ namespace sp_operator
 
     void Engineer::chassis_set()
     {
-        if (dbus_data_.s_l == 1) //chassis_control_mode
+
+        if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
-            if (dbus_data_.s_r == 1) //Mouse & Keyboard mode
-            {
-                cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
-                cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
-                cmd_chassis_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
-            }
-            else if (dbus_data_.s_r == 3) //Remote control mode
-            {
-                if (dbus_data_.key_w)
-                    cmd_chassis_vel_.linear.x = x_coeff_;
-                else if (dbus_data_.key_s)
-                    cmd_chassis_vel_.linear.x = -x_coeff_;
-                else 
-                    cmd_chassis_vel_.linear.x = 0.0;
-                if (dbus_data_.key_a)
-                    cmd_chassis_vel_.linear.y = y_coeff_;
-                else if (dbus_data_.key_d)
-                    cmd_chassis_vel_.linear.y = -y_coeff_;
-                else 
-                    cmd_chassis_vel_.linear.y = 0.0;
-                cmd_chassis_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
-            }
-            else if (dbus_data_.s_r == 2) //Stop mode
-            {
+            cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
+            cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
+            cmd_chassis_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
+        }
+        else if (dbus_data_.s_r == 3) //Remote control mode
+        {
+            if (dbus_data_.key_w)
+                cmd_chassis_vel_.linear.x = x_coeff_;
+            else if (dbus_data_.key_s)
+                cmd_chassis_vel_.linear.x = -x_coeff_;
+            else 
                 cmd_chassis_vel_.linear.x = 0.0;
+            if (dbus_data_.key_a)
+                cmd_chassis_vel_.linear.y = y_coeff_;
+            else if (dbus_data_.key_d)
+                cmd_chassis_vel_.linear.y = -y_coeff_;
+            else 
                 cmd_chassis_vel_.linear.y = 0.0;
-                cmd_chassis_vel_.angular.z = 0.0;
-            }
+            cmd_chassis_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
+        }
+        else if (dbus_data_.s_r == 2) //Stop mode
+        {
+            cmd_chassis_vel_.linear.x = 0.0;
+            cmd_chassis_vel_.linear.y = 0.0;
+            cmd_chassis_vel_.angular.z = 0.0;
         }
         else // Avoid chassis's movement when the manipulator is operating 
         {
@@ -114,7 +113,7 @@ namespace sp_operator
 
     void Engineer::gimbal_set()
     {
-        if (dbus_data_.s_r == 1) //Remote control mode
+        if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Remote control mode
         {
             cmd_gimbal_vel_.y = pitch_rc_coeff_ * dbus_data_.ch_l_y;
             cmd_gimbal_vel_.z = pitch_rc_coeff_ * dbus_data_.ch_l_x;
@@ -150,11 +149,22 @@ namespace sp_operator
 
             manipulator_cmd_.control_mode = MAUL;
 
+            twist_cmd_.linear.x = 0;
             twist_cmd_.linear.y = 0;
             twist_cmd_.linear.z = 0;
             twist_cmd_.angular.x = 0.003 * velocity_cmd_.angular.x;
             twist_cmd_.angular.y = 0.003 * velocity_cmd_.angular.y;
             twist_cmd_.angular.z = 0.003 * velocity_cmd_.angular.z;
+            if (dbus_data_.s_r == 1) //Control XYZ
+            {
+                // joint_vel_cmd_.data[0] = 0.0003 * dbus_data_.ch_l_x;
+                // joint_vel_cmd_.data[1] = 0.01 * dbus_data_.ch_l_y;
+                // joint_vel_cmd_.data[2] = 0.0015 * dbus_data_.ch_r_x;
+                // joint_vel_cmd_.data[3] = 0.0005 * dbus_data_.ch_r_y;
+                joint_vel_cmd_.data[0] = 0.001 * dbus_data_.ch_l_y;
+                joint_vel_cmd_.data[1] = -0.001 * dbus_data_.ch_r_y;
+                joint_vel_cmd_.data[2] = 0.0015 * dbus_data_.ch_r_x;
+            }
           
             // twist_cmd_.angular.x = 0.001 * dbus_data_.ch_r_y;
             // twist_cmd_.angular.y = 0.001 * dbus_data_.ch_r_x;
@@ -163,14 +173,16 @@ namespace sp_operator
         else if (dbus_data_.s_l == 3)
         {
             manipulator_cmd_.control_mode = AUTO;
-            if (dbus_data_.key_v)
+            if (dbus_data_.key_z)
                 manipulator_cmd_.destination = HOME;
-            else if (dbus_data_.key_b)
-                manipulator_cmd_.destination = GROUND;
-            else if (dbus_data_.key_z)
-                manipulator_cmd_.destination = SLIVER;
             else if (dbus_data_.key_x)
+                manipulator_cmd_.destination = GROUND;
+            else if (dbus_data_.key_c)
+                manipulator_cmd_.destination = SLIVER;
+            else if (dbus_data_.key_v)
                 manipulator_cmd_.destination = GOLD;
+            else if (dbus_data_.key_b)
+                manipulator_cmd_.destination = VISION;
             else 
                 manipulator_cmd_.destination = NONE;
         }
@@ -217,9 +229,7 @@ namespace sp_operator
                 if(dbus_data_.ch_l_x > 0)
                     ore_cmd_.data = 4;
                 if(dbus_data_.ch_r_y > 0)
-                    ore_cmd_.data = 0;
-                
-               
+                    ore_cmd_.data = 0;       
             }    
         }
 
@@ -227,14 +237,29 @@ namespace sp_operator
             manipulator_cmd_.final_push = true;
         else 
             manipulator_cmd_.final_push = false;
+
+        if (dbus_data_.key_f)
+        {
+            if (!pump_cmd_.data)
+                pump_cmd_.data = true;
+            else
+                pump_cmd_.data = false;
+        }
+
+        if (dbus_data_.key_ctrl)
+        {
+            if (!rob_cmd_.data)
+                rob_cmd_.data = true;
+            else
+                rob_cmd_.data = false;
+        }
+            
                 
     }
     void Engineer::velocity_callback(const geometry_msgs::Twist::ConstPtr &vel)
     {
         velocity_cmd_ = *vel;
-    }
-       
-
+    }   
 
 }
     
