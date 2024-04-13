@@ -1,0 +1,9 @@
+<library path="lib/libcalibration_controller">
+	<class 	name="calibration_controller/CalibrationController"
+			type="calibration_controller::CalibrationController"
+			base_class_type="controller_interface::ControllerBase">
+		<description>
+		JOINT WITH CALIBRATION ABILITY.
+		</description>
+	</class>
+</library>

@@ -1,0 +1,4 @@
+<launch>
+
+    <node name="calibration_controller_loader" pkg="controller_manager" type="unspawner" output="screen" args="controllers/calibration_controller"/>
+</launch>

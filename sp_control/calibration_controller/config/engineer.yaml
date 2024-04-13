@@ -1,0 +1,14 @@
+controllers:
+  calibration_controller:
+    type: calibration_controller/CalibrationController
+    joint_z:
+      gpio: joint_z_gpio
+    joint_x:
+      gpio: joint_x_gpio
+    joint_y:
+      gpio: joint_y_gpio
+    joint_pitch:
+      gpio: joint_pitch_gpio
+
+
+
