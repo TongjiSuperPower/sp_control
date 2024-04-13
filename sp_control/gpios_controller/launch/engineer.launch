@@ -1,0 +1,5 @@
+<launch>
+    <rosparam file="$(find gpios_controller)/config/engineer.yaml" command="load"/>
+
+    <node name="gpios_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="controllers/gpios_controller"/>
+</launch>

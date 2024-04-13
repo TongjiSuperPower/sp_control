@@ -1,0 +1,10 @@
+<library path="lib/libcover_controller">
+	<class  name="cover_controller/CoverController" 
+		    type="cover_controller::CoverController"
+		    base_class_type="controller_interface::ControllerBase">
+		<description>
+			The Cover Controller for infantry's Gimbal.
+		</description>
+	</class>
+</library>
+

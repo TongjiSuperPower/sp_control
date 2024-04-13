@@ -1,0 +1,8 @@
+controllers:
+  gpios_controller:
+    type: gpios_controller/Infantry
+    cover:
+      gpio: cover_gpio
+
+
+
