@@ -1,0 +1,5 @@
+<launch>
+    <rosparam file="$(find adjustment_controller)/config/adjustment.yaml" command="load"/>
+
+    <node name="adjustment_controller_loader" pkg="controller_manager" type="spawner" output="screen" args="adjustment/adjustment_controller"/>
+</launch>

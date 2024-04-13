@@ -1,0 +1,17 @@
+adjustment:
+  adjustment_controller:
+    type: adjustment_controller/AdjustmentController
+    actuator1:
+      joint: joint1
+      pid:
+        {
+          p: 0.8,
+          i: 0.0,
+          d: 0.002,
+          i_clamp_max: 5,
+          i_clamp_min: -5,
+          antiwindup: true,
+        }
+    cmd_vel: 6.28
+
+

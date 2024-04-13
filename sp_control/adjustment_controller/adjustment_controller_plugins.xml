@@ -1,0 +1,9 @@
+<library path="lib/libadjustment_controller">
+	<class 	name="adjustment_controller/AdjustmentController"
+			type="adjustment_controller::AdjustmentController"
+			base_class_type="controller_interface::ControllerBase">
+		<description>
+		JOINT WITH ADJUSTMENT ABILITY.
+		</description>
+	</class>
+</library>

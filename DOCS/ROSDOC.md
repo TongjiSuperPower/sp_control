@@ -915,7 +915,7 @@ rostopic pub /controllers/joint1_velocity_controller/command std_msgs/Float64 "d
 
 1）修改xacro模型
 
-文件位于`sp_description/urdf/engineer/engineer.xarco `
+文件位于`sp_description/urdf/engineer_manipulator/engineer.xarco `
 
 ```
 <?xml version="1.0"?>
