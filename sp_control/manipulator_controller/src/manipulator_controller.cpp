@@ -8,22 +8,14 @@ namespace manipulator_controller
         ROS_INFO("MANIPULATOR: START TO INIT ...");
         ros::NodeHandle nh;
 
-        // if (!controller_nh.getParam("publish_rate", publish_rate_) || !controller_nh.getParam("timeout", timeout_))
-        // {
-        //     ROS_ERROR("Some gimbal params doesn't given (namespace: %s)", controller_nh.getNamespace().c_str());
-        //     return false;
-        // }
-
         // Determine whether it is in simulation environment or real environment
-        // simulated engineer uses series pitch and little roll axes, while real engineer uses differential pitch and little roll axes. 
+        // Simulated engineer uses series pitch and little roll axes, while real engineer uses differential pitch and little roll axes. 
         if (!nh.getParam("simulate", simulate_))
         {
             ROS_ERROR_STREAM("Don't know simulate or real.");
             return false;
         }
         ROS_INFO_STREAM("SIMULATE:" << (simulate_?"TRUE":"FALSE"));
-
-
 
 
         ros::NodeHandle nh_z = ros::NodeHandle(controller_nh, "z");
@@ -37,7 +29,7 @@ namespace manipulator_controller
         ros::NodeHandle nh_roll2 = ros::NodeHandle(controller_nh, "roll2");
         ros::NodeHandle nh_diff = ros::NodeHandle(controller_nh, "diff");
 
-        // get the effort joint interface
+        // Get the effort joint interface
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 
 
@@ -47,7 +39,7 @@ namespace manipulator_controller
        
         if (!ctrl_yaw_.init(effort_joint_interface_, nh_yaw) || !ctrl_roll1_.init(effort_joint_interface_, nh_roll1))
             return false;
-
+        //  Determine the use of series axes or differential axes based on simulate property
         if (simulate_)
         {
             if (!ctrl_pitch_.init(effort_joint_interface_, nh_pitch) || !ctrl_roll2_.init(effort_joint_interface_, nh_roll2))
@@ -59,11 +51,12 @@ namespace manipulator_controller
                 return false;
         }
 
-
+        // Read y axis parameters about friction
         y_has_friction_ = sp_common::getParam(controller_nh, "y/has_friction", false);
         y_friction_ = sp_common::getParam(controller_nh, "y/friction", 0.0);
         XmlRpc::XmlRpcValue xml_rpc_value;
 
+        // Read some parameters
         controller_nh.getParam("vel_limit", xml_rpc_value);
         for (auto it = xml_rpc_value.begin(); it != xml_rpc_value.end(); ++it)
             vel_limit_.push_back(it->second);
@@ -75,6 +68,10 @@ namespace manipulator_controller
         controller_nh.getParam("lower_pos_limit", xml_rpc_value);
         for (auto it = xml_rpc_value.begin(); it != xml_rpc_value.end(); ++it)
             lower_pos_limit_.push_back(it->second);
+
+        controller_nh.getParam("position_threshold", xml_rpc_value);
+        for (auto it = xml_rpc_value.begin(); it != xml_rpc_value.end(); ++it)
+            position_threshold_.push_back(it->second);
 
         // controller_nh.getParam("structure_coeff", xml_rpc_value);
         // for (auto it = xml_rpc_value.begin(); it != xml_rpc_value.end(); ++it)
@@ -93,7 +90,7 @@ namespace manipulator_controller
             joint_destination_.emplace(std::make_pair(destination_name, destinations));         
         }
 
-        
+        // Generate subscribers and publishers
         cmd_quat_sub_ = root_nh.subscribe<geometry_msgs::Quaternion>("/cmd_quat", 1, &ManipulatorController::cmdQuatCallback, this);
         cmd_twist_sub_ = root_nh.subscribe<geometry_msgs::Twist>("/cmd_twist", 1, &ManipulatorController::cmdTwistCallback, this);
         cmd_joint_vel_sub_ = root_nh.subscribe<std_msgs::Float64MultiArray>("/cmd_joint_vel", 1, &ManipulatorController::cmdJointVelCallback, this);
@@ -107,29 +104,28 @@ namespace manipulator_controller
         cali_pub_ = root_nh.advertise<std_msgs::Bool>("/calibrated", 10);
         twist_cmd_ = Eigen::Matrix<double, 6, 1>::Zero();
 
+        // Initialize some values
         joint_cmd_ = joint_vel_cmd_= joint_pos_ = joint_pos_cmd_ = Eigen::Matrix<double, 7, 1>::Zero();
-
         coeff_ = Eigen::Matrix<double, 7, 4>::Zero();
-
-        ROS_INFO("MANIPULATOR: INIT SUCCESS !");
-        //initPosition();
         initiated_ = false;
         jacobian = Eigen::Matrix<double, 3, 4>::Zero();
         destination_ = NONE;
+
+        ROS_INFO("MANIPULATOR: INIT SUCCESS !");
 
         return true;
     }
 
     void ManipulatorController::update(const ros::Time &time, const ros::Duration &period)
     {
-        if (!initiated_)
+        if (!initiated_) // Init process to read the joints' positions
         {
             initPosition(time, period);      
             initiated_ = true;
             ROS_INFO_STREAM("INIT JOINT POSITION");
         }
 
-
+        // Get subscribed messages
         geometry_msgs::Quaternion cmd_quat = cmd_rt_buffer_.readFromRT()->cmd_quat_;
         geometry_msgs::Twist cmd_twist = cmd_rt_buffer_.readFromRT()->cmd_twist_;
         std_msgs::Float64MultiArray cmd_joint_vel = cmd_rt_buffer_.readFromRT()->cmd_joint_vel_;
@@ -145,14 +141,7 @@ namespace manipulator_controller
             for (int i = 0; i < 7; i++)
                 joint_vel_cmd_[i] = cmd_joint_vel.data[i];
         }
-        else
-        {
-            // for (int i = 0; i < 7; i++)
-            //     joint_pos_cmd_[i] = joint_pos_[i];
-        }
-
-
-        
+ 
         twist_cmd_[0] = cmd_twist.angular.x;
         twist_cmd_[1] = cmd_twist.angular.y;
         twist_cmd_[2] = cmd_twist.angular.z;
@@ -169,19 +158,21 @@ namespace manipulator_controller
             planed_ = false;
         }
 
-        if (process_ != manipulator_cmd_.control_process)
-        {
-            process_ = manipulator_cmd_.control_process;
-            process_changed_ = true;
-        }
+        // if (process_ != manipulator_cmd_.control_process)
+        // {
+        //     process_ = manipulator_cmd_.control_process;
+        //     process_changed_ = true;
+        // }
+
 
         destination_ = manipulator_cmd_.destination;
+        getPosition();
         //Choose mode
         //AUTO MODE: auto control, be used when camera is vaild.
         //MAUL MODE: maul control by customer controller (twist_cmd)
         //JOINT MODE: joint control by remote_controller (joint_vel_cmd)
         // maulMode(); 
-        getPosition();
+    
        
 
         switch (mode_)
@@ -190,8 +181,7 @@ namespace manipulator_controller
             {
                 caliMode();
                 break;
-            }
-            
+            }            
             case AUTO:
             {
                 autoMode();       
@@ -209,19 +199,6 @@ namespace manipulator_controller
             }
         }
 
-        // switch (process_)
-        // {       
-        //     case STOP:
-        //     {
-        //         stopProcess(time, period);
-        //         break;
-        //     }
-        //     case REDAY:
-        //     {
-        //         readyProcess(time, period);
-        //         break;
-        //     }
-        // }
         last_final_push_ = final_push_;
         final_push_ = manipulator_cmd_.final_push;
         finalPush();
@@ -230,15 +207,12 @@ namespace manipulator_controller
 
     void ManipulatorController::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        //ROS_INFO_STREAM("joint_cmd_[0]:" << joint_cmd_[0]);
-        // ROS_INFO_STREAM("joint_err_[0]:" << joint_cmd_[0] - ctrl_z_.getPosition());
         if (mode_ != AUTO)
         {
             for (int i = 0; i <  7; i++)
                 joint_cmd_[i] += joint_vel_cmd_[i];
         }
         jointPosConstraint();
-
 
         ctrl_z_.setCommand(joint_cmd_[0]);
         ctrl_x_.setCommand(joint_cmd_[1]);
@@ -280,7 +254,6 @@ namespace manipulator_controller
             else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.001)
                 ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
         }
-
     }
 
     void ManipulatorController::caliMode()
@@ -314,8 +287,6 @@ namespace manipulator_controller
             calibrated.data = true;
             cali_pub_.publish(calibrated);
         }
-
-
     }
 
     void ManipulatorController::autoMode()
@@ -327,13 +298,13 @@ namespace manipulator_controller
             mode_changed_ = false;
         }
 
-
-        if (!planed_ && destination_ != NONE)
-        {     
-            std::string name;
-            if (destination_ == HOME)
+        std::string name;
+              
+        if (!planed_)
+        {
+            if  (destination_ == HOME)
                 name = "home";
-            else if (destination_ == GROUND)
+            else if  (destination_ == GROUND)
                 name = "ground";
             else if (destination_ == SLIVER)
                 name = "sliver";
@@ -347,13 +318,7 @@ namespace manipulator_controller
             for (int i = 0; i < 7; i++)
             {
                 joint_pos_cmd_[i] = joint_destination_[name][i];
-                spline_.init(joint_pos_[i], joint_pos_cmd_[i], vel_limit_[i]);
-                Eigen::Vector4d coeff;
-                spline_.computeCoeff(coeff);
-                coeff_(i, 0) = coeff[0];
-                coeff_(i, 1) = coeff[1];
-                coeff_(i, 2) = coeff[2];
-                coeff_(i, 3) = coeff[3];
+                generateSplineCoeff(i);
             }
 
             begin_time_ = ros::Time::now();
@@ -376,12 +341,11 @@ namespace manipulator_controller
 
             for (int i = 0; i < 7; i++)
             { 
-    
                 if (abs(joint_pos_cmd_[i] - joint_cmd_[i]) > 0.002)
                     joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
                 else
                     joint_cmd_[i] = joint_pos_cmd_[i];
-                if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > 0.02)
+                if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
                     reached = false;
             }
 
@@ -393,15 +357,7 @@ namespace manipulator_controller
 
         }
 
-       
-        
-      
-    
-        // quat2Euler(); 
-        // cartesian_cmd_[0] = 0.0;
-        // cartesian_cmd_[1] = 0.4;
-        // cartesian_cmd_[2] = 0.4;
-        // cartesian_cmd_[3] = 0.3;
+
 
 
         //if (manipulator_cmd_.is_start_vision_exchange)
@@ -439,7 +395,6 @@ namespace manipulator_controller
 
     void ManipulatorController::maulMode()
     {
-        
         if (mode_changed_)
         {
             //modeChangeProtect();
@@ -460,14 +415,17 @@ namespace manipulator_controller
         }
     }
 
-    void ManipulatorController::quat2Euler()
+    void ManipulatorController::generateSplineCoeff(int index)
     {
-        quat_cmd_.normalized();
-        Eigen::Matrix3d rot = quat_cmd_.matrix();
-        euler_cmd_[0] = std::atan2(-rot(1, 2), rot(1, 1));
-        euler_cmd_[1] = std::atan2(rot(1, 0), std::sqrt(rot(1, 1) * rot(1, 1) + rot(1, 2) * rot(1, 2)));
-        euler_cmd_[2] = std::atan2(-rot(2, 0), rot(0, 0));
+        spline_.init(joint_pos_[index], joint_pos_cmd_[index], vel_limit_[index]);
+        Eigen::Vector4d coeff;
+        spline_.computeCoeff(coeff);
+        coeff_(index, 0) = coeff[0];
+        coeff_(index, 1) = coeff[1];
+        coeff_(index, 2) = coeff[2];
+        coeff_(index, 3) = coeff[3];
     }
+
 
     void ManipulatorController::initPosition(const ros::Time &time, const ros::Duration &period)
     {
@@ -484,8 +442,6 @@ namespace manipulator_controller
         }
         else
             ctrl_diff_.update(time, period);
- 
- 
 
         joint_cmd_[0] = ctrl_z_.getPosition();
         joint_cmd_[1] = ctrl_x_.getPosition();
@@ -597,25 +553,6 @@ namespace manipulator_controller
         jacobian(2, 1) = sin(joint_pos_[5]) * cos(joint_pos_[6]);
         jacobian(2, 2) = -sin(joint_pos_[6]);
         jacobian(2, 3) = 0;
-        // jacobian(1, 4) = jacobian(3, 1) = jacobian(3, 2) = jacobian(4, 3) = jacobian(5, 0) = 1.0;
-
-        // jacobian(0, 5) = sin(joint_pos_[4]);
-        // jacobian(0, 6) = cos(joint_pos_[4]) * cos(joint_pos_[5]);
-        // jacobian(1, 6) = sin(joint_pos_[5]);
-        // jacobian(2, 5) = cos(joint_pos_[4]);
-        // jacobian(2, 6) = -sin(joint_pos_[4]) * cos(joint_pos_[5]);
-
-        // jacobian(3, 4) = -sin(joint_pos_[4]) * cos(joint_pos_[5]) * structure_coeff_.l3_ - (sin(joint_pos_[4]) * sin(joint_pos_[5]) * sin(joint_pos_[6]) + cos(joint_pos_[4]) * cos(joint_pos_[6]) ) * structure_coeff_.l4_;
-        // jacobian(5, 4) = -cos(joint_pos_[4]) * cos(joint_pos_[5]) * structure_coeff_.l3_ - (cos(joint_pos_[4]) * sin(joint_pos_[5]) * sin(joint_pos_[6]) + sin(joint_pos_[4]) * cos(joint_pos_[6]) ) * structure_coeff_.l4_;
-
-        // jacobian(3, 5) = -cos(joint_pos_[4]) * sin(joint_pos_[5]) * structure_coeff_.l3_  + cos(joint_pos_[4]) * cos(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
-        // jacobian(4, 5) = cos(joint_pos_[5]) * structure_coeff_.l3_  + sin(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
-        // jacobian(5, 5) = sin(joint_pos_[4]) * sin(joint_pos_[5]) * structure_coeff_.l3_  - sin(joint_pos_[4]) * cos(joint_pos_[5]) * sin(joint_pos_[6]) * structure_coeff_.l4_;
-        
-        // jacobian(3, 6) = (-sin(joint_pos_[4]) * sin(joint_pos_[6]) + cos(joint_pos_[4]) * sin(joint_pos_[5]) * cos(joint_pos_[6])) * structure_coeff_.l4_;
-        // jacobian(4, 6) = -cos(joint_pos_[5]) * cos(joint_pos_[6]) * structure_coeff_.l4_;
-        // jacobian(5, 6) = (-cos(joint_pos_[4]) * sin(joint_pos_[6]) - sin(joint_pos_[4]) * sin(joint_pos_[5]) * cos(joint_pos_[6])) * structure_coeff_.l4_;
-
     }
 
     void ManipulatorController::finalPush()

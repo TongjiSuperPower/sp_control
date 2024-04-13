@@ -95,7 +95,7 @@ namespace manipulator_controller
 
         void jointMode();
 
-        void quat2Euler();
+        void generateSplineCoeff(int index);
 
         void calJointVel();
 
@@ -106,6 +106,8 @@ namespace manipulator_controller
         void finalPush();
         
         void jointPosConstraint();
+
+        void orePlaceProcess();
 
         void msgCaliZCallback(const std_msgs::Bool::ConstPtr &msg);
 
@@ -149,7 +151,8 @@ namespace manipulator_controller
 
         std::vector<double> vel_limit_{};
         std::vector<double> upper_pos_limit_{};
-        std::vector<double> lower_pos_limit_{};
+        std::vector<double> lower_pos_limit_{}; 
+        std::vector<double> position_threshold_{}; 
         std::unordered_map<std::string, std::vector<double>> joint_destination_;
 
         // Structure_coeff structure_coeff_{};

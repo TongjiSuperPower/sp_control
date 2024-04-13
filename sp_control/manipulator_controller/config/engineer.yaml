@@ -65,9 +65,11 @@ manipulator:
     vel_limit:
       {1_z: 0.2, 2_x: 0.2, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 3.14, 6_pitch: 3.14, 7_roll2: 3.14}
     upper_pos_limit:
-      {1_z: 0.755, 2_x: 0.265, 3_y: 0.25, 4_yaw: 2.00, 5_roll1: 6.28, 6_pitch: 1.57, roll2: 6.28}
+      {1_z: 0.755, 2_x: 0.265, 3_y: 0.25, 4_yaw: 2.00, 5_roll1: 6.28, 6_pitch: 1.57, 7_roll2: 6.28}
     lower_pos_limit:
-      {1_z: 0.0, 2_x: 0.0, 3_y: -0.25, 4_yaw: -2.00, 5_roll1: -6.28, 6_pitch: -1.57, roll2: -6.28}
+      {1_z: 0.0, 2_x: 0.0, 3_y: -0.25, 4_yaw: -2.00, 5_roll1: -6.28, 6_pitch: -1.57, 7_roll2: -6.28}
+    position_threshold:
+      {1_z: 0.01, 2_x: 0.01, 3_y: 0.01, 4_yaw: 0.05, 5_roll1: 0.05, 6_pitch: 0.05, 7_roll2: 0.05}
     structure_coeff:
       {l1: 0.60, l2: 0.25, l3: 0.10, l4: 0.20}
 

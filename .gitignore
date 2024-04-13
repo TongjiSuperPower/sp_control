@@ -1,5 +1,6 @@
 build/
 sp_vision
+imu_control
 *.swp
 .vscode/
 out/
