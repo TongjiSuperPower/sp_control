@@ -28,6 +28,7 @@ add_message_files(
    JointMsgs.msg
    ShooterCmd.msg
    CustomerControllerCmd.msg 
+   VisionCmd.msg
 
 #   Message2.msg
 )

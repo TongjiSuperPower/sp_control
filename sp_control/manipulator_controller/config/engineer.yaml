@@ -82,7 +82,25 @@ manipulator:
         {1_z: 0.42, 2_x: 0.2, 3_y: -0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.0, 7_roll2: 0.0}
       gold:
         {1_z: 0.25, 2_x: 0.2, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: -1.57, 6_pitch: -0.87, 7_roll2: 1.57}
-      vision:
+      exchange:
         {1_z: 0.5, 2_x: 0.2, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+    
+    process:
+      place_ore:
+        process_num: 4
+        destinations:
+        -  {1_z: 0.4, 2_x: 0.25, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.4, 2_x: 0.25, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.4, 2_x: 0.0, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.4, 2_x: 0.0, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 0.0, 6_pitch: 0.0, 7_roll2: 0.0}
+
+     take_ore: 
+        process_num: 4
+        destinations:
+        -  {1_z: 0.45, 2_x: 0.12, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.35, 2_x: 0.14, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.25, 2_x: 0.16, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        -  {1_z: 0.15, 2_x: 0.18, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+
     
     

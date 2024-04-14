@@ -23,6 +23,7 @@
 #include <sp_common/base_utilities.h>
 #include <sp_common/ManipulatorCmd.h>
 #include <sp_common/CustomerControllerCmd.h>
+#include <sp_common/VisionCmd.h>
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
@@ -37,6 +38,7 @@ namespace manipulator_controller
         std_msgs::Float64MultiArray cmd_joint_vel_;
         sp_common::ManipulatorCmd cmd_manipulator_;
         sp_common::CustomerControllerCmd cmd_cc_;
+        sp_common::VisionCmd cmd_vision_;
         ros::Time stamp_;
     };
 
@@ -95,6 +97,12 @@ namespace manipulator_controller
 
         void jointMode();
 
+        void destinationMode();
+
+        void visionMode();
+
+        void processMode();
+
         void generateSplineCoeff(int index);
 
         void calJointVel();
@@ -127,6 +135,8 @@ namespace manipulator_controller
 
         void cmdCustomerControllerCallback(const sp_common::CustomerControllerCmd::ConstPtr &msg);
 
+        void cmdVisionCallback(const sp_common::VisionCmd::ConstPtr &msg);
+
         void stopProcess();
 
         void readyProcess();
@@ -154,6 +164,9 @@ namespace manipulator_controller
         std::vector<double> lower_pos_limit_{}; 
         std::vector<double> position_threshold_{}; 
         std::unordered_map<std::string, std::vector<double>> joint_destination_;
+        std::vector<double> vision_destination_{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        std::unordered_map<std::string, int> joint_process_num_;
+        std::unordered_map<std::string, std::vector<std::vector<double>>> joint_process_;
 
         // Structure_coeff structure_coeff_{};
 
@@ -165,10 +178,6 @@ namespace manipulator_controller
         sp_common::ManipulatorCmd manipulator_cmd_{};
         sp_common::CustomerControllerCmd cc_cmd_{};
 
-        Eigen::Vector4d cartesian_cmd_{};
-        Eigen::Vector3d euler_cmd_{};
-        Eigen::Vector4d xyz_cmd_{};
-        Eigen::Vector3d rpy_cmd_{};
 
         Eigen::Matrix<double, 3, 4> jacobian {};
         // Subscribers
@@ -177,8 +186,10 @@ namespace manipulator_controller
         ros::Subscriber cmd_joint_vel_sub_;
         ros::Subscriber cmd_manipulator_sub_;
         ros::Subscriber cmd_cc_sub_;
+        ros::Subscriber cmd_vision_sub_;
 
         ros::Publisher cali_pub_;
+        ros::Publisher vision_pub_;
         
         ros::Subscriber msg_joint_z_cali_sub_;
         ros::Subscriber msg_joint_x_cali_sub_;
@@ -203,12 +214,11 @@ namespace manipulator_controller
             CALI
         };
 
-        enum 
+        enum
         {
-            STOP,
-            READY,
-            MOVE,
-            DONE
+            DESTINATION,
+            VISION,
+            PROCESS
         };
 
         enum
@@ -218,27 +228,32 @@ namespace manipulator_controller
             GROUND,
             SLIVER,
             GOLD,
-            VISION
+            EXCHANGE
         };
 
+        enum
+        { 
+            STOP,
+            PLACE_ORE,
+            TAKE_ORE
+        };
 
 
         int mode_ = MAUL;
         bool mode_changed_ = false;
 
-        int process_ = STOP;
-        bool process_changed_ = false;
+        int auto_type_ = DESTINATION;
 
         bool y_has_friction_{};
         double y_friction_{};
 
         bool last_final_push_{}, final_push_{};
 
-        int orientation_ = HOME;
-
-        bool planed_;
+        bool planed_, begin_exchange_, vision_execuated_;
 
         int destination_ = NONE;
+        int process_ = STOP;
+        int process_num_ = 0;
 
         Spline spline_;
 
