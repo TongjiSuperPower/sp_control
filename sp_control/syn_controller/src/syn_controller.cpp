@@ -32,39 +32,69 @@ namespace syn_controller
 
   void SynController::update(const ros::Time &time, const ros::Duration &period)
   { 
+    i++;
     pos_ = (ctrl_left_.joint_.getPosition() + ctrl_right_.joint_.getPosition()) / 2;
     //if (ctrl_left_.joint_.getPosition() - ctrl_right_.joint_.getPosition())
+   
+     
 
     ctrl_left_.setCommand(cmd_);
     ctrl_right_.setCommand(cmd_);
     ctrl_left_.update(time, period);
     ctrl_right_.update(time, period);
+     if (i == 50)
+    {
+      // ROS_INFO_STREAM(cmd_);
+      // ROS_INFO_STREAM(ctrl_left_.joint_.getPosition());
+      // ROS_INFO_STREAM(ctrl_right_.joint_.getPosition());
+      // ROS_INFO_STREAM("------------");
+      // ROS_INFO_STREAM(ctrl_left_.joint_.getEffort());
+      // ROS_INFO_STREAM(ctrl_right_.joint_.getEffort());
+      // ROS_INFO_STREAM(ctrl_left_.joint_.getCommand());
+      // ROS_INFO_STREAM(ctrl_right_.joint_.getCommand());
+      // ROS_INFO_STREAM("---------------------------------------");
+      i = 0;
+    }
     if (has_friction_)
     {
       if (has_gravity_)
       {
-        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.002)
+        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.008)
         {
-          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_ - gravity_);
-          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_ - gravity_);
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_ + gravity_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_ + gravity_);
         }
-        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
+        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.008)
         {
-          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_ - gravity_);
-          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_ - gravity_);
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_ + gravity_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_ + gravity_);
+        }
+        else
+        {
+          double eff = (cmd_ - ctrl_left_.joint_.getPosition()) / 0.008;
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + eff * friction_ + gravity_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + eff * friction_ + gravity_);
+
         }
       }
       else
       {
-        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.002)
+        if ((cmd_ - ctrl_left_.joint_.getPosition()) > 0.02)
         {
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + friction_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + friction_);
         }
-        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.002)
+        else if ((cmd_ - ctrl_left_.joint_.getPosition()) < -0.02)
         {
           ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() - friction_);
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() - friction_);
+        }
+        else
+        {
+          double eff = (cmd_ - ctrl_left_.joint_.getPosition()) / 0.02;
+          ctrl_left_.joint_.setCommand(ctrl_left_.joint_.getCommand() + eff * friction_);
+          ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + eff * friction_);
+
         }
       }
     }

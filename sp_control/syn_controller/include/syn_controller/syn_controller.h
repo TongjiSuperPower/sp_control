@@ -36,6 +36,7 @@ namespace syn_controller
 
     ros::NodeHandle nh;
     ros::Subscriber syn_cmd_sub_;
+    int i = 0;
 
  
 

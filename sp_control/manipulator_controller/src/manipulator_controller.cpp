@@ -209,6 +209,8 @@ namespace manipulator_controller
             ROS_INFO_STREAM("Change mode: " << mode_);
             mode_changed_ = true;
             planed_ = false;
+            destination_ = NONE;
+            
         }
 
         if (auto_type_ != manipulator_cmd_.auto_type)
@@ -231,7 +233,7 @@ namespace manipulator_controller
         //JOINT MODE: joint control by remote_controller (joint_vel_cmd)
         // maulMode(); 
 
-
+        // caliMode();
         switch (mode_)
         {
             case CALI:
@@ -280,12 +282,12 @@ namespace manipulator_controller
 
         if (simulate_)
         {
-            ctrl_pitch_.setCommand(joint_cmd_[5]);
+            ctrl_pitch_.setCommand(joint_cmd_[5] - pitch_offset_);
             ctrl_roll2_.setCommand(joint_cmd_[6]);
         }
         else
         {
-            ctrl_diff_.setPitchCommand(joint_cmd_[5]);
+            ctrl_diff_.setPitchCommand(joint_cmd_[5] - pitch_offset_);
             ctrl_diff_.setRollCommand(joint_cmd_[6]);
         }
 
@@ -306,10 +308,15 @@ namespace manipulator_controller
 
         if (y_has_friction_)
         {
-            if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) > 0.001)
+            if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) > 0.005)
                 ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
-            else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.001)
+            else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.005)
                 ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
+            else
+            {
+                double eff = (joint_cmd_[2] - ctrl_y_.joint_.getPosition()) / 0.005;
+                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + eff * y_friction_);
+            }
         }
     }
 
@@ -320,25 +327,20 @@ namespace manipulator_controller
             ROS_INFO_STREAM("Enter cali mode");
             mode_changed_ = false;
         }
+        if (!z_calibrated_ && z_calimsg_)
+        {
+            pitch_offset_ = -1.5708 - joint_pos_[5];
+            joint_cmd_[5] += pitch_offset_;
+            joint_pos_[5] += pitch_offset_;
+            z_calibrated_ = true;
+          
+        }
+        ROS_INFO_STREAM(joint_pos_[5]);
 
-        if (!z_calibrated_)
-            joint_vel_cmd_[0] = 0.001;
-        else    
-            joint_vel_cmd_[0] = 0.00;
-        if (!x_calibrated_)
-            joint_vel_cmd_[1] = 0.001;
-        else    
-            joint_vel_cmd_[1] = 0.00;
-         if (!y_calibrated_)
-            joint_vel_cmd_[2] = 0.001;
-        else    
-            joint_vel_cmd_[2] = 0.00;
-        if (!pitch_calibrated_)
-            joint_vel_cmd_[5] = 0.001;
-        else    
-            joint_vel_cmd_[5] = 0.00;
+     
 
-        if (z_calibrated_ && x_calibrated_ && y_calibrated_ && pitch_calibrated_ )
+        // if (z_calibrated_ && x_calibrated_ && y_calibrated_ && pitch_calibrated_ )
+        if (z_calibrated_)
         {
             std_msgs::Bool calibrated;
             calibrated.data = true;
@@ -400,22 +402,24 @@ namespace manipulator_controller
             duration = now_time_ - begin_time_;
             double sec = duration.toSec();
             bool reached = true;
-            // ROS_INFO_STREAM("yaw_joint");
-            // ROS_INFO_STREAM(joint_pos_cmd_[3]);
-            // ROS_INFO_STREAM(joint_cmd_[3]);
-            // ROS_INFO_STREAM(joint_pos_[3]);
-            // ROS_INFO_STREAM("----------------------");
+            ROS_INFO_STREAM("z_joint");
+            ROS_INFO_STREAM(joint_pos_cmd_[0]);
+            ROS_INFO_STREAM(joint_cmd_[0]);
+            ROS_INFO_STREAM(joint_pos_[0]);
+            ROS_INFO_STREAM("----------------------");
 
 
-            for (int i = 0; i < 7; i++)
-            { 
+
+            // for (int i = 0; i < 7; i++)
+            // { 
+                int i = 0;
                 if (abs(joint_pos_cmd_[i] - joint_cmd_[i]) > 0.002)
                     joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
                 else
                     joint_cmd_[i] = joint_pos_cmd_[i];
                 if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
                     reached = false;
-            }
+            // }
 
             if (reached)
             {
@@ -552,6 +556,9 @@ namespace manipulator_controller
             ROS_INFO_STREAM("Enter joint mode");
             mode_changed_ = false;
         }
+        // ROS_INFO_STREAM(joint_cmd_[0]);
+        // ROS_INFO_STREAM(joint_pos_[0]);
+        // ROS_INFO_STREAM("----------------------------");
     }
 
     void ManipulatorController::generateSplineCoeff(int index)
@@ -616,7 +623,7 @@ namespace manipulator_controller
         }
         else
         {
-            joint_pos_[5] = ctrl_diff_.getPitchPosition();
+            joint_pos_[5] = ctrl_diff_.getPitchPosition() + pitch_offset_;
             joint_pos_[6] = ctrl_diff_.getRollPosition();
         }
     }
@@ -716,25 +723,25 @@ namespace manipulator_controller
     void ManipulatorController::msgCaliZCallback(const std_msgs::Bool::ConstPtr &msg)
     {
         if (msg->data)
-            z_calibrated_ = true;
+            z_calimsg_ = true;
     }
 
     void ManipulatorController::msgCaliXCallback(const std_msgs::Bool::ConstPtr &msg)
     {
         if (msg->data)
-            x_calibrated_ = true;
+            x_calimsg_ = true;
     }
 
     void ManipulatorController::msgCaliYCallback(const std_msgs::Bool::ConstPtr &msg)
     {
         if (msg->data)
-            y_calibrated_ = true;
+            y_calimsg_ = true;
     }
 
     void ManipulatorController::msgCaliPitchCallback(const std_msgs::Bool::ConstPtr &msg)
     {
         if (msg->data)
-            pitch_calibrated_ = true;
+            pitch_calimsg_ = true;
     }
 
 

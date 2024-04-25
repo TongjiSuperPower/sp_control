@@ -35,7 +35,7 @@ actuator_coefficient:
     max_out: 2000
     act2pos2: 1.74532922e-4 # 2PI/360/100
 
-  MG_995:
+  MG_996R:
     act2pos: 0.0001
     act2vel: 0
     act2effort: 0

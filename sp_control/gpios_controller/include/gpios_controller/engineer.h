@@ -38,7 +38,7 @@ namespace gpios_controller
          */
         void update(const ros::Time &time, const ros::Duration &period) override;
 
-        void starting(const ros::Time &time);
+        void starting(const ros::Time &time) {}
 
         void stopping(const ros::Time &time) {}
 

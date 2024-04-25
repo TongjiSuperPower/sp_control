@@ -69,18 +69,11 @@
   <depend>hardware_interface</depend>
   <depend>realtime_tools</depend>
   <depend>control_toolbox</depend>
-  <depend>effort_controllers</depend>
   <depend>gpio_controller</depend>
   
   <!-- For custom controllers -->
   <build_depend>pluginlib</build_depend>
   <exec_depend>pluginlib</exec_depend>
-
-  <depend>tf2</depend>
-  <depend>tf2_geometry_msgs</depend>
-  <depend>tf2_msgs</depend>
-  <depend>nav_msgs</depend>
-  <depend>geometry_msgs</depend>
 
   <depend>sp_common</depend>
 

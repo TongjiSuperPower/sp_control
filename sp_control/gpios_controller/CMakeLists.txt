@@ -8,8 +8,16 @@ project(gpios_controller)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  controller_interface
   roscpp
+  roslint
+  rospy
   std_msgs
+  pluginlib
+  hardware_interface
+  realtime_tools
+  control_toolbox
+
   sp_common
   gpio_controller
 )
@@ -71,7 +79,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -105,8 +113,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES multigpio_controller
-#  CATKIN_DEPENDS roscpp std_msgs
+#  LIBRARIES calibration_controller
+#  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
 
@@ -116,21 +124,24 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
-
+include_directories(${PROJECT_SOURCE_DIR}/include)
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/multigpio_controller.cpp
-# )
+
 set(SRC_LIST 
-  src/infantry.cpp
-  src/engineer.cpp
+ src/engineer.cpp
  )
 add_library(gpios_controller ${SRC_LIST}) 
 target_link_libraries(gpios_controller ${catkin_LIBRARIES})
+## Declare a C++ library
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/calibration_controller.cpp
+# )
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -139,7 +150,7 @@ target_link_libraries(gpios_controller ${catkin_LIBRARIES})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/multigpio_controller_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/calibration_controller_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -203,10 +214,10 @@ target_link_libraries(gpios_controller ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_multigpio_controller.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_calibration_controller.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
-
+roslint_cpp()
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

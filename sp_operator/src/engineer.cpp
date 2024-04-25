@@ -14,7 +14,7 @@ namespace sp_operator
         joint_cmd_pub_ = nh.advertise<std_msgs::Float64MultiArray>("/cmd_joint_vel",10);
         ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",1);
         pump_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_pump",10);
-        rob_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rob",1);
+        rod_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rod",1);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
 
@@ -26,9 +26,9 @@ namespace sp_operator
         y_accel_set_ = sp_common::getParam(controller_nh, "chassis/y_accel_set", 5);
         z_accel_set_ = sp_common::getParam(controller_nh, "chassis/z_accel_set", 1.8);
 
-        yaw_coeff_ =  sp_common::getParam(controller_nh, "gimbal/yaw_coeff_", 1.0);
-        pitch_mk_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_mk_coeff", 1.0);
-        pitch_rc_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_rc_coeff", 1.0);
+        yaw_coeff_ =  sp_common::getParam(controller_nh, "gimbal/yaw_coeff", 0.005);
+        pitch_mk_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_mk_coeff", 0.005);
+        pitch_rc_coeff_ = sp_common::getParam(controller_nh, "gimbal/pitch_rc_coeff", 0.005);
         yaw_left_limit_ = sp_common::getParam(controller_nh, "gimbal/yaw_left_limit", -1.57);
         yaw_right_limit_ = sp_common::getParam(controller_nh, "gimbal/yaw_right_limit", 1.57);
         pitch_low_limit_ = sp_common::getParam(controller_nh, "gimbal/pitch_low_limit", -0.52);
@@ -36,6 +36,7 @@ namespace sp_operator
         // for (int i = 0; i < 7; i++)
         //     joint_cmd_.velocities.push_back(0.0);
         joint_vel_cmd_.data = std::vector<double>(7, 0.0);
+
         return true;
     }
 
@@ -58,6 +59,8 @@ namespace sp_operator
 
         joint_cmd_pub_.publish(joint_vel_cmd_);
         ore_cmd_pub_.publish(ore_cmd_);
+        pump_cmd_pub_.publish(pump_cmd_);
+        rod_cmd_pub_.publish(rod_cmd_);
 
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
@@ -124,8 +127,8 @@ namespace sp_operator
                 cmd_gimbal_vel_.z = yaw_coeff_;
             else if (dbus_data_.key_e && !dbus_data_.key_q) // Turn right
                 cmd_gimbal_vel_.z = -yaw_coeff_;
-            else if (dbus_data_.key_q && dbus_data_.key_e) // If press Q and E simultaneously, return to 0 position.
-                cmd_gimbal_vel_.z = 1.0;
+            // else if (dbus_data_.key_q && dbus_data_.key_e) // If press Q and E simultaneously, return to 0 position.
+            //     cmd_gimbal_vel_.z = 1.0;
             else
                 cmd_gimbal_vel_.z = 0.0;
 
@@ -237,21 +240,34 @@ namespace sp_operator
             manipulator_cmd_.final_push = true;
         else 
             manipulator_cmd_.final_push = false;
+        ros::Duration delay(0.05);
+        pump_change_count_--;
+        rod_change_count_--;
 
-        if (dbus_data_.key_f)
+        if (dbus_data_.key_f && pump_change_count_ <= 0)
         {
-            if (!pump_cmd_.data)
-                pump_cmd_.data = true;
-            else
-                pump_cmd_.data = false;
+            delay.sleep();
+            if (dbus_data_.key_f)
+            {
+                if (!pump_cmd_.data)
+                    pump_cmd_.data = true;
+                else
+                    pump_cmd_.data = false;
+                pump_change_count_ = 50;
+            }
         }
 
-        if (dbus_data_.key_ctrl)
+        if (dbus_data_.key_ctrl && rod_change_count_ <= 0)
         {
-            if (!rob_cmd_.data)
-                rob_cmd_.data = true;
-            else
-                rob_cmd_.data = false;
+            delay.sleep();
+            if (dbus_data_.key_ctrl)
+            {
+                if (!rod_cmd_.data)
+                    rod_cmd_.data = true;
+                else
+                    rod_cmd_.data = false;
+                rod_change_count_ = 50;
+            }
         }
             
                 

@@ -11,7 +11,7 @@
     <xacro:engineer_chassis roller_type="simple"/>
 	<xacro:engineer_manipulator/>
 	<xacro:engineer_rotating_ore/>
-	<!-- <xacro:engineer_gimbal/> -->
+	<xacro:engineer_gimbal/>
 
    	<joint name="z_base_joint" type="fixed">
 		<origin xyz="-5.6436E-05 0 0.13569" rpy="0 0 0" />
@@ -21,13 +21,13 @@
   	</joint>
 
 
-	<!-- <joint name="gimbal_base_joint" type="fixed">
+	<joint name="gimbal_base_joint" type="fixed">
 		<origin
 		xyz="0.018 0.0825 0.029" rpy="0 0 0" />
 		<parent link="y_link" />
 		<child link="gimbal_base_link" />
 		<axis xyz="0 0 0" />
-  	</joint> -->
+  	</joint>
 
 
 	<!--在机器人模型的urdf/xacro文件中添加gazebo_ros_control插件-->
@@ -38,9 +38,9 @@
 		<plugin name="chassis_controller" filename="libchassis_controller.so">
 			<robotNamespace>/</robotNamespace>
 		</plugin>
-		<!-- <plugin name="gimbal_controller" filename="libgimbal_controller.so">
+		<plugin name="gimbal_controller" filename="libgimbal_controller.so">
 			<robotNamespace>/</robotNamespace>
-		</plugin> -->
+		</plugin>
 	</gazebo>
 
 </robot>

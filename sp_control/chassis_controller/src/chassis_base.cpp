@@ -134,9 +134,7 @@ namespace chassis_controller
         ramp_z_->input(cmd_vel.angular.z);
         vel_cmd_.x = ramp_x_->output(); 
         vel_cmd_.y = ramp_y_->output(); 
-        vel_cmd_.z = ramp_z_->output(); 
-        ROS_INFO_STREAM(vel_cmd_);
-    
+        vel_cmd_.z = ramp_z_->output();   
     }
 
     

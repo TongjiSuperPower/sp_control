@@ -66,44 +66,85 @@ void vel_callback(const geometry_msgs::Twist::ConstPtr& msg_p)
     //     last_time = ros::Time::now();
     // }
         vel = *msg_p ;
-            // 计算当前帧与上一帧的差异值
-        double diff_linear_x = fabs(vel.linear.x - previous_velocity.linear.x);
-        double diff_linear_y = fabs(vel.linear.y - previous_velocity.linear.y);
-        double diff_linear_z = fabs(vel.linear.z - previous_velocity.linear.z);
-        double diff_angular_x = fabs(vel.angular.x - previous_velocity.angular.x);
-        double diff_angular_y = fabs(vel.angular.y - previous_velocity.angular.y);
-        double diff_angular_z = fabs(vel.angular.z - previous_velocity.angular.z);
+        // ROS_INFO_STREAM(vel);
+        if(std::abs(vel.angular.x) < 2)
+        vel.angular.x = 0;
+        if(std::abs(vel.angular.y) < 2)
+        vel.angular.y = 0;
+        if(std::abs(vel.angular.z) < 2)
+        vel.angular.z = 0;
 
-        if (diff_linear_x > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.linear.x = previous_velocity.linear.x + (vel.linear.x - previous_velocity.linear.x)/diff_linear_x * MAX_DIFFERENCE;
-            }
-        if (diff_linear_y > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.linear.y = previous_velocity.linear.y + (vel.linear.y - previous_velocity.linear.y)/diff_linear_y * MAX_DIFFERENCE;
-            }
-        if (diff_linear_z > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.linear.z = previous_velocity.linear.z + (vel.linear.z - previous_velocity.linear.z)/diff_linear_z * MAX_DIFFERENCE;
-            }
-        if (diff_angular_x > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.angular.x = previous_velocity.angular.x + (vel.angular.x - previous_velocity.angular.x)/diff_angular_x * MAX_DIFFERENCE;
-            }
-        if (diff_angular_y > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.angular.y = previous_velocity.angular.y + (vel.angular.y - previous_velocity.angular.y)/diff_angular_y * MAX_DIFFERENCE;
-            }
-        if (diff_angular_z > 0.6)
-            // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
-            {
-                vel.angular.z = previous_velocity.angular.z + (vel.angular.z - previous_velocity.angular.z)/diff_angular_z * MAX_DIFFERENCE;
-            }
+        vel.linear.z = filterlz.update(vel.linear.z);
+        vel.linear.y = filterly.update(vel.linear.y);
+        vel.linear.x = filterlx.update(vel.linear.x);
+        vel.angular.x = filterax.update(vel.angular.x);
+        vel.angular.y = filteray.update(vel.angular.y);
+        vel.angular.z = filteraz.update(vel.angular.z);
+
+        if(std::abs(vel.angular.x) < 2)
+        vel.angular.x = 0;
+        if(std::abs(vel.angular.y) < 2)
+        vel.angular.y = 0;
+        if(std::abs(vel.angular.z) < 2)
+        vel.angular.z = 0;
+        
+            // 计算当前帧与上一帧的差异值
+        double diff_linear_x = vel.linear.x - previous_velocity.linear.x;
+        double diff_linear_y = vel.linear.y - previous_velocity.linear.y;
+        double diff_linear_z = vel.linear.z - previous_velocity.linear.z;
+        double diff_angular_x = vel.angular.x - previous_velocity.angular.x;
+        double diff_angular_y = vel.angular.y - previous_velocity.angular.y;
+        double diff_angular_z = vel.angular.z - previous_velocity.angular.z;
+
+        // if (diff_angular_x < 3)
+        // vel.angular.x = previous_velocity.angular.x;
+        // if (diff_angular_y < 3)
+        // vel.angular.y = previous_velocity.angular.y;       
+        // if (diff_angular_z < 3)
+        // {   ROS_INFO_STREAM(vel.angular.z);
+        //     ROS_INFO_STREAM(previous_velocity.angular.z);
+        //     vel.angular.z = previous_velocity.angular.z;
+        //     ROS_INFO_STREAM(vel.angular.z);
+        //     ROS_INFO_STREAM(previous_velocity.angular.z);
+        
+        // }
+
+            // ROS_INFO_STREAM(vel);
+
+
+        // ROS_INFO_STREAM("diff_angular_x:"<<diff_angular_x);
+
+
+        // if (diff_linear_x > 0.6)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.linear.x = previous_velocity.linear.x + (vel.linear.x - previous_velocity.linear.x)/diff_linear_x * MAX_DIFFERENCE;
+        //     }
+        // if (diff_linear_y > 0.6)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.linear.y = previous_velocity.linear.y + (vel.linear.y - previous_velocity.linear.y)/diff_linear_y * MAX_DIFFERENCE;
+        //     }
+        // if (diff_linear_z > 0.6)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.linear.z = previous_velocity.linear.z + (vel.linear.z - previous_velocity.linear.z)/diff_linear_z * MAX_DIFFERENCE;
+        //     }
+        // if (std::abs(diff_angular_x) > MAX_DIFFERENCE)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.angular.x = previous_velocity.angular.x +  MAX_DIFFERENCE;
+        //     }
+        // if (std::abs(diff_angular_y) > MAX_DIFFERENCE)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.angular.y = previous_velocity.angular.y +  MAX_DIFFERENCE;
+        //     }
+        // if (std::abs(diff_angular_z) > MAX_DIFFERENCE)
+        //     // if (std::abs(twist_cmd_[i] - last_twist_cmd_[i]) > VChangeConstraint[i])
+        //     {
+        //         vel.angular.z = previous_velocity.angular.z +  MAX_DIFFERENCE;
+        //     }
 
 
 
@@ -143,6 +184,8 @@ void vel_callback(const geometry_msgs::Twist::ConstPtr& msg_p)
             // vel.angular.y = std::abs(kf.stateOpt(3)) >= 0.20 ? -kf.stateOpt(3) : 0;
             // vel.angular.z = std::abs(kf.stateOpt(4)) >= 0.20 ? kf.stateOpt(4) : 0;
             // vel.angular.x = std::abs(kf.stateOpt(5)) >= 0.20 ? kf.stateOpt(5) : 0;
+            ROS_INFO_STREAM(vel);
+            ROS_INFO_STREAM("----------------");
 
 
             vel.linear.z = vel.linear.z*linearz;
@@ -152,13 +195,18 @@ void vel_callback(const geometry_msgs::Twist::ConstPtr& msg_p)
             vel.angular.y = - vel.angular.y*angulary;
             vel.angular.z = - vel.angular.z*angularz;
 
-            
-            vel.linear.z = filterlz.update(vel.linear.z);
-            vel.linear.y = filterly.update(vel.linear.y);
-            vel.linear.x = filterlx.update(vel.linear.x);
-            vel.angular.x = filterax.update(vel.angular.x);
-            vel.angular.y = filteray.update(vel.angular.y);
-            vel.angular.z = filteraz.update(vel.angular.z);
+            // if(std::abs(vel.angular.x) < 0.00005)
+            // vel.angular.x = 0;
+            // if(std::abs(vel.angular.y) < 0.00005)
+            // vel.angular.y = 0;
+            // if(std::abs(vel.angular.z) < 0.00005)
+            // vel.angular.z = 0;
+            // if(std::abs(vel.angular.x) > 0.002)
+            // vel.angular.x = 0.002 *std::abs(vel.angular.x)/vel.angular.x;
+            // if(std::abs(vel.angular.y) > 0.002)
+            // vel.angular.y = 0.002 *std::abs(vel.angular.y)/vel.angular.y;
+            // if(std::abs(vel.angular.z) > 0.002)
+            // vel.angular.z = 0.002 *std::abs(vel.angular.z)/vel.angular.z;
 
 
             ROS_INFO_STREAM(vel);
@@ -276,7 +324,7 @@ int main(int argc, char  *argv[])
     // ros::Publisher pub = nh.advertise<geometry_msgs::TwistStamped>("cmd_twist",10);
     ros::Publisher pub = nh.advertise<geometry_msgs::Twist>("cmd_twist",10);
     pub_vel = &(pub);
-    ros::Subscriber sub = nh.subscribe<geometry_msgs::Twist>("cmd_velocity",10,&vel_callback);
+    ros::Subscriber sub = nh.subscribe<geometry_msgs::Twist>("cmd_cc_velocity",10,&vel_callback);
 
 
 

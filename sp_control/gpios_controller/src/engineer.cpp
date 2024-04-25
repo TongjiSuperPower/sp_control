@@ -3,22 +3,11 @@
 //
 
 #include "gpios_controller/engineer.h"
-#include <angles/angles.h>
 #include <string>
 #include <pluginlib/class_list_macros.hpp>
 
 namespace gpios_controller
 {
-
-    template <typename T>
-    T getParam(ros::NodeHandle &pnh, const std::string &param_name, const T &default_val)
-    {
-        T param_val;
-        pnh.param<T>(param_name, param_val, default_val);
-        return param_val;
-    }
-
-
     bool Engineer::init(hardware_interface::RobotHW *robot_hw, ros::NodeHandle &root_nh, ros::NodeHandle &controller_nh)
     {
 
@@ -58,8 +47,8 @@ namespace gpios_controller
         rod_msg_ = msg->data;
     }
 
+PLUGINLIB_EXPORT_CLASS(gpios_controller::Engineer, controller_interface::ControllerBase);
+    
+}// namespace gpios_controller
 
-    PLUGINLIB_EXPORT_CLASS(gpios_controller::Engineer, controller_interface::ControllerBase);
-
-}// namespace cover_controller
 

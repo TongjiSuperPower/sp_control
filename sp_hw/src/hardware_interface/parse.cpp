@@ -104,7 +104,7 @@ namespace sp_hw
                     else
                         ROS_WARN_STREAM("Actuator Type " << it->first << "has no associated act2pos2");
                 }
-                if (it->first == "MG_995")
+                if (it->first == "MG_996R")
                 {
                     if (it->second.hasMember("pos2act"))
                         act_coeff.pos2act = xmlRpcGetDouble(it->second, "pos2act");
@@ -203,7 +203,7 @@ namespace sp_hw
                                                                       &bus_id2act_data_[bus][id].vel,
                                                                       &bus_id2act_data_[bus][id].effort);
                     act_state_interface_.registerHandle(act_state);
-                    if (type != "MG_995")
+                    if (type != "MG_996R")
                         effort_act_interface_.registerHandle(hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_effort));
                     else
                         position_act_interface_.registerHandle(hardware_interface::ActuatorHandle(act_state, &bus_id2act_data_[bus][id].exe_pos));

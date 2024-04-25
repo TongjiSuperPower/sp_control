@@ -214,8 +214,9 @@ namespace sp_hw
                 socket_can_.write(&frame);
             }
             // Servo : position control
-            else if (id2act_data.second.type.find("MG_995") != std::string::npos)
+            else if (id2act_data.second.type.find("MG_996R") != std::string::npos)
             {
+              
                 // Acquire the servo coefficient
                 const ActCoeff &act_coeff = data_ptr_.type2act_coeffs_->find(id2act_data.second.type)->second;
                 double cmd =
@@ -255,7 +256,9 @@ namespace sp_hw
 
         // 0X200, 0X1FF and 0X188 frame will only be sent when the associated actuators or gpio are mounted
         if (has_write_frame0)
+        {
             socket_can_.write(&rm_can_frame0_);
+        }
         if (has_write_frame1)
             socket_can_.write(&rm_can_frame1_);
         if (has_write_frame2)
@@ -282,7 +285,6 @@ namespace sp_hw
                     act_data.q_raw = (frame.data[0] << 8u) | frame.data[1];
                     act_data.qd_raw = (frame.data[2] << 8u) | frame.data[3];
                     int16_t mapped_current = (frame.data[4] << 8u) | frame.data[5];
-                    // ROS_INFO_STREAM(mapped_current);
                     act_data.stamp = can_frame_stamp.stamp;
                     if (act_data.seq < 10)
                     {
@@ -349,7 +351,6 @@ namespace sp_hw
 
                         act_data.offset = act_coeff.act2pos2 * static_cast<double>((frame.data[7] << 24u) |
                                                                                    (frame.data[3] << 16u) | (frame.data[2] << 8u) | frame.data[1]);
-                        ROS_INFO_STREAM(frame.can_id << " OFFSET " << act_data.offset / 6);
                         continue;
                     }
                 }
@@ -410,9 +411,7 @@ namespace sp_hw
                 ros::Duration duration = current_time - last_time;
                 double secs = duration.toSec();
                 Eigen::Matrix3d vel_matrix = current_matrix.inverse()*(current_matrix - last_matrix) /secs;
-                //ROS_INFO_STREAM("last_matrix: \n" << last_matrix);
-                //ROS_INFO_STREAM("current_matrix: \n" << current_matrix);
-                ROS_INFO_STREAM("vel_matrix: \n" << vel_matrix);
+
                 double wx = (vel_matrix(2, 1) -  vel_matrix(1, 2)) / 2;
                 double wy = (vel_matrix(0, 2) -  vel_matrix(2, 0)) / 2;
                 double wz = (vel_matrix(1, 0) -  vel_matrix(0, 1)) / 2;
@@ -424,6 +423,24 @@ namespace sp_hw
                 imu_pub_.publish(cmd_imu);
                 velocity_pub_.publish(cmd_velocity);
 
+            }
+            else if (frame.can_id == static_cast<unsigned int>(0x18B))
+            {
+                for (auto &id2gpio_data : *data_ptr_.id2gpio_data_)
+                {
+                    int id = id2gpio_data.first - 0x104;
+                    // There are four gpios can be used.
+                    // Can id from 0x103 to 0x106.
+                    if (0 < id && id <= 4)
+                    {
+                        if (frame.data[id - 1] == 0xFF)
+                        {
+                            id2gpio_data.second.value = true;
+                        }
+                        else
+                            id2gpio_data.second.value = false;
+                    }
+                }
             }
         }
         read_buffer_.clear();
@@ -483,7 +500,7 @@ namespace sp_hw
                 socket_can_.write(&frame);
             }
         }
-        ROS_INFO_STREAM("Canbus Exit");  
+        ROS_INFO_STREAM(bus_name_ << " Exit");  
     }
     /**
      * @brief Callback function called after receive can frame.

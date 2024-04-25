@@ -1,10 +1,9 @@
 controllers:
   gpios_controller:
-    type: gpios_controller/Engineer
+    type: "gpios_controller/Engineer"
     pump:
-      gpio: pump_gpio
+      gpio: "pump_gpio"
     rod:
-      gpio: rod_gpio
-
+      gpio: "rod_gpio"
 
 

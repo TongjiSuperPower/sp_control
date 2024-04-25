@@ -36,7 +36,7 @@ namespace sp_operator
 
             ros::Publisher pump_cmd_pub_;
 
-            ros::Publisher rob_cmd_pub_;
+            ros::Publisher rod_cmd_pub_;
 
             ros::Publisher twist_cmd_pub_;
 
@@ -53,7 +53,10 @@ namespace sp_operator
             std_msgs::Float64MultiArray joint_vel_cmd_{};
             std_msgs::Int8 ore_cmd_;
             std_msgs::Bool pump_cmd_;
-            std_msgs::Bool rob_cmd_;
+            std_msgs::Bool rod_cmd_;
+
+            int pump_change_count_ {};
+            int rod_change_count_ {};
 
             //control_msgs::JointJog joint_cmd_{};
 

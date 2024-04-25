@@ -1,16 +1,16 @@
 engineer:
   chassis:
-    x_coeff: 2.5
-    y_coeff: 2.5
+    x_coeff: 2.0
+    y_coeff: 2.0
     z_mk_coeff: 300
     z_rc_coeff: 3.0
-    x_accel_set : 8
-    y_accel_set : 8
+    x_accel_set : 5
+    y_accel_set : 5
     z_accel_set : 12
 
   gimbal:
     yaw_coeff : 0.005
-    pitch_mk_coeff : 0.005
+    pitch_mk_coeff : 0.02
     pitch_rc_coeff : 0.005
     yaw_left_limit: -1.57
     yaw_right_limit: 1.57

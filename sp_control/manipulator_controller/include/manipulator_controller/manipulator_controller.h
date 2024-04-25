@@ -198,11 +198,18 @@ namespace manipulator_controller
 
         bool initiated_{};
 
+        bool z_calimsg_{};
+        bool x_calimsg_{};
+        bool y_calimsg_{};
+        bool pitch_calimsg_{}; 
+
         bool z_calibrated_{};
         bool x_calibrated_{};
         bool y_calibrated_{};
         bool pitch_calibrated_{}; 
         bool calibrated_{};
+
+        double z_offset_{}, x_offset_{}, y_offset_{}, pitch_offset_{};
 
 
 

@@ -76,19 +76,20 @@ namespace gimbal_controller
                 yaw_cmd_ += cmd_vel_.z;
 
             }
-        ROS_INFO_STREAM(yaw_cmd_ );
-        ROS_INFO_STREAM(yaw_cmd_ + yaw_pos_);
+       
+        //ROS_INFO_STREAM(yaw_cmd_ + yaw_pos_);
         if ((pitch_pos_ < -0.35 && cmd_vel_.y >= 0) ||
             (pitch_pos_ > 0.35 && cmd_vel_.y <= 0) ||
             (pitch_pos_ >= -0.35 && pitch_pos_ <= 0.35))
             pitch_pos_+= cmd_vel_.y;
 
-
+        ROS_INFO_STREAM(pitch_pos_);
         if (!initiated_)
             ctrl_yaw_.setCommand(yaw_cmd_);
         else
             ctrl_yaw_.setCommand(yaw_cmd_ + yaw_pos_);
         ctrl_yaw_.update(time, period);
+        //pitch_pos_ = 0.15;
         ctrl_pitch_.joint_.setCommand(pitch_pos_);
     }
 
