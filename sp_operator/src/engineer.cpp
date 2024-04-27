@@ -69,14 +69,16 @@ namespace sp_operator
 
     void Engineer::chassis_set()
     {
+        manipulator_cmd_.y_lock = false;
 
         if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
             cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
             cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
             cmd_chassis_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
+            manipulator_cmd_.y_lock = true;
         }
-        else if (dbus_data_.s_r == 3) //Remote control mode
+        else if (dbus_data_.s_l == 3 && dbus_data_.s_r == 3) //Remote control mode
         {
             if (dbus_data_.key_w)
                 cmd_chassis_vel_.linear.x = x_coeff_;
@@ -91,6 +93,7 @@ namespace sp_operator
             else 
                 cmd_chassis_vel_.linear.y = 0.0;
             cmd_chassis_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
+            manipulator_cmd_.y_lock = true;
         }
         else if (dbus_data_.s_r == 2) //Stop mode
         {
@@ -119,7 +122,7 @@ namespace sp_operator
         if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Remote control mode
         {
             cmd_gimbal_vel_.y = pitch_rc_coeff_ * dbus_data_.ch_l_y;
-            cmd_gimbal_vel_.z = pitch_rc_coeff_ * dbus_data_.ch_l_x;
+            //cmd_gimbal_vel_.z = pitch_rc_coeff_ * dbus_data_.ch_l_x;
         }
         else if (dbus_data_.s_r == 3) //Mouse & Keyboard  mode
         {
@@ -248,6 +251,19 @@ namespace sp_operator
         {
             delay.sleep();
             if (dbus_data_.key_f)
+            {
+                if (!pump_cmd_.data)
+                    pump_cmd_.data = true;
+                else
+                    pump_cmd_.data = false;
+                pump_change_count_ = 50;
+            }
+        }
+
+        if (dbus_data_.wheel > 0.8 && pump_change_count_ <= 0)
+        {
+            delay.sleep();
+            if (dbus_data_.wheel > 0.8)
             {
                 if (!pump_cmd_.data)
                     pump_cmd_.data = true;

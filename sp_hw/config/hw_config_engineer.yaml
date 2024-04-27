@@ -85,12 +85,12 @@ actuators:
 gpios:
 
   pump_gpio:
-    bus: can4
+    bus: can3
     id: 0x101
     type: out
 
   rod_gpio:
-    bus: can4
+    bus: can3
     id: 0x102
     type: out
 

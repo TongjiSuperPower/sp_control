@@ -83,7 +83,7 @@ namespace gimbal_controller
             (pitch_pos_ >= -0.35 && pitch_pos_ <= 0.35))
             pitch_pos_+= cmd_vel_.y;
 
-        ROS_INFO_STREAM(pitch_pos_);
+       // ROS_INFO_STREAM(pitch_pos_);
         if (!initiated_)
             ctrl_yaw_.setCommand(yaw_cmd_);
         else

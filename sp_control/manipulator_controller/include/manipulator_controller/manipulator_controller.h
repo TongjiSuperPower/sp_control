@@ -266,6 +266,9 @@ namespace manipulator_controller
 
         ros::Time begin_time_, now_time_;
 
+        control_toolbox::Pid y_lock_pid_;
+        bool y_lock_{};
+
 
 
         Command cmd_struct_;

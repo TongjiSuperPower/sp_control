@@ -22,7 +22,7 @@ namespace chassis_controller
         wheel_base_ = sp_common::getParam(controller_nh, "wheel_base", 0.320);
         twist_angular_ = sp_common::getParam(controller_nh, "twist_angular", M_PI / 6);
 
-        if (follow_pid_.init(ros::NodeHandle(controller_nh, "yaw_follow/pid")));
+        follow_pid_.init(ros::NodeHandle(controller_nh, "yaw_follow/pid"));
 
         effort_joint_interface_ = robot_hw->get<hardware_interface::EffortJointInterface>();
 

@@ -9,7 +9,7 @@ engineer:
     z_accel_set : 12
 
   gimbal:
-    yaw_coeff : 0.005
+    yaw_coeff : 0.003
     pitch_mk_coeff : 0.02
     pitch_rc_coeff : 0.005
     yaw_left_limit: -1.57

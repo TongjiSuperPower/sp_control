@@ -51,10 +51,14 @@ namespace differential_controller
     effort_controllers::JointPositionController ctrl_positive_;
     effort_controllers::JointPositionController ctrl_negative_; 
 
+    control_toolbox::Pid pitch_pid_;
+    control_toolbox::Pid roll_pid_;
+
     double pitch_pos_{};
     double roll_pos_{};
     double pitch_cmd_{};
     double roll_cmd_{};
+    int i = 0;
 
     double differential_reduction_{};
   };

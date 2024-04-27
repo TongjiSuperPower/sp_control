@@ -164,6 +164,8 @@ namespace manipulator_controller
         destination_ = NONE;
         vision_execuated_ = true;
 
+        y_lock_pid_.init(ros::NodeHandle(controller_nh, "y/lock_pid"));
+        y_lock_pid_.reset();
         ROS_INFO("MANIPULATOR: INIT SUCCESS !");
 
         return true;
@@ -185,7 +187,9 @@ namespace manipulator_controller
         // TODO: check whether "sp_common::ManipulatorCmd" can be deleted
         sp_common::ManipulatorCmd manipulator_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
         //cc_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
-
+        y_lock_ = manipulator_cmd_.y_lock;
+        if (!y_lock_)
+            y_lock_pid_.reset();
         quat_cmd_ = Eigen::Quaterniond(cmd_quat.w, cmd_quat.x, cmd_quat.y, cmd_quat.z);	
 
         //Update joint_vel_cmd_ message and twist_cmd_ message
@@ -194,6 +198,8 @@ namespace manipulator_controller
             for (int i = 0; i < 7; i++)
                 joint_vel_cmd_[i] = cmd_joint_vel.data[i];
         }
+
+      
  
         twist_cmd_[0] = cmd_twist.angular.x;
         twist_cmd_[1] = cmd_twist.angular.y;
@@ -308,14 +314,26 @@ namespace manipulator_controller
 
         if (y_has_friction_)
         {
-            if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) > 0.005)
-                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
-            else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.005)
-                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
+            if (!y_lock_)
+            {
+                if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) > 0.005)
+                    ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
+                else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.005)
+                    ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
+                else
+                {
+                    double eff = (joint_cmd_[2] - ctrl_y_.joint_.getPosition()) / 0.005;
+                    ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + eff * y_friction_);
+                }
+            }
             else
             {
-                double eff = (joint_cmd_[2] - ctrl_y_.joint_.getPosition()) / 0.005;
-                ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + eff * y_friction_);
+               
+                double y_error = joint_cmd_[2] - joint_pos_[2];
+                y_lock_pid_.computeCommand(y_error, period);
+                double y_cmd = y_lock_pid_.getCurrentCmd();
+                //ROS_INFO_STREAM(y_cmd);
+                ctrl_y_.joint_.setCommand(y_cmd);
             }
         }
     }
@@ -402,24 +420,23 @@ namespace manipulator_controller
             duration = now_time_ - begin_time_;
             double sec = duration.toSec();
             bool reached = true;
-            ROS_INFO_STREAM("z_joint");
-            ROS_INFO_STREAM(joint_pos_cmd_[0]);
-            ROS_INFO_STREAM(joint_cmd_[0]);
-            ROS_INFO_STREAM(joint_pos_[0]);
+            ROS_INFO_STREAM("pitch_joint");
+            ROS_INFO_STREAM(joint_pos_cmd_[5]);
+            ROS_INFO_STREAM(joint_cmd_[5]);
+            ROS_INFO_STREAM(joint_pos_[5]);
             ROS_INFO_STREAM("----------------------");
 
 
 
-            // for (int i = 0; i < 7; i++)
-            // { 
-                int i = 0;
+            for (int i = 0; i < 7; i++)
+            { 
                 if (abs(joint_pos_cmd_[i] - joint_cmd_[i]) > 0.002)
                     joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
                 else
                     joint_cmd_[i] = joint_pos_cmd_[i];
                 if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
                     reached = false;
-            // }
+            }
 
             if (reached)
             {
@@ -556,8 +573,8 @@ namespace manipulator_controller
             ROS_INFO_STREAM("Enter joint mode");
             mode_changed_ = false;
         }
-        // ROS_INFO_STREAM(joint_cmd_[0]);
-        // ROS_INFO_STREAM(joint_pos_[0]);
+        // ROS_INFO_STREAM(joint_cmd_[2]);
+        // ROS_INFO_STREAM(joint_pos_[2]);
         // ROS_INFO_STREAM("----------------------------");
     }
 
