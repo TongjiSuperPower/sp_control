@@ -17,6 +17,7 @@ namespace sp_operator
         rod_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rod",1);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
+        yaw_angle_sub_ = nh.subscribe<std_msgs::Float64>("/yaw_angle", 10, &Engineer::yaw_angle_callback, this);
 
         x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
         y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.0);
@@ -73,27 +74,53 @@ namespace sp_operator
 
         if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
-            cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
-            cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
+            if (yaw_angle_ > 0.8)
+            {
+                cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
+                cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
+            }
+            else
+            {
+                cmd_chassis_vel_.linear.x = -x_coeff_ * dbus_data_.ch_r_y;
+                cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_x;
+            }
             cmd_chassis_vel_.angular.z = -z_rc_coeff_ * dbus_data_.ch_l_x;
-            manipulator_cmd_.y_lock = true;
         }
         else if (dbus_data_.s_l == 3 && dbus_data_.s_r == 3) //Remote control mode
         {
-            if (dbus_data_.key_w)
-                cmd_chassis_vel_.linear.x = x_coeff_;
-            else if (dbus_data_.key_s)
-                cmd_chassis_vel_.linear.x = -x_coeff_;
-            else 
-                cmd_chassis_vel_.linear.x = 0.0;
-            if (dbus_data_.key_a)
-                cmd_chassis_vel_.linear.y = y_coeff_;
-            else if (dbus_data_.key_d)
-                cmd_chassis_vel_.linear.y = -y_coeff_;
-            else 
-                cmd_chassis_vel_.linear.y = 0.0;
+            if (yaw_angle_ > 0.8)
+            {
+                if (dbus_data_.key_w)
+                    cmd_chassis_vel_.linear.x = x_coeff_;
+                else if (dbus_data_.key_s)
+                    cmd_chassis_vel_.linear.x = -x_coeff_;
+                else 
+                    cmd_chassis_vel_.linear.x = 0.0;
+                
+                if (dbus_data_.key_a)
+                    cmd_chassis_vel_.linear.y = y_coeff_;
+                else if (dbus_data_.key_d)
+                    cmd_chassis_vel_.linear.y = -y_coeff_;
+                else 
+                    cmd_chassis_vel_.linear.y = 0.0;
+            }
+            else
+            {
+                if (dbus_data_.key_w)
+                    cmd_chassis_vel_.linear.y = -y_coeff_;
+                else if (dbus_data_.key_s)
+                    cmd_chassis_vel_.linear.y = y_coeff_;
+                else 
+                    cmd_chassis_vel_.linear.y = 0.0;
+                
+                if (dbus_data_.key_a)
+                    cmd_chassis_vel_.linear.x = x_coeff_;
+                else if (dbus_data_.key_d)
+                    cmd_chassis_vel_.linear.x = -x_coeff_;
+                else 
+                    cmd_chassis_vel_.linear.x = 0.0;
+            }
             cmd_chassis_vel_.angular.z = -z_mk_coeff_ * dbus_data_.m_x;
-            manipulator_cmd_.y_lock = true;
         }
         else if (dbus_data_.s_r == 2) //Stop mode
         {
@@ -132,6 +159,10 @@ namespace sp_operator
                 cmd_gimbal_vel_.z = -yaw_coeff_;
             // else if (dbus_data_.key_q && dbus_data_.key_e) // If press Q and E simultaneously, return to 0 position.
             //     cmd_gimbal_vel_.z = 1.0;
+            // else if (dbus_data_.key_shift && dbus_data_.key_q)
+            //     cmd_gimbal_vel_.z = 2.0;
+            // else if (dbus_data_.key_shift && dbus_data_.key_e)
+            //     cmd_gimbal_vel_.z = 3.0;
             else
                 cmd_gimbal_vel_.z = 0.0;
 
@@ -210,9 +241,9 @@ namespace sp_operator
                 // joint_vel_cmd_.data[4] = -0.005 * dbus_data_.ch_r_x;
                 // joint_vel_cmd_.data[5] = -0.005 * dbus_data_.ch_l_x;
                 // joint_vel_cmd_.data[6] = -0.005 * dbus_data_.ch_r_y;
-                joint_vel_cmd_.data[3] = -0.005 * dbus_data_.ch_l_y;
-                joint_vel_cmd_.data[4] = 0.005 * dbus_data_.ch_l_x;
-                joint_vel_cmd_.data[5] = -0.005 * dbus_data_.ch_r_x;
+                joint_vel_cmd_.data[3] = 0.005 * dbus_data_.ch_l_y;
+                joint_vel_cmd_.data[4] = -0.005 * dbus_data_.ch_l_x;
+                joint_vel_cmd_.data[5] = 0.005 * dbus_data_.ch_r_x;
                 joint_vel_cmd_.data[6] = 0.005 * dbus_data_.ch_r_y;
             }  
             else if (dbus_data_.s_r == 2)   
@@ -239,10 +270,14 @@ namespace sp_operator
             }    
         }
 
+        // if (dbus_data_.key_g) // Push(or pull) forward along the direction of the end effector
+        //     manipulator_cmd_.final_push = true;
+        // else 
+        //     manipulator_cmd_.final_push = false;
         if (dbus_data_.key_g) // Push(or pull) forward along the direction of the end effector
-            manipulator_cmd_.final_push = true;
+            manipulator_cmd_.y_lock = true;
         else 
-            manipulator_cmd_.final_push = false;
+            manipulator_cmd_.y_lock = false;
         ros::Duration delay(0.05);
         pump_change_count_--;
         rod_change_count_--;
@@ -291,7 +326,12 @@ namespace sp_operator
     void Engineer::velocity_callback(const geometry_msgs::Twist::ConstPtr &vel)
     {
         velocity_cmd_ = *vel;
-    }   
+    }  
+
+    void Engineer::yaw_angle_callback(const std_msgs::Float64::ConstPtr &angle)
+    {
+        yaw_angle_ = angle->data;
+    }    
 
 }
     

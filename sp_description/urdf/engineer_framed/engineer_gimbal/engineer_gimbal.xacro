@@ -168,7 +168,7 @@
   <transmission name="trans_gimbal_yaw_joint" >
             <type>transmission_interface/SimpleTransmission</type>
             <actuator name="gimbal_yaw_joint_motor">
-                <mechanicalReduction>-4.833</mechanicalReduction>
+                <mechanicalReduction>-3.833</mechanicalReduction>
 				<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
             </actuator>
 			<joint name="gimbal_yaw_joint">

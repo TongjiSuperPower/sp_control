@@ -65,19 +65,19 @@ namespace syn_controller
           ctrl_right_.joint_.setCommand(ctrl_right_.joint_.getCommand() + eff_right * friction_ + gravity_);
 
         }
-        //      if (i == 50)
-        // {
-        //   ROS_INFO_STREAM(cmd_);
-        //   ROS_INFO_STREAM(ctrl_left_.joint_.getPosition());
-        //   ROS_INFO_STREAM(ctrl_right_.joint_.getPosition());
-        //   ROS_INFO_STREAM("------------");
-        //   ROS_INFO_STREAM(ctrl_left_.joint_.getEffort());
-        //   ROS_INFO_STREAM(ctrl_right_.joint_.getEffort());
-        //   ROS_INFO_STREAM(ctrl_left_.joint_.getCommand());
-        //   ROS_INFO_STREAM(ctrl_right_.joint_.getCommand());
-        //   ROS_INFO_STREAM("---------------------------------------");
-        //   i = 0;
-        // }
+             if (i == 50)
+        {
+          // ROS_INFO_STREAM(cmd_);
+          // ROS_INFO_STREAM(ctrl_left_.joint_.getPosition());
+          // ROS_INFO_STREAM(ctrl_right_.joint_.getPosition());
+          // ROS_INFO_STREAM("------------");
+          // ROS_INFO_STREAM(ctrl_left_.joint_.getEffort());
+          // ROS_INFO_STREAM(ctrl_right_.joint_.getEffort());
+          // ROS_INFO_STREAM(ctrl_left_.joint_.getCommand());
+          // ROS_INFO_STREAM(ctrl_right_.joint_.getCommand());
+          // ROS_INFO_STREAM("---------------------------------------");
+          i = 0;
+        }
     
       }
       else

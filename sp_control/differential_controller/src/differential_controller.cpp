@@ -57,13 +57,13 @@ namespace differential_controller
     i++;
     if (i == 50)
     {
-        ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
-        ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
-        ROS_INFO_STREAM("pitch_cmd_: " << pitch_cmd_);
-        ROS_INFO_STREAM("roll_cmd_: " << roll_cmd_);
-        ROS_INFO_STREAM("pitch_eff_cmd_: " << pitch_eff_cmd);
-        ROS_INFO_STREAM("roll_eff_cmd_: " << roll_eff_cmd);
-        ROS_INFO_STREAM("------------------------------------");
+        // ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
+        // ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
+        // ROS_INFO_STREAM("pitch_cmd_: " << pitch_cmd_);
+        // ROS_INFO_STREAM("roll_cmd_: " << roll_cmd_);
+        // ROS_INFO_STREAM("pitch_eff_cmd_: " << pitch_eff_cmd);
+        // ROS_INFO_STREAM("roll_eff_cmd_: " << roll_eff_cmd);
+        // ROS_INFO_STREAM("------------------------------------");
         i = 0;
     }
 

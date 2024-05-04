@@ -154,6 +154,7 @@ namespace manipulator_controller
         msg_joint_pitch_cali_sub_ = root_nh.subscribe<std_msgs::Bool>("/cali_msg/joint_pitch", 1, &ManipulatorController::msgCaliPitchCallback, this);
         cali_pub_ = root_nh.advertise<std_msgs::Bool>("/calibrated", 1);
         vision_pub_ = root_nh.advertise<std_msgs::Bool>("/begin_identify", 1);
+        pos_pub_ = root_nh.advertise<std_msgs::Float64MultiArray>("/manipultor_pos", 1);
         twist_cmd_ = Eigen::Matrix<double, 6, 1>::Zero();
 
         // Initialize some values
@@ -420,11 +421,6 @@ namespace manipulator_controller
             duration = now_time_ - begin_time_;
             double sec = duration.toSec();
             bool reached = true;
-            ROS_INFO_STREAM("pitch_joint");
-            ROS_INFO_STREAM(joint_pos_cmd_[5]);
-            ROS_INFO_STREAM(joint_cmd_[5]);
-            ROS_INFO_STREAM(joint_pos_[5]);
-            ROS_INFO_STREAM("----------------------");
 
 
 
@@ -435,7 +431,15 @@ namespace manipulator_controller
                 else
                     joint_cmd_[i] = joint_pos_cmd_[i];
                 if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
+                {
+                    ROS_INFO_STREAM(i);
+                    ROS_INFO_STREAM(joint_pos_cmd_[i]);
+                    ROS_INFO_STREAM(joint_cmd_[i]);
+                    ROS_INFO_STREAM(joint_pos_[i]);
+                    ROS_INFO_STREAM(position_threshold_[i]);
+                    ROS_INFO_STREAM("----------------------");
                     reached = false;
+                }
             }
 
             if (reached)
@@ -478,15 +482,23 @@ namespace manipulator_controller
             double sec = duration.toSec();
             bool reached = true;
 
-            for (int i = 0; i < 7; i++)
-            { 
+            // for (int i = 0; i < 7; i++)
+            // { 
+                int i = 0;
                 if (abs(joint_pos_cmd_[i] - joint_cmd_[i]) > 0.002)
                     joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
                 else
                     joint_cmd_[i] = joint_pos_cmd_[i];
                 if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
                     reached = false;
-            }
+                i = 2;
+                if (abs(joint_pos_cmd_[i] - joint_cmd_[i]) > 0.002)
+                    joint_cmd_[i] = coeff_(i, 0) + coeff_(i, 1)*sec + coeff_(i, 2)*pow(sec, 2) + coeff_(i, 3)*pow(sec, 3);
+                else
+                    joint_cmd_[i] = joint_pos_cmd_[i];
+                if (abs(joint_pos_cmd_[i] - joint_pos_[i]) > position_threshold_[i])
+                    reached = false;
+            //}
             if (reached)
             {
                 ROS_INFO_STREAM("Visual Plan Compeleted");

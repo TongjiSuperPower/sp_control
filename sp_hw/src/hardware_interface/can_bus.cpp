@@ -358,6 +358,10 @@ namespace sp_hw
             // DM motor 
             else if (frame.can_id == static_cast<unsigned int>(0x000))
             {
+                if (frame.data[0] != 0x04 && frame.data[0] != 0x05)
+                {
+                    ROS_INFO_STREAM(int(frame.data[0]));
+                }
                 if (data_ptr_.id2act_data_->find(frame.data[0]) != data_ptr_.id2act_data_->end())
                 {
                     ActData &act_data = data_ptr_.id2act_data_->find(frame.data[0])->second;

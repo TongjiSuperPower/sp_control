@@ -130,8 +130,18 @@ namespace can
       ROS_ERROR_THROTTLE(5., "Unable to write: Socket %s not open", interface_request_.ifr_name);
       return;
     }
-    if (::write(sock_fd_, frame, sizeof(can_frame)) == -1)
-      ROS_DEBUG_THROTTLE(5., "Unable to write: The %s tx buffer may be full", interface_request_.ifr_name);
+    //if (::write(sock_fd_, frame, sizeof(can_frame)) == -1)
+      //ROS_ERROR_THROTTLE(5., "Unable to write: The %s tx buffer may be full", interface_request_.ifr_name);
+    if (::write(sock_fd_, frame, sizeof(*frame)) == -1) {
+      perror("write failed"); // perror 会将 errno 中的错误码转换为字符串
+      // 或者使用 strerror(errno) 来获取错误描述
+      fprintf(stderr, "Error writing to socket: %s\n", strerror(errno));
+      // 这里可以添加更多的错误处理逻辑
+    } 
+    else {
+        // 写入成功，可以继续其他操作
+    }
+
   }
 
   static void *socketcan_receiver_thread(void *argv)

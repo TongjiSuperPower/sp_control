@@ -24,7 +24,7 @@ namespace gimbal_controller
 
         gimbal_cali_sub_ = root_nh.subscribe<std_msgs::Bool>("/gimbal_calibration", 1, &GimbalEngineer::GimbalCaliCallback, this);
       
-        
+        angle_pub_ = root_nh.advertise<std_msgs::Float64>("yaw_angle", 10);
 
         // subsribe the topic "cmd_pos"
        
@@ -57,6 +57,13 @@ namespace gimbal_controller
         }
         
         cmd_vel_ = cmd_rt_buffer_.readFromRT()->cmd_gimbal_vel_;
+        double yaw_angle = ctrl_yaw_.joint_.getPosition();
+        std_msgs::Float64 yaw;
+         if (!initiated_)
+            yaw.data = yaw_angle;
+        else
+            yaw.data = yaw_angle + yaw_pos_;
+        angle_pub_.publish(yaw);
         
         moveJoint(time, period);
     }
@@ -66,30 +73,40 @@ namespace gimbal_controller
         yaw_pos_ = ctrl_yaw_.joint_.getPosition();
     }
 
+    void GimbalEngineer::cmdConstraint()
+    {
+
+        if (yaw_cmd_ > 1.57)
+            yaw_cmd_ = 1.57;
+        else if (yaw_cmd_ < -1.57)
+            yaw_cmd_ = -1.57;
+
+        if (pitch_pos_ > 0.7)
+            pitch_pos_ = 0.7;
+        else if (pitch_pos_ < -0.9)
+            pitch_pos_ = -0.9;
+
+        
+    }
+
 
     void GimbalEngineer::moveJoint(const ros::Time &time, const ros::Duration &period)
     {
-        if ((yaw_cmd_ < -3.14 && cmd_vel_.z >= 0) ||
-            (yaw_cmd_ > 3.14 && cmd_vel_.z <= 0) ||
-            (yaw_cmd_ >= -3.14 && yaw_cmd_ <= 3.14))
-            {
-                yaw_cmd_ += cmd_vel_.z;
-
-            }
-       
-        //ROS_INFO_STREAM(yaw_cmd_ + yaw_pos_);
-        if ((pitch_pos_ < -0.35 && cmd_vel_.y >= 0) ||
-            (pitch_pos_ > 0.35 && cmd_vel_.y <= 0) ||
-            (pitch_pos_ >= -0.35 && pitch_pos_ <= 0.35))
-            pitch_pos_+= cmd_vel_.y;
-
-       // ROS_INFO_STREAM(pitch_pos_);
+        if (abs(cmd_vel_.z) < 0.05)
+            yaw_cmd_ += cmd_vel_.z;
+        pitch_pos_+= cmd_vel_.y;
+        cmdConstraint();
+        //ROS_INFO_STREAM(yaw_cmd_);
+        // ROS_INFO_STREAM(ctrl_yaw_.joint_.getPosition());
+        // ROS_INFO_STREAM("---------------------");
+        
         if (!initiated_)
             ctrl_yaw_.setCommand(yaw_cmd_);
         else
             ctrl_yaw_.setCommand(yaw_cmd_ + yaw_pos_);
+     
+     
         ctrl_yaw_.update(time, period);
-        //pitch_pos_ = 0.15;
         ctrl_pitch_.joint_.setCommand(pitch_pos_);
     }
 

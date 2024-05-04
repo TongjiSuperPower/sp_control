@@ -1,5 +1,5 @@
 <library path="lib/libgimbal_controller">
-	<class  name="gimbal_controller/GimbalPosition" 
+	<!-- <class  name="gimbal_controller/GimbalPosition" 
 		    type="gimbal_controller::GimbalPosition"
 		    base_class_type="controller_interface::ControllerBase">
 		<description>
@@ -12,7 +12,7 @@
 		<description>
 			The Gimbal Controller for Hero/Infentry/Sentry
 		</description>
-	</class>
+	</class> -->
 	<class 	name="gimbal_controller/GimbalEngineer"
 			type="gimbal_controller::GimbalEngineer"
 			base_class_type="controller_interface::ControllerBase">
@@ -21,4 +21,3 @@
 		</description>
 	</class>
 </library>
-

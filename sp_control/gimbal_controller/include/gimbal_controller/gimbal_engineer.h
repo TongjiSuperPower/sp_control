@@ -40,6 +40,8 @@ namespace gimbal_controller
 
         void initCmd(const ros::Time &time, const ros::Duration &period);
 
+        void cmdConstraint();
+
         void GimbalCaliCallback(const std_msgs::Bool::ConstPtr &msg);
 
         effort_controllers::JointPositionController ctrl_yaw_;
@@ -47,6 +49,8 @@ namespace gimbal_controller
         position_controllers::JointPositionController ctrl_pitch_;
 
         ros::Subscriber gimbal_cali_sub_;
+
+        ros::Publisher angle_pub_;
 
         double yaw_cmd_{};
 

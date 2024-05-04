@@ -102,7 +102,7 @@ namespace sp_operator
             cmd_gimbal_vel_.y = pitch_mk_coeff_ * dbus_data_.m_y;
             cmd_gimbal_vel_.z = -yaw_mk_coeff_ * dbus_data_.m_x;
 
-            cmd_cover_.data = dbus_data_.key_ctrl;
+
 
             ros::Duration trun_duration = ros::Time::now() - trun_time_;
             if (trun_duration.toSec() > 1)

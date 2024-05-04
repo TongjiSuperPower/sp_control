@@ -190,6 +190,7 @@ namespace manipulator_controller
 
         ros::Publisher cali_pub_;
         ros::Publisher vision_pub_;
+        ros::Publisher pos_pub_;
         
         ros::Subscriber msg_joint_z_cali_sub_;
         ros::Subscriber msg_joint_x_cali_sub_;

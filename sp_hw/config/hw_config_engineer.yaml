@@ -28,57 +28,57 @@ actuators:
     type: rm_3508
 
   z_joint_left_motor:
-    bus: can4
+    bus: can5
     id: 0x201
     type: rm_3508
   z_joint_right_motor:
-    bus: can4
+    bus: can5
     id: 0x202
     type: rm_3508
   x_joint_left_motor:
-    bus: can4
+    bus: can5
     id: 0x203
     type: rm_3508
   x_joint_right_motor:
-    bus: can4
+    bus: can5
     id: 0x204
     type: rm_3508
   y_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x205
     type: rm_3508
   yaw_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x004
     type: DM_J4310
   roll1_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x005
     type: DM_J4310
   pitch_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x206
     type: rm_2006
   roll2_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x207
     type: rm_2006
   ore_left_joint_motor:
-    bus: can4
+    bus: can5
     id: 0x206
     type: rm_2006
   ore_right_joint_motor:
-    bus: can4
+    bus: can5
     id: 0x207
     type: rm_2006
 
   gimbal_yaw_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x208
     type: rm_2006
 
   gimbal_pitch_joint_motor:
-    bus: can5
+    bus: can4
     id: 0x101
     type: MG_996R
   

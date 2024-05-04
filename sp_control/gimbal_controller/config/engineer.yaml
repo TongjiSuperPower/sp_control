@@ -6,9 +6,9 @@ gimbal:
 
     yaw:
       joint: "gimbal_yaw_joint"
-      pid: { p: 8.0, i: 0, d: 0.8, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid: { p: 6.0, i: 0.0, d: 0.6, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
     pitch:
       joint: "gimbal_pitch_joint"
-      pid: { p: 1.0, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      pid: { p: 1.0, i: 0.0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
     
    

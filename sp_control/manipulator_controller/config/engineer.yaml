@@ -34,12 +34,12 @@ manipulator:
       friction: 8.0
 
       joint: "y_joint"
-      pid: { p: 28.0, i: 0.1, d: 10.5 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      pid: { p: 35.0, i: 0.1, d: 10.5 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       lock_pid: { p: 2400.0, i: 0.5, d: 50.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     
     yaw:
       joint: "yaw_joint"
-      pid: { p: 17.0, i: 0.3, d: 0.1, i_max: 50.0, i_min: -50.0, antiwindup: true, publish_state: true }
+      pid: { p: 19.0, i: 0.3, d: 0.2, i_max: 50.0, i_min: -50.0, antiwindup: true, publish_state: true }
 
     roll1:
       joint: "roll1_joint"
@@ -62,7 +62,7 @@ manipulator:
         joint: "roll2_joint"
         pid: { p: 2.2, i: 0.05, d: 0.06, i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       pitch_pid:
-        pid: { p: 15.5, i: 1.2, d: 0.07, i_max: 1.0, i_min: -1.0, antiwindup: true, publish_state: true }
+        pid: { p: 17.5, i: 1.2, d: 0.3, i_max: 1.0, i_min: -1.0, antiwindup: true, publish_state: true }
       roll_pid:
         pid: { p: 2.0, i: 0.00, d: 0.05, i_max: 1.0, i_min: -1.0, antiwindup: true, publish_state: true }
      
@@ -75,29 +75,19 @@ manipulator:
     lower_pos_limit:
       {1_z: 0.0, 2_x: 0.0, 3_y: -0.28, 4_yaw: -2.00, 5_roll1: -6.28, 6_pitch: -1.57, 7_roll2: -6.28}
     position_threshold:
-      {1_z: 0.005, 2_x: 0.005, 3_y: 0.005, 4_yaw: 0.05, 5_roll1: 0.05, 6_pitch: 0.3, 7_roll2: 0.05}
+      {1_z: 0.008, 2_x: 0.005, 3_y: 0.005, 4_yaw: 0.05, 5_roll1: 0.05, 6_pitch: 0.3, 7_roll2: 0.05}
     structure_coeff:
       {l1: 0.60, l2: 0.25, l3: 0.10, l4: 0.20}
 
     destination:
-      # home:
-      #   {1_z: 0.1, 2_x: 0.0, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}
-      # ground:
-      #   {1_z: 0.2, 2_x: 0.2, 3_y: -0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
-      # sliver:
-      #   {1_z: 0.307, 2_x: 0.2, 3_y: -0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.0, 7_roll2: 0.0}#z:0.347
-      # gold:
-      #   {1_z: 0.108, 2_x: 0.05, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: -1.57, 6_pitch: -0.87, 7_roll2: 1.57}#z:0.148
-      # exchange:
-      #   {1_z: 0.5, 2_x: 0.2, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
       home:
-        {1_z: 0.1, 2_x: 0.0, 3_y: 0.0, 4_yaw: 1.57, 5_roll1: 0.0, 6_pitch: -1.4, 7_roll2: 0.0}
+        {1_z: 0.1, 2_x: 0.0, 3_y: 0.0, 4_yaw: 1.57, 5_roll1: 0.0, 6_pitch: 1.4, 7_roll2: 0.0}
       ground:
-        {1_z: 0.2, 2_x: 0.0, 3_y: -0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
+        {1_z: 0.205, 2_x: 0.0, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.00, 7_roll2: 0.0}
       sliver:
-        {1_z: 0.31, 2_x: 0.0, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -0.22, 7_roll2: 0.0}#z:0.347
+        {1_z: 0.50, 2_x: 0.0, 3_y: 0.05, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}#z:0.347
       gold:
-        {1_z: 0.4, 2_x: 0.0, 3_y: 0.1, 4_yaw: 0.0, 5_roll1: -1.90, 6_pitch: -0.87, 7_roll2: 1.57}#z:0.148
+        {1_z: 0.125, 2_x: 0.0, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.00, 7_roll2: 0.0}#z:0.148
       exchange:
         {1_z: 0.45, 2_x: 0.0, 3_y: 0.05, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 1.57, 7_roll2: 0.0}
     process:
