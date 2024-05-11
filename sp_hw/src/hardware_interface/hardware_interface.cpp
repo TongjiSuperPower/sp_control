@@ -76,7 +76,11 @@ namespace sp_hw
                 act_data.second.last_halted = act_data.second.halted;
                 try
                 {
-                    act_data.second.halted = (time - act_data.second.stamp).toSec() > 0.5 || false;
+                    act_data.second.halted = (time - act_data.second.stamp).toSec() > 2.0 || false;
+                    // if (act_data.second.name == "yaw_joint_motor")
+                    // {
+                    //     ROS_INFO_STREAM((time - act_data.second.stamp));
+                    // }
                 }
                 catch (std::runtime_error &ex)
                 {

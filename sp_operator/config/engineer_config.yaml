@@ -4,9 +4,9 @@ engineer:
     y_coeff: 2.0
     z_mk_coeff: 300
     z_rc_coeff: 3.0
-    x_accel_set : 5
-    y_accel_set : 5
-    z_accel_set : 12
+    x_accel_set : 4
+    y_accel_set : 4
+    z_accel_set : 10
 
   gimbal:
     yaw_coeff : 0.0025

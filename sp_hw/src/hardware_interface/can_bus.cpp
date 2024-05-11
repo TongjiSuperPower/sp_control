@@ -142,7 +142,22 @@ namespace sp_hw
             {
                 // Block sending data when the motor's receive data is missing.
                 if (id2act_data.second.halted)
+                {
+                    can_frame frame{};
+                    frame.can_id = id2act_data.first;
+                    frame.can_dlc = 8;
+                    frame.data[0] = 0xFF;
+                    frame.data[1] = 0xFF;
+                    frame.data[2] = 0xFF;
+                    frame.data[3] = 0xFF;
+                    frame.data[4] = 0xFF;
+                    frame.data[5] = 0xFF;
+                    frame.data[6] = 0xFF;
+                    frame.data[7] = 0xFC;
+                    socket_can_.write(&frame);
                     continue;
+                }
+                   
                 else
                 {  
                     // 
@@ -243,7 +258,7 @@ namespace sp_hw
             int id = id2gpio_data.first - 0x100;
             bool cmd = id2gpio_data.second.value;
             // There are four gpios can be used.
-            // Can id from 0x103 to 0x106.
+            // Can id from 0x101 to 0x104.
             if (id <= 4)
             {
                 if (cmd)

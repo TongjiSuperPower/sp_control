@@ -88,6 +88,9 @@ namespace sp_operator
         }
         else if (dbus_data_.s_l == 3 && dbus_data_.s_r == 3) //Remote control mode
         {
+            if (dbus_data_.key_w || dbus_data_.key_a ||
+             dbus_data_.key_s || dbus_data_.key_d || abs(dbus_data_.m_x) > 0.2)
+            manipulator_cmd_.y_lock = true;
             if (yaw_angle_ > 0.8)
             {
                 if (dbus_data_.key_w)
@@ -151,6 +154,10 @@ namespace sp_operator
             cmd_gimbal_vel_.y = pitch_rc_coeff_ * dbus_data_.ch_l_y;
             //cmd_gimbal_vel_.z = pitch_rc_coeff_ * dbus_data_.ch_l_x;
         }
+        else if (dbus_data_.s_l == 2 && dbus_data_.s_r == 1)
+        {
+            cmd_gimbal_vel_.z = -pitch_rc_coeff_ * dbus_data_.ch_l_x;
+        }
         else if (dbus_data_.s_r == 3) //Mouse & Keyboard  mode
         {
             if (dbus_data_.key_q && !dbus_data_.key_e) // Turn left
@@ -210,18 +217,34 @@ namespace sp_operator
         else if (dbus_data_.s_l == 3)
         {
             manipulator_cmd_.control_mode = AUTO;
-            if (dbus_data_.key_z)
-                manipulator_cmd_.destination = HOME;
-            else if (dbus_data_.key_x)
-                manipulator_cmd_.destination = GROUND;
-            else if (dbus_data_.key_c)
-                manipulator_cmd_.destination = SLIVER;
-            else if (dbus_data_.key_v)
-                manipulator_cmd_.destination = GOLD;
-            else if (dbus_data_.key_b)
-                manipulator_cmd_.destination = VISION;
-            else 
-                manipulator_cmd_.destination = NONE;
+            manipulator_cmd_.destination = NONE;                   
+            manipulator_cmd_.process = STOP;
+            if (!dbus_data_.key_shift)
+            {
+                manipulator_cmd_.auto_type = DESTINATION;
+                if (dbus_data_.key_z)
+                    manipulator_cmd_.destination = HOME;
+                else if (dbus_data_.key_x)
+                    manipulator_cmd_.destination = GROUND;
+                else if (dbus_data_.key_c)
+                    manipulator_cmd_.destination = SLIVER;
+                else if (dbus_data_.key_v)
+                    manipulator_cmd_.destination = GOLD;
+                else if (dbus_data_.key_b)
+                    manipulator_cmd_.destination = EXCHANGE;
+                // else if (dbus_data_.key_b && dbus_data_.key_shift)
+                //     manipulator_cmd_.destination = VISION;
+          
+            }
+            else
+            {
+                manipulator_cmd_.auto_type = PROCESS;
+                if (dbus_data_.key_c)
+                    manipulator_cmd_.process = TAKE_SLIVER;
+                else if (dbus_data_.key_v)
+                    manipulator_cmd_.process = TAKE_GOLD;
+   
+            }
         }
         else if (dbus_data_.s_l == 2)
         {
@@ -270,17 +293,24 @@ namespace sp_operator
             }    
         }
 
-        // if (dbus_data_.key_g) // Push(or pull) forward along the direction of the end effector
-        //     manipulator_cmd_.final_push = true;
-        // else 
-        //     manipulator_cmd_.final_push = false;
-        if (dbus_data_.key_g) // Push(or pull) forward along the direction of the end effector
-            manipulator_cmd_.y_lock = true;
-        else 
-            manipulator_cmd_.y_lock = false;
         ros::Duration delay(0.05);
+        //push_change_count_--;
         pump_change_count_--;
         rod_change_count_--;
+        // if (push_change_count_ <= 0)
+        // {
+        //     manipulator_cmd_.final_push = false;
+        //     if (dbus_data_.key_g)
+        //     {
+        //         delay.sleep();
+        //         if (dbus_data_.key_g)
+        //         {
+        //             manipulator_cmd_.final_push = true;
+        //             push_change_count_ = 50;
+        //         }
+        //     }
+        //     }
+    
 
         if (dbus_data_.key_f && pump_change_count_ <= 0)
         {

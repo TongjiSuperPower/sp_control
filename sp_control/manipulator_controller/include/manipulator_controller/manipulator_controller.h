@@ -10,6 +10,7 @@
 
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/Pose.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float64MultiArray.h>
 
@@ -38,7 +39,8 @@ namespace manipulator_controller
         std_msgs::Float64MultiArray cmd_joint_vel_;
         sp_common::ManipulatorCmd cmd_manipulator_;
         sp_common::CustomerControllerCmd cmd_cc_;
-        sp_common::VisionCmd cmd_vision_;
+        //geometry_msgs::Pose cmd_vision_;
+        std_msgs::Float64MultiArray cmd_vision_;
         ros::Time stamp_;
     };
 
@@ -112,6 +114,8 @@ namespace manipulator_controller
         void updateJacobian();
 
         void finalPush();
+
+        void visionInverseKinematic();
         
         void jointPosConstraint();
 
@@ -135,7 +139,8 @@ namespace manipulator_controller
 
         void cmdCustomerControllerCallback(const sp_common::CustomerControllerCmd::ConstPtr &msg);
 
-        void cmdVisionCallback(const sp_common::VisionCmd::ConstPtr &msg);
+        //void cmdVisionCallback(const geometry_msgs::Pose::ConstPtr &msg);
+        void cmdVisionCallback(const std_msgs::Float64MultiArray::ConstPtr &msg);
 
         void stopProcess();
 
@@ -166,9 +171,13 @@ namespace manipulator_controller
         std::unordered_map<std::string, std::vector<double>> joint_destination_;
         std::vector<double> vision_destination_{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         std::unordered_map<std::string, int> joint_process_num_;
+        std::unordered_map<std::string, double> process_delay_time_;
         std::unordered_map<std::string, std::vector<std::vector<double>>> joint_process_;
+        std::string destination_name_;
+        std::string process_name_;
 
-        // Structure_coeff structure_coeff_{};
+        //geometry_msgs::Pose vision_pose_; 
+        Eigen::Matrix<double, 6, 1> vision_pose_;
 
         Eigen::Quaterniond quat_cmd_{};
 
@@ -212,8 +221,6 @@ namespace manipulator_controller
 
         double z_offset_{}, x_offset_{}, y_offset_{}, pitch_offset_{};
 
-
-
         enum
         {
             MAUL,
@@ -225,7 +232,6 @@ namespace manipulator_controller
         enum
         {
             DESTINATION,
-            VISION,
             PROCESS
         };
 
@@ -236,14 +242,15 @@ namespace manipulator_controller
             GROUND,
             SLIVER,
             GOLD,
-            EXCHANGE
+            EXCHANGE,
+            VISION
         };
 
         enum
         { 
             STOP,
-            PLACE_ORE,
-            TAKE_ORE
+            TAKE_SLIVER,
+            TAKE_GLOD,
         };
 
 
@@ -265,7 +272,7 @@ namespace manipulator_controller
 
         Spline spline_;
 
-        ros::Time begin_time_, now_time_;
+        ros::Time begin_time_, now_time_, reach_time_;
 
         control_toolbox::Pid y_lock_pid_;
         bool y_lock_{};

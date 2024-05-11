@@ -57,6 +57,7 @@ namespace sp_operator
             std_msgs::Bool pump_cmd_;
             std_msgs::Bool rod_cmd_;
 
+            int push_change_count_ {};
             int pump_change_count_ {};
             int rod_change_count_ {};
 
@@ -76,14 +77,27 @@ namespace sp_operator
             };
 
             enum
+            {
+                DESTINATION,
+                PROCESS,  
+            };
+
+            enum
             {  
                 NONE,
                 HOME,
                 GROUND,
                 SLIVER,
                 GOLD,
+                EXCHANGE,
                 VISION
+            };
 
+            enum
+            {  
+                STOP,
+                TAKE_SLIVER,
+                TAKE_GOLD,
             };
 
             ros::Subscriber velocity_sub_;

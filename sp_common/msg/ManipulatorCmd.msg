@@ -9,9 +9,15 @@ uint8 GROUND = 2
 uint8 SLIVER = 3
 uint8 GOLD = 4
 uint8 EXCHANGE = 5
+uint8 VISION = 6
 
-uint8 PLACE_ORE = 0
-uint8 TAKE_ORE = 1
+uint8 STOP = 0
+uint8 TAKE_SLIVER = 1
+uint8 TAKE_GOLD = 2
+
+uint8 DESTINTION = 0
+uint8 PROCESS = 1
+
 
 uint8 control_mode
 uint8 control_process

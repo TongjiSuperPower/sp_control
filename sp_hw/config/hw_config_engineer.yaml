@@ -2,7 +2,7 @@ bus:
   - can3
   - can4
   - can5
-loop_frequency: 800
+loop_frequency: 700
 cycle_time_error_threshold: 1
 thread_priority: 30
 
@@ -85,12 +85,12 @@ actuators:
 gpios:
 
   pump_gpio:
-    bus: can3
+    bus: can5
     id: 0x101
     type: out
 
   rod_gpio:
-    bus: can3
+    bus: can5
     id: 0x102
     type: out
 

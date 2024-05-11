@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 DBusNode::DBusNode()
 {
   dbus_pub_ = nh_.advertise<sp_common::DbusData>("dbus_data", 1);
-  nh_.param<std::string>("serial_port", serial_port_, "/dev/ttyUSB0");
+  nh_.param<std::string>("serial_port", serial_port_, "/dev/dbus");
   dbus_.init(serial_port_.data());  
 }
 

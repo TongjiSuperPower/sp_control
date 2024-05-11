@@ -57,18 +57,23 @@ namespace differential_controller
     i++;
     if (i == 50)
     {
-        // ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
-        // ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
-        // ROS_INFO_STREAM("pitch_cmd_: " << pitch_cmd_);
-        // ROS_INFO_STREAM("roll_cmd_: " << roll_cmd_);
-        // ROS_INFO_STREAM("pitch_eff_cmd_: " << pitch_eff_cmd);
-        // ROS_INFO_STREAM("roll_eff_cmd_: " << roll_eff_cmd);
-        // ROS_INFO_STREAM("------------------------------------");
+        ROS_INFO_STREAM("pitch_pos_: " << pitch_pos_);
+        ROS_INFO_STREAM("roll_pos_: " << roll_pos_);
+        ROS_INFO_STREAM("pitch_cmd_: " << pitch_cmd_);
+        ROS_INFO_STREAM("roll_cmd_: " << roll_cmd_);
+        ROS_INFO_STREAM("pitch_eff_cmd_: " << pitch_eff_cmd);
+        ROS_INFO_STREAM("roll_eff_cmd_: " << roll_eff_cmd);
+        ROS_INFO_STREAM("positive_cmd_: " << ctrl_positive_.joint_.getEffort());
+        ROS_INFO_STREAM("negative_cmd_: " << ctrl_negative_.joint_.getEffort());
+        ROS_INFO_STREAM(pitch_eff_cmd + differential_reduction_ * roll_eff_cmd);
+        ROS_INFO_STREAM(pitch_eff_cmd - differential_reduction_ * roll_eff_cmd);
+        ROS_INFO_STREAM("------------------------------------");
         i = 0;
     }
 
     ctrl_positive_.joint_.setCommand(pitch_eff_cmd + differential_reduction_ * roll_eff_cmd);
-    ctrl_negative_.joint_.setCommand(pitch_eff_cmd- differential_reduction_ * roll_eff_cmd);
+    // ctrl_negative_.joint_.setCommand(0);
+    ctrl_negative_.joint_.setCommand(pitch_eff_cmd - differential_reduction_ * roll_eff_cmd);
   }
 
   double DifferentialController::getPitchPosition()
