@@ -3,7 +3,7 @@
 #include <std_msgs/Float64MultiArray.h>
 #include "sp_common/SingleJointWrite.h"
 #include "sp_common/DbusData.h"
-#include "sp_common/ManipulatorCmd.h"
+
 
 void pose_callback(const geometry_msgs::Pose::ConstPtr &pose_, manipulator_control::Manipulator *manipulator)
 {

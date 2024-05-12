@@ -27,3 +27,4 @@ uint8 process
 
 bool final_push
 bool y_lock
+bool cali

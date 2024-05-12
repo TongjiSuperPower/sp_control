@@ -28,8 +28,6 @@ namespace sp_operator
 
             void velocity_callback(const geometry_msgs::Twist::ConstPtr &vel);
 
-            void yaw_angle_callback(const std_msgs::Float64::ConstPtr &vel);
-
             ros::NodeHandle controller_nh;
 
             ros::Publisher manipulator_cmd_pub_;
@@ -46,6 +44,8 @@ namespace sp_operator
 
             ros::Publisher gimbal_calibration_pub_;
 
+            ros::Publisher chassis_deflected_pub_;
+
             sp_common::ManipulatorCmd manipulator_cmd_{};
 
             geometry_msgs::Twist twist_cmd_{};
@@ -56,10 +56,12 @@ namespace sp_operator
             std_msgs::Int8 ore_cmd_;
             std_msgs::Bool pump_cmd_;
             std_msgs::Bool rod_cmd_;
+            std_msgs::Bool deflection_cmd_;
 
-            int push_change_count_ {};
+            int deflection_change_count_ {};
             int pump_change_count_ {};
             int rod_change_count_ {};
+            int calibration_change_count_ {};
 
             //control_msgs::JointJog joint_cmd_{};
 
@@ -68,7 +70,6 @@ namespace sp_operator
             double yaw_coeff_, pitch_mk_coeff_, pitch_rc_coeff_;
             double yaw_left_limit_, yaw_right_limit_, pitch_low_limit_, pitch_high_limit_;
             
-            double yaw_angle_{};
             enum
             {
                 MAUL,
@@ -101,7 +102,6 @@ namespace sp_operator
             };
 
             ros::Subscriber velocity_sub_;
-            ros::Subscriber yaw_angle_sub_;
 
 
             geometry_msgs::Twist velocity_cmd_{};

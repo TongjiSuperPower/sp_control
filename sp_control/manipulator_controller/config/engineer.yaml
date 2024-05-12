@@ -35,7 +35,8 @@ manipulator:
 
       joint: "y_joint"
       pid: { p: 45.0, i: 0.1, d: 15.5 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
-      lock_pid: { p: 2400.0, i: 0.5, d: 50.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      #lock_pid: { p: 2400.0, i: 0.5, d: 50.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      lock_pid: { p: 24.0, i: 0.5, d: 10.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     
     yaw:
       joint: "yaw_joint"
@@ -71,9 +72,9 @@ manipulator:
     vel_limit:
       {1_z: 0.25, 2_x: 0.15, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 3.14, 6_pitch: 3.14, 7_roll2: 3.14}
     upper_pos_limit:
-      {1_z: 0.700, 2_x: 0.22, 3_y: 0.25, 4_yaw: 2.00, 5_roll1: 6.28, 6_pitch: 1.57, 7_roll2: 6.28}
+      {1_z: 0.700, 2_x: 0.22, 3_y: 0.25, 4_yaw: 2.00, 5_roll1: 6.28, 6_pitch: 3.00, 7_roll2: 6.28}
     lower_pos_limit:
-      {1_z: -0.120, 2_x: -0.22, 3_y: -0.25, 4_yaw: -2.00, 5_roll1: -6.28, 6_pitch: -1.57, 7_roll2: -6.28}
+      {1_z: -0.120, 2_x: -0.22, 3_y: -0.25, 4_yaw: -2.00, 5_roll1: -6.28, 6_pitch: -3.00, 7_roll2: -6.28}
     position_threshold:
       {1_z: 0.008, 2_x: 0.005, 3_y: 0.005, 4_yaw: 0.03, 5_roll1: 0.05, 6_pitch: 0.3, 7_roll2: 0.05}
     structure_coeff:

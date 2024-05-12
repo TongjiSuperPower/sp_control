@@ -219,6 +219,8 @@ namespace manipulator_controller
         bool pitch_calibrated_{}; 
         bool calibrated_{};
 
+        bool cali_{};
+
         double z_offset_{}, x_offset_{}, y_offset_{}, pitch_offset_{};
 
         enum

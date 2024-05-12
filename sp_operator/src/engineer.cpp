@@ -15,10 +15,9 @@ namespace sp_operator
         ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",1);
         pump_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_pump",10);
         rod_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rod",1);
+        chassis_deflected_pub_ = nh.advertise<std_msgs::Bool>("/cmd_del",10); 
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
-        yaw_angle_sub_ = nh.subscribe<std_msgs::Float64>("/yaw_angle", 10, &Engineer::yaw_angle_callback, this);
-
         x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
         y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.0);
         z_mk_coeff_ = sp_common::getParam(controller_nh, "chassis/z_mk_coeff", 70);
@@ -62,6 +61,7 @@ namespace sp_operator
         ore_cmd_pub_.publish(ore_cmd_);
         pump_cmd_pub_.publish(pump_cmd_);
         rod_cmd_pub_.publish(rod_cmd_);
+        chassis_deflected_pub_.publish(deflection_cmd_);
 
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
@@ -74,7 +74,7 @@ namespace sp_operator
 
         if (dbus_data_.s_l == 3 && dbus_data_.s_r == 1) //Mouse & Keyboard mode
         {
-            if (yaw_angle_ > 0.8)
+            if (!deflection_cmd_.data)
             {
                 cmd_chassis_vel_.linear.x = x_coeff_ * dbus_data_.ch_r_x;
                 cmd_chassis_vel_.linear.y = -y_coeff_ * dbus_data_.ch_r_y;
@@ -90,8 +90,8 @@ namespace sp_operator
         {
             if (dbus_data_.key_w || dbus_data_.key_a ||
              dbus_data_.key_s || dbus_data_.key_d || abs(dbus_data_.m_x) > 0.2)
-            manipulator_cmd_.y_lock = true;
-            if (yaw_angle_ > 0.8)
+                manipulator_cmd_.y_lock = true;
+            if (!deflection_cmd_.data)
             {
                 if (dbus_data_.key_w)
                     cmd_chassis_vel_.linear.x = x_coeff_;
@@ -294,9 +294,10 @@ namespace sp_operator
         }
 
         ros::Duration delay(0.05);
-        //push_change_count_--;
         pump_change_count_--;
         rod_change_count_--;
+        deflection_change_count_--;
+        calibration_change_count_--;
         // if (push_change_count_ <= 0)
         // {
         //     manipulator_cmd_.final_push = false;
@@ -310,6 +311,30 @@ namespace sp_operator
         //         }
         //     }
         //     }
+        if (calibration_change_count_ <= 0)
+            manipulator_cmd_.cali = false;
+        if (dbus_data_.key_r && calibration_change_count_ <= 0)
+        {  
+            delay.sleep();
+            if (dbus_data_.key_r)
+            {
+                manipulator_cmd_.cali = true;
+                calibration_change_count_ = 50;
+            }
+        }
+
+        if (dbus_data_.key_g && deflection_change_count_ <= 0)
+        {
+            delay.sleep();
+            if (dbus_data_.key_g)
+            {
+                if (!deflection_cmd_.data)
+                    deflection_cmd_.data = true;
+                else
+                    deflection_cmd_.data = false;
+                deflection_change_count_ = 50;
+            }
+        }
     
 
         if (dbus_data_.key_f && pump_change_count_ <= 0)
@@ -358,10 +383,7 @@ namespace sp_operator
         velocity_cmd_ = *vel;
     }  
 
-    void Engineer::yaw_angle_callback(const std_msgs::Float64::ConstPtr &angle)
-    {
-        yaw_angle_ = angle->data;
-    }    
+ 
 
 }
     

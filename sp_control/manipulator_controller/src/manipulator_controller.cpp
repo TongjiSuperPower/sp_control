@@ -174,6 +174,7 @@ namespace manipulator_controller
         sp_common::ManipulatorCmd manipulator_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
         //cc_cmd_ = cmd_rt_buffer_.readFromRT()->cmd_manipulator_;
         y_lock_ = manipulator_cmd_.y_lock;
+        cali_ = manipulator_cmd_.cali;
         //geometry_msgs::Pose vision_pose = cmd_rt_buffer_.readFromRT()->cmd_vision_;
         //vision_pose_ = vision_pose;
         std_msgs::Float64MultiArray vision_pose = cmd_rt_buffer_.readFromRT()->cmd_vision_;
@@ -279,7 +280,11 @@ namespace manipulator_controller
 
         ctrl_z_.setCommand(joint_cmd_[0]);
         ctrl_x_.setCommand(joint_cmd_[1]);
-        ctrl_y_.setCommand(joint_cmd_[2]);
+        ctrl_y_.setCommand(joint_cmd_[2] - y_offset_);
+        ROS_INFO_STREAM("CMD"<<joint_cmd_[2] - y_offset_);
+        ROS_INFO_STREAM("CMD"<<y_offset_);
+        ROS_INFO_STREAM("CMD"<<ctrl_y_.joint_.getPosition());
+        ROS_INFO_STREAM("--------------------");
 
         ctrl_yaw_.setCommand(joint_cmd_[3]);
         ctrl_roll1_.setCommand(joint_cmd_[4]);
@@ -314,9 +319,9 @@ namespace manipulator_controller
         {
             if (!y_lock_)
             {
-                if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) > 0.005)
+                if ((joint_cmd_[2] - (ctrl_y_.joint_.getPosition() + y_offset_)) > 0.005)
                     ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
-                else if ((joint_cmd_[2] - ctrl_y_.joint_.getPosition()) < -0.005)
+                else if ((joint_cmd_[2] - (ctrl_y_.joint_.getPosition() + y_offset_)) < -0.005)
                     ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
                 else
                 {
@@ -326,7 +331,6 @@ namespace manipulator_controller
             }
             else
             {
-               
                 double y_error = joint_cmd_[2] - joint_pos_[2];
                 y_lock_pid_.computeCommand(y_error, period);
                 double y_cmd = y_lock_pid_.getCurrentCmd();
@@ -620,9 +624,15 @@ namespace manipulator_controller
             ROS_INFO_STREAM("Enter joint mode");
             mode_changed_ = false;
         }
-        // ROS_INFO_STREAM(joint_cmd_[2]);
-        // ROS_INFO_STREAM(joint_pos_[2]);
-        // ROS_INFO_STREAM("----------------------------");
+        if (cali_)
+        {
+            pitch_offset_ = 1.40 - ctrl_diff_.getPitchPosition();     
+            joint_pos_[5] = ctrl_diff_.getPitchPosition() + pitch_offset_;
+            joint_cmd_[5] = joint_pos_[5];
+            // y_offset_ = 0.25 - ctrl_y_.joint_.getPosition();     
+            // joint_pos_[2] = ctrl_y_.joint_.getPosition() + y_offset_;
+            // joint_cmd_[2] = joint_pos_[2];
+        }
     }
 
     void ManipulatorController::generateSplineCoeff(int index)
@@ -682,7 +692,7 @@ namespace manipulator_controller
     {   
         joint_pos_[0] = ctrl_z_.getPosition();
         joint_pos_[1] = ctrl_x_.getPosition();
-        joint_pos_[2] = ctrl_y_.joint_.getPosition();
+        joint_pos_[2] = ctrl_y_.joint_.getPosition() + y_offset_;
         joint_pos_[3] = ctrl_yaw_.joint_.getPosition();
         joint_pos_[4] = ctrl_roll1_.joint_.getPosition();
         if (simulate_)
