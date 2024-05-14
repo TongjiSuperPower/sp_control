@@ -119,9 +119,9 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
 )
-INCLUDE_DIRECTORIES(/home/rm/catkin_ws/src/sp_control/imu_control/include/imu_control)
+INCLUDE_DIRECTORIES(~/catkin_ws/src/sp_control/imu_control/include/imu_control)
 ## Declare a C++ library
-add_library(Kalman SHARED /home/rm/catkin_ws/src/sp_control/imu_control/src/Kalman.cpp
+add_library(Kalman SHARED ~/catkin_ws/src/sp_control/imu_control/src/Kalman.cpp
 )
 # find_library(SP_CONTROL_LIB libsp_control.so PATHS /home/lyc/VisualOdometry/src/new_engineer/sp_control/build/devel/lib)
 ## Add cmake target dependencies of the library
