@@ -15,9 +15,10 @@ namespace sp_operator
         ore_cmd_pub_ = nh.advertise<std_msgs::Int8>("/cmd_ore",1);
         pump_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_pump",10);
         rod_cmd_pub_ = nh.advertise<std_msgs::Bool>("/cmd_rod",1);
-        chassis_deflected_pub_ = nh.advertise<std_msgs::Bool>("/cmd_del",10); 
+        chassis_deflected_pub_ = nh.advertise<std_msgs::Bool>("/cmd_def",10);
         gimbal_calibration_pub_ = nh.advertise<std_msgs::Bool>("/gimbal_calibration",10);
         velocity_sub_ = nh.subscribe<geometry_msgs::Twist>("/cmd_velocity", 10, &Engineer::velocity_callback, this);
+        timeout_ = sp_common::getParam(controller_nh, "timeout", 2.0);
         x_coeff_ = sp_common::getParam(controller_nh, "chassis/x_coeff", 2.0);
         y_coeff_ = sp_common::getParam(controller_nh, "chassis/y_coeff", 2.0);
         z_mk_coeff_ = sp_common::getParam(controller_nh, "chassis/z_mk_coeff", 70);
@@ -42,8 +43,8 @@ namespace sp_operator
 
     void Engineer::run()
     {
-        chassis_set();
-        cmd_chassis_vel_pub_.publish(cmd_chassis_vel_); 
+
+        
 
         chassis_cmd_pub_.publish(chassis_cmd_);
 
@@ -62,6 +63,15 @@ namespace sp_operator
         pump_cmd_pub_.publish(pump_cmd_);
         rod_cmd_pub_.publish(rod_cmd_);
         chassis_deflected_pub_.publish(deflection_cmd_);
+        ros::Time time = ros::Time::now();
+        if ((time - dbus_data_.stamp).toSec() > timeout_)
+        {
+            ROS_INFO_STREAM("Dbus lost");
+            return;
+        }
+        chassis_set();
+        cmd_chassis_vel_pub_.publish(cmd_chassis_vel_); 
+
 
         last_dbus_data_ = dbus_data_;
         ros::spinOnce();
@@ -241,8 +251,8 @@ namespace sp_operator
                 manipulator_cmd_.auto_type = PROCESS;
                 if (dbus_data_.key_c)
                     manipulator_cmd_.process = TAKE_SLIVER;
-                else if (dbus_data_.key_v)
-                    manipulator_cmd_.process = TAKE_GOLD;
+                // else if (dbus_data_.key_v)
+                //     manipulator_cmd_.process = TAKE_GOLD;
    
             }
         }

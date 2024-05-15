@@ -43,8 +43,7 @@ namespace chassis_controller
     {
         sp_common::ChassisCmd cmd_chassis = cmd_rt_buffer_.readFromRT()->cmd_chassis_;
         geometry_msgs::Twist cmd_vel = cmd_rt_buffer_.readFromRT()->cmd_vel_;
-        
-
+        ROS_INFO_STREAM((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec());
         if ((time - cmd_rt_buffer_.readFromRT()->stamp_).toSec() > timeout_)
         {
             cmd_vel.linear.x = 0.;

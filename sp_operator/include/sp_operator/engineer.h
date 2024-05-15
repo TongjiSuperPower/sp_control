@@ -64,6 +64,7 @@ namespace sp_operator
             int calibration_change_count_ {};
 
             //control_msgs::JointJog joint_cmd_{};
+            double timeout_;
 
             double x_coeff_, y_coeff_, z_rc_coeff_, z_mk_coeff_;
             double x_accel_set_, y_accel_set_, z_accel_set_;

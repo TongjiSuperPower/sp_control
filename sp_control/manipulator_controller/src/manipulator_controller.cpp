@@ -281,10 +281,6 @@ namespace manipulator_controller
         ctrl_z_.setCommand(joint_cmd_[0]);
         ctrl_x_.setCommand(joint_cmd_[1]);
         ctrl_y_.setCommand(joint_cmd_[2] - y_offset_);
-        ROS_INFO_STREAM("CMD"<<joint_cmd_[2] - y_offset_);
-        ROS_INFO_STREAM("CMD"<<y_offset_);
-        ROS_INFO_STREAM("CMD"<<ctrl_y_.joint_.getPosition());
-        ROS_INFO_STREAM("--------------------");
 
         ctrl_yaw_.setCommand(joint_cmd_[3]);
         ctrl_roll1_.setCommand(joint_cmd_[4]);
@@ -319,13 +315,13 @@ namespace manipulator_controller
         {
             if (!y_lock_)
             {
-                if ((joint_cmd_[2] - (ctrl_y_.joint_.getPosition() + y_offset_)) > 0.005)
+                if ((joint_cmd_[2] - joint_pos_[2]) > 0.005)
                     ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + y_friction_);
-                else if ((joint_cmd_[2] - (ctrl_y_.joint_.getPosition() + y_offset_)) < -0.005)
+                else if ((joint_cmd_[2] - joint_pos_[2]) < -0.005)
                     ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() - y_friction_);
                 else
                 {
-                    double eff = (joint_cmd_[2] - ctrl_y_.joint_.getPosition()) / 0.005;
+                    double eff = (joint_cmd_[2] - joint_pos_[2]) / 0.005;
                     ctrl_y_.joint_.setCommand(ctrl_y_.joint_.getCommand() + eff * y_friction_);
                 }
             }

@@ -34,9 +34,9 @@ manipulator:
       friction: 8.0
 
       joint: "y_joint"
-      pid: { p: 45.0, i: 0.1, d: 15.5 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      pid: { p: 85.0, i: 0.1, d: 18.5 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
       #lock_pid: { p: 2400.0, i: 0.5, d: 50.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
-      lock_pid: { p: 24.0, i: 0.5, d: 10.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
+      lock_pid: { p: 124.0, i: 0.5, d: 20.0 , i_max: 100.0, i_min: -100.0, antiwindup: true, publish_state: true }
     
     yaw:
       joint: "yaw_joint"
@@ -44,7 +44,7 @@ manipulator:
 
     roll1:
       joint: "roll1_joint"
-      pid: { p: 13.0, i: 0.01, d: 0.06, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
+      pid: { p: 14.0, i: 0.3, d: 0.06, i_max: 20.0, i_min: -20.0, antiwindup: true, publish_state: true }
 
     pitch:
       joint: "pitch_joint"
@@ -70,7 +70,7 @@ manipulator:
     
 
     vel_limit:
-      {1_z: 0.25, 2_x: 0.15, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 3.14, 6_pitch: 3.14, 7_roll2: 3.14}
+      {1_z: 0.3, 2_x: 0.15, 3_y: 0.2, 4_yaw: 1.57, 5_roll1: 1.57, 6_pitch: 3.14, 7_roll2: 3.14}
     upper_pos_limit:
       {1_z: 0.700, 2_x: 0.22, 3_y: 0.25, 4_yaw: 2.00, 5_roll1: 6.28, 6_pitch: 3.00, 7_roll2: 6.28}
     lower_pos_limit:
@@ -88,9 +88,10 @@ manipulator:
       sliver:
         {1_z: 0.205, 2_x: 0.0, 3_y: -0.20, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}#z:0.347
       gold:
-        {1_z: 0.125, 2_x: 0.0, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.00, 7_roll2: 0.0}#z:0.148
+        {1_z: 0.135, 2_x: 0.0, 3_y: 0.0, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.00, 7_roll2: 0.0}#z:0.148
       exchange:
-        {1_z: 0.60, 2_x: 0.0, 3_y: 0.22, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: 0.00, 7_roll2: 0.0}
+        {1_z: 0.60, 2_x: 0.0, 3_y: 0.22, 4_yaw: 0.0, 5_roll1: 3.14, 6_pitch: 0.00, 7_roll2: 0.0}
+
     
     process:
       take_sliver:
@@ -100,7 +101,7 @@ manipulator:
         -  {1_z: 0.50, 2_x: 0.00, 3_y: 0.05, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}
         -  {1_z: 0.44, 2_x: 0.00, 3_y: 0.05, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}
         -  {1_z: 0.60, 2_x: 0.00, 3_y: 0.05, 4_yaw: 0.0, 5_roll1: 0.0, 6_pitch: -1.57, 7_roll2: 0.0}  
-        delay_time: 0.5
+        delay_time: 0.4
     
       take_gold: 
         process_num: 5

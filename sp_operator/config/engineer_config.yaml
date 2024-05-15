@@ -1,4 +1,5 @@
 engineer:
+  timeout: 1.0
   chassis:
     x_coeff: 2.0
     y_coeff: 2.0
